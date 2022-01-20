@@ -72,8 +72,5 @@ $CLASSPATH = "$APP_HOME\gradle\wrapper\gradle-wrapper.jar"
 $params = "$DEFAULT_JVM_OPTS"+" "+"$env:JAVA_OPTS"+" "+"$env:GRADLE_OPTS"+" "+"-Dorg.gradle.appname=$APP_NAME"+" "+"-classpath $CLASSPATH"+" "+"org.gradle.wrapper.GradleWrapperMain"+" "+"$CMD_LINE_ARGS"
 $cmd = "$JAVA_EXE"
 # Execute Gradle
-$g = Start-Process -PassThru -NoNewWindow -FilePath "$cmd" -ArgumentList $params
-# Figure out return value
-$handle = $g.Handle # cache g.Handle for .NET work around
-$g.WaitForExit();
+$g = Start-Process -Wait -PassThru -NoNewWindow -FilePath "$cmd" -ArgumentList $params
 exit $g.ExitCode

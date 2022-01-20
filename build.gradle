@@ -1,4 +1,5 @@
 plugins {
+    id 'com.github.johnrengelman.shadow'
     id "java"
     id "edu.wpi.first.GradleRIO" version "2022.2.1"
     id "net.ltgt.errorprone"
@@ -53,6 +54,8 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    shadow group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.10.0'
+
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
 
@@ -74,6 +77,12 @@ dependencies {
     implementation project(':common:robot')
 
     testImplementation 'junit:junit:4.12'
+
+    errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.10.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone.disableWarningsInGeneratedCode = true
 }
 
 // Simulation configuration (e.g. environment variables).

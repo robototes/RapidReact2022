@@ -30,6 +30,3 @@ pluginManagement {
         id 'net.ltgt.errorprone' version '2.0.2'
     }
 }
-
-include ":common"
-include ":common:robot"

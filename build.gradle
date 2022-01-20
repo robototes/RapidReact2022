@@ -73,8 +73,7 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation project(':common')
-    implementation project(':common:robot')
+    implementation 'com.github.jamesdooley4:common:2022.0.0'
 
     testImplementation 'junit:junit:4.12'
 

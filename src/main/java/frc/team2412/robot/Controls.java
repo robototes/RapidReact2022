@@ -1,7 +1,7 @@
 package frc.team2412.robot;
 
 import org.frcteam2910.common.robot.input.XboxController;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.SubsystemContainer.SubsystemConstants.*;
 
 public class Controls {
     public static class ControlConstants{
@@ -10,9 +10,9 @@ public class Controls {
 
     public XboxController controller;
 
-    public Subsystems subsystems;
+    public SubsystemContainer subsystems;
 
-    public Controls(Subsystems s){
+    public Controls(SubsystemContainer s){
         subsystems = s;
         controller = new XboxController(ControlConstants.CONTROLLER_PORT);
         if(CLIMB_ENABLED) bindClimbControls();

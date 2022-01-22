@@ -1,17 +1,17 @@
 package frc.team2412.robot;
 
-import frc.team2412.robot.subsystems.*;
+import static frc.team2412.robot.SubsystemContainer.SubsystemConstants.*;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import frc.team2412.robot.Subsystems.*;
 
-public class Subsystems {
+public class SubsystemContainer {
     public static class SubsystemConstants {
         public static final boolean CLIMB_ENABLED = false;
         public static final boolean DRIVE_ENABLED = false;
         public static final boolean FRONT_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean INTAKE_ENABLED = false; 
         public static final boolean SHOOTER_ENABLED = false;
 
 
@@ -32,7 +32,7 @@ public class Subsystems {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public Subsystems(Hardware h){
+    public SubsystemContainer(Hardware h){
         hardware = h;
         if(CLIMB_ENABLED) climbSubsystem = new ClimbSubsystem();
         if(DRIVE_ENABLED) drivebaseSubsystem = new DrivebaseSubsystem();

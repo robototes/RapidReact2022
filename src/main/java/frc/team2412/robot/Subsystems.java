@@ -16,7 +16,7 @@ public class Subsystems {
 
 
     }
-    public Hardware hardware;
+    public final Hardware hardware;
 
     public ClimbSubsystem climbSubsystem;
 

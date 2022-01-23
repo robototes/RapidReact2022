@@ -12,23 +12,23 @@ public class Robot extends TimedRobot {
    */
   private static Robot instance = null;
 
-  public static Robot getInstance(){
-    if(instance == null) instance = new Robot();
-      return instance;
+  public static Robot getInstance() {
+    if (instance == null)
+      instance = new Robot();
+    return instance;
   }
-
 
   public final Controls controls;
   public final SubsystemContainer subsystems;
   public final Hardware hardware;
 
-  private Robot(){
-      instance = this;
-      hardware = new Hardware();
-      subsystems = new SubsystemContainer(hardware);
-      controls = new Controls(subsystems);
+  private Robot() {
+    instance = this;
+    hardware = new Hardware();
+    subsystems = new SubsystemContainer(hardware);
+    controls = new Controls(subsystems);
   }
 
-  //TODO start overriding methods
+  // TODO start overriding methods
 
 }

@@ -11,11 +11,11 @@ public class SubsystemContainer {
         public static final boolean FRONT_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false; 
+        public static final boolean INTAKE_ENABLED = false;
         public static final boolean SHOOTER_ENABLED = false;
 
-
     }
+
     public final Hardware hardware;
 
     public ClimbSubsystem climbSubsystem;
@@ -32,14 +32,21 @@ public class SubsystemContainer {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public SubsystemContainer(Hardware h){
+    public SubsystemContainer(Hardware h) {
         hardware = h;
-        if(CLIMB_ENABLED) climbSubsystem = new ClimbSubsystem();
-        if(DRIVE_ENABLED) drivebaseSubsystem = new DrivebaseSubsystem();
-        if(FRONT_VIS_ENABLED) frontVisionSubsystem = new FrontVisionSubsystem();
-        if(GOAL_VIS_ENABLED) goalVisionSubsystem = new GoalVisionSubsystem();
-        if(INDEX_ENABLED) indexSubsystem = new IndexSubsystem();
-        if(INTAKE_ENABLED) intakeSubsystem = new IntakeSubsystem();
-        if(SHOOTER_ENABLED) shooterSubsystem = new ShooterSubsystem();
+        if (CLIMB_ENABLED)
+            climbSubsystem = new ClimbSubsystem();
+        if (DRIVE_ENABLED)
+            drivebaseSubsystem = new DrivebaseSubsystem();
+        if (FRONT_VIS_ENABLED)
+            frontVisionSubsystem = new FrontVisionSubsystem();
+        if (GOAL_VIS_ENABLED)
+            goalVisionSubsystem = new GoalVisionSubsystem();
+        if (INDEX_ENABLED)
+            indexSubsystem = new IndexSubsystem();
+        if (INTAKE_ENABLED)
+            intakeSubsystem = new IntakeSubsystem();
+        if (SHOOTER_ENABLED)
+            shooterSubsystem = new ShooterSubsystem();
     }
 }

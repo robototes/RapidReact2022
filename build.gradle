@@ -1,5 +1,4 @@
 plugins {
-    id 'com.github.johnrengelman.shadow'
     id "java"
     id "edu.wpi.first.GradleRIO" version "2022.2.1"
     id "net.ltgt.errorprone"
@@ -54,7 +53,7 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
-    shadow group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.10.0'
+    compileOnly group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.10.0'
 
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
@@ -73,7 +72,8 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation 'com.github.jamesdooley4:common:2022.0.0'
+    implementation 'com.github.robototes.2910Common:common:2022.0.4'
+    implementation 'com.github.robototes.2910Common:robot:2022.0.4'
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
 

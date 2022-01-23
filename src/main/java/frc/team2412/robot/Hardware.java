@@ -95,5 +95,4 @@ public class Hardware {
             limelight = new PhotonCamera(LIMELIGHT);
         }
     }
-
 }

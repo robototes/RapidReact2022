@@ -11,10 +11,11 @@ public class SubsystemContainer {
         public static final boolean FRONT_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false; 
+        public static final boolean INTAKE_ENABLED = false;
         public static final boolean SHOOTER_ENABLED = false;
 
     }
+
     public final Hardware hardware;
 
     public ClimbSubsystem climbSubsystem;
@@ -31,7 +32,7 @@ public class SubsystemContainer {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public SubsystemContainer(Hardware h){
+    public SubsystemContainer(Hardware h) {
         hardware = h;
         if(CLIMB_ENABLED) climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1, hardware.climbAngled2, hardware.climbAngle);
         if(DRIVE_ENABLED) drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule, hardware.backRightModule, hardware.navX);

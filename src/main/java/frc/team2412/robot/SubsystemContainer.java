@@ -1,8 +1,8 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.SubsystemContainer.SubsystemConstants.*;
-
 import frc.team2412.robot.subsystems.*;
+
+import static frc.team2412.robot.SubsystemContainer.SubsystemConstants.*;
 
 public class SubsystemContainer {
     public static class SubsystemConstants {
@@ -35,18 +35,18 @@ public class SubsystemContainer {
     public SubsystemContainer(Hardware h) {
         hardware = h;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem();
+            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1, hardware.climbAngled2, hardware.climbAngle);
         if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem();
+            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule, hardware.backRightModule, hardware.navX);
         if (FRONT_VIS_ENABLED)
-            frontVisionSubsystem = new FrontVisionSubsystem();
+            frontVisionSubsystem = new FrontVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
-            goalVisionSubsystem = new GoalVisionSubsystem();
+            goalVisionSubsystem = new GoalVisionSubsystem(hardware.limelight);
         if (INDEX_ENABLED)
-            indexSubsystem = new IndexSubsystem();
+            indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem();
+            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2, hardware.intakeSolenoid);
         if (SHOOTER_ENABLED)
-            shooterSubsystem = new ShooterSubsystem();
+            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2, hardware.turretMotor, hardware.hoodMotor);
     }
 }

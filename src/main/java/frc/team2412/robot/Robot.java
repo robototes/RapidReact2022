@@ -19,13 +19,13 @@ public class Robot extends TimedRobot {
     }
 
     public final Controls controls;
-    public final SubsystemContainer subsystems;
+    public final Subsystems subsystems;
     public final Hardware hardware;
 
     private Robot() {
         instance = this;
         hardware = new Hardware();
-        subsystems = new SubsystemContainer(hardware);
+        subsystems = new Subsystems(hardware);
         controls = new Controls(subsystems);
     }
 

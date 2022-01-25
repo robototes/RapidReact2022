@@ -15,7 +15,7 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
-        //drive
+        //drive can ids are range 1-19
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
@@ -26,16 +26,16 @@ public class Hardware {
         //cameras
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
 
-        //shooter
+        //shooter can ids are range 20-29
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
-        //intake
+        //intake can ids are rnage 30-39
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
-        //index
+        //index can ids are range 40-49
         public static final int INDEX = 0;
 
-        //climb
+        //climb can ids are range 50-59
         public static final int CLIMB_FIXED_1 = 0, CLIMB_FIXED_2 = 0, CLIMB_ANGLED_1 = 0, CLIMB_ANGLED_2 = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
     }
 

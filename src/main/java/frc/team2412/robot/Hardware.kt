@@ -1,11 +1,13 @@
 package frc.team2412.robot
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX
+import com.revrobotics.ColorSensorV3
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper
 import com.swervedrivespecialties.swervelib.SwerveModule
 import edu.wpi.first.wpilibj.DoubleSolenoid
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.SPI
+import edu.wpi.first.wpilibj.Solenoid
 import frc.team2412.robot.SubsystemContainer.SubsystemConstants
 import frc.team2412.robot.util.Mk4Configuration
 import org.frcteam2910.common.robot.drivers.NavX
@@ -72,7 +74,9 @@ public class Hardware {
     // Intake
     public lateinit var intakeMotor1: TalonFX
     public lateinit var intakeMotor2: TalonFX
-    public lateinit var intakeSolenoid: DoubleSolenoid
+    public lateinit var intakeSolenoid1: Solenoid
+    public lateinit var intakeSolenoid2: Solenoid
+    public lateinit var intakeColorSensor: ColorSensorV3
 
     // Climb
     public lateinit var climbFixed1: TalonFX
@@ -103,7 +107,8 @@ public class Hardware {
         if (SubsystemConstants.DRIVE_ENABLED) {
             intakeMotor1 = TalonFX(INTAKE_1)
             intakeMotor2 = TalonFX(INTAKE_2)
-            intakeSolenoid = DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN)
+            intakeSolenoid1 = Solenoid(PneumaticsModuleType.REVPH, INTAKE_UP)
+            intakeSolenoid2 = Solenoid(PneumaticsModuleType.REVPH, INTAKE_DOWN)
         }
         if (SubsystemConstants.DRIVE_ENABLED) {
             indexMotor = TalonFX(INDEX)

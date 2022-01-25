@@ -55,7 +55,9 @@ public class SubsystemContainer(h: Hardware) {
                         IntakeSubsystem(
                                 hardware.intakeMotor1,
                                 hardware.intakeMotor2,
-                                hardware.intakeSolenoid
+                                hardware.intakeSolenoid1,
+                                hardware.intakeSolenoid2,
+                                hardware.intakeColorSensor
                         )
 
         if (SHOOTER_ENABLED)

@@ -1,6 +1,6 @@
 package frc.team2412.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -47,18 +47,18 @@ public class Hardware {
     public PhotonCamera limelight, frontCamera;
 
     //shooter
-    public TalonFX flywheelMotor1, flywheelMotor2, turretMotor, hoodMotor;
+    public WPI_TalonFX flywheelMotor1, flywheelMotor2, turretMotor, hoodMotor;
 
     //intake
-    public TalonFX intakeMotor1, intakeMotor2;
+    public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
     //climb
-    public TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
+    public WPI_TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
     public DoubleSolenoid climbAngle;
 
     //index
-    public TalonFX indexMotor;
+    public WPI_TalonFX indexMotor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -69,25 +69,25 @@ public class Hardware {
             navX = new NavX(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
-            climbFixed1 = new TalonFX(CLIMB_FIXED_1);
-            climbFixed2 = new TalonFX(CLIMB_FIXED_2);
-            climbAngled1 = new TalonFX(CLIMB_ANGLED_1);
-            climbAngled2 = new TalonFX(CLIMB_ANGLED_2);
+            climbFixed1 = new WPI_TalonFX(CLIMB_FIXED_1);
+            climbFixed2 = new WPI_TalonFX(CLIMB_FIXED_2);
+            climbAngled1 = new WPI_TalonFX(CLIMB_ANGLED_1);
+            climbAngled2 = new WPI_TalonFX(CLIMB_ANGLED_2);
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new TalonFX(INTAKE_1);
-            intakeMotor2 = new TalonFX(INTAKE_2);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_1);
+            intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
         }
         if (INDEX_ENABLED) {
-            indexMotor = new TalonFX(INDEX);
+            indexMotor = new WPI_TalonFX(INDEX);
         }
         if (SHOOTER_ENABLED) {
-            flywheelMotor1 = new TalonFX(FLYWHEEL_1);
-            flywheelMotor2 = new TalonFX(FLYWHEEL_2);
-            turretMotor = new TalonFX(TURRET);
-            hoodMotor = new TalonFX(HOOD);
+            flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
+            flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
+            turretMotor = new WPI_TalonFX(TURRET);
+            hoodMotor = new WPI_TalonFX(HOOD);
         }
         if (DRIVER_VIS_ENABLED) {
             frontCamera = new PhotonCamera(FRONT_CAM);

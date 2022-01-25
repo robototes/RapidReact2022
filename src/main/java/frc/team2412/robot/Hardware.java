@@ -11,7 +11,7 @@ import org.frcteam2910.common.robot.drivers.NavX;
 import org.photonvision.PhotonCamera;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
-import static frc.team2412.robot.SubsystemContainer.SubsystemConstants.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
@@ -89,7 +89,7 @@ public class Hardware {
             turretMotor = new TalonFX(TURRET);
             hoodMotor = new TalonFX(HOOD);
         }
-        if (FRONT_VIS_ENABLED) {
+        if (DRIVER_VIS_ENABLED) {
             frontCamera = new PhotonCamera(FRONT_CAM);
         }
         if (GOAL_VIS_ENABLED) {

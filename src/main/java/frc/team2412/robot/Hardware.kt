@@ -81,8 +81,6 @@ public class Hardware {
     // Climb
     public lateinit var climbFixed1: TalonFX
     public lateinit var climbFixed2: TalonFX
-    public lateinit var climbAngled1: TalonFX
-    public lateinit var climbAngled2: TalonFX
     public lateinit var climbAngle: DoubleSolenoid
 
     // Index
@@ -99,8 +97,6 @@ public class Hardware {
         if (SubsystemConstants.DRIVE_ENABLED) {
             climbFixed1 = TalonFX(CLIMB_FIXED_1)
             climbFixed2 = TalonFX(CLIMB_FIXED_2)
-            climbAngled1 = TalonFX(CLIMB_ANGLED_1)
-            climbAngled2 = TalonFX(CLIMB_ANGLED_2)
             climbAngle =
                     DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN)
         }

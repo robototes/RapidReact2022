@@ -29,8 +29,6 @@ public class SubsystemContainer(h: Hardware) {
                         ClimbSubsystem(
                                 hardware.climbFixed1,
                                 hardware.climbFixed2,
-                                hardware.climbAngled1,
-                                hardware.climbAngled2,
                                 hardware.climbAngle
                         )
 

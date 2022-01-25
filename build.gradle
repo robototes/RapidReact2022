@@ -82,7 +82,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.10.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -108,11 +107,11 @@ wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }

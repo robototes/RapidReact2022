@@ -1,13 +1,13 @@
 package frc.team2412.robot.subsystem
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode
-import com.ctre.phoenix.motorcontrol.can.TalonFX
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX
 import edu.wpi.first.wpilibj.DoubleSolenoid
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 public class ClimbSubsystem(
-        climbFixed1: TalonFX,
-        climbFixed2: TalonFX,
+        climbFixed1: WPI_TalonFX,
+        climbFixed2: WPI_TalonFX,
         climbAngle: DoubleSolenoid
 ) : SubsystemBase() {
     public companion object ClimbConstants {

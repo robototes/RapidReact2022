@@ -1,6 +1,6 @@
 package frc.team2412.robot
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX
 import com.revrobotics.ColorSensorV3
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper
 import com.swervedrivespecialties.swervelib.SwerveModule
@@ -67,25 +67,25 @@ public class Hardware {
     public lateinit var frontCamera: PhotonCamera
 
     // Shooter
-    public lateinit var flywheelMotor1: TalonFX
-    public lateinit var flywheelMotor2: TalonFX
-    public lateinit var turretMotor: TalonFX
-    public lateinit var hoodMotor: TalonFX
+    public lateinit var flywheelMotor1: WPI_TalonFX
+    public lateinit var flywheelMotor2: WPI_TalonFX
+    public lateinit var turretMotor: WPI_TalonFX
+    public lateinit var hoodMotor: WPI_TalonFX
 
     // Intake
-    public lateinit var intakeMotor1: TalonFX
-    public lateinit var intakeMotor2: TalonFX
+    public lateinit var intakeMotor1: WPI_TalonFX
+    public lateinit var intakeMotor2: WPI_TalonFX
     public lateinit var intakeSolenoid1: Solenoid
     public lateinit var intakeSolenoid2: Solenoid
     public lateinit var intakeColorSensor: ColorSensorV3
 
     // Climb
-    public lateinit var climbFixed1: TalonFX
-    public lateinit var climbFixed2: TalonFX
+    public lateinit var climbFixed1: WPI_TalonFX
+    public lateinit var climbFixed2: WPI_TalonFX
     public lateinit var climbAngle: DoubleSolenoid
 
     // Index
-    public lateinit var indexMotor: TalonFX
+    public lateinit var indexMotor: WPI_TalonFX
 
     init {
         if (SubsystemConstants.DRIVE_ENABLED) {
@@ -96,25 +96,25 @@ public class Hardware {
             navX = NavX(GYRO_PORT)
         }
         if (SubsystemConstants.CLIMB_ENABLED) {
-            climbFixed1 = TalonFX(CLIMB_FIXED_1)
-            climbFixed2 = TalonFX(CLIMB_FIXED_2)
+            climbFixed1 = WPI_TalonFX(CLIMB_FIXED_1)
+            climbFixed2 = WPI_TalonFX(CLIMB_FIXED_2)
             climbAngle =
                     DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN)
         }
         if (SubsystemConstants.INTAKE_ENABLED) {
-            intakeMotor1 = TalonFX(INTAKE_1)
-            intakeMotor2 = TalonFX(INTAKE_2)
+            intakeMotor1 = WPI_TalonFX(INTAKE_1)
+            intakeMotor2 = WPI_TalonFX(INTAKE_2)
             intakeSolenoid1 = Solenoid(PneumaticsModuleType.REVPH, INTAKE_UP)
             intakeSolenoid2 = Solenoid(PneumaticsModuleType.REVPH, INTAKE_DOWN)
         }
         if (SubsystemConstants.INDEX_ENABLED) {
-            indexMotor = TalonFX(INDEX)
+            indexMotor = WPI_TalonFX(INDEX)
         }
         if (SubsystemConstants.SHOOTER_ENABLED) {
-            flywheelMotor1 = TalonFX(FLYWHEEL_1)
-            flywheelMotor2 = TalonFX(FLYWHEEL_2)
-            turretMotor = TalonFX(TURRET)
-            hoodMotor = TalonFX(HOOD)
+            flywheelMotor1 = WPI_TalonFX(FLYWHEEL_1)
+            flywheelMotor2 = WPI_TalonFX(FLYWHEEL_2)
+            turretMotor = WPI_TalonFX(TURRET)
+            hoodMotor = WPI_TalonFX(HOOD)
         }
         if (SubsystemConstants.DRIVER_VIS_ENABLED) {
             frontCamera = PhotonCamera(FRONT_CAM)

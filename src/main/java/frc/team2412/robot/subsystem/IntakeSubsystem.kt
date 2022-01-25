@@ -1,13 +1,13 @@
 package frc.team2412.robot.subsystem
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX
 import com.revrobotics.ColorSensorV3
 import edu.wpi.first.wpilibj.Solenoid
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 public class IntakeSubsystem(
-        intakeMotor1: TalonFX,
-        intakeMotor2: TalonFX,
+        intakeMotor1: WPI_TalonFX,
+        intakeMotor2: WPI_TalonFX,
         intakeSolenoid1: Solenoid,
         intakeSolenoid2: Solenoid,
         intakeColorSensor: ColorSensorV3

@@ -1,6 +1,5 @@
 package frc.team2412.robot
 
-import frc.team2412.robot.SubsystemContainer.SubsystemConstants.*
 import org.frcteam2910.common.robot.input.XboxController
 
 public class Controls(sub: SubsystemContainer) {
@@ -11,11 +10,11 @@ public class Controls(sub: SubsystemContainer) {
     public val controller = XboxController(ControlConstants.CONTROLLER_PORT)
 
     init {
-        if (CLIMB_ENABLED) bindClimbControls()
-        if (DRIVE_ENABLED) bindDriveControls()
-        if (INDEX_ENABLED) bindIndexControls()
-        if (INTAKE_ENABLED) bindIntakeControls()
-        if (SHOOTER_ENABLED) bindShoooterControls()
+        if (SubsystemContainer.CLIMB_ENABLED) bindClimbControls()
+        if (SubsystemContainer.DRIVE_ENABLED) bindDriveControls()
+        if (SubsystemContainer.INDEX_ENABLED) bindIndexControls()
+        if (SubsystemContainer.INTAKE_ENABLED) bindIntakeControls()
+        if (SubsystemContainer.SHOOTER_ENABLED) bindShoooterControls()
     }
 
     // TODO

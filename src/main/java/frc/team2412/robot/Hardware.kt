@@ -6,7 +6,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule
 import edu.wpi.first.wpilibj.DoubleSolenoid
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.SPI
-import frc.team2412.robot.SubsystemContainer.SubsystemConstants.*
+import frc.team2412.robot.SubsystemContainer.SubsystemConstants
 import frc.team2412.robot.util.Mk4Configuration
 import org.frcteam2910.common.robot.drivers.NavX
 import org.photonvision.PhotonCamera
@@ -85,14 +85,14 @@ public class Hardware {
     public lateinit var indexMotor: TalonFX
 
     init {
-        if (DRIVE_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.falcons()
             frontRightModule = FRONT_RIGHT_CONFIG.falcons()
             backLeftModule = BACK_LEFT_CONFIG.falcons()
             backRightModule = BACK_RIGHT_CONFIG.falcons()
             navX = NavX(GYRO_PORT)
         }
-        if (CLIMB_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             climbFixed1 = TalonFX(CLIMB_FIXED_1)
             climbFixed2 = TalonFX(CLIMB_FIXED_2)
             climbAngled1 = TalonFX(CLIMB_ANGLED_1)
@@ -100,30 +100,30 @@ public class Hardware {
             climbAngle =
                     DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN)
         }
-        if (INTAKE_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             intakeMotor1 = TalonFX(INTAKE_1)
             intakeMotor2 = TalonFX(INTAKE_2)
             intakeSolenoid = DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN)
         }
-        if (INDEX_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             indexMotor = TalonFX(INDEX)
         }
-        if (SHOOTER_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             flywheelMotor1 = TalonFX(FLYWHEEL_1)
             flywheelMotor2 = TalonFX(FLYWHEEL_2)
             turretMotor = TalonFX(TURRET)
             hoodMotor = TalonFX(HOOD)
         }
-        if (SHOOTER_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             flywheelMotor1 = TalonFX(FLYWHEEL_1)
             flywheelMotor2 = TalonFX(FLYWHEEL_2)
             turretMotor = TalonFX(TURRET)
             hoodMotor = TalonFX(HOOD)
         }
-        if (FRONT_VIS_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             frontCamera = PhotonCamera(FRONT_CAM)
         }
-        if (GOAL_VIS_ENABLED) {
+        if (SubsystemConstants.DRIVE_ENABLED) {
             limelight = PhotonCamera(LIMELIGHT)
         }
     }

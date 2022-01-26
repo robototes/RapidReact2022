@@ -15,4 +15,4 @@ additional terms or conditions.
 
 ### Credits
 
-Thanks to [Bevy](https://github.com/bevyengine/bevy/issues/2373) for the License and Contribution sections in the README
+Thanks to [Bevy](https://github.com/bevyengine/bevy/issues/2373) for the License and Contribution sections in the README.

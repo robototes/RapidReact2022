@@ -4,7 +4,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.photonvision.PhotonCamera;
 
 public class ShooterVisionSubsystem extends SubsystemBase {
-    public ShooterVisionSubsystem(PhotonCamera limelight) {
 
+    private PhotonCamera limelight;
+
+    public ShooterVisionSubsystem(PhotonCamera limelight) {
+        this.limelight = limelight;
     }
+
+    public double getYaw(){
+        return limelight.getLatestResult().getBestTarget().getYaw();
+    }
+
+
+
+    
 }

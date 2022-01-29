@@ -13,6 +13,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX hoodMotor;
 
     public static final double MAX_FORWARD = 0.1;
+    public static final double FLYWHEEL_VELOCITY = 10;
     public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
@@ -25,6 +26,8 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor1.configSupplyCurrentLimit(limit);
         flywheelMotor2.configSupplyCurrentLimit(limit);
         flywheelMotor2.setInverted(true);
+        turretMotor.configSupplyCurrentLimit(limit);
+        hoodMotor.configSupplyCurrentLimit(limit);
 
         this.flywheelMotor1 = flywheelMotor1;
         this.flywheelMotor2 = flywheelMotor2;
@@ -48,8 +51,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // TODO make sure these motors are going in the right direction
     public void startFlywheel() {
-        flywheelMotor1.set(MAX_FORWARD);
-        flywheelMotor2.set(MAX_FORWARD);
+        flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
+        flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
     }
 
     public void stopFlywheel() {
@@ -60,6 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Resets the turret motor's integrated encoder to 0.
      */
+    // TODO use limit switches to reset the encoder
     public void resetTurretEncoder() {
         turretMotor.setSelectedSensorPosition(0);
     }

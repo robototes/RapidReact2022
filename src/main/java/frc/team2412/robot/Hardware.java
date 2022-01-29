@@ -99,7 +99,7 @@ public class Hardware {
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
             if (false){
-                this.i2c_multiplexer = new I2C(I2C.Port.kOnboard, I2C_MULTIPLEXER_ADDRESS);
+                this.i2c_multiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
                 this.leftColorSensor = new MultiplexedColorSensor(i2c_multiplexer, LEFT_COLORSENSOR_PORT);
                 this.rightColorSensor = new MultiplexedColorSensor(i2c_multiplexer, RIGHT_COLORSENSOR_PORT);
                 this.centerColorSensor = new MultiplexedColorSensor(i2c_multiplexer, CENTER_COLORSENSOR_PORT);

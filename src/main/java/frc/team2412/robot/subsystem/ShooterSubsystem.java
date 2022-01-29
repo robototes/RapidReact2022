@@ -16,9 +16,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX hoodMotor;
 
     // Constants
-    public static final double MAX_FORWARD = 0.1;
     public static final double FLYWHEEL_VELOCITY = 10;
-    public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
     public static final double MIN_TURRET_ANGLE = -180; // Total ~360 degrees of rotation, assumes 0 is center
@@ -87,12 +85,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.hoodMotor = hoodMotor;
     }
 
-    public void hoodMotorExtend() {
-        hoodMotor.set(MAX_FORWARD);
-    }
-
-    public void hoodMotorRetract() {
-        hoodMotor.set(MAX_REVERSE);
+    public void hoodMotorSetAngle(double degrees) {
+        hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
     }
 
     // TODO make hardstop

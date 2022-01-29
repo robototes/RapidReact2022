@@ -81,21 +81,36 @@ public class ShooterSubsystem extends SubsystemBase {
         this.hoodMotor = hoodMotor;
     }
 
+    /**
+     * Sets the target angle for the hood motor
+     * 
+     * @param degrees
+     *            Target angle for the hood motor in degrees
+     */
     public void hoodMotorSetAngle(double degrees) {
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
         hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
     }
 
+    /**
+     * Stops the hood motor
+     */
     // TODO make hardstop
     public void hoodMotorStop() {
         hoodMotor.set(STOP_MOTOR);
     }
 
+    /**
+     * Starts both flywheel motors
+     */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
         flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
     }
 
+    /**
+     * Stops both flywheel motors
+     */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
         flywheelMotor2.set(STOP_MOTOR);
@@ -109,6 +124,11 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.setSelectedSensorPosition(0);
     }
 
+    /**
+     * Gets angle of the turret motor (horizontal swivel)
+     * 
+     * @return Angle, in degrees
+     */
     public double getTurretAngle() {
         return turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
     }
@@ -124,6 +144,13 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * angle);
     }
 
+    /**
+     * Sets the turret angle realative to the current angle - not the last target
+     * angle, but the current position of the motor
+     * 
+     * @param deltaAngle
+     *            Amount to change the turret angle by in degrees
+     */
     public void updateTurretAngle(double deltaAngle) {
         double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
         setTurretAngle(currentAngle + deltaAngle);

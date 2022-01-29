@@ -57,26 +57,22 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
         flywheelMotor2.setInverted(true);
 
-        var limit = new SupplyCurrentLimitConfiguration(true, 10, 10, 500);
-        TalonFXConfiguration turretConfig = new TalonFXConfiguration();
-        turretConfig.forwardSoftLimitThreshold = MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS;
-        turretConfig.reverseSoftLimitThreshold = MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS;
-        turretConfig.forwardSoftLimitEnable = true;
-        turretConfig.reverseSoftLimitEnable = true;
-        turretMotor.configSupplyCurrentLimit(limit);
-        turretMotor.configAllSettings(turretConfig);
+        SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration(true, 10, 10, 500);
+        turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
+        turretMotor.configReverseSoftLimitThreshold(MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
+        turretMotor.configForwardSoftLimitEnable(true);
+        turretMotor.configReverseSoftLimitEnable(true);
+        turretMotor.configSupplyCurrentLimit(currentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
         turretMotor.config_kP(0, TURRET_P);
         turretMotor.config_kI(0, TURRET_I);
         turretMotor.config_kD(0, TURRET_D);
-        TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
-        hoodConfig.forwardSoftLimitThreshold = MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS;
-        hoodConfig.reverseSoftLimitThreshold = MIN_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS;
-        hoodConfig.forwardSoftLimitEnable = true;
-        hoodConfig.reverseSoftLimitEnable = true;
-        hoodMotor.configSupplyCurrentLimit(limit);
-        hoodMotor.configAllSettings(hoodConfig);
+        hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);
+        hoodMotor.configReverseSoftLimitThreshold(0); // Current hood setup plan starts hood at 0, below MIN_HOOD_ANGLE
+        hoodMotor.configForwardSoftLimitEnable(true);
+        hoodMotor.configReverseSoftLimitEnable(true);
+        hoodMotor.configSupplyCurrentLimit(currentLimit);
         hoodMotor.setNeutralMode(NeutralMode.Brake);
 
         this.flywheelMotor1 = flywheelMotor1;
@@ -86,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void hoodMotorSetAngle(double degrees) {
+        degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
         hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
     }
 
@@ -94,7 +91,6 @@ public class ShooterSubsystem extends SubsystemBase {
         hoodMotor.set(STOP_MOTOR);
     }
 
-    // TODO make sure these motors are going in the right direction
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
         flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);

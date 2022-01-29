@@ -23,6 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double TURRET_P = 0.01; // Placeholder PID constants
     public static final double TURRET_I = 0;
     public static final double TURRET_D = 0;
+    public static final double MAX_HOOD_ANGLE = 90.0; // TODO find out max angle for hood
+    public static final double MIN_HOOD_ANGLE = 0;
 
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
@@ -51,6 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
         hoodMotor.set(MAX_REVERSE);
     }
 
+    // TODO make hardstop
     public void hoodMotorStop() {
         hoodMotor.set(STOP_MOTOR);
     }

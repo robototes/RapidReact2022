@@ -16,7 +16,8 @@ import frc.team2412.robot.Hardware.HardwareConstants;
 public class MultiplexedColorSensor {
     // The multiplexer I2C is static because it needs to be used for ALL of the multiplexer sensors,
     // and so by making it static all sensors can access it.
-    private static I2C i2c_multiplexer;
+//    private static I2C i2c_multiplexer;
+    private I2C i2c_multiplexer;
     // The actual sensor. All of the methods call this sensor to get the data.
     private final ColorSensorV3 sensor;
     // What port on the multiplexer the color sensor is plugged into.
@@ -31,10 +32,11 @@ public class MultiplexedColorSensor {
      *                (commonly labeled SC3 and SD3 on the PCB, where 3 is the
      *                port)</br>
      */
-    private MultiplexedColorSensor(I2C.Port i2cPort, int port_number) {
-      if (i2c_multiplexer == null) {
-        i2c_multiplexer = new I2C(i2cPort, HardwareConstants.I2C_MULTIPLEXER_ADDRESS);
-      }
+    private MultiplexedColorSensor(I2C i2c_multiplexer, I2C.Port i2cPort, int port_number) {
+//      if (i2c_multiplexer == null) {
+//        i2c_multiplexer = new I2C(i2cPort, HardwareConstants.I2C_MULTIPLEXER_ADDRESS);
+//      }
+        this.i2c_multiplexer = i2c_multiplexer;
       this.port_number = port_number;
       setChannel();
       this.sensor = new ColorSensorV3(i2cPort);
@@ -45,8 +47,8 @@ public class MultiplexedColorSensor {
      * 
      * @param port_number which port the ColorSensorV3 is plugged on the multiplexer
      */
-    public MultiplexedColorSensor(int port_number){
-        this(I2C.Port.kOnboard, port_number);
+    public MultiplexedColorSensor(I2C i2c_multiplexer, int port_number){
+        this(i2c_multiplexer, I2C.Port.kOnboard, port_number);
     }
   
     /**

@@ -11,8 +11,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX turretMotor;
     private final WPI_TalonFX hoodMotor;
 
-    public static final double MAX_FORWARD = 1;
-    public static final double MAX_REVERSE = -1;
+    public static final double MAX_FORWARD = 0.1;
+    public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
 
@@ -20,6 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
             WPI_TalonFX hoodMotor) {
         this.flywheelMotor1 = flywheelMotor1;
         this.flywheelMotor2 = flywheelMotor2;
+        this.flywheelMotor2.setInverted(true);
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
         hoodMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
@@ -37,6 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
         hoodMotor.set(STOP_MOTOR);
     }
 
+    // TODO make sure these motors are going in the right direction
     public void startFlywheel() {
         flywheelMotor1.set(MAX_FORWARD);
         flywheelMotor2.set(MAX_FORWARD);
@@ -67,7 +69,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void updateTurretAngle(double deltaAngle) {
-        double currentAngle = turretMotor.getSelectedSensorPosition()/DEGREES_TO_ENCODER_TICKS;
-        setTurretAngle(currentAngle+deltaAngle);
+        double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+        setTurretAngle(currentAngle + deltaAngle);
     }
 }

@@ -18,10 +18,16 @@ public class ClimbSubsystem extends SubsystemBase {
         public static final double MAX_ENCODER_TICKS = 1000;
         public static final double MIN_ENCODER_TICKS = 0;
 
-        public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
-        
-        enum HookArmState { ANGLED, UPRIGHT }
-        enum ClimbSubsystemState { ENABLED, DISABLED }
+        public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
+                true, 40, 40, 500);
+
+        enum HookArmState {
+            ANGLED, UPRIGHT
+        }
+
+        enum ClimbSubsystemState {
+            ENABLED, DISABLED
+        }
     }
 
     private final WPI_TalonFX climbFixedMotor;
@@ -40,7 +46,7 @@ public class ClimbSubsystem extends SubsystemBase {
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = true;
         motorConfig.reverseSoftLimitEnable = true;
-        motorConfig.forwardSoftLimitThreshold= MAX_ENCODER_TICKS;
+        motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
@@ -49,7 +55,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() { 
+    public void periodic() {
         double positionDynamic = climbDynamicMotor.getSelectedSensorPosition();
         if (!(positionDynamic >= MAX_ENCODER_TICKS || positionDynamic <= MIN_ENCODER_TICKS)) {
             stopAngledArm();
@@ -74,36 +80,36 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void angleClimbHook(boolean extended) {
         solenoid.set(extended ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-    }  
-   
+    }
+
     public void extendFixedArm() {
-        if (state == ClimbSubsystemState.ENABLED) 
+        if (state == ClimbSubsystemState.ENABLED)
             climbFixedMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
     }
-    
+
     public void retractFixedArm() {
         if (state == ClimbSubsystemState.ENABLED)
             climbFixedMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopFixedArm() {
-        if (state == ClimbSubsystemState.ENABLED) 
+        if (state == ClimbSubsystemState.ENABLED)
             climbFixedMotor.set(ClimbConstants.STOP_SPEED);
     }
 
     public void extendAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED) 
+        if (state == ClimbSubsystemState.ENABLED)
             climbDynamicMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
     }
-    
+
     public void retractAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED) 
+        if (state == ClimbSubsystemState.ENABLED)
             climbDynamicMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED) 
+        if (state == ClimbSubsystemState.ENABLED)
             climbDynamicMotor.set(ClimbConstants.STOP_SPEED);
     }
-    
+
 }

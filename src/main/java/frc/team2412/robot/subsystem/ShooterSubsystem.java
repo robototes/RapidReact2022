@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -17,8 +18,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
-    public static final double MIN_TURRET_ANGLE = 0; // These are currently unused
-    public static final double MAX_TURRET_ANGLE = 180; // Placeholder, maybe need to update
+    public static final double MIN_TURRET_ANGLE = -180; // Total ~360 degrees of rotation, assumes 0 is center
+    public static final double MAX_TURRET_ANGLE = 180;
     public static final double TURRET_MAX_SPEED = 0.1;
     public static final double TURRET_MIN_SPEED = -0.1;
     public static final double TURRET_P = 0.01; // Placeholder PID constants
@@ -40,6 +41,9 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheelMotor2 = flywheelMotor2;
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
+        // Set neutral mode
+        this.turretMotor.setNeutralMode(NeutralMode.Brake);
+        this.hoodMotor.setNeutralMode(NeutralMode.Brake);
         // Make sure turret is using builtin encoder, may be unneccessary
         this.turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
         // Configure turret PID
@@ -98,9 +102,5 @@ public class ShooterSubsystem extends SubsystemBase {
     public void updateTurretAngle(double deltaAngle) {
         double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
         setTurretAngle(currentAngle + deltaAngle);
-    }
-
-    public void setTurretSpeed(double speed) {
-        turretMotor.set(Math.min(Math.max(speed, TURRET_MIN_SPEED), TURRET_MAX_SPEED));
     }
 }

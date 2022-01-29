@@ -28,7 +28,8 @@ public class Robot extends TimedRobot {
     public final Controls controls;
     public final Subsystems subsystems;
     public final Hardware hardware;
-    public UpdateManager updateManager;
+    
+    private UpdateManager updateManager;
 
     private Robot() {
         instance = this;
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
     }
 
     // TODO add other override methods
-    
+
     @Override
     public void robotInit() {
         updateManager = new UpdateManager(
@@ -52,7 +53,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
     }
 
-    public SimplePathBuilder builder;
     @Override
     public void autonomousInit() {
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);

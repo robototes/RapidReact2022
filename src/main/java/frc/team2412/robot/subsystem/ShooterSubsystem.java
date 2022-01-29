@@ -8,11 +8,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
+    // instance variables
     private final WPI_TalonFX flywheelMotor1;
     private final WPI_TalonFX flywheelMotor2;
     private final WPI_TalonFX turretMotor;
     private final WPI_TalonFX hoodMotor;
 
+    // Constants
     public static final double MAX_FORWARD = 0.1;
     public static final double FLYWHEEL_VELOCITY = 10;
     public static final double MAX_REVERSE = -0.1;
@@ -28,6 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_HOOD_ANGLE = 40.0;
     public static final double MIN_HOOD_ANGLE = 5;
 
+    // methods & constructors
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
         var limit = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);

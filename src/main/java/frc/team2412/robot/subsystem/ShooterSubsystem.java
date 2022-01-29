@@ -24,14 +24,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void hoodMotorExtend(WPI_TalonFX hoodMotor){
-        
+        hoodMotor.set(shooterSubsystemConstants.MAX_FORWARD);
     }
 
     public void hoodMotorRetract(WPI_TalonFX hoodMotor){
-
+        hoodMotor.set(shooterSubsystemConstants.MAX_REVERSE);
     }
 
     public void hoodMotorStop(WPI_TalonFX hoodMotor){
-
+        hoodMotor.set(shooterSubsystemConstants.STOP_MOTOR);
     }
 }

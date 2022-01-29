@@ -33,26 +33,30 @@ public class ShooterSubsystem extends SubsystemBase {
     // methods & constructors
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
-        var limit = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
-        flywheelMotor1.configSupplyCurrentLimit(limit);
-        flywheelMotor2.configSupplyCurrentLimit(limit);
+        // Motor configs
+        // TODO soft limits
+        var flywheelLimit = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
+
+        flywheelMotor1.configSupplyCurrentLimit(flywheelLimit);
+        flywheelMotor1.setNeutralMode(NeutralMode.Coast);
+        flywheelMotor2.configSupplyCurrentLimit(flywheelLimit);
+        flywheelMotor2.setNeutralMode(NeutralMode.Coast);
         flywheelMotor2.setInverted(true);
+
+        var limit = new SupplyCurrentLimitConfiguration(true, 10, 10, 500);
         turretMotor.configSupplyCurrentLimit(limit);
+        turretMotor.setNeutralMode(NeutralMode.Brake);
+        turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+        turretMotor.config_kP(0, TURRET_P);
+        turretMotor.config_kI(0, TURRET_I);
+        turretMotor.config_kD(0, TURRET_D);
         hoodMotor.configSupplyCurrentLimit(limit);
+        hoodMotor.setNeutralMode(NeutralMode.Brake);
 
         this.flywheelMotor1 = flywheelMotor1;
         this.flywheelMotor2 = flywheelMotor2;
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
-        // Set neutral mode
-        this.turretMotor.setNeutralMode(NeutralMode.Brake);
-        this.hoodMotor.setNeutralMode(NeutralMode.Brake);
-        // Make sure turret is using builtin encoder, may be unneccessary
-        this.turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-        // Configure turret PID
-        this.turretMotor.config_kP(0, TURRET_P);
-        this.turretMotor.config_kI(0, TURRET_I);
-        this.turretMotor.config_kD(0, TURRET_D);
     }
 
     public void hoodMotorExtend() {

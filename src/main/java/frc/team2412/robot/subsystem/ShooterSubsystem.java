@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -51,9 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
         // Motor configs
-        // TODO soft limits
         var flywheelLimit = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
-
         flywheelMotor1.configSupplyCurrentLimit(flywheelLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
         flywheelMotor2.configSupplyCurrentLimit(flywheelLimit);
@@ -61,13 +60,25 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor2.setInverted(true);
 
         var limit = new SupplyCurrentLimitConfiguration(true, 10, 10, 500);
+        TalonFXConfiguration turretConfig = new TalonFXConfiguration();
+        turretConfig.forwardSoftLimitThreshold = MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS;
+        turretConfig.reverseSoftLimitThreshold = MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS;
+        turretConfig.forwardSoftLimitEnable = true;
+        turretConfig.reverseSoftLimitEnable = true;
         turretMotor.configSupplyCurrentLimit(limit);
+        turretMotor.configAllSettings(turretConfig);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
         turretMotor.config_kP(0, TURRET_P);
         turretMotor.config_kI(0, TURRET_I);
         turretMotor.config_kD(0, TURRET_D);
+        TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
+        hoodConfig.forwardSoftLimitThreshold = MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS;
+        hoodConfig.reverseSoftLimitThreshold = MIN_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS;
+        hoodConfig.forwardSoftLimitEnable = true;
+        hoodConfig.reverseSoftLimitEnable = true;
         hoodMotor.configSupplyCurrentLimit(limit);
+        hoodMotor.configAllSettings(hoodConfig);
         hoodMotor.setNeutralMode(NeutralMode.Brake);
 
         this.flywheelMotor1 = flywheelMotor1;

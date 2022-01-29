@@ -13,6 +13,7 @@ public class Subsystems {
         public static final boolean INDEX_ENABLED = false;
         public static final boolean INTAKE_ENABLED = false;
         public static final boolean SHOOTER_ENABLED = false;
+        public static final boolean I2C_MUX_ENABLED = false;
 
     }
 

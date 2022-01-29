@@ -98,7 +98,7 @@ public class Hardware {
              * example code from https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
-            if (false){
+            if (I2C_MUX_ENABLED) {
                 this.i2c_multiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
                 this.leftColorSensor = new MultiplexedColorSensor(i2c_multiplexer, LEFT_COLORSENSOR_PORT);
                 this.rightColorSensor = new MultiplexedColorSensor(i2c_multiplexer, RIGHT_COLORSENSOR_PORT);

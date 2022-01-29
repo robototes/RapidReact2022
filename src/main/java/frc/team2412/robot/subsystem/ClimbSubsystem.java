@@ -1,88 +1,107 @@
 package frc.team2412.robot.subsystem;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 
 public class ClimbSubsystem extends SubsystemBase {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
+        public static final double TEST_SPEED = 0.5;
         public static final double STOP_SPEED = 0;
+        public static final double MAX_ENCODER_TICKS = 1000;
+        public static final double MIN_ENCODER_TICKS = 0;
+
+        public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
+        
+        enum HookArmState { ANGLED, UPRIGHT }
+        enum ClimbSubsystemState { ENABLED, DISABLED }
     }
 
-    /**
-     * State of the cliimb subsystem
-     */
-    enum ClimbSubsystemState {
-        ENABLED, DISABLED
-    }
-
-    /**
-     * State of the solenoid to change the climb angle
-     */
-    enum HookArmState {
-        EXTENDED, UPRIGHT
-    }
-
-    private final TalonFX climbMotor1;
-    private final TalonFX climbMotor2;
+    private final WPI_TalonFX climbFixedMotor;
+    private final WPI_TalonFX climbDynamicMotor;
 
     private final DoubleSolenoid solenoid;
 
-    ClimbSubsystemState state;
+    private static ClimbSubsystemState state = ClimbSubsystemState.DISABLED;
 
-    public ClimbSubsystem(TalonFX climbFixed1, TalonFX climbFixed2, DoubleSolenoid climbAngle) {
-        climbMotor1 = climbFixed1;
-        climbMotor2 = climbFixed2;
-        solenoid = climbAngle;
+    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle) {
         setName("ClimbSubsystem");
+        this.climbFixedMotor = climbFixedMotor;
+        this.climbDynamicMotor = climbDynamicMotor;
+        solenoid = climbAngle;
+        climbFixedMotor.configSupplyCurrentLimit(MOTOR_CURRENT_LIMIT);
+        climbDynamicMotor.configSupplyCurrentLimit(MOTOR_CURRENT_LIMIT);
+        climbFixedMotor.configForwardSoftLimitThreshold(MAX_ENCODER_TICKS);
+        climbFixedMotor.configReverseSoftLimitThreshold(MIN_ENCODER_TICKS);
+        climbFixedMotor.configForwardSoftLimitEnable(true, 0);
+        climbFixedMotor.configReverseSoftLimitEnable(true, 0);
+        climbDynamicMotor.configForwardSoftLimitThreshold(MAX_ENCODER_TICKS);
+        climbDynamicMotor.configReverseSoftLimitThreshold(MIN_ENCODER_TICKS);
+        climbDynamicMotor.configReverseSoftLimitEnable(true, 0);
+        climbDynamicMotor.configForwardSoftLimitEnable(true, 0);
     }
 
     @Override
-    public void periodic() {
-        System.out.println("Subsystem " + getName() + " says hi?");
+    public void periodic() { 
+        double positionDynamic = climbDynamicMotor.getSelectedSensorPosition();
+        if (!(positionDynamic >= MAX_ENCODER_TICKS || positionDynamic <= MIN_ENCODER_TICKS)) {
+            stopAngledArm();
+        }
+        double positionFixed = climbFixedMotor.getSelectedSensorPosition();
+        if (!(positionFixed >= MAX_ENCODER_TICKS || positionFixed <= MIN_ENCODER_TICKS)) {
+            stopFixedArm();
+        }
     }
 
     public void setEnabled() {
         state = ClimbSubsystemState.ENABLED;
     }
 
-     public void setDisabled() {
+    public void setDisabled() {
         state = ClimbSubsystemState.DISABLED;
     }
 
-    /**
-     * Extend the solenoid to angle the climb hook
-     * @param extended - True to extend the arm, false to collapse
-     */
+    public boolean getState() {
+        return state == ClimbSubsystemState.ENABLED;
+    }
+
     public void angleClimbHook(boolean extended) {
         solenoid.set(extended ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }  
-    
+   
     public void extendFixedArm() {
-        climbMotor1.set(TalonFXControlMode.PercentOutput, ClimbConstants.MAX_SPEED);
+        if (state == ClimbSubsystemState.ENABLED) 
+            climbFixedMotor.set(ClimbConstants.TEST_SPEED);
     }
     
     public void retractFixedArm() {
-        climbMotor1.set(TalonFXControlMode.PercentOutput, -ClimbConstants.MAX_SPEED);
+        if (state == ClimbSubsystemState.ENABLED)
+            climbFixedMotor.set(-ClimbConstants.TEST_SPEED);
     }
 
     public void stopFixedArm() {
-        climbMotor1.set(TalonFXControlMode.PercentOutput, ClimbConstants.STOP_SPEED);
+        if (state == ClimbSubsystemState.ENABLED) 
+            climbFixedMotor.set(ClimbConstants.STOP_SPEED);
     }
 
     public void extendAngledArm() {
-        climbMotor2.set(TalonFXControlMode.PercentOutput, ClimbConstants.MAX_SPEED);
+        if (state == ClimbSubsystemState.ENABLED) 
+            climbDynamicMotor.set(ClimbConstants.TEST_SPEED);
     }
     
     public void retractAngledArm() {
-        climbMotor2.set(TalonFXControlMode.PercentOutput, -ClimbConstants.MAX_SPEED);
+        if (state == ClimbSubsystemState.ENABLED) 
+            climbDynamicMotor.set(-ClimbConstants.TEST_SPEED);
     }
 
     public void stopAngledArm() {
-        climbMotor2.set(TalonFXControlMode.PercentOutput, ClimbConstants.STOP_SPEED);
+        if (state == ClimbSubsystemState.ENABLED) 
+            climbDynamicMotor.set(ClimbConstants.STOP_SPEED);
     }
     
 }

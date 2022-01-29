@@ -15,6 +15,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
+    public static final double MIN_TURRET_ANGLE = 0;
+    public static final double MAX_TURRET_ANGLE = 180; // Placeholder, maybe need to update
 
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
@@ -23,7 +25,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheelMotor2.setInverted(true);
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
-        hoodMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+        // Make sure hood is using builtin encoder, may be unneccessary
+        this.hoodMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     }
 
     public void hoodMotorExtend() {
@@ -56,9 +59,12 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.setSelectedSensorPosition(0);
     }
 
+    public double getTurretAngle() {
+        return turretMotor.getSelectedSensorPosition()/DEGREES_TO_ENCODER_TICKS;
+    }
+
     /**
-     * Sets the turret's angle to the given angle.
-     * TODO: Prevent motor from ripping out wires
+     * Sets the turret's angle to the given angle (Does not check angle limits).
      * 
      * @param angle
      *            the angle (in degrees) to set the turret to (negative for
@@ -71,5 +77,14 @@ public class ShooterSubsystem extends SubsystemBase {
     public void updateTurretAngle(double deltaAngle) {
         double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
         setTurretAngle(currentAngle + deltaAngle);
+    }
+
+    public void setTurretSpeed(double speed) {
+        if (speed > 1) {
+            speed = 1;
+        } else if (speed < -1) {
+            speed = -1;
+        }
+        turretMotor.set(speed);
     }
 }

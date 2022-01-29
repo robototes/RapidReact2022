@@ -66,4 +66,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setTurretAngle(double angle) {
         turretMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * angle);
     }
+
+    public void updateTurretAngle(double deltaAngle) {
+        double currentAngle = turretMotor.getSelectedSensorPosition()/DEGREES_TO_ENCODER_TICKS;
+        setTurretAngle(currentAngle+deltaAngle);
+    }
 }

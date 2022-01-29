@@ -34,7 +34,7 @@ public class Hardware {
         //shooter can ids are range 20-29
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
-        //intake can ids are rnage 30-39
+        //intake can ids are range 30-39
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         //index can ids are range 40-49
@@ -46,7 +46,7 @@ public class Hardware {
         //default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
         public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
-        //which the I2C device plugged in on the multiplexer
+        //which port the I2C device plugged in on the multiplexer
         public static final int LEFT_COLORSENSOR_PORT = 1, RIGHT_COLORSENSOR_PORT = 2, CENTER_COLORSENSOR_PORT = 3;
     }
 

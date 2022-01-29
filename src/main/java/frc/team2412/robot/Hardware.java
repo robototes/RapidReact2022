@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C.Port;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
@@ -44,6 +45,7 @@ public class Hardware {
 
         //default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
+        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
         //which the I2C device plugged in on the multiplexer
         public static final int LEFT_COLORSENSOR_PORT = 1, RIGHT_COLORSENSOR_PORT = 2, CENTER_COLORSENSOR_PORT = 3;
     }
@@ -62,9 +64,6 @@ public class Hardware {
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
     public I2C i2c_multiplexer;
-//    public ColorSensorV3 leftColorSensor;
-//    public ColorSensorV3 rightColorSensor;
-//    public ColorSensorV3 centerColorSensor;
     public MultiplexedColorSensor leftColorSensor;
     public MultiplexedColorSensor rightColorSensor;
     public MultiplexedColorSensor centerColorSensor;
@@ -96,17 +95,9 @@ public class Hardware {
             intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
             /**
-             * untested
              * example code from https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
-            // multiplexer = new I2C(I2C.Port.kOnboard, I2C_MULTIPLEXER_ADDRESS);
-            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << LEFT_COLORSENSOR_PORT);
-            // leftColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << RIGHT_COLORSENSOR_PORT);
-            // rightColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << CENTER_COLORSENSOR_PORT);
-            // centerColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
             if (false){
                 this.i2c_multiplexer = new I2C(I2C.Port.kOnboard, I2C_MULTIPLEXER_ADDRESS);
                 this.leftColorSensor = new MultiplexedColorSensor(i2c_multiplexer, LEFT_COLORSENSOR_PORT);

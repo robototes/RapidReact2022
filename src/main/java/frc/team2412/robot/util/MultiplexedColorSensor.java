@@ -14,41 +14,32 @@ import frc.team2412.robot.Hardware.HardwareConstants;
  * so if called any method that's not been override will cause trouble
  */
 public class MultiplexedColorSensor {
-    // The multiplexer I2C is static because it needs to be used for ALL of the multiplexer sensors,
-    // and so by making it static all sensors can access it.
-//    private static I2C i2c_multiplexer;
     private I2C i2c_multiplexer;
+    private final int i2c_multiplexer_address;
     // The actual sensor. All of the methods call this sensor to get the data.
     private final ColorSensorV3 sensor;
     // What port on the multiplexer the color sensor is plugged into.
-    private final int port_number;
+    private final int sensor_port_number;
   
     /**
      * Create a multiplexed color sensor.
-     * 
-     * @param i2cPort - What port the multiplexer is plugged into.
-     * @param port_number    - What port the color sensor is plugged into the multiplexer
-     *                <br>
-     *                (commonly labeled SC3 and SD3 on the PCB, where 3 is the
-     *                port)</br>
+     * the constructor with most control, make it public if necessary
      */
-    private MultiplexedColorSensor(I2C i2c_multiplexer, I2C.Port i2cPort, int port_number) {
-//      if (i2c_multiplexer == null) {
-//        i2c_multiplexer = new I2C(i2cPort, HardwareConstants.I2C_MULTIPLEXER_ADDRESS);
-//      }
+    private MultiplexedColorSensor(I2C i2c_multiplexer, int i2c_multiplexer_address, I2C.Port i2cPort, int sensor_port_number) {
         this.i2c_multiplexer = i2c_multiplexer;
-      this.port_number = port_number;
-      setChannel();
-      this.sensor = new ColorSensorV3(i2cPort);
+        this.i2c_multiplexer_address = i2c_multiplexer_address;
+        this.sensor_port_number = sensor_port_number;
+        setChannel();
+        this.sensor = new ColorSensorV3(i2cPort);
     }
 
     /**
      * Since there is only one I2C port on roboRIO 2, so just pass in the port number on multiplexer should be enough
-     * 
-     * @param port_number which port the ColorSensorV3 is plugged on the multiplexer
+     * @param i2c_multiplexer the only I2C multiplexer 
+     * @param sensor_port_number which port the ColorSensorV3 is plugged on the multiplexer
      */
-    public MultiplexedColorSensor(I2C i2c_multiplexer, int port_number){
-        this(i2c_multiplexer, I2C.Port.kOnboard, port_number);
+    public MultiplexedColorSensor(I2C i2c_multiplexer, int sensor_port_number){
+        this(i2c_multiplexer, HardwareConstants.I2C_MULTIPLEXER_ADDRESS, HardwareConstants.I2C_MULTIPLEXER_PORT, sensor_port_number);
     }
   
     /**
@@ -56,51 +47,51 @@ public class MultiplexedColorSensor {
      * using the color sensor.
      */
     private void setChannel() {
-      i2c_multiplexer.write(HardwareConstants.I2C_MULTIPLEXER_ADDRESS, 1 << this.port_number);
+      this.i2c_multiplexer.write(this.i2c_multiplexer_address, 1 << this.sensor_port_number);
     }
   
     /*-----------------------------------------------------------------------*/
-    /* Below are all of the methods used for the color sensor. */
+    /* Below are all of the methods used for the color sensor.               */
     /* All this does is set the channel, then run the command on the sensor. */
+    /* Should covered most commonly used method, if not just add them below  */
     /*-----------------------------------------------------------------------*/
-  
     public Color getColor() {
-      setChannel();
-      return this.sensor.getColor();
+        setChannel();
+        return this.sensor.getColor();
     }
   
     public int getProximity() {
-      setChannel();
-      return this.sensor.getProximity();
+        setChannel();
+        return this.sensor.getProximity();
     }
   
     public RawColor getRawColor() {
-      setChannel();
-      return this.sensor.getRawColor();
+        setChannel();
+        return this.sensor.getRawColor();
     }
   
     public int getRed() {
-      setChannel();
-      return this.sensor.getRed();
+        setChannel();
+        return this.sensor.getRed();
     }
   
     public int getGreen() {
-      setChannel();
-      return this.sensor.getGreen();
+        setChannel();
+        return this.sensor.getGreen();
     }
   
     public int getBlue() {
-      setChannel();
-      return this.sensor.getBlue();
+        setChannel();
+        return this.sensor.getBlue();
     }
   
     public int getIR() {
-      setChannel();
-      return this.sensor.getIR();
+        setChannel();
+        return this.sensor.getIR();
     }
   
     public boolean hasReset() {
-      setChannel();
-      return this.sensor.hasReset();
+        setChannel();
+        return this.sensor.hasReset();
     }
-  }
+}

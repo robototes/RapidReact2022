@@ -62,13 +62,13 @@ public class Hardware {
     //climb
     public WPI_TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
     public DoubleSolenoid climbAngle;
+
+    //index
+    public WPI_TalonFX indexMotor;
     public I2C multiplexer;
     public ColorSensorV3 leftColorSensor;
     public ColorSensorV3 rightColorSensor;
     public ColorSensorV3 centerColorSensor;
-
-    //index
-    public WPI_TalonFX indexMotor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -91,8 +91,7 @@ public class Hardware {
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
             /**
              * untested
-             * take the example code from
-             * https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
+             * example code from https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
             // multiplexer = new I2C(I2C.Port.kOnboard, I2C_MULTIPLEXER_ADDRESS);

@@ -16,8 +16,13 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_REVERSE = -0.1;
     public static final double STOP_MOTOR = 0;
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
-    public static final double MIN_TURRET_ANGLE = 0;
+    public static final double MIN_TURRET_ANGLE = 0; // These are currently unused
     public static final double MAX_TURRET_ANGLE = 180; // Placeholder, maybe need to update
+    public static final double TURRET_MAX_SPEED = 0.1;
+    public static final double TURRET_MIN_SPEED = -0.1;
+    public static final double TURRET_P = 0.01; // Placeholder PID constants
+    public static final double TURRET_I = 0;
+    public static final double TURRET_D = 0;
 
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
@@ -30,8 +35,12 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheelMotor2 = flywheelMotor2;
         this.turretMotor = turretMotor;
         this.hoodMotor = hoodMotor;
-        // Make sure hood is using builtin encoder, may be unneccessary
-        this.hoodMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+        // Make sure turret is using builtin encoder, may be unneccessary
+        this.turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+        // Configure turret PID
+        this.turretMotor.config_kP(0, TURRET_P);
+        this.turretMotor.config_kI(0, TURRET_I);
+        this.turretMotor.config_kD(0, TURRET_D);
     }
 
     public void hoodMotorExtend() {
@@ -85,11 +94,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setTurretSpeed(double speed) {
-        if (speed > 1) {
-            speed = 1;
-        } else if (speed < -1) {
-            speed = -1;
-        }
-        turretMotor.set(speed);
+        turretMotor.set(Math.min(Math.max(speed, TURRET_MIN_SPEED), TURRET_MAX_SPEED));
     }
 }

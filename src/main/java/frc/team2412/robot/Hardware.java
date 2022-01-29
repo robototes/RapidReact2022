@@ -1,9 +1,11 @@
 package frc.team2412.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.ColorSensorV3;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
@@ -37,6 +39,10 @@ public class Hardware {
 
         //climb can ids are range 50-59
         public static final int CLIMB_FIXED_1 = 0, CLIMB_FIXED_2 = 0, CLIMB_ANGLED_1 = 0, CLIMB_ANGLED_2 = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
+
+        //I2C multiplexer address //might be wrong
+        public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
+        public static final int LEFT_COLORSENSOR_PORT = 1, RIGHT_COLORSENSOR_PORT = 2, CENTER_COLORSENSOR_PORT = 3;
     }
 
     //drive
@@ -56,6 +62,10 @@ public class Hardware {
     //climb
     public WPI_TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
     public DoubleSolenoid climbAngle;
+    public I2C multiplexer;
+    public ColorSensorV3 leftColorSensor;
+    public ColorSensorV3 rightColorSensor;
+    public ColorSensorV3 centerColorSensor;
 
     //index
     public WPI_TalonFX indexMotor;
@@ -79,6 +89,19 @@ public class Hardware {
             intakeMotor1 = new WPI_TalonFX(INTAKE_1);
             intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
+            /**
+             * untested
+             * take the example code from
+             * https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
+             * also possible to put a wrapper for the ColorSensor on Multiplexer
+             */
+            // multiplexer = new I2C(I2C.Port.kOnboard, I2C_MULTIPLEXER_ADDRESS);
+            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << LEFT_COLORSENSOR_PORT);
+            // leftColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << RIGHT_COLORSENSOR_PORT);
+            // rightColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+            // multiplexer.write(I2C_MULTIPLEXER_ADDRESS, 1 << CENTER_COLORSENSOR_PORT);
+            // centerColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
         }
         if (INDEX_ENABLED) {
             indexMotor = new WPI_TalonFX(INDEX);

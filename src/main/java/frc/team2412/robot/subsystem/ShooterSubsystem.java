@@ -30,7 +30,24 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_HOOD_ANGLE = 40.0;
     public static final double MIN_HOOD_ANGLE = 5;
 
-    // methods & constructors
+    /**
+     * Constructor for shooter subsystem.
+     * 
+     * @param flywheelMotor1
+     *            The first motor connected to the flywheel
+     * 
+     * @param flywheelMotor2
+     *            The second motor connected to the flywheel
+     * 
+     * @param turretMotor
+     *            The motor that controls the horizontal rotation of the
+     *            turret
+     * 
+     * @param hoodMotor
+     *            The motor that controls the angle of the hood above the
+     *            turret
+     * 
+     */
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
         // Motor configs

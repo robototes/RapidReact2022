@@ -1,6 +1,7 @@
 package frc.team2412.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -50,7 +51,7 @@ public class Hardware {
     public TalonFX flywheelMotor1, flywheelMotor2, turretMotor, hoodMotor;
 
     //intake
-    public TalonFX intakeMotor1, intakeMotor2;
+    public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
     //climb
@@ -76,8 +77,8 @@ public class Hardware {
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new TalonFX(INTAKE_1);
-            intakeMotor2 = new TalonFX(INTAKE_2);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_1);
+            intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
         }
         if (INDEX_ENABLED) {

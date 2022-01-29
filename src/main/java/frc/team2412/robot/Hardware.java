@@ -47,7 +47,7 @@ public class Hardware {
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
         public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
         //which port the I2C device plugged in on the multiplexer
-        public static final int LEFT_COLORSENSOR_PORT = 1, RIGHT_COLORSENSOR_PORT = 2, CENTER_COLORSENSOR_PORT = 3;
+        public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2, CENTER_INTAKE_COLORSENSOR_PORT = 3;
     }
 
     //drive
@@ -63,10 +63,10 @@ public class Hardware {
     //intake
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
-    public I2C i2c_multiplexer;
-    public MultiplexedColorSensor leftColorSensor;
-    public MultiplexedColorSensor rightColorSensor;
-    public MultiplexedColorSensor centerColorSensor;
+    public I2C i2cMultiplexer;
+    public MultiplexedColorSensor leftIntakeColorSensor;
+    public MultiplexedColorSensor rightIntakeColorSensor;
+    public MultiplexedColorSensor centerIntakeColorSensor;
 
     //climb
     public WPI_TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
@@ -99,10 +99,10 @@ public class Hardware {
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
             if (I2C_MUX_ENABLED) {
-                this.i2c_multiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
-                this.leftColorSensor = new MultiplexedColorSensor(i2c_multiplexer, LEFT_COLORSENSOR_PORT);
-                this.rightColorSensor = new MultiplexedColorSensor(i2c_multiplexer, RIGHT_COLORSENSOR_PORT);
-                this.centerColorSensor = new MultiplexedColorSensor(i2c_multiplexer, CENTER_COLORSENSOR_PORT);
+                this.i2cMultiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
+                this.leftIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, LEFT_INTAKE_COLORSENSOR_PORT);
+                this.rightIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, RIGHT_INTAKE_COLORSENSOR_PORT);
+                this.centerIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, CENTER_INTAKE_COLORSENSOR_PORT);
             }
         }
         if (INDEX_ENABLED) {

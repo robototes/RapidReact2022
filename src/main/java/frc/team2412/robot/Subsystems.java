@@ -35,7 +35,7 @@ public class Subsystems {
     public Subsystems(Hardware h) {
         hardware = h;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1, hardware.climbAngled2, hardware.climbAngle);
+            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule, hardware.backRightModule, hardware.navX);
         if (DRIVER_VIS_ENABLED)

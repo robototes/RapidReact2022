@@ -13,7 +13,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
         public static final double TEST_SPEED_EXTEND = 0.7;
-        public static final double TEST_SPEED_RETRACT = 0.5;
+        public static final double TEST_SPEED_RETRACT = -0.5;
         public static final double STOP_SPEED = 0;
         public static final double MAX_ENCODER_TICKS = 1000;
         public static final double MIN_ENCODER_TICKS = 0;
@@ -57,11 +57,11 @@ public class ClimbSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         double positionDynamic = climbDynamicMotor.getSelectedSensorPosition();
-        if (!(positionDynamic >= MAX_ENCODER_TICKS || positionDynamic <= MIN_ENCODER_TICKS)) {
+        if (positionDynamic >= MAX_ENCODER_TICKS || positionDynamic <= MIN_ENCODER_TICKS) {
             stopAngledArm();
         }
         double positionFixed = climbFixedMotor.getSelectedSensorPosition();
-        if (!(positionFixed >= MAX_ENCODER_TICKS || positionFixed <= MIN_ENCODER_TICKS)) {
+        if (positionFixed >= MAX_ENCODER_TICKS || positionFixed <= MIN_ENCODER_TICKS) {
             stopFixedArm();
         }
     }
@@ -89,7 +89,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void retractFixedArm() {
         if (state == ClimbSubsystemState.ENABLED)
-            climbFixedMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
+            climbFixedMotor.set(ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopFixedArm() {
@@ -104,7 +104,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void retractAngledArm() {
         if (state == ClimbSubsystemState.ENABLED)
-            climbDynamicMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
+            climbDynamicMotor.set(ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopAngledArm() {

@@ -15,6 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double MAX_FORWARD = Double.MAX_VALUE;
     public static final double MAX_REVERSE = -1;
     public static final double STOP_MOTOR = 0;
+    public static final double DEGREES_TO_ENCODER_TICKS = 2048/360; // 2048 ticks per 360 degrees
 
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {

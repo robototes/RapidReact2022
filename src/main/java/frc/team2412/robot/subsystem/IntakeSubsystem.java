@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Joystick;
+
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -133,7 +135,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //if 
+        intakeSolenoidState = IntakeSolenoidState.EXTENDED;
+        Joystick joystick = new Joystick(0);
+        solenoid.set(joystick.getTwist() != 0 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+        motorInnerAxle.set(joystick.getX());
+        motorOuterAxle.set(joystick.getY());
     }
     
 }

@@ -11,7 +11,7 @@ public class Subsystems {
         public static final boolean DRIVER_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
 
     }

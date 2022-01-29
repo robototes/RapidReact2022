@@ -11,8 +11,11 @@ public class ShooterVisionSubsystem extends SubsystemBase {
         this.limelight = limelight;
     }
 
-    public double getYaw() {
+    public double getYaw(){
         return limelight.getLatestResult().getBestTarget().getYaw();
     }
 
+
+
+    
 }

@@ -92,9 +92,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void intakeIn() {
         if (intakeSolenoidState == IntakeSolenoidState.EXTENDED) {
-
             motorOuterAxle.set(IntakeConstants.INTAKE_IN_SPEED);
             motorInnerAxle.set(IntakeConstants.INTAKE_IN_SPEED);
+
             intakeMotorState = IntakeMotorState.IN;
         }
     }
@@ -103,6 +103,7 @@ public class IntakeSubsystem extends SubsystemBase {
         if (intakeSolenoidState == IntakeSolenoidState.EXTENDED) {
             motorOuterAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
             motorInnerAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
+
             intakeMotorState = IntakeMotorState.OUT;
         }
     }
@@ -110,6 +111,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeStop() {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
+
         intakeMotorState = IntakeMotorState.STOPPED;
     }
 
@@ -120,11 +122,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     
     public void intakeRetract() {
-        if (intakeSolenoidState == IntakeSolenoidState.EXTENDED) {
-            intakeSolenoidState = IntakeSolenoidState.RETRACTED; 
- 
-        }
-        
+        intakeSolenoidState = IntakeSolenoidState.RETRACTED; 
+
+        solenoid.set(IntakeState.RETRACT.value);
     }
 
     public boolean colorIdentify() {

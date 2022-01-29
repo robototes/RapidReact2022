@@ -1,4 +1,4 @@
-package frc.team2412.robot.subsystems;
+package frc.team2412.robot.subsystem;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
@@ -25,7 +25,7 @@ import org.frcteam2910.common.util.*;
 
 import java.util.Optional;
 
-import static frc.team2412.robot.subsystems.DrivebaseSubsystem.DriveConstants.*;
+import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
 public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable {
 

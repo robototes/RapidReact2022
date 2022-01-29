@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +12,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
-        public static final double TEST_SPEED = 0.5;
+        public static final double TEST_SPEED_EXTEND = 0.7;
+        public static final double TEST_SPEED_RETRACT = 0.5;
         public static final double STOP_SPEED = 0;
         public static final double MAX_ENCODER_TICKS = 1000;
         public static final double MIN_ENCODER_TICKS = 0;
@@ -34,16 +36,16 @@ public class ClimbSubsystem extends SubsystemBase {
         this.climbFixedMotor = climbFixedMotor;
         this.climbDynamicMotor = climbDynamicMotor;
         solenoid = climbAngle;
-        climbFixedMotor.configSupplyCurrentLimit(MOTOR_CURRENT_LIMIT);
-        climbDynamicMotor.configSupplyCurrentLimit(MOTOR_CURRENT_LIMIT);
-        climbFixedMotor.configForwardSoftLimitThreshold(MAX_ENCODER_TICKS);
-        climbFixedMotor.configReverseSoftLimitThreshold(MIN_ENCODER_TICKS);
-        climbFixedMotor.configForwardSoftLimitEnable(true, 0);
-        climbFixedMotor.configReverseSoftLimitEnable(true, 0);
-        climbDynamicMotor.configForwardSoftLimitThreshold(MAX_ENCODER_TICKS);
-        climbDynamicMotor.configReverseSoftLimitThreshold(MIN_ENCODER_TICKS);
-        climbDynamicMotor.configReverseSoftLimitEnable(true, 0);
-        climbDynamicMotor.configForwardSoftLimitEnable(true, 0);
+
+        TalonFXConfiguration motorConfig = new TalonFXConfiguration();
+        motorConfig.forwardSoftLimitEnable = true;
+        motorConfig.reverseSoftLimitEnable = true;
+        motorConfig.forwardSoftLimitThreshold= MAX_ENCODER_TICKS;
+        motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
+        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
+
+        climbFixedMotor.configAllSettings(motorConfig);
+        climbDynamicMotor.configAllSettings(motorConfig);
     }
 
     @Override
@@ -76,12 +78,12 @@ public class ClimbSubsystem extends SubsystemBase {
    
     public void extendFixedArm() {
         if (state == ClimbSubsystemState.ENABLED) 
-            climbFixedMotor.set(ClimbConstants.TEST_SPEED);
+            climbFixedMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
     }
     
     public void retractFixedArm() {
         if (state == ClimbSubsystemState.ENABLED)
-            climbFixedMotor.set(-ClimbConstants.TEST_SPEED);
+            climbFixedMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopFixedArm() {
@@ -91,12 +93,12 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void extendAngledArm() {
         if (state == ClimbSubsystemState.ENABLED) 
-            climbDynamicMotor.set(ClimbConstants.TEST_SPEED);
+            climbDynamicMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
     }
     
     public void retractAngledArm() {
         if (state == ClimbSubsystemState.ENABLED) 
-            climbDynamicMotor.set(-ClimbConstants.TEST_SPEED);
+            climbDynamicMotor.set(-ClimbConstants.TEST_SPEED_RETRACT);
     }
 
     public void stopAngledArm() {

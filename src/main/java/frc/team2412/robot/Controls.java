@@ -28,10 +28,11 @@ public class Controls {
             bindShooterControls();
     }
 
+
     // TODO these yay
 
     public void bindClimbControls() {
-
+        
     }
 
     public void bindDriveControls() {

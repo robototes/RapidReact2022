@@ -2,7 +2,6 @@ package frc.team2412.robot.subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterSubsystemConstants.*;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX flywheelMotor1;
@@ -10,11 +9,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX turretMotor;
     private final WPI_TalonFX hoodMotor;
 
-    public static class ShooterSubsystemConstants {
-        public static final double MAX_FORWARD = Double.MAX_VALUE;
-        public static final double MAX_REVERSE = -1;
-        public static final double STOP_MOTOR = 0;
-    }
+    // TODO remove the MAX_VALUE (it was funny)
+    public static final double MAX_FORWARD = Double.MAX_VALUE;
+    public static final double MAX_REVERSE = -1;
+    public static final double STOP_MOTOR = 0;
 
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
@@ -38,5 +36,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void startFlywheel() {
         flywheelMotor1.set(MAX_FORWARD);
+        flywheelMotor2.set(MAX_FORWARD);
+    }
+
+    public void stopFlywheel() {
+        flywheelMotor1.set(STOP_MOTOR);
+        flywheelMotor2.set(STOP_MOTOR);
     }
 }

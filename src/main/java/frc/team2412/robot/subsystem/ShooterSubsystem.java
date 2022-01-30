@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -56,8 +57,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // Motor configs
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
+        flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
-        flywheelMotor2.setInverted(true);
+        flywheelMotor1.setInverted(false);
+        flywheelMotor2.follow(flywheelMotor1);
+        flywheelMotor2.setInverted(InvertType.OpposeMaster);
 
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
         turretMotor.configReverseSoftLimitThreshold(MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
@@ -69,6 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.config_kP(0, TURRET_P);
         turretMotor.config_kI(0, TURRET_I);
         turretMotor.config_kD(0, TURRET_D);
+
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);
         hoodMotor.configReverseSoftLimitThreshold(0); // Current hood setup plan starts hood at 0, below MIN_HOOD_ANGLE
         hoodMotor.configForwardSoftLimitEnable(true);
@@ -106,7 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
-        flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
     }
 
     /**
@@ -114,7 +118,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
-        flywheelMotor2.set(STOP_MOTOR);
     }
 
     /**

@@ -25,23 +25,23 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
-    public final Controls controls;
-    public final Subsystems subsystems;
-    public final Hardware hardware;
+    public Controls controls;
+    public Subsystems subsystems;
+    public Hardware hardware;
 
     private UpdateManager updateManager;
 
     private Robot() {
         instance = this;
-        hardware = new Hardware();
-        subsystems = new Subsystems(hardware);
-        controls = new Controls(subsystems);
     }
 
     // TODO add other override methods
 
     @Override
     public void robotInit() {
+        hardware = new Hardware();
+        subsystems = new Subsystems(hardware);
+        controls = new Controls(subsystems);
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);

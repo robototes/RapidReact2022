@@ -23,8 +23,9 @@ public class IntakeSubsystem extends SubsystemBase {
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5;
 
-        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
-        
+        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
+                true, 40, 40, 500);
+
     }
 
     // Enums
@@ -33,14 +34,12 @@ public class IntakeSubsystem extends SubsystemBase {
         IN, OUT, STOPPED;
     }
 
-    public enum IntakeSolenoidState{
+    public enum IntakeSolenoidState {
         EXTENDED, RETRACTED;
     }
-    
-    
-    public enum IntakeState{
-        EXTEND(DoubleSolenoid.Value.kForward),
-        RETRACT(DoubleSolenoid.Value.kReverse);
+
+    public enum IntakeState {
+        EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
 
         public DoubleSolenoid.Value value;
 
@@ -48,9 +47,9 @@ public class IntakeSubsystem extends SubsystemBase {
             this.value = value;
         }
     }
-    
-    
-    ///// IMPORTANT: Need ball amount variable and make method to stop taking in balls when at limit.
+
+    ///// IMPORTANT: Need ball amount variable and make method to stop taking in
+    ///// balls when at limit.
 
     // Define Hardware
 
@@ -60,7 +59,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final DoubleSolenoid solenoid;
 
-    ///private final ColorSensorV3 colorSensor = new colorSensorV3(i2cPort);
+    /// private final ColorSensorV3 colorSensor = new colorSensorV3(i2cPort);
 
     private IntakeMotorState intakeMotorState;
 
@@ -74,13 +73,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
-        
 
         this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.motorInnerAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
         this.solenoid = intakeSolenoid;
-        //this.colorSensor = intakeColorSensor;
+        // this.colorSensor = intakeColorSensor;
         intakeSolenoidState = IntakeSolenoidState.RETRACTED;
         intakeMotorState = IntakeMotorState.STOPPED;
 
@@ -122,9 +120,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
         solenoid.set(IntakeState.EXTEND.value);
     }
-    
+
     public void intakeRetract() {
-        intakeSolenoidState = IntakeSolenoidState.RETRACTED; 
+        intakeSolenoidState = IntakeSolenoidState.RETRACTED;
 
         solenoid.set(IntakeState.RETRACT.value);
     }
@@ -141,5 +139,5 @@ public class IntakeSubsystem extends SubsystemBase {
         motorInnerAxle.set(joystick.getX());
         motorOuterAxle.set(joystick.getY());
     }
-    
+
 }

@@ -7,11 +7,11 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 public class Subsystems {
     public static class SubsystemConstants {
         public static final boolean CLIMB_ENABLED = false;
-        public static final boolean DRIVE_ENABLED = false;
+        public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean I2C_MUX_ENABLED = false;
 

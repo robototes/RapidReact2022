@@ -41,10 +41,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 0.30764
         );
 
+        // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
-                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-                new MaxAccelerationConstraint(12.5 * 12.0),
-                new CentripetalAccelerationConstraint(15 * 12.0)
+                new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
+                new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
+                new CentripetalAccelerationConstraint(3.0) // old value was 15 * 12.0
         };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
@@ -303,6 +304,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {
         return follower;
+    }
+
+    public void follow(Path p) {
+        follower.follow(new Trajectory(p, TRAJECTORY_CONSTRAINTS, 12.0));
     }
 
 }

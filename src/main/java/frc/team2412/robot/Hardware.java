@@ -16,14 +16,38 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 public class Hardware {
     public static class HardwareConstants {
         // drive can ids are range 1-19
+        public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
+                DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
+        public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
+                DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 8, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 11;
+        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
+                DRIVETRAIN_BACK_LEFT_ENCODER_PORT = -1, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = -1;
+
+        // TODO set encoder offset values
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
+                Mk4SwerveModuleHelper.GearRatio.L3,
+                DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
+                DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
+                DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
+                -Math.toRadians(0));
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
-        public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(Mk4SwerveModuleHelper.GearRatio.L3,
-                0, 0, 0, -Math.toRadians(0));
+                Mk4SwerveModuleHelper.GearRatio.L3,
+                DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
+                DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
+                DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
+                -Math.toRadians(0));
+        public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
+                Mk4SwerveModuleHelper.GearRatio.L3,
+                DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
+                DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
+                DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
+                -Math.toRadians(0));
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3, 0, 0, 0, -Math.toRadians(0));
+                Mk4SwerveModuleHelper.GearRatio.L3,
+                DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
+                DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
+                DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
+                -Math.toRadians(0));
 
         public static final SPI.Port GYRO_PORT = SPI.Port.kMXP;
 

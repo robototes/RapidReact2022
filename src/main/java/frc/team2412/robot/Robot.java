@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
     public final Controls controls;
     public final Subsystems subsystems;
     public final Hardware hardware;
-    
+
     private UpdateManager updateManager;
 
     private Robot() {
@@ -43,8 +43,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         updateManager = new UpdateManager(
-                subsystems.drivebaseSubsystem
-        );
+                subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
     }
 
@@ -57,7 +56,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
         SimplePathBuilder builder = new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0));
-        subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20)).lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());
+        subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20))
+                .lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());
     }
 
 }

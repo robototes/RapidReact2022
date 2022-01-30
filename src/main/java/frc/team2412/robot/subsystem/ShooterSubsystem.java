@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,6 +27,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double TURRET_D = 0;
     public static final double MAX_HOOD_ANGLE = 40.0;
     public static final double MIN_HOOD_ANGLE = 5;
+    public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(true,
+            40, 40, 500);
+    public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
+            10, 10, 500);
+    public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
 
     /**
      * Constructor for shooter subsystem.
@@ -50,19 +54,16 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
         // Motor configs
-        var flywheelLimit = new SupplyCurrentLimitConfiguration(true, 40, 40, 500);
-        flywheelMotor1.configSupplyCurrentLimit(flywheelLimit);
+        flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
-        flywheelMotor2.configSupplyCurrentLimit(flywheelLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
         flywheelMotor2.setInverted(true);
 
-        SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration(true, 10, 10, 500);
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
         turretMotor.configReverseSoftLimitThreshold(MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
         turretMotor.configForwardSoftLimitEnable(true);
         turretMotor.configReverseSoftLimitEnable(true);
-        turretMotor.configSupplyCurrentLimit(currentLimit);
+        turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
         turretMotor.config_kP(0, TURRET_P);
@@ -72,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
         hoodMotor.configReverseSoftLimitThreshold(0); // Current hood setup plan starts hood at 0, below MIN_HOOD_ANGLE
         hoodMotor.configForwardSoftLimitEnable(true);
         hoodMotor.configReverseSoftLimitEnable(true);
-        hoodMotor.configSupplyCurrentLimit(currentLimit);
+        hoodMotor.configSupplyCurrentLimit(hoodCurrentLimit);
         hoodMotor.setNeutralMode(NeutralMode.Brake);
 
         this.flywheelMotor1 = flywheelMotor1;

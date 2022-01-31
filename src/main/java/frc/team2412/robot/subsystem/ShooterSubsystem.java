@@ -111,6 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
+        flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
     }
 
     /**
@@ -118,6 +119,7 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
+        flywheelMotor2.set(STOP_MOTOR);
     }
 
     /**

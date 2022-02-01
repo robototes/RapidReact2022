@@ -11,6 +11,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import org.frcteam2910.common.math.Vector2;
 
 
 import java.util.function.Consumer;
@@ -26,6 +28,7 @@ public class SwerveControllerCommand extends CommandBase {
     private final HolonomicDriveController controller;
     private final Consumer<SwerveModuleState[]> outputModuleStates;
     private final Supplier<Rotation2d> desiredRotation;
+    private final DrivebaseSubsystem drivebase;
 
     /**
      * Constructs a new SwerveControllerCommand that when executed will follow the provided
@@ -34,8 +37,7 @@ public class SwerveControllerCommand extends CommandBase {
      *
      * <p>Note: The controllers will *not* set the outputVolts to zero upon completion of the path-
      * this is left to the user, since it is not appropriate for paths with nonstationary endstates.
-     *
-     * @param trajectory The trajectory to follow.
+     *  @param trajectory The trajectory to follow.
      * @param pose A function that supplies the robot pose - use one of the odometry classes to
      *     provide this.
      * @param kinematics The kinematics for the robot drivetrain.
@@ -43,8 +45,9 @@ public class SwerveControllerCommand extends CommandBase {
      * @param yController The Trajectory Tracker PID controller for the robot's y position.
      * @param thetaController The Trajectory Tracker PID controller for angle for the robot.
      * @param desiredRotation The angle that the drivetrain should be facing. This is sampled at each
-     *     time step.
+*     time step.
      * @param outputModuleStates The raw output module states from the position controllers.
+     * @param drivebase
      * @param requirements The subsystems to require.
      */
     @SuppressWarnings("ParameterName")
@@ -57,10 +60,11 @@ public class SwerveControllerCommand extends CommandBase {
             ProfiledPIDController thetaController,
             Supplier<Rotation2d> desiredRotation,
             Consumer<SwerveModuleState[]> outputModuleStates,
-            Subsystem... requirements) {
+            DrivebaseSubsystem drivebase, Subsystem... requirements) {
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         this.pose = requireNonNullParam(pose, "pose", "SwerveControllerCommand");
         this.kinematics = requireNonNullParam(kinematics, "kinematics", "SwerveControllerCommand");
+        this.drivebase = drivebase;
 
         controller =
                 new HolonomicDriveController(
@@ -108,7 +112,7 @@ public class SwerveControllerCommand extends CommandBase {
             PIDController xController,
             PIDController yController,
             ProfiledPIDController thetaController,
-            Consumer<SwerveModuleState[]> outputModuleStates,
+            Consumer<SwerveModuleState[]> outputModuleStates, DrivebaseSubsystem drivebase,
             Subsystem... requirements) {
         this(
                 trajectory,
@@ -120,7 +124,7 @@ public class SwerveControllerCommand extends CommandBase {
                 () ->
                         trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
                 outputModuleStates,
-                requirements);
+                drivebase, requirements);
     }
 
     @Override
@@ -132,6 +136,7 @@ public class SwerveControllerCommand extends CommandBase {
     @Override
     @SuppressWarnings("LocalVariableName")
     public void execute() {
+        //gets current time and desired location in trajectory
         double curTime = timer.get();
         var desiredState = trajectory.sample(curTime);
 
@@ -140,6 +145,7 @@ public class SwerveControllerCommand extends CommandBase {
         var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
         outputModuleStates.accept(targetModuleStates);
+        drivebase.drive(new Vector2(targetChassisSpeeds.vxMetersPerSecond, targetChassisSpeeds.vyMetersPerSecond), targetChassisSpeeds.omegaRadiansPerSecond, true);
     }
 
     @Override

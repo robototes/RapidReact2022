@@ -21,8 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
     public static final double MIN_TURRET_ANGLE = -180; // Total ~360 degrees of rotation, assumes 0 is center
     public static final double MAX_TURRET_ANGLE = 180;
-    public static final double TURRET_MAX_SPEED = 0.1;
-    public static final double TURRET_MIN_SPEED = -0.1;
+    public static final int TURRET_SLOT_ID = 0;
     public static final double TURRET_P = 0.01; // Placeholder PID constants
     public static final double TURRET_I = 0;
     public static final double TURRET_D = 0;
@@ -54,37 +53,46 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
-        // Motor configs
+        this.flywheelMotor1 = flywheelMotor1;
+        this.flywheelMotor2 = flywheelMotor2;
+        this.turretMotor = turretMotor;
+        this.hoodMotor = hoodMotor;
+        configMotors();
+    }
+
+    /**
+     * Configures the instance motors
+     */
+    private void configMotors() {
+        flywheelMotor1.configFactoryDefault();
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
+        flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
 
+        turretMotor.configFactoryDefault();
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
         turretMotor.configReverseSoftLimitThreshold(MIN_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
         turretMotor.configForwardSoftLimitEnable(true);
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-        turretMotor.config_kP(0, TURRET_P);
-        turretMotor.config_kI(0, TURRET_I);
-        turretMotor.config_kD(0, TURRET_D);
+        turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
+        turretMotor.config_kP(TURRET_SLOT_ID, TURRET_P);
+        turretMotor.config_kI(TURRET_SLOT_ID, TURRET_I);
+        turretMotor.config_kD(TURRET_SLOT_ID, TURRET_D);
 
+        hoodMotor.configFactoryDefault();
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);
         hoodMotor.configReverseSoftLimitThreshold(0); // Current hood setup plan starts hood at 0, below MIN_HOOD_ANGLE
         hoodMotor.configForwardSoftLimitEnable(true);
         hoodMotor.configReverseSoftLimitEnable(true);
         hoodMotor.configSupplyCurrentLimit(hoodCurrentLimit);
         hoodMotor.setNeutralMode(NeutralMode.Brake);
-
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
     }
 
     /**
@@ -111,7 +119,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
-        flywheelMotor2.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
     }
 
     /**
@@ -119,7 +126,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
-        flywheelMotor2.set(STOP_MOTOR);
     }
 
     /**
@@ -140,13 +146,25 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
-     * Sets the turret's angle to the given angle (Does not check angle limits).
+     * Sets the turret's target angle to the given angle.
+     * 
+     * If angle is too far in one direction but can be reached by rotating in the
+     * other direction, the turret will turn in that direction.
      * 
      * @param angle
      *            the angle (in degrees) to set the turret to (negative for
      *            counterclockwise)
      */
     public void setTurretAngle(double angle) {
+        if (angle < MIN_TURRET_ANGLE) {
+            if (angle + 360 < MAX_TURRET_ANGLE) {
+                angle += 360;
+            }
+        } else if (angle > MAX_TURRET_ANGLE) {
+            if (angle - 360 > MIN_TURRET_ANGLE) {
+                angle -= 360;
+            }
+        }
         turretMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * angle);
     }
 

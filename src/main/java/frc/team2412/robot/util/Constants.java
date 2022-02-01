@@ -50,9 +50,9 @@ public final class Constants {
         public static final boolean frontRightDriveEncoderReversed = false;
         public static final boolean rearRightDriveEncoderReversed = true;
 
-        public static final double trackWidth = 0.5;
+        public static final double trackWidth = 1.0;
         // Distance between centers of right and left wheels on robot
-        public static final double wheelBase = 0.7;
+        public static final double wheelBase = 1.0;
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics driveKinematics =
                 new SwerveDriveKinematics(

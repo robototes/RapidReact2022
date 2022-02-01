@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -50,7 +51,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
                 new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
-                new CentripetalAccelerationConstraint(3.0) // old value was 15 * 12.0
+                new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
                 //in inches
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
                 new MaxAccelerationConstraint(12.5 * 12.0),
@@ -191,8 +192,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
-            this.pose = pose;
-            swerveOdometry.resetPose(pose);
+            this.pose = GeoConvertor.poseToRigid(pose);
+            swerveOdometry.resetPose(this.pose);
         }
     }
 

@@ -17,7 +17,7 @@ public class AutonomousChooser {
         autonomousModeChooser.setDefaultOption("Square Path Auto", AutonomousMode.SQUARE_PATH_AUTO);
         autonomousModeChooser.addOption("Star Path Auto", AutonomousMode.STAR_PATH_AUTO);
 
-        SmartDashboard.putData(autonomousModeChooser);
+        SmartDashboard.putData("Choose Auto Mode", autonomousModeChooser);
     }
 
     public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
@@ -27,11 +27,12 @@ public class AutonomousChooser {
     private SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        command.addCommands(new FollowTrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
+        command.addCommands(
+                new FollowTrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
 
         return command;
     }
-    
+
     private SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
@@ -52,7 +53,6 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        SQUARE_PATH_AUTO,
-        STAR_PATH_AUTO
+        SQUARE_PATH_AUTO, STAR_PATH_AUTO
     }
 }

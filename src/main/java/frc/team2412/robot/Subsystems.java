@@ -1,8 +1,12 @@
 package frc.team2412.robot;
 
 import frc.team2412.robot.subsystem.*;
+import frc.team2412.robot.util.AutonomousChooser;
+import frc.team2412.robot.util.AutonomousTrajectories;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Subsystems {
     public static class SubsystemConstants {
@@ -32,8 +36,14 @@ public class Subsystems {
 
     public ShooterSubsystem shooterSubsystem;
 
+    private AutonomousTrajectories autonomousTrajectories;
+    private final AutonomousChooser autonomousChooser;
+
     public Subsystems(Hardware h) {
         hardware = h;
+        autonomousTrajectories = new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS);
+        autonomousChooser = new AutonomousChooser(autonomousTrajectories);
+
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1,
                     hardware.climbAngled2, hardware.climbAngle);
@@ -52,5 +62,9 @@ public class Subsystems {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
+    }
+
+    public SequentialCommandGroup getAutonomousCommand() {
+        return autonomousChooser.getCommand(this);
     }
 }

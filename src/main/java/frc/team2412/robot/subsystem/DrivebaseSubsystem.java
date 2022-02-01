@@ -3,6 +3,8 @@ package frc.team2412.robot.subsystem;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -10,6 +12,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
@@ -101,10 +105,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
 
+    private final Field2d field = new Field2d();
+
     public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
         synchronized (sensorLock) {
             gyroscope = g;
             gyroscope.setInverted(false);
+            SmartDashboard.putData("Field", field);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -298,7 +305,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         RigidTransform2 pose = getPose();
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
-        odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
+        odometryAngleEntry.setDouble(pose.rotation.toDegrees());
+        field.setRobotPose(new Pose2d(pose.translation.x, pose.translation.y, new Rotation2d(pose.rotation.toRadians())));
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

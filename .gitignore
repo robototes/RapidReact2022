@@ -164,3 +164,6 @@ bin/
 # Vim :)
 Session.vim
 .undodir
+
+# Simulator Files
+gitsim*.json

@@ -15,8 +15,13 @@ public class IntakeStopCommand extends CommandBase {
 
     @Override
     public void execute() {
-    subsystem.intakeStop();
+        subsystem.intakeStop();
 
     }
 
+    @Override
+	public boolean isFinished() {
+		return true;
+	}
+    
 }

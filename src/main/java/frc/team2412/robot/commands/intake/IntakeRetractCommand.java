@@ -17,5 +17,11 @@ public class IntakeRetractCommand extends CommandBase{
         subsystem.intakeRetract();
         
     }
+
+    @Override
+	public boolean isFinished() {
+		return true;
+	}
+    
 }
 

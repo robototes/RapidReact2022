@@ -15,8 +15,13 @@ public class IntakeInCommand extends CommandBase {
 
     @Override
     public void execute() {
-    subsystem.intakeIn();
+        subsystem.intakeIn();
 
     }
+
+    @Override
+	public boolean isFinished() {
+		return true;
+	}
 
 }

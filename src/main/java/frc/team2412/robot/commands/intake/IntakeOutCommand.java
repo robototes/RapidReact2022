@@ -15,7 +15,13 @@ public class IntakeOutCommand extends CommandBase {
 
     @Override
     public void execute() {
-    subsystem.intakeOut();
+        subsystem.intakeOut();
 
     }
+
+    @Override
+	public boolean isFinished() {
+		return true;
+	}
+    
 }

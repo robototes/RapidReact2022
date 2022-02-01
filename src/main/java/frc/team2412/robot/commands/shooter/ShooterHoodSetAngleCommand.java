@@ -13,11 +13,13 @@ public class ShooterHoodSetAngleCommand extends CommandBase {
     public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, double angle) {
         this.shooter = shooter;
         this.angleSupplier = () -> angle;
+        addRequirements(shooter);
     }
 
     public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         this.shooter = shooter;
         this.angleSupplier = null; // TODO: Interface with ShooterVisionSubsystem
+        addRequirements(shooter);
     }
 
     @Override

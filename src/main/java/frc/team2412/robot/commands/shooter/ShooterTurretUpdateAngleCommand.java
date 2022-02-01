@@ -13,6 +13,7 @@ public class ShooterTurretUpdateAngleCommand extends CommandBase {
     public ShooterTurretUpdateAngleCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         this.shooter = shooter;
         this.angleSupplier = null; // TODO: Interface with ShooterVisionSubsystem
+        addRequirements(shooter);
     }
 
     @Override

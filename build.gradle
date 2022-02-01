@@ -78,6 +78,10 @@ dependencies {
     implementation 'com.github.robototes.2910Common:robot:2022.0.4'
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+    implementation 'org.apache.commons:commons-csv:1.9.0'
+
+
 
     testImplementation 'junit:junit:4.12'
 

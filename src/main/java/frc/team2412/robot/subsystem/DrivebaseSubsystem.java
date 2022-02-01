@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -42,6 +43,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         );
 
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
+                //in inches
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
                 new MaxAccelerationConstraint(12.5 * 12.0),
                 new CentripetalAccelerationConstraint(15 * 12.0)
@@ -180,7 +182,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void resetPose(RigidTransform2 pose) {
+    public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = pose;
             swerveOdometry.resetPose(pose);
@@ -202,6 +204,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
         return averageVelocity / 4;
     }
+
 
     private void updateOdometry(double time, double dt) {
         Vector2[] moduleVelocities = new Vector2[modules.length];
@@ -232,7 +235,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    private void updateModules(HolonomicDriveSignal driveSignal, double dt) {
+    public void updateModules(HolonomicDriveSignal driveSignal, double dt) {
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);

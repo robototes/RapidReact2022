@@ -1,5 +1,6 @@
 package frc.team2412.robot.subsystem;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -16,7 +17,12 @@ public class ClimbSubsystem extends SubsystemBase {
         public static final double TEST_SPEED_RETRACT = -0.5;
         public static final double STOP_SPEED = 0;
         public static final double MAX_ENCODER_TICKS = 1000;
-        public static final double MIN_ENCODER_TICKS = 0;
+        public static final double MIN_ENCODER_TICKS = 0.8;
+        public static final double RUNG_DISTANCE = 24; // inches
+        public static final double GEARBOX_REDUCTION = 10.61;
+        public static final double ENCODER_TICKS_PER_REVOLUTION = 2048;
+        public static final double ARM_REACH_DISTANCE = Math.PI * RUNG_DISTANCE * GEARBOX_REDUCTION
+                * ENCODER_TICKS_PER_REVOLUTION;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
@@ -56,12 +62,10 @@ public class ClimbSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double positionDynamic = climbDynamicMotor.getSelectedSensorPosition();
-        if (positionDynamic >= MAX_ENCODER_TICKS || positionDynamic <= MIN_ENCODER_TICKS) {
+        if (isDynamicFullyExtended() || isDynamicFullyRetracted()) {
             stopAngledArm();
         }
-        double positionFixed = climbFixedMotor.getSelectedSensorPosition();
-        if (positionFixed >= MAX_ENCODER_TICKS || positionFixed <= MIN_ENCODER_TICKS) {
+        if (isFixedFullyExtended() || isFixedFullyRetracted()) {
             stopFixedArm();
         }
     }
@@ -78,38 +82,54 @@ public class ClimbSubsystem extends SubsystemBase {
         return state == ClimbSubsystemState.ENABLED;
     }
 
-    public void angleClimbHook(boolean extended) {
-        solenoid.set(extended ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    public void angleClimbHook(DoubleSolenoid.Value value) {
+        solenoid.set(value);
     }
 
     public void extendFixedArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbFixedMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
+        setMotor(ClimbConstants.TEST_SPEED_EXTEND, climbFixedMotor);
     }
 
     public void retractFixedArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbFixedMotor.set(ClimbConstants.TEST_SPEED_RETRACT);
+        setMotor(ClimbConstants.TEST_SPEED_RETRACT, climbFixedMotor);
     }
 
     public void stopFixedArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbFixedMotor.set(ClimbConstants.STOP_SPEED);
+        setMotor(ClimbConstants.STOP_SPEED, climbFixedMotor);
     }
 
     public void extendAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbDynamicMotor.set(ClimbConstants.TEST_SPEED_EXTEND);
+        setMotor(ClimbConstants.TEST_SPEED_EXTEND, climbDynamicMotor);
     }
 
     public void retractAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbDynamicMotor.set(ClimbConstants.TEST_SPEED_RETRACT);
+        setMotor(ClimbConstants.TEST_SPEED_RETRACT, climbDynamicMotor);
     }
 
     public void stopAngledArm() {
-        if (state == ClimbSubsystemState.ENABLED)
-            climbDynamicMotor.set(ClimbConstants.STOP_SPEED);
+        setMotor(ClimbConstants.STOP_SPEED, climbDynamicMotor);
+    }
+
+    public void setMotor(double position, WPI_TalonFX motor) {
+        if (state == ClimbSubsystemState.ENABLED) {
+            motor.set(ControlMode.Position, position);
+        }
+    }
+
+    public boolean isFixedFullyExtended() {
+        return climbFixedMotor.getSelectedSensorPosition() >= ClimbConstants.MAX_ENCODER_TICKS;
+    }
+
+    public boolean isFixedFullyRetracted() {
+        return climbFixedMotor.getSelectedSensorPosition() <= ClimbConstants.MIN_ENCODER_TICKS;
+    }
+
+    public boolean isDynamicFullyExtended() {
+        return climbDynamicMotor.getSelectedSensorPosition() >= ClimbConstants.MAX_ENCODER_TICKS;
+    }
+
+    public boolean isDynamicFullyRetracted() {
+        return climbDynamicMotor.getSelectedSensorPosition() <= ClimbConstants.MIN_ENCODER_TICKS;
     }
 
 }

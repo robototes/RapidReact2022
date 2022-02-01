@@ -299,7 +299,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         odometryXEntry.setDouble(pose.translation.x);
         odometryYEntry.setDouble(pose.translation.y);
         odometryAngleEntry.setDouble(pose.rotation.toDegrees());
-        field.setRobotPose(new Pose2d(pose.translation.x, pose.translation.y, new Rotation2d(pose.rotation.toRadians())));
+        if (follower.getLastState() != null) {
+            //0.0254 is inches to meter conversion
+            field.setRobotPose(follower.getLastState().getPathState().getPosition().x *0.0254, follower.getLastState().getPathState().getPosition().y * 0.0254, Rotation2d.fromDegrees(follower.getLastState().getPathState().getRotation().toDegrees()));
+        }
+
+        //field.setRobotPose(new Pose2d(pose.translation.x, pose.translation.y, new Rotation2d(pose.rotation.toRadians())));
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

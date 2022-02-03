@@ -1,13 +1,47 @@
 package frc.team2412.robot;
 
+import static frc.team2412.robot.Hardware.HardwareConstants.BACK_LEFT_CONFIG;
+import static frc.team2412.robot.Hardware.HardwareConstants.BACK_RIGHT_CONFIG;
+import static frc.team2412.robot.Hardware.HardwareConstants.CLIMB_ANGLE_DOWN;
+import static frc.team2412.robot.Hardware.HardwareConstants.CLIMB_ANGLE_UP;
+import static frc.team2412.robot.Hardware.HardwareConstants.CLIMB_DYNAMIC;
+import static frc.team2412.robot.Hardware.HardwareConstants.CLIMB_FIXED;
+import static frc.team2412.robot.Hardware.HardwareConstants.FLYWHEEL_1;
+import static frc.team2412.robot.Hardware.HardwareConstants.FLYWHEEL_2;
+import static frc.team2412.robot.Hardware.HardwareConstants.FRONT_CAM;
+import static frc.team2412.robot.Hardware.HardwareConstants.FRONT_LEFT_CONFIG;
+import static frc.team2412.robot.Hardware.HardwareConstants.FRONT_RIGHT_CONFIG;
+import static frc.team2412.robot.Hardware.HardwareConstants.GYRO_PORT;
+import static frc.team2412.robot.Hardware.HardwareConstants.HOOD;
+import static frc.team2412.robot.Hardware.HardwareConstants.INDEX;
+import static frc.team2412.robot.Hardware.HardwareConstants.INTAKE_1;
+import static frc.team2412.robot.Hardware.HardwareConstants.INTAKE_2;
+import static frc.team2412.robot.Hardware.HardwareConstants.INTAKE_DOWN;
+import static frc.team2412.robot.Hardware.HardwareConstants.INTAKE_UP;
+import static frc.team2412.robot.Hardware.HardwareConstants.LIMELIGHT;
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVER_VIS_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.GOAL_VIS_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.ColorSensorV3;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C.Port;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
@@ -61,8 +95,8 @@ public class Hardware {
         // shooter can ids are range 20-29
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
-        //intake can ids are range 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
+        // intake can ids are rnage 30-39
+        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0, INTAKE_COLOR_SENSOR = 0;
 
         // index can ids are range 40-49
         public static final int INDEX = 0;
@@ -95,6 +129,7 @@ public class Hardware {
     public MultiplexedColorSensor centerIntakeColorSensor;
     public ColorSensorV3 intakeColorSensor;
 
+
     //climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
 
@@ -125,6 +160,7 @@ public class Hardware {
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
+            intakeColorSensor = new ColorSensorV3(Port.kOnboard);
         }
         if (INDEX_ENABLED) {
             indexMotor = new WPI_TalonFX(INDEX);

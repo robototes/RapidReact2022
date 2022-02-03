@@ -30,8 +30,9 @@ public class MultiplexedColorSensor {
     /**
      * Create a multiplexed color sensor.
      * the constructor with most control, make it public if necessary
+     * assuming when initialize these subsystems is in sequential order so may not need a lock at here
      */
-    public MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
+    private MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
         this.sensorPortNumber = sensorPortNumber;
         setChannel();
         this.colorSensor = new ColorSensorV3(i2cPort);
@@ -60,44 +61,62 @@ public class MultiplexedColorSensor {
     /* Below are all of the methods used for the color sensor.               */
     /* All this does is set the channel, then run the command on the sensor. */
     /* Should covered most commonly used method, if not just add them below  */
+    /* Basically the synchronized (i2cMultiplexer) is putting a lock on the  */
+    /* i2cMultiplexer, will release it after finish these code in the block  */
     /*-----------------------------------------------------------------------*/
     public Color getColor() {
-        setChannel();
-        return this.colorSensor.getColor();
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getColor();
+        }
     }
   
     public int getProximity() {
-        setChannel();
-        return this.colorSensor.getProximity();
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getProximity();
+        }
     }
   
-    public RawColor getRawColor() {
-        setChannel();
-        return this.colorSensor.getRawColor();
+    public synchronized RawColor getRawColor() {
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getRawColor();
+        }
     }
   
-    public int getRed() {
-        setChannel();
-        return this.colorSensor.getRed();
+    public synchronized int getRed() {
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getRed();
+        }
     }
   
-    public int getGreen() {
-        setChannel();
-        return this.colorSensor.getGreen();
+    public synchronized int getGreen() {
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getGreen();
+        }
     }
   
-    public int getBlue() {
-        setChannel();
-        return this.colorSensor.getBlue();
+    public synchronized int getBlue() {
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getBlue();
+        }
     }
   
-    public int getIR() {
-        setChannel();
-        return this.colorSensor.getIR();
+    public synchronized int getIR() {
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.getIR();
+        }
     }
   
     public boolean hasReset() {
-        setChannel();
-        return this.colorSensor.hasReset();
+        synchronized (i2cMultiplexer){
+            setChannel();
+            return this.colorSensor.hasReset();
+        }
     }
 }

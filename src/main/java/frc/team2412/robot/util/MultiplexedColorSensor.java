@@ -65,13 +65,13 @@ public class MultiplexedColorSensor {
         }
     }
 
-    /*-----------------------------------------------------------------------*/
-    /* Below are all of the methods used for the color sensor. */
-    /* All this does is set the channel, then run the command on the sensor. */
-    /* Should covered most commonly used method, if not just add them below */
-    /* Basically the synchronized (i2cMultiplexer) is putting a lock on the */
-    /* i2cMultiplexer, will release it after finish these code in the block */
-    /*-----------------------------------------------------------------------*/
+    /*
+     * Below are all of the methods used for the color sensor.
+     * All this does is set the channel, then run the command on the sensor.
+     * Should covered most commonly used method, if not just add them below
+     * Basically the synchronized (i2cMultiplexer) is putting a lock on the
+     * i2cMultiplexer, will release it after finish these code in the block
+     */
     public Color getColor() {
         synchronized (i2cMultiplexer) {
             setChannelUnderLock();

@@ -3,6 +3,19 @@ package frc.team2412.robot.util;
 import java.util.TreeMap;
 
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
+    // TODO: Use JSON files in deploy folder?
+
+    public InterpolatingTreeMap() {
+        super();
+    }
+
+    public InterpolatingTreeMap(ShooterDataDistancePoint[] dataPoints) {
+        super();
+        for (ShooterDataDistancePoint dataPoint : dataPoints) {
+            put(dataPoint.getDistance(), dataPoint);
+        }
+    }
+
     public ShooterDataDistancePoint getInterpolated(Double key) {
         ShooterDataDistancePoint value = get(key);
 

@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.InterpolatingTreeMap;
 
 public class ShooterSubsystem extends SubsystemBase {
     // instance variables
@@ -32,6 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
             10, 10, 500);
     public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+    public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap(); // TODO: Add actual values (use
+                                                                                      // JSON?)
 
     /**
      * Constructor for shooter subsystem.
@@ -112,6 +115,16 @@ public class ShooterSubsystem extends SubsystemBase {
     // TODO make hardstop
     public void hoodMotorStop() {
         hoodMotor.set(STOP_MOTOR);
+    }
+
+    /**
+     * Sets the velocity of both flywheel motors
+     * 
+     * @param velocity
+     *            the velocity of the flywheel motors
+     */
+    public void setFlywheelVelocity(double velocity) {
+        flywheelMotor1.set(ControlMode.Velocity, velocity);
     }
 
     /**

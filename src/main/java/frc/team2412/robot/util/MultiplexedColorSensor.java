@@ -1,5 +1,8 @@
 package frc.team2412.robot.util;
 
+import static frc.team2412.robot.Hardware.HardwareConstants.I2C_MULTIPLEXER_ADDRESS;
+import static frc.team2412.robot.Hardware.HardwareConstants.I2C_MULTIPLEXER_PORT;
+
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorSensorV3.RawColor;
 
@@ -14,20 +17,21 @@ import frc.team2412.robot.Hardware.HardwareConstants;
  * so if called any method that's not been override will cause trouble
  */
 public class MultiplexedColorSensor {
-    private I2C i2cMultiplexer;
-    private final int i2cMultiplexerAddress;
+    // Constants from Hardware.java
+    private static final I2C i2cMultiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
+    private static final int i2cMultiplexerAddress = I2C_MULTIPLEXER_ADDRESS;
     // The actual sensor. All of the methods call this sensor to get the data.
     private final ColorSensorV3 colorSensor;
     // What port on the multiplexer the color sensor is plugged into.
     private final int sensorPortNumber;
-  
+
+    private static int lastSensorPortNumber = -1;
+
     /**
      * Create a multiplexed color sensor.
      * the constructor with most control, make it public if necessary
      */
-    private MultiplexedColorSensor(I2C i2cMultiplexer, int i2cMultiplexerAddress, I2C.Port i2cPort, int sensorPortNumber) {
-        this.i2cMultiplexer = i2cMultiplexer;
-        this.i2cMultiplexerAddress = i2cMultiplexerAddress;
+    public MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
         this.sensorPortNumber = sensorPortNumber;
         setChannel();
         this.colorSensor = new ColorSensorV3(i2cPort);
@@ -35,19 +39,21 @@ public class MultiplexedColorSensor {
 
     /**
      * Since there is only one I2C port on roboRIO 2, so just pass in the port number on multiplexer should be enough
-     * @param i2cMultiplexer the instance of I2C multiplexer 
      * @param sensorPortNumber which port the ColorSensorV3 is plugged on the multiplexer
      */
-    public MultiplexedColorSensor(I2C i2cMultiplexer, int sensorPortNumber){
-        this(i2cMultiplexer, HardwareConstants.I2C_MULTIPLEXER_ADDRESS, HardwareConstants.I2C_MULTIPLEXER_PORT, sensorPortNumber);
+    public MultiplexedColorSensor(int sensorPortNumber){
+        this(HardwareConstants.I2C_MULTIPLEXER_PORT, sensorPortNumber);
     }
-  
+
     /**
-     * Helper method. This just sets the multiplexer to the correct port before
-     * using the color sensor.
+     * Helper method. This just sets the multiplexer to the correct port before using the color sensor.
+     * checking if is still on the same port as last time, if so will skip this step
      */
     private void setChannel() {
-      this.i2cMultiplexer.write(this.i2cMultiplexerAddress, 1 << this.sensorPortNumber);
+        if (lastSensorPortNumber != this.sensorPortNumber) {
+            i2cMultiplexer.write(i2cMultiplexerAddress, 1 << this.sensorPortNumber);
+            lastSensorPortNumber = this.sensorPortNumber;
+        }
     }
   
     /*-----------------------------------------------------------------------*/

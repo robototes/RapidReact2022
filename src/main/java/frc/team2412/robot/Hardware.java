@@ -126,10 +126,10 @@ public class Hardware {
              * also possible to put a wrapper for the ColorSensor on Multiplexer
              */
             if (I2C_MUX_ENABLED) {
-                this.i2cMultiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
-                this.leftIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, LEFT_INTAKE_COLORSENSOR_PORT);
-                this.rightIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, RIGHT_INTAKE_COLORSENSOR_PORT);
-                this.centerIntakeColorSensor = new MultiplexedColorSensor(i2cMultiplexer, CENTER_INTAKE_COLORSENSOR_PORT);
+//                this.i2cMultiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
+                this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
+                this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
+                this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
         }
         if (INDEX_ENABLED) {

@@ -6,6 +6,14 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.6.10"
 }
 
+// Enforce formatting
+spotless {
+    java {
+        eclipse().configFile("eclipse-formatter.xml")
+        indentWithSpaces()
+    }
+}
+
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
@@ -116,13 +124,5 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "11"
-    }
-}
-
-// Enforce formatting
-spotless {
-    java {
-        eclipse().configFile("eclipse-formatter.xml")
-        indentWithSpaces()
     }
 }

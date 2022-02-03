@@ -16,4 +16,4 @@ jobs:
                   cache: gradle
 
             - name: Check with Gradle
-              run: ./gradlew check
+              run: ./gradlew check --no-daemon

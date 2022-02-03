@@ -3,7 +3,6 @@ package frc.team2412.robot.util;
 import java.util.TreeMap;
 
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
-
     public ShooterDataDistancePoint getInterpolated(Double key) {
         ShooterDataDistancePoint value = get(key);
 
@@ -16,23 +15,28 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         Double floor = floorKey(key);
         Double ceiling = ceilingKey(key);
 
-        ShooterDataDistancePoint interpolatedPoint;
+        ShooterDataDistancePoint floorVal;
+        ShooterDataDistancePoint ceilingVal;
 
         if (floor == null && ceiling == null) {
             // If the floor and ceiling keys are not present, no keys are in the map and
             // there is nothing to interpolate.
             return null;
         } else if (floor == null) {
-            ShooterDataDistancePoint floorVal = get(ceiling);
-            ShooterDataDistancePoint ceilingVal = get(ceilingKey(ceiling));
-            interpolatedPoint = interpolate(floorVal, ceilingVal, key);
+            // key is below lowest value in map
+            floorVal = get(ceiling);
+            ceilingVal = get(higherKey(ceiling));
+        } else if (ceiling == null) {
+            // key is above highest value in map
+            floorVal = get(lowerKey(floor));
+            ceilingVal = get(floor);
         } else {
-            ShooterDataDistancePoint ceilingVal = get(floor);
-            ShooterDataDistancePoint floorVal = get(floorKey(floor));
-            interpolatedPoint = interpolate(floorVal, ceilingVal, key);
+            // key is in between values in map
+            floorVal = get(floor);
+            ceilingVal = get(ceiling);
         }
 
-        return interpolatedPoint;
+        return interpolate(floorVal, ceilingVal, key);
     }
 
     public static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor, ShooterDataDistancePoint ceiling,

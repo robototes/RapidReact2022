@@ -8,4 +8,16 @@ public class ShooterDataDistancePoint {
         this.angle = angle;
         this.power = power;
     }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public double getPower() {
+        return power;
+    }
 }

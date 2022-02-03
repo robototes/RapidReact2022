@@ -4,21 +4,14 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
 public class ShooterHoodSetAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final DoubleSupplier angleSupplier;
 
-    public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, double angle) {
+    public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, DoubleSupplier angleSupplier) {
         this.shooter = shooter;
-        this.angleSupplier = () -> angle;
-        addRequirements(shooter);
-    }
-
-    public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        this.shooter = shooter;
-        this.angleSupplier = null; // TODO: Interface with ShooterVisionSubsystem
+        this.angleSupplier = angleSupplier;
         addRequirements(shooter);
     }
 

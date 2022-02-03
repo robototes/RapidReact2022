@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -29,6 +30,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
@@ -171,6 +173,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return pose;
         }
     }
+    public Pose2d getPoseAsPose() {
+        synchronized (kinematicsLock) {
+            return GeoConvertor.rigidToPose(pose);
+        }
+    }
 
     public Vector2 getVelocity() {
         synchronized (kinematicsLock) {
@@ -243,7 +250,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void updateModules(HolonomicDriveSignal driveSignal, double dt) {
+    public void updateModules(HolonomicDriveSignal driveSignal) {
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
@@ -262,6 +269,22 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         for (int i = 0; i < moduleOutputs.length; i++) {
             var module = modules[i];
             module.set(moduleOutputs[i].length * 12.0, moduleOutputs[i].getAngle().toRadians());
+        }
+    }
+
+    public void updateModules(SwerveModuleState[] swerveModuleStates) {
+        double realMaxVelocity = Arrays.stream(swerveModuleStates).mapToDouble((m) -> {
+            return m.speedMetersPerSecond;
+        }).max().orElseThrow();
+        if (realMaxVelocity > 1) {
+            for(int i = 0; i < swerveModuleStates.length; ++i) {
+                swerveModuleStates[i].speedMetersPerSecond /= realMaxVelocity;
+            }
+        }
+
+        for (int i = 0; i < swerveModuleStates.length; i++) {
+            var module = modules[i];
+            module.set(swerveModuleStates[i].speedMetersPerSecond * 12.0, swerveModuleStates[i].angle.getRadians());
         }
     }
 
@@ -297,7 +320,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             }
         }
 
-        updateModules(driveSignal, dt);
+        updateModules(driveSignal);
     }
 
     @Override

@@ -88,7 +88,7 @@ public final class Constants {
         public static final double maxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
     }
-    public static final class OIconstants{
+    public static final class OIConstants{
 
     }
 

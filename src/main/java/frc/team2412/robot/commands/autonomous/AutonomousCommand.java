@@ -21,6 +21,7 @@ import java.util.List;
 
 public class AutonomousCommand extends SequentialCommandGroup {
     DrivebaseSubsystem drivebaseSubsystem;
+
     public AutonomousCommand(DrivebaseSubsystem d){
         drivebaseSubsystem = d;
     }
@@ -52,7 +53,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         SwerveControllerCommand swerveControllerCommand =
                 new SwerveControllerCommand(
                         exampleTrajectory,
-                        drivebaseSubsystem::getPose, // Functional interface to feed supplier
+                        drivebaseSubsystem::getPoseAsPose, // Functional interface to feed supplier
                         Constants.DriveConstants.driveKinematics,
 
                         // Position controllers
@@ -60,7 +61,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         new PIDController(Constants.AutoConstants.PYController, 0, 0),
                         thetaController,
                         drivebaseSubsystem::updateModules,
-                        DrivebaseSubsystem);
+                        drivebaseSubsystem);
 
         // Reset odometry to the starting pose of the trajectory.
         drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());

@@ -45,8 +45,7 @@ public class Subsystems {
         autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1,
-                    hardware.climbAngled2, hardware.climbAngle);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic, hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.navX);

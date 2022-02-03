@@ -77,8 +77,7 @@ dependencies {
     implementation 'com.github.robototes.2910Common:common:2022.0.4'
     implementation 'com.github.robototes.2910Common:robot:2022.0.4'
 
-    implementation 'com.github.robototes:swerve-lib:bfebe09632'
-
+    implementation 'com.github.robototes:swerve-lib:c10c9e5c9c'
     implementation "com.github.Oblarg:Oblog:4.0.9"
     // https://mvnrepository.com/artifact/org.apache.commons/commons-csv
     implementation 'org.apache.commons:commons-csv:1.9.0'

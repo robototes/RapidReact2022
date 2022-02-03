@@ -82,8 +82,8 @@ public final class Constants {
                 new TrapezoidProfile.Constraints(
                         MaxAngularSpeedRadiansPerSecond, MaxAngularSpeedRadiansPerSecondSquared);
 
-        public static final double maxSpeedMetersPerSecond = 3;
-        public static final double maxAccelerationMetersPerSecondSquared = 3;
+        public static final double maxSpeedMetersPerSecond = 0.02;
+        public static final double maxAccelerationMetersPerSecondSquared = 0.003;
         public static final double maxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double maxAngularSpeedRadiansPerSecondSquared = Math.PI;
 

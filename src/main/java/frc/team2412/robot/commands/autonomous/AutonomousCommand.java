@@ -35,19 +35,36 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         .setKinematics(Constants.DriveConstants.driveKinematics);
 
         // An example trajectory to follow.  All units in meters.
+//        Trajectory exampleTrajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        new Pose2d(0, 0, new Rotation2d(0)),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(3, 0, new Rotation2d(0)),
+//                        config);
+
         Trajectory exampleTrajectory =
                 TrajectoryGenerator.generateTrajectory(
                         // Start at the origin facing the +X direction
                         new Pose2d(0, 0, new Rotation2d(0)),
                         // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                        List.of(new Translation2d(-0.01, 0)),
                         // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(3, 0, new Rotation2d(0)),
+                        new Pose2d(-0.3, 0, new Rotation2d(180)),
                         config);
 
-        var thetaController =
+
+
+//        ProfiledPIDController thetaController =
+//                new ProfiledPIDController(
+//                        Constants.AutoConstants.PThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+//        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        ProfiledPIDController thetaController =
                 new ProfiledPIDController(
-                        Constants.AutoConstants.PThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+                       0.000000005, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         SwerveControllerCommand swerveControllerCommand =
@@ -63,9 +80,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         drivebaseSubsystem::updateModules,
                         drivebaseSubsystem);
 
+
+        System.out.println(exampleTrajectory.getTotalTimeSeconds());
+
         // Reset odometry to the starting pose of the trajectory.
         drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());
 
+        System.out.println("Created Trajectory");
         // Run path following command, then stop at the end.
         //have to fix this later, the parameters are just placeholders to get program to build
         return swerveControllerCommand.andThen(() -> drivebaseSubsystem.drive(GeoConvertor.translation2dToVector2(exampleTrajectory.getInitialPose().getTranslation()),

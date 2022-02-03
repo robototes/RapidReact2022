@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team2412.robot.commands.autonomous.AutonomousCommand;
+import frc.team2412.robot.util.Constants;
 import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.math.RigidTransform2;
@@ -66,9 +68,12 @@ public class Robot extends TimedRobot {
         //to have it, just set trajectory to debug
 
 
+
         // Create and push Field2d to SmartDashboard.
         field = new Field2d();
         SmartDashboard.putData(field);
+
+
 
         // Push the trajectory to Field2d.
         //field.getObject("traj").setTrajectory(trajectory);
@@ -77,15 +82,39 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        TrajectoryConfig config =
+                new TrajectoryConfig(
+                        Constants.AutoConstants.maxSpeedMetersPerSecond,
+                        Constants.AutoConstants.maxAccelerationMetersPerSecondSquared)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(Constants.DriveConstants.driveKinematics);
+
+        // An example trajectory to follow.  All units in meters.
+        Trajectory exampleTrajectory =
+                TrajectoryGenerator.generateTrajectory(
+                        // Start at the origin facing the +X direction
+                        new Pose2d(0, 0, new Rotation2d(0)),
+                        // Pass through these two interior waypoints, making an 's' curve path
+                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                        // End 3 meters straight ahead of where we started, facing forward
+                        new Pose2d(3, 0, new Rotation2d(0)),
+                        config);
+
+   //     System.out.println(exampleTrajectory.getStates());
+
+
+    //    System.out.println(exampleTrajectory.getTotalTimeSeconds());
+
     }
 
     @Override
     public void autonomousInit() {
         //subsystems.drivebaseSubsystem.resetPose(new Pose2d(RigidTransform2.ZERO) );
-        subsystems.drivebaseSubsystem.resetPose(GeoConvertor.rigidToPose(RigidTransform2.ZERO));
-        SimplePathBuilder builder = new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0));
-        subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20))
-                .lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());
+        AutonomousCommand autonomousCommand = new AutonomousCommand(subsystems.drivebaseSubsystem);
+
+        if (autonomousCommand !=null){
+            CommandScheduler.getInstance().schedule(autonomousCommand.getAutonomousCommand());
+        }
     }
 
 }

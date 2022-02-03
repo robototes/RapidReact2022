@@ -30,6 +30,8 @@ import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.*;
 
+
+
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -325,13 +327,15 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     @Override
     public void periodic() {
-        RigidTransform2 pose = getPose();
-        odometryXEntry.setDouble(pose.translation.x);
-        odometryYEntry.setDouble(pose.translation.y);
-        odometryAngleEntry.setDouble(pose.rotation.toDegrees());
+        Pose2d pose = getPoseAsPose();
+        System.out.println(pose);
+//        odometryXEntry.setDouble(pose.translation.x);
+//        odometryYEntry.setDouble(pose.translation.y);
+//        odometryAngleEntry.setDouble(pose.rotation.toDegrees());
+        field.setRobotPose(pose);
         if (follower.getLastState() != null) {
             //0.0254 is inches to meter conversion
-            field.setRobotPose(follower.getLastState().getPathState().getPosition().x *0.0254, follower.getLastState().getPathState().getPosition().y * 0.0254, Rotation2d.fromDegrees(follower.getLastState().getPathState().getRotation().toDegrees()));
+          //  field.setRobotPose(follower.getLastState().getPathState().getPosition().x *0.0254, follower.getLastState().getPathState().getPosition().y * 0.0254, Rotation2d.fromDegrees(follower.getLastState().getPathState().getRotation().toDegrees()));
         }
 
         //field.setRobotPose(new Pose2d(pose.translation.x, pose.translation.y, new Rotation2d(pose.rotation.toRadians())));

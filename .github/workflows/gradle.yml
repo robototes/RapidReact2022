@@ -1,4 +1,4 @@
-name: Test with Gradle
+name: Check with Gradle
 
 on: [push, pull_request]
 
@@ -15,5 +15,5 @@ jobs:
                   java-version: 11
                   cache: gradle
 
-            - name: Test with Gradle
+            - name: Check with Gradle
               run: ./gradlew check

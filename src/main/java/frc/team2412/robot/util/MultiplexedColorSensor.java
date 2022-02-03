@@ -45,7 +45,7 @@ public class MultiplexedColorSensor {
     /**
      * Since there is only one I2C port on roboRIO 2, so just pass in the port
      * number on multiplexer should be enough
-     * 
+     *
      * @param sensorPortNumber
      *            which port the ColorSensorV3 is plugged on the multiplexer
      */

@@ -8,9 +8,29 @@ plugins {
 
 // Enforce formatting
 spotless {
+    format "misc", {
+        target "*"
+
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
     java {
         eclipse().configFile("eclipse-formatter.xml")
+        removeUnusedImports()
+
+        endWithNewline()
         indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+    kotlin {
+        ktfmt()
+
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
     }
 }
 

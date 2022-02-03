@@ -63,7 +63,7 @@ public class Hardware {
         // index can ids are range 40-49
         public static final int INDEX = 0;
 
-        //climb can ids are range 50-59
+        // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
     }
 
@@ -81,8 +81,7 @@ public class Hardware {
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
-
-    //climb
+    // climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
 
     public DoubleSolenoid climbAngle;

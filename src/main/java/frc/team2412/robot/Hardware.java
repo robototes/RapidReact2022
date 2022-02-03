@@ -4,9 +4,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
+import frc.team2412.robot.util.MultiplexedColorSensor;
+
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.photonvision.PhotonCamera;
 
@@ -57,7 +61,7 @@ public class Hardware {
         // shooter can ids are range 20-29
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
-        // intake can ids are rnage 30-39
+        // intake can ids are range 30-39
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
@@ -65,6 +69,13 @@ public class Hardware {
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
+
+        // default address of TCA9548A
+        public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
+        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
+        // which port the I2C device plugged in on the multiplexer
+        public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
+                CENTER_INTAKE_COLORSENSOR_PORT = 3;
     }
 
     // drive
@@ -80,6 +91,9 @@ public class Hardware {
     // intake
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
+    public MultiplexedColorSensor leftIntakeColorSensor;
+    public MultiplexedColorSensor rightIntakeColorSensor;
+    public MultiplexedColorSensor centerIntakeColorSensor;
 
     // climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
@@ -106,6 +120,11 @@ public class Hardware {
             intakeMotor1 = new WPI_TalonFX(INTAKE_1);
             intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
+            if (I2C_MUX_ENABLED) {
+                this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
+                this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
+                this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
+            }
         }
         if (INDEX_ENABLED) {
             indexMotor = new WPI_TalonFX(INDEX);

@@ -93,6 +93,7 @@ public class Hardware {
     public MultiplexedColorSensor leftIntakeColorSensor;
     public MultiplexedColorSensor rightIntakeColorSensor;
     public MultiplexedColorSensor centerIntakeColorSensor;
+    public ColorSensorV3 intakeColorSensor;
 
     //climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;

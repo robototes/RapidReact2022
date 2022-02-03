@@ -55,7 +55,6 @@ public class Subsystems {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2, hardware.turretMotor, hardware.hoodMotor);
         if (TESTING_ENABLED){
             testingSubsystem = new TestingSubsystem(hardware.testingColorSensor);
         }

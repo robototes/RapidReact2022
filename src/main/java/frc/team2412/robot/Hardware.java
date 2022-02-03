@@ -67,9 +67,8 @@ public class Hardware {
         // index can ids are range 40-49
         public static final int INDEX = 0;
 
-        // climb can ids are range 50-59
-        public static final int CLIMB_FIXED_1 = 0, CLIMB_FIXED_2 = 0, CLIMB_ANGLED_1 = 0, CLIMB_ANGLED_2 = 0,
-                CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
+        //climb can ids are range 50-59
+        public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
 
         //default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
@@ -96,8 +95,10 @@ public class Hardware {
     public MultiplexedColorSensor rightIntakeColorSensor;
     public MultiplexedColorSensor centerIntakeColorSensor;
 
-    // climb
-    public WPI_TalonFX climbFixed1, climbFixed2, climbAngled1, climbAngled2;
+
+    //climb
+    public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
+
     public DoubleSolenoid climbAngle;
 
     // index
@@ -112,10 +113,8 @@ public class Hardware {
             navX = new NavX(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
-            climbFixed1 = new WPI_TalonFX(CLIMB_FIXED_1);
-            climbFixed2 = new WPI_TalonFX(CLIMB_FIXED_2);
-            climbAngled1 = new WPI_TalonFX(CLIMB_ANGLED_1);
-            climbAngled2 = new WPI_TalonFX(CLIMB_ANGLED_2);
+            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC);
+            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED);
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
         }
         if (INTAKE_ENABLED) {

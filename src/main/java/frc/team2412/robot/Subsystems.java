@@ -36,9 +36,10 @@ public class Subsystems {
     public Subsystems(Hardware h) {
         hardware = h;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1, hardware.climbAngled2, hardware.climbAngle);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic, hardware.climbAngle);
         if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule, hardware.backRightModule, hardware.navX);
+            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
+                    hardware.backLeftModule, hardware.backRightModule, hardware.navX);
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
@@ -46,8 +47,10 @@ public class Subsystems {
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2, hardware.intakeSolenoid);
+            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
+                    hardware.intakeSolenoid);
         if (SHOOTER_ENABLED)
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2, hardware.turretMotor, hardware.hoodMotor);
+            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
+                    hardware.turretMotor, hardware.hoodMotor);
     }
 }

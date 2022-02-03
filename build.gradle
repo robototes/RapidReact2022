@@ -77,12 +77,13 @@ dependencies {
     implementation 'com.github.robototes.2910Common:common:2022.0.4'
     implementation 'com.github.robototes.2910Common:robot:2022.0.4'
 
+    implementation 'com.github.robototes:swerve-lib:03b8d8f99f'
+
     implementation "com.github.Oblarg:Oblog:4.0.9"
 
     testImplementation 'junit:junit:4.12'
 
     errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.10.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 tasks.withType(JavaCompile).configureEach {

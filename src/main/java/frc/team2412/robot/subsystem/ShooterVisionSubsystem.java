@@ -10,15 +10,15 @@ public class ShooterVisionSubsystem extends SubsystemBase {
     public static class ShooterVisionConstants {
 
         public static double LIMELIGHT_ANGLE_OFFSET = 0;
-        public static double LIMELIGHT_HEIGHT_OFFSET = 0; 
-        public static double RIM_HEIGHT = 104; //8ft8in
+        public static double LIMELIGHT_HEIGHT_OFFSET = 0;
+        public static double RIM_HEIGHT = 104; // 8ft8in
         public static double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
     }
 
     public NetworkTable limelight;
 
     public ShooterVisionSubsystem() {
-       limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
     @Override
@@ -36,8 +36,8 @@ public class ShooterVisionSubsystem extends SubsystemBase {
     }
 
     // returns in inches
-    public double getDistance(){
-        double distance = HEIGHT_TO_RIM/Math.tan(LIMELIGHT_ANGLE_OFFSET + getPitch());
+    public double getDistance() {
+        double distance = HEIGHT_TO_RIM / Math.tan(LIMELIGHT_ANGLE_OFFSET + getPitch());
         return distance;
     }
 

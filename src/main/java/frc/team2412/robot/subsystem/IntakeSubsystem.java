@@ -1,32 +1,34 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.BLUE_CARGO_COLOR;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.RED_CARGO_COLOR;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
-
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.teamColor;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.EXTEND;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
+import frc.team2412.robot.util.MultiplexedColorSensor;
 
 public class IntakeSubsystem extends SubsystemBase {
 
     // Constants
 
     public static class IntakeConstants {
+
         public static Alliance teamColor = DriverStation.getAlliance();
 
         public static Color BLUE_CARGO_COLOR = new Color(0, 0, 1);
@@ -73,14 +75,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final ColorSensorV3 colorSensor;
 
+    // private final MultiplexedColorSensor leftColorSensor;
+    // private final MultiplexedColorSensor rightColorSensor;
+    // private final MultiplexedColorSensor centerColorSensor;
+
     // States
 
     private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
-
-    //
-
-    
 
     // CONSTRUCTOR!
 
@@ -117,8 +119,11 @@ public class IntakeSubsystem extends SubsystemBase {
         setName("IntakeSubsystem");
     }
 
-    // Methods.
+    // Methods
 
+    /**
+     * Spins motors inwards and updates motor state
+     */
     public void intakeIn() {
         if (intakeSolenoidState == EXTEND) {
             motorOuterAxle.set(IntakeConstants.INTAKE_IN_SPEED);
@@ -128,6 +133,9 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Spins motors outwards and updates motor state
+     */
     public void intakeOut() {
         if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
             motorOuterAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
@@ -137,6 +145,9 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Stops motors and updates motor state
+     */
     public void intakeStop() {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
@@ -144,22 +155,34 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotorState = IntakeMotorState.STOPPED;
     }
 
+    /**
+     * Extends solenoid and updates solenoid state
+     */
     public void intakeExtend() {
         intakeSolenoidState = IntakeSolenoidState.EXTEND;
 
         solenoid.set(EXTEND.value);
-    }
+        }
 
+    /**
+     * Retracts solenoid and updates solenoid state
+     */
     public void intakeRetract() {
         intakeSolenoidState = IntakeSolenoidState.RETRACT;
 
         solenoid.set(RETRACT.value);
     }
 
+    /**
+     * Returns true if the opposing team's cargo is present
+     */
     public boolean hasOpposingColorCargo() {
         return colorMatcher.matchColor(colorSensor.getColor()) != null;
     }
-    
+
+    /**
+     * Returns current color value detected if matched
+     */
     public Color getMatchedSensorColor() {
         return colorMatcher.matchColor(colorSensor.getColor()).color;
     }
@@ -168,8 +191,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         intakeSolenoidState = IntakeSolenoidState.EXTEND;
+        
     }
 
 }

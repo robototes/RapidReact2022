@@ -46,7 +46,7 @@ public class Subsystems {
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
-            goalVisionSubsystem = new ShooterVisionSubsystem(hardware.limelight);
+            goalVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)

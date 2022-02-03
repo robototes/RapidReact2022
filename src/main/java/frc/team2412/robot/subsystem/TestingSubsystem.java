@@ -20,7 +20,7 @@ public class TestingSubsystem extends SubsystemBase{
                 .withPosition(0, 0)
                 .withSize(1, 1)
                 .getEntry();
-        timeDuration = tab.add("TIme Duration", 0.0)
+        timeDuration = tab.add("Time Duration", 0.0)
                 .withPosition(0, 0)
                 .withSize(1, 1)
                 .getEntry();

@@ -13,6 +13,7 @@ public class Subsystems {
         public static final boolean INDEX_ENABLED = false;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
+        public static final boolean I2C_MUX_ENABLED = false;
 
     }
 
@@ -42,7 +43,7 @@ public class Subsystems {
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
-            goalVisionSubsystem = new ShooterVisionSubsystem(hardware.limelight);
+            goalVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)

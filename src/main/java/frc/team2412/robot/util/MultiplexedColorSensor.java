@@ -32,12 +32,13 @@ public class MultiplexedColorSensor {
     /**
      * Create a multiplexed color sensor.
      * the constructor with most control, make it public if necessary
-     * assuming when initialize these subsystems is in sequential order so may not need a lock at here
      */
     private MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
         this.sensorPortNumber = sensorPortNumber;
-        setChannelUnderLock();
-        this.colorSensor = new ColorSensorV3(i2cPort);
+        synchronized (i2cMultiplexer){
+            setChannelUnderLock();
+            this.colorSensor = new ColorSensorV3(i2cPort);
+        }
     }
 
     /**

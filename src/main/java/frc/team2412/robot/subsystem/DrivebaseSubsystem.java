@@ -4,9 +4,11 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -27,6 +30,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.*;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
@@ -49,7 +53,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
                 new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
-                new CentripetalAccelerationConstraint(3.0) // old value was 15 * 12.0
+                new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
+                //in inches
+                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
+                new MaxAccelerationConstraint(12.5 * 12.0),
+                new CentripetalAccelerationConstraint(15 * 12.0)
         };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
@@ -165,6 +173,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return pose;
         }
     }
+    public Pose2d getPoseAsPose() {
+        synchronized (kinematicsLock) {
+            return GeoConvertor.rigidToPose(pose);
+        }
+    }
 
     public Vector2 getVelocity() {
         synchronized (kinematicsLock) {
@@ -184,10 +197,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void resetPose(RigidTransform2 pose) {
+    public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
-            this.pose = pose;
-            swerveOdometry.resetPose(pose);
+            this.pose = GeoConvertor.poseToRigid(pose);
+            swerveOdometry.resetPose(this.pose);
         }
     }
 
@@ -205,6 +218,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
         return averageVelocity / 4;
     }
+
 
     private void updateOdometry(double time, double dt) {
         Vector2[] moduleVelocities = new Vector2[modules.length];
@@ -236,7 +250,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    private void updateModules(HolonomicDriveSignal driveSignal, double dt) {
+    public void updateModules(HolonomicDriveSignal driveSignal) {
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
@@ -255,6 +269,22 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         for (int i = 0; i < moduleOutputs.length; i++) {
             var module = modules[i];
             module.set(moduleOutputs[i].length * 12.0, moduleOutputs[i].getAngle().toRadians());
+        }
+    }
+
+    public void updateModules(SwerveModuleState[] swerveModuleStates) {
+        double realMaxVelocity = Arrays.stream(swerveModuleStates).mapToDouble((m) -> {
+            return m.speedMetersPerSecond;
+        }).max().orElseThrow();
+        if (realMaxVelocity > 1) {
+            for(int i = 0; i < swerveModuleStates.length; ++i) {
+                swerveModuleStates[i].speedMetersPerSecond /= realMaxVelocity;
+            }
+        }
+
+        for (int i = 0; i < swerveModuleStates.length; i++) {
+            var module = modules[i];
+            module.set(swerveModuleStates[i].speedMetersPerSecond * 12.0, swerveModuleStates[i].angle.getRadians());
         }
     }
 
@@ -290,7 +320,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             }
         }
 
-        updateModules(driveSignal, dt);
+        updateModules(driveSignal);
     }
 
     @Override

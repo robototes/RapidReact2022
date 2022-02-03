@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
@@ -63,12 +64,7 @@ public class Robot extends TimedRobot {
         // Create the trajectory to follow in autonomous. It is best to initialize
         // trajectories here to avoid wasting time in autonomous. This is an example trajectory, you do not need to
         //to have it, just set trajectory to debug
-        trajectory =
-                TrajectoryGenerator.generateTrajectory(
-                        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-                        new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+
 
         // Create and push Field2d to SmartDashboard.
         field = new Field2d();
@@ -85,7 +81,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        //subsystems.drivebaseSubsystem.resetPose(new Pose2d(RigidTransform2.ZERO) );
+        subsystems.drivebaseSubsystem.resetPose(GeoConvertor.rigidToPose(RigidTransform2.ZERO));
         SimplePathBuilder builder = new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0));
         subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20))
                 .lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());

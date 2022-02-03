@@ -5,9 +5,9 @@ import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.I2C.Port;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
@@ -90,11 +90,9 @@ public class Hardware {
     // intake
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
-    public I2C i2cMultiplexer;
     public MultiplexedColorSensor leftIntakeColorSensor;
     public MultiplexedColorSensor rightIntakeColorSensor;
     public MultiplexedColorSensor centerIntakeColorSensor;
-
 
     //climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
@@ -121,12 +119,7 @@ public class Hardware {
             intakeMotor1 = new WPI_TalonFX(INTAKE_1);
             intakeMotor2 = new WPI_TalonFX(INTAKE_2);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
-            /**
-             * example code from https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
-             * also possible to put a wrapper for the ColorSensor on Multiplexer
-             */
             if (I2C_MUX_ENABLED) {
-//                this.i2cMultiplexer = new I2C(I2C_MULTIPLEXER_PORT, I2C_MULTIPLEXER_ADDRESS);
                 this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);

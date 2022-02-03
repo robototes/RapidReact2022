@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.Hardware.HardwareConstants;
 
 /**
- * based on https://gist.github.com/SCOTSBots/4daf384311d32e9ff0aad2f179819139
- * the reason why not extend or inherit the ColorSensorV3 is because
- * in order to use any device attached to the Multiplexer have to setChannel() beforehand
- * so if called any method that's not been override will cause trouble
+ * Based on
+ * https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
+ * https://gist.github.com/SCOTSBots/4daf384311d32e9ff0aad2f179819139
+ * The reason why not extend or inherit the ColorSensorV3 is because
+ * In order to use any device attached to the Multiplexer have to setChannel() beforehand
+ * So if called any method that's not been override will cause trouble
  */
 public class MultiplexedColorSensor {
     // Constants from Hardware.java

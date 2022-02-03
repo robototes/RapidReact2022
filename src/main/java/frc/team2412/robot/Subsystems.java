@@ -14,8 +14,7 @@ public class Subsystems {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean I2C_MUX_ENABLED = false;
-        public static final boolean TESTING_ENABLED = true;
-
+        public static final boolean TESTING_ENABLED = false;
     }
 
     public final Hardware hardware;

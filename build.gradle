@@ -77,7 +77,7 @@ dependencies {
     implementation 'com.github.robototes.2910Common:common:2022.0.4'
     implementation 'com.github.robototes.2910Common:robot:2022.0.4'
 
-    implementation 'com.github.robototes:swerve-lib:03b8d8f99f'
+    implementation 'com.github.robototes:swerve-lib:4c8cf8a7d0'
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
 

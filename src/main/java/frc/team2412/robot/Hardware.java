@@ -103,9 +103,6 @@ public class Hardware {
     // index
     public WPI_TalonFX indexMotor;
 
-    //testing
-    public ColorSensorV3 testingColorSensor;
-
     public Hardware() {
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.falcons();
@@ -143,9 +140,6 @@ public class Hardware {
         }
         if (GOAL_VIS_ENABLED) {
             limelight = new PhotonCamera(LIMELIGHT);
-        }
-        if (TESTING_ENABLED){
-            testingColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
         }
     }
 }

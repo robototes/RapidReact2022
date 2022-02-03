@@ -14,7 +14,6 @@ public class Subsystems {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean I2C_MUX_ENABLED = false;
-        public static final boolean TESTING_ENABLED = false;
     }
 
     public final Hardware hardware;
@@ -32,8 +31,6 @@ public class Subsystems {
     public IntakeSubsystem intakeSubsystem;
 
     public ShooterSubsystem shooterSubsystem;
-
-    public TestingSubsystem testingSubsystem;
 
     public Subsystems(Hardware h) {
         hardware = h;
@@ -54,8 +51,5 @@ public class Subsystems {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
-        if (TESTING_ENABLED){
-            testingSubsystem = new TestingSubsystem(hardware.testingColorSensor);
-        }
     }
 }

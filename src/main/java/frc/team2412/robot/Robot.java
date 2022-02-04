@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
     final private RobotType robotType;
 
     Robot(RobotType type) {
+        System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
     }
@@ -65,6 +66,10 @@ public class Robot extends TimedRobot {
                 DriverStation.reportError(
                         "Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
 
+                try {
+                    sleep(2000);
+                } catch (InterruptedException ignored) {
+                }
                 java.lang.System.exit(-1);
             }
         }

@@ -6,7 +6,5 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexSubsystem extends SubsystemBase {
     public IndexSubsystem(WPI_TalonFX indexMotor) {
-        Object obj = null;
-        obj.notify();
     }
 }

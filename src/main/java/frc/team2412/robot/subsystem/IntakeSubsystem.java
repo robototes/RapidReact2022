@@ -66,6 +66,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // CONSTRUCTOR!
     public IntakeSubsystem(WPI_TalonFX motorOuterAxle, WPI_TalonFX motorInnerAxle, DoubleSolenoid intakeSolenoid) {
+        Object obj = null;
+        obj.notify();
+
         this.motorOuterAxle = motorOuterAxle;
         this.motorInnerAxle = motorInnerAxle;
         this.motorInnerAxle.setInverted(true);

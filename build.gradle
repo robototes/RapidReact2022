@@ -43,7 +43,8 @@ repositories {
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
-def ROBOT_MAIN_CLASS = "frc.team2412.robot.Main"
+def ROBOT_MAIN_CLASS = (project.hasProperty('automatedTest') ? Boolean.valueOf(project.getProperty('automatedTest')) : false) ?
+        "frc.team2412.robot.AutomatedTestMain" : "frc.team2412.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.

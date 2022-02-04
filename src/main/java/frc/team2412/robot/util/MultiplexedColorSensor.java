@@ -15,7 +15,8 @@ import frc.team2412.robot.Hardware.HardwareConstants;
  * https://www.chiefdelphi.com/t/multiple-rev-color-sensors-using-an-i2c-multiplexer-java/377776
  * https://gist.github.com/SCOTSBots/4daf384311d32e9ff0aad2f179819139
  * The reason why not extend or inherit the ColorSensorV3 is because
- * In order to use any device attached to the Multiplexer have to setChannel() beforehand
+ * In order to use any device attached to the Multiplexer have to setChannel()
+ * beforehand
  * So if called any method that's not been override will cause trouble
  */
 public class MultiplexedColorSensor {
@@ -35,22 +36,26 @@ public class MultiplexedColorSensor {
      */
     private MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
         this.sensorPortNumber = sensorPortNumber;
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             this.colorSensor = new ColorSensorV3(i2cPort);
         }
     }
 
     /**
-     * Since there is only one I2C port on roboRIO 2, so just pass in the port number on multiplexer should be enough
-     * @param sensorPortNumber which port the ColorSensorV3 is plugged on the multiplexer
+     * Since there is only one I2C port on roboRIO 2, so just pass in the port
+     * number on multiplexer should be enough
+     *
+     * @param sensorPortNumber
+     *            which port the ColorSensorV3 is plugged on the multiplexer
      */
-    public MultiplexedColorSensor(int sensorPortNumber){
+    public MultiplexedColorSensor(int sensorPortNumber) {
         this(HardwareConstants.I2C_MULTIPLEXER_PORT, sensorPortNumber);
     }
 
     /**
-     * Helper method. This just sets the multiplexer to the correct port before using the color sensor.
+     * Helper method. This just sets the multiplexer to the correct port before
+     * using the color sensor.
      * checking if is still on the same port as last time, if so will skip this step
      */
     private void setChannelUnderLock() {
@@ -59,65 +64,65 @@ public class MultiplexedColorSensor {
             lastSensorPortNumber = this.sensorPortNumber;
         }
     }
-  
-    /*-----------------------------------------------------------------------*/
-    /* Below are all of the methods used for the color sensor.               */
-    /* All this does is set the channel, then run the command on the sensor. */
-    /* Should covered most commonly used method, if not just add them below  */
-    /* Basically the synchronized (i2cMultiplexer) is putting a lock on the  */
-    /* i2cMultiplexer, will release it after finish these code in the block  */
-    /*-----------------------------------------------------------------------*/
+
+    /*
+     * Below are all of the methods used for the color sensor.
+     * All this does is set the channel, then run the command on the sensor.
+     * Should covered most commonly used method, if not just add them below
+     * Basically the synchronized (i2cMultiplexer) is putting a lock on the
+     * i2cMultiplexer, will release it after finish these code in the block
+     */
     public Color getColor() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getColor();
         }
     }
-  
+
     public int getProximity() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getProximity();
         }
     }
-  
+
     public synchronized RawColor getRawColor() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getRawColor();
         }
     }
-  
+
     public synchronized int getRed() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getRed();
         }
     }
-  
+
     public synchronized int getGreen() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getGreen();
         }
     }
-  
+
     public synchronized int getBlue() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getBlue();
         }
     }
-  
+
     public synchronized int getIR() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.getIR();
         }
     }
-  
+
     public boolean hasReset() {
-        synchronized (i2cMultiplexer){
+        synchronized (i2cMultiplexer) {
             setChannelUnderLock();
             return this.colorSensor.hasReset();
         }

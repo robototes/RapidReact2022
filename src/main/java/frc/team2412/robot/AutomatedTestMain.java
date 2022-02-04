@@ -13,8 +13,8 @@ import java.util.function.Supplier;
  * Unless you know what you are doing, do not modify this file except to change
  * the parameter class to the startRobot call.
  */
-public final class Main {
-    private Main() {
+public final class AutomatedTestMain {
+    private AutomatedTestMain() {
     }
 
     /**
@@ -27,7 +27,7 @@ public final class Main {
         RobotBase.startRobot(new Supplier<RobotBase>() {
             @Override
             public RobotBase get() {
-                return Robot.getInstance(Robot.RobotType.COMPETITION);
+                return Robot.getInstance(Robot.RobotType.AUTOMATED_TEST);
             }
         });
     }

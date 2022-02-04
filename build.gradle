@@ -10,6 +10,7 @@ plugins {
 spotless {
     format "misc", {
         target "*"
+        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**"
 
         endWithNewline()
         indentWithSpaces()

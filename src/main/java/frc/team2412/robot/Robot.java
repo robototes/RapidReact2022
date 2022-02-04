@@ -4,6 +4,8 @@
 
 package frc.team2412.robot;
 
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
@@ -13,15 +15,21 @@ import org.frcteam2910.common.robot.UpdateManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import static java.lang.Thread.sleep;
+
 public class Robot extends TimedRobot {
     /**
      * Singleton Stuff
      */
     private static Robot instance = null;
 
-    public static Robot getInstance() {
+    enum RobotType {
+        COMPETITION, AUTOMATED_TEST
+    }
+
+    public static Robot getInstance(RobotType type) {
         if (instance == null)
-            instance = new Robot();
+            instance = new Robot(type);
         return instance;
     }
 
@@ -30,12 +38,37 @@ public class Robot extends TimedRobot {
     public Hardware hardware;
 
     private UpdateManager updateManager;
+    private Thread controlAuto;
+    final private RobotType robotType;
 
-    private Robot() {
+    Robot(RobotType type) {
         instance = this;
+        robotType = type;
     }
 
     // TODO add other override methods
+
+    @Override
+    public void startCompetition() {
+        if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
+            super.startCompetition();
+        } else {
+            try {
+                super.startCompetition();
+            } catch (Throwable throwable) {
+                Throwable cause = throwable.getCause();
+                if (cause != null) {
+                    // We're about to exit, so overwriting the param is fine
+                    // noinspection AssignmentToCatchBlockParameter
+                    throwable = cause;
+                }
+                DriverStation.reportError(
+                        "Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+
+                java.lang.System.exit(-1);
+            }
+        }
+    }
 
     @Override
     public void robotInit() {
@@ -45,6 +78,36 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+
+        if (robotType.equals(RobotType.AUTOMATED_TEST)) {
+            controlAuto = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    DriverStationDataJNI.setAutonomous(true);
+                    DriverStationDataJNI.setEnabled(true);
+
+                    try {
+                        sleep(10000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    DriverStationDataJNI.setEnabled(false);
+
+                    try {
+                        sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    endCompetition();
+                }
+            });
+            controlAuto.start();
+        }
     }
 
     @Override

@@ -8,6 +8,5 @@ public class IndexSubsystem extends SubsystemBase {
     public IndexSubsystem(WPI_TalonFX indexMotor) {
         Object obj = null;
         obj.notify();
-        obj.hashCode();
     }
 }

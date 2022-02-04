@@ -122,7 +122,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Sets the velocity of both flywheel motors
-     * 
+     *
      * @param velocity
      *            the velocity of the flywheel motors
      */

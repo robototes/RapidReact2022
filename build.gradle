@@ -18,20 +18,31 @@ spotless {
     }
 
     java {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
         eclipse().configFile("eclipse-formatter.xml")
-        removeUnusedImports()
 
+        removeUnusedImports()
         endWithNewline()
         indentWithSpaces()
         trimTrailingWhitespace()
     }
 
     kotlin {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
         ktfmt()
 
         endWithNewline()
         indentWithSpaces()
         trimTrailingWhitespace()
+    }
+
+    groovyGradle {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        greclipse().configFile("eclipse-formatter.xml")
+
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }
 

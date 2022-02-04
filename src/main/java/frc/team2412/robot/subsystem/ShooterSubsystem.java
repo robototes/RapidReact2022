@@ -19,11 +19,14 @@ public class ShooterSubsystem extends SubsystemBase {
     // Constants
     public static final double FLYWHEEL_VELOCITY = 10;
     public static final double STOP_MOTOR = 0;
-    public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
-    public static final double MIN_TURRET_ANGLE = -180; // Total ~360 degrees of rotation, assumes 0 is center
+    // 2048 ticks per 360 degrees
+    public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
+    // Total ~360 degrees of rotation, assumes 0 is center
+    public static final double MIN_TURRET_ANGLE = -180;
     public static final double MAX_TURRET_ANGLE = 180;
     public static final int TURRET_SLOT_ID = 0;
-    public static final double TURRET_P = 0.01; // Placeholder PID constants
+    // Placeholder PID constants
+    public static final double TURRET_P = 0.01;
     public static final double TURRET_I = 0;
     public static final double TURRET_D = 0;
     public static final double MAX_HOOD_ANGLE = 40.0;
@@ -33,8 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
             10, 10, 500);
     public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
-    public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap(); // TODO: Add actual values (use
-                                                                                      // JSON?)
+    // TODO: Add actual values (use JSON?)
+    public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
 
     /**
      * Constructor for shooter subsystem.

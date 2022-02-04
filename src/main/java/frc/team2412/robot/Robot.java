@@ -88,11 +88,13 @@ public class Robot extends TimedRobot {
             controlAuto = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("Waiting two seconds for robot to finish startup");
                     try {
                         sleep(2000);
                     } catch (InterruptedException ignored) {
                     }
 
+                    System.out.println("Enabling autonomous mode and waiting 10 seconds");
                     DriverStationDataJNI.setAutonomous(true);
                     DriverStationDataJNI.setEnabled(true);
 
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
                     } catch (InterruptedException ignored) {
                     }
 
+                    System.out.println("Disabling robot and waiting two seconds");
                     DriverStationDataJNI.setEnabled(false);
 
                     try {
@@ -108,6 +111,8 @@ public class Robot extends TimedRobot {
                     } catch (InterruptedException ignored) {
                     }
 
+                    System.out.println("Ending competition");
+                    suppressExitWarning(true);
                     endCompetition();
                 }
             });

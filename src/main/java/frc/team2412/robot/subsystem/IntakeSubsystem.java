@@ -1,16 +1,8 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.BLUE_CARGO_COLOR;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.MAX_MOTOR_CURRENT;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.RED_CARGO_COLOR;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.teamColor;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.EXTEND;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -58,13 +50,10 @@ public class IntakeSubsystem extends SubsystemBase {
                 this.value = value;
             }
         }
-
-        // public enum IntakeSolenoidState {
-        // EXTENDED, RETRACTED;
-        // }
     }
 
-    private ColorMatch colorMatcher = new ColorMatch();
+    private ColorMatch allyColorMatcher = new ColorMatch();
+    private ColorMatch enemyColorMatcher = new ColorMatch();
 
     ///// IMPORTANT: Need ball amount variable and make method to stop taking in
     ///// balls when at limit.
@@ -108,15 +97,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.leftColorSensor = leftColorSensor;
         this.rightColorSensor = rightColorSensor;
-        this.centerColorSensor = rightColorSensor;
+        this.centerColorSensor = centerColorSensor;
 
-        colorMatcher.setConfidenceThreshold(0.9);
+        allyColorMatcher.setConfidenceThreshold(0.9);
+        enemyColorMatcher.setConfidenceThreshold(0.9);
 
-        // Looking for opposite alliance ball color to extake
+        // Creates two different color matchers to differentiate between enemy and ally cargo
         if (teamColor == Alliance.Blue) {
-            colorMatcher.addColorMatch(RED_CARGO_COLOR);
+            allyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
+            enemyColorMatcher.addColorMatch(RED_CARGO_COLOR);
+
         } else if (teamColor == Alliance.Red) {
-            colorMatcher.addColorMatch(BLUE_CARGO_COLOR);
+            allyColorMatcher.addColorMatch(RED_CARGO_COLOR);
+            enemyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
         }
 
         intakeSolenoidState = RETRACT;
@@ -178,37 +171,43 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void intakeRetract() {
         intakeSolenoidState = RETRACT;
-
+        intakeStop();
         solenoid.set(RETRACT.value);
     }
 
     /**
      * Returns true if color sensor detects an enemy cargo
      */
-    public boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
-        return colorMatcher.matchColor(colorSensor.getColor()) != null;
+    private boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
+        return enemyColorMatcher.matchColor(colorSensor.getColor()) != null;
     }
 
     /**
      * Returns true if any of the color sensors detect an enemy cargo
      */
     public boolean hasOpposingColorCargo() {
-        if (individualHasOpposingColorCargo(leftColorSensor) || individualHasOpposingColorCargo(rightColorSensor)
-                || individualHasOpposingColorCargo(centerColorSensor)) {
-            return true;
-        }
-        return false;
+        return (individualHasOpposingColorCargo(leftColorSensor)
+                || individualHasOpposingColorCargo(rightColorSensor)
+                || individualHasOpposingColorCargo(centerColorSensor));
     }
 
     /**
      * Returns current color value detected if matched
      */
-    public Color individualgetMatchedSensorColor(MultiplexedColorSensor colorSensor) {
-        return colorMatcher.matchColor(colorSensor.getColor()).color;
+    private boolean individualHasMatchingColorCargo(MultiplexedColorSensor colorSensor) {
+        return allyColorMatcher.matchColor(colorSensor.getColor()) != null;
+    }
+
+    public boolean hasMatchingColorCargo() {
+        return (individualHasMatchingColorCargo(leftColorSensor)
+                || individualHasMatchingColorCargo(rightColorSensor)
+                || individualHasMatchingColorCargo(centerColorSensor));
     }
 
     @Override
     public void periodic() {
-        // mayb add controls later????
+        if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
+            intakeStop();
+        }
     }
 }

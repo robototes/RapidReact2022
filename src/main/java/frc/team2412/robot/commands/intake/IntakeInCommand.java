@@ -10,19 +10,15 @@ public class IntakeInCommand extends CommandBase {
     public IntakeInCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         subsystem.intakeIn();
-
     }
 
     @Override
     public boolean isFinished() {
-        return subsystem.hasOpposingColorCargo();
-
+        return true;
     }
-
 }

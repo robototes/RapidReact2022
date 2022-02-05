@@ -10,18 +10,15 @@ public class IntakeRetractCommand extends CommandBase {
     public IntakeRetractCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-
     }
 
     @Override
     public void execute() {
         subsystem.intakeRetract();
-
     }
 
     @Override
     public boolean isFinished() {
         return true;
     }
-
 }

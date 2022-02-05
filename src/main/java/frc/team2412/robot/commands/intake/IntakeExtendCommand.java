@@ -9,18 +9,15 @@ public class IntakeExtendCommand extends CommandBase {
     public IntakeExtendCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-
     }
 
     @Override
     public void execute() {
         subsystem.intakeExtend();
-
     }
 
     @Override
     public boolean isFinished() {
         return true;
     }
-
 }

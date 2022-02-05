@@ -89,12 +89,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motorOuterAxle, 
-                           WPI_TalonFX motorInnerAxle, 
-                           DoubleSolenoid intakeSolenoid, 
-                           MultiplexedColorSensor leftColorSensor, 
-                           MultiplexedColorSensor rightColorSensor, 
-                        MultiplexedColorSensor centerColorSensor) {
+    public IntakeSubsystem(WPI_TalonFX motorOuterAxle,
+            WPI_TalonFX motorInnerAxle,
+            DoubleSolenoid intakeSolenoid,
+            MultiplexedColorSensor leftColorSensor,
+            MultiplexedColorSensor rightColorSensor,
+            MultiplexedColorSensor centerColorSensor) {
 
         this.motorOuterAxle = motorOuterAxle;
         this.motorInnerAxle = motorInnerAxle;
@@ -193,7 +193,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * Returns true if any of the color sensors detect an enemy cargo
      */
     public boolean hasOpposingColorCargo() {
-        if (individualHasOpposingColorCargo(leftColorSensor) || individualHasOpposingColorCargo(rightColorSensor) 
+        if (individualHasOpposingColorCargo(leftColorSensor) || individualHasOpposingColorCargo(rightColorSensor)
                 || individualHasOpposingColorCargo(centerColorSensor)) {
             return true;
         }
@@ -209,6 +209,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // mayb add controls later???? 
+        // mayb add controls later????
     }
 }

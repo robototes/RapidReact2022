@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class TestingSubsystem extends SubsystemBase{
+public class TestingSubsystem extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Testing Hardware");
     NetworkTableEntry sensorValue, timeDuration;
     ColorSensorV3 colorSensor;
@@ -22,7 +22,7 @@ public class TestingSubsystem extends SubsystemBase{
      * Since the robotInit() is being called on the first place anyway,
      * so as mentioned above this subsystem is only for hardware on top of existing hardware
      */
-    public TestingSubsystem(){
+    public TestingSubsystem() {
         sensorValue = tab.add("Sensor Value", 0.0)
                 .withPosition(0, 0)
                 .withSize(1, 1)
@@ -39,7 +39,7 @@ public class TestingSubsystem extends SubsystemBase{
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         /*
          * to measure how long does the ColorSensorV3 take to measure once
          * remember only send to value to telemetry outside the time-evaluation block

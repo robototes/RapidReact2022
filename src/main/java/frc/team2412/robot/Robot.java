@@ -190,12 +190,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
-
         autonomousChooser.getCommand(subsystems).schedule();
-        // subsystems.drivebaseSubsystem.resetPose(new Pose2d(RigidTransform2.ZERO) );
-        autonomousCommand = new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand();
-        autonomousCommand.schedule();
     }
     @Override public void autonomousExit(){
         if (autonomousCommand !=null){

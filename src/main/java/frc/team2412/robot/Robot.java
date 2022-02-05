@@ -88,6 +88,8 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+        autonomousChooser = new AutonomousChooser(
+                new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -122,9 +124,6 @@ public class Robot extends TimedRobot {
                 }
             });
             controlAuto.start();
-        } else {
-            autonomousChooser = new AutonomousChooser(
-                    new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         }
     }
 

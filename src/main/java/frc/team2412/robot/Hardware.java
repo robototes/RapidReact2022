@@ -1,8 +1,14 @@
 package frc.team2412.robot;
 
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -11,10 +17,6 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
-import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
-
-import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
@@ -125,6 +127,7 @@ public class Hardware {
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
+
         }
         if (INDEX_ENABLED) {
             indexMotor = new WPI_TalonFX(INDEX);

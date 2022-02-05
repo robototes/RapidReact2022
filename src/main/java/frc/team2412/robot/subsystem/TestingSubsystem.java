@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestingSubsystem extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Testing Hardware");
-    NetworkTableEntry sensorValue, timeDuration;
+    NetworkTableEntry timeDuration, redValue, greenValue, blueValue, proximityValue;
     ColorSensorV3 colorSensor;
 
     /**
@@ -22,14 +22,27 @@ public class TestingSubsystem extends SubsystemBase {
      * Since the robotInit() is being called on the first place anyway,
      */
     public TestingSubsystem() {
-        sensorValue = tab.add("Sensor Value", 0.0)
+        timeDuration = tab.add("Time Duration", 0.0)
                 .withPosition(0, 0)
                 .withSize(1, 1)
                 .getEntry();
-        timeDuration = tab.add("Time Duration", 0.0)
+        proximityValue = tab.add("DIstance", 0.0)
                 .withPosition(0, 1)
                 .withSize(1, 1)
                 .getEntry();
+        redValue = tab.add("Red", 0.0)
+                .withPosition(1, 0)
+                .withSize(1, 1)
+                .getEntry();
+        greenValue = tab.add("Green", 0.0)
+                .withPosition(1, 1)
+                .withSize(1, 1)
+                .getEntry();
+        blueValue = tab.add("Blue", 0.0)
+                .withPosition(1, 2)
+                .withSize(1, 1)
+                .getEntry();
+        
         /*
          * The testing subsystem have its built-in Hardware class,
          * that no need to initialize and store the Hardware in somewhere else
@@ -44,9 +57,15 @@ public class TestingSubsystem extends SubsystemBase {
          * remember only send to value to telemetry outside the time-evaluation block
          */
         Instant start = Instant.now();
-        double ColorSensorRedValue = colorSensor.getRed();
+        double rValue = colorSensor.getRed();
+        double gValue = colorSensor.getGreen();
+        double bValue = colorSensor.getBlue();
+        double pValue = colorSensor.getProximity();
         Duration timeElapsed = Duration.between(start, Instant.now());
-        sensorValue.setDouble(ColorSensorRedValue);
-        timeDuration.setDouble(timeElapsed.toMillis());
+        redValue.setDouble(rValue);
+        greenValue.setDouble(gValue);
+        blueValue.setDouble(bValue);
+        proximityValue.setDouble(pValue);
+        timeDuration.setDouble(timeElapsed.toNanos()/1000);
     }
 }

@@ -2,12 +2,12 @@ package frc.team2412.robot;
 
 import org.frcteam2910.common.robot.input.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import edu.wpi.first.wpilibj.GenericHID.*;
 
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import frc.team2412.robot.commands.climb.*;
+import frc.team2412.robot.subsystem.ClimbSubsystem;
 
 public class Controls {
     public static class ControlConstants {
@@ -50,7 +50,7 @@ public class Controls {
         if (SHOOTER_ENABLED)
             bindShooterControls();
     }
-
+    
     // TODO these yay
 
     public void bindClimbControls() {

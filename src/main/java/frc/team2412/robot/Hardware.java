@@ -62,13 +62,13 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
+        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 1, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
         public static final int INDEX = 0;
 
         // climb can ids are range 50-59
-        public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
+        public static final int CLIMB_DYNAMIC = 12, CLIMB_FIXED = 13, CLIMB_ANGLE_UP = 14, CLIMB_ANGLE_DOWN = 15;
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;

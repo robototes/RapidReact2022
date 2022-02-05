@@ -13,13 +13,8 @@ public class ExtendAngledHookCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-        subsystem.extendAngledArm();
-    }
-
-    @Override
     public boolean isFinished() {
-        return subsystem.isDynamicFullyExtended();
+       return subsystem.isDynamicFullyExtended();
     }
 
 }

@@ -160,7 +160,12 @@ bin/
 
 # Simulation GUI and other tools window save file
 *-window.json
+simgui*.json
 
 # Vim :)
 Session.vim
 .undodir
+
+# Intellij IDEA platform
+.idea
+local.properties

@@ -3,11 +3,10 @@ package frc.team2412.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
-public class IntakeInCommand extends CommandBase {
+public class IntakeRetractCommand extends CommandBase {
+    private final IntakeSubsystem subsystem;
 
-    public final IntakeSubsystem subsystem;
-
-    public IntakeInCommand(IntakeSubsystem subsystem) {
+    public IntakeRetractCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
 
@@ -15,7 +14,7 @@ public class IntakeInCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.intakeIn();
+        subsystem.intakeRetract();
 
     }
 

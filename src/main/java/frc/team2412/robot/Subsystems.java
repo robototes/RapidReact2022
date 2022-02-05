@@ -17,6 +17,7 @@ public class Subsystems {
         public static final boolean INDEX_ENABLED = false;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
+        public static final boolean I2C_MUX_ENABLED = false;
 
     }
 
@@ -45,15 +46,15 @@ public class Subsystems {
         autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbFixed1, hardware.climbFixed2, hardware.climbAngled1,
-                    hardware.climbAngled2, hardware.climbAngle);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
+                    hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.navX);
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
-            goalVisionSubsystem = new ShooterVisionSubsystem(hardware.limelight);
+            goalVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)

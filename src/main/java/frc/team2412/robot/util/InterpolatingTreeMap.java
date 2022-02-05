@@ -32,6 +32,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         if (floor == null && ceiling == null) {
             // If the floor and ceiling keys are not present, no keys are in the map and
             // there is nothing to interpolate.
+            System.out.println("getInterpolated was called, but InterpolatingTreeMap is empty...");
             return null;
         } else if (floor == null) {
             // key is below lowest value in map
@@ -50,7 +51,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         return interpolate(floorVal, ceilingVal, key);
     }
 
-    public static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor, ShooterDataDistancePoint ceiling,
+    private static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor,
+            ShooterDataDistancePoint ceiling,
             Double key) {
         double slopeDistanceDifference = ceiling.getDistance() - floor.getDistance();
         if (slopeDistanceDifference == 0 || Double.isNaN(slopeDistanceDifference)

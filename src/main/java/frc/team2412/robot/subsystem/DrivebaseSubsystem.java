@@ -4,7 +4,6 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -26,8 +25,6 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.util.*;
-
-
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -53,8 +50,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
                 new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
                 new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
-                //in inches
-                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(), FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
+                // in inches
+                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
                 new MaxAccelerationConstraint(12.5 * 12.0),
                 new CentripetalAccelerationConstraint(15 * 12.0)
         };
@@ -108,6 +106,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry module1, module2, module3, module4;
 
     private final Field2d field = new Field2d();
 
@@ -165,6 +164,22 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+        module1 = tab.add("Module 1", 0.0)
+                .withPosition(1, 0)
+                .withSize(1, 1)
+                .getEntry();
+        module2 = tab.add("Module 2", 0.0)
+                .withPosition(1, 1)
+                .withSize(1, 1)
+                .getEntry();
+        module3 = tab.add("Module 3", 0.0)
+                .withPosition(1, 2)
+                .withSize(1, 1)
+                .getEntry();
+        module4 = tab.add("Module 4", 0.0)
+                .withPosition(1, 3)
+                .withSize(1, 1)
+                .getEntry();
     }
 
     public RigidTransform2 getPose() {
@@ -172,6 +187,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return pose;
         }
     }
+
     public Pose2d getPoseAsPose() {
         synchronized (kinematicsLock) {
             return GeoConvertor.rigidToPose(pose);
@@ -217,7 +233,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
         return averageVelocity / 4;
     }
-
 
     private void updateOdometry(double time, double dt) {
         Vector2[] moduleVelocities = new Vector2[modules.length];
@@ -272,11 +287,15 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public void updateModules(SwerveModuleState[] swerveModuleStates) {
+        module1.setNumber(swerveModuleStates[0].speedMetersPerSecond);
+        module2.setNumber(swerveModuleStates[1].speedMetersPerSecond);
+        module3.setNumber(swerveModuleStates[2].speedMetersPerSecond);
+        module4.setNumber(swerveModuleStates[3].speedMetersPerSecond);
         double realMaxVelocity = Arrays.stream(swerveModuleStates).mapToDouble((m) -> {
             return m.speedMetersPerSecond;
         }).max().orElseThrow();
         if (realMaxVelocity > 1) {
-            for(int i = 0; i < swerveModuleStates.length; ++i) {
+            for (int i = 0; i < swerveModuleStates.length; ++i) {
                 swerveModuleStates[i].speedMetersPerSecond /= realMaxVelocity;
             }
         }
@@ -318,24 +337,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 driveSignal = this.driveSignal;
             }
         }
-
-        updateModules(driveSignal);
     }
 
     @Override
     public void periodic() {
         Pose2d pose = getPoseAsPose();
-        System.out.println(pose);
-//        odometryXEntry.setDouble(pose.translation.x);
-//        odometryYEntry.setDouble(pose.translation.y);
-//        odometryAngleEntry.setDouble(pose.rotation.toDegrees());
+       // System.out.println(pose);
         field.setRobotPose(pose);
         if (follower.getLastState() != null) {
-            //0.0254 is inches to meter conversion
-          //  field.setRobotPose(follower.getLastState().getPathState().getPosition().x *0.0254, follower.getLastState().getPathState().getPosition().y * 0.0254, Rotation2d.fromDegrees(follower.getLastState().getPathState().getRotation().toDegrees()));
-        }
 
-        //field.setRobotPose(new Pose2d(pose.translation.x, pose.translation.y, new Rotation2d(pose.rotation.toRadians())));
+        }
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

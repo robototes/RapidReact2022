@@ -22,11 +22,14 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX hoodMotor;
 
     public static class ShooterConstants {
+        public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
         public static final double FLYWHEEL_VELOCITY = 10;
         public static final double STOP_MOTOR = 0;
-        // 2048 ticks per 360 degrees
-        public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
-        // Total ~360 degrees of rotation, assumes 0 is center
+        public static final int FLYWHEEL_SLOT_ID = 0;
+        // Placeholder PID constants
+        public static final double FLYWHEEL_P = 0.01;
+        public static final double FLYWHEEL_I = 0;
+        public static final double FLYWHEEL_D = 0;
         public static final double MIN_TURRET_ANGLE = -180;
         public static final double MAX_TURRET_ANGLE = 180;
         public static final int TURRET_SLOT_ID = 0;
@@ -44,7 +47,6 @@ public class ShooterSubsystem extends SubsystemBase {
                 10, 10, 500);
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
-        // Shuffleboard
         public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
     }
 
@@ -82,6 +84,9 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor1.configFactoryDefault();
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
+        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, FLYWHEEL_P);
+        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, FLYWHEEL_I);
+        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, FLYWHEEL_D);
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);

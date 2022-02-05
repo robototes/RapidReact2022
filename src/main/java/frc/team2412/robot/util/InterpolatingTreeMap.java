@@ -6,13 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-
 import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
-    private final NetworkTableEntry distanceBiasEntry;
-
     /**
      * Creates an empty {@link InterpolatingTreeMap}.
      */
@@ -28,9 +24,6 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         for (ShooterDataDistancePoint dataPoint : dataPoints) {
             put(dataPoint.getDistance(), dataPoint);
         }
-
-        // Initialize shuffleboard
-        distanceBiasEntry = ShooterConstants.tab.add("Distance Bias", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
     }
 
     /**
@@ -95,7 +88,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *         match.
      */
     public ShooterDataDistancePoint getInterpolated(Double key) {
-        key += distanceBiasEntry.getDouble(0.0);
+        key += ShooterConstants.distanceBiasEntry.getDouble(0.0);
 
         ShooterDataDistancePoint value = get(key);
 

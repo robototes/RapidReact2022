@@ -101,14 +101,15 @@ public class Hardware {
         // index can ids are range 40-49
         public static final int INDEX = 0;
 
-        //climb can ids are range 50-59
+        // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
 
-        //default address of TCA9548A
+        // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
         public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
-        //which port the I2C device plugged in on the multiplexer
-        public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2, CENTER_INTAKE_COLORSENSOR_PORT = 3;
+        // which port the I2C device plugged in on the multiplexer
+        public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
+                CENTER_INTAKE_COLORSENSOR_PORT = 3;
     }
 
     // drive
@@ -130,7 +131,7 @@ public class Hardware {
     public ColorSensorV3 intakeColorSensor;
 
 
-    //climb
+    // climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
 
     public DoubleSolenoid climbAngle;

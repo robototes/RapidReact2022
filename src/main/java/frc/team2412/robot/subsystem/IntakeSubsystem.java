@@ -9,7 +9,6 @@ import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.Intak
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
 
@@ -55,10 +54,10 @@ public class IntakeSubsystem extends SubsystemBase {
         public static enum IntakeSolenoidState {
             EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
 
-            public DoubleSolenoid.Value value;
+            public DoubleSolenoid.Value Value;
 
-            private IntakeSolenoidState(DoubleSolenoid.Value value) {
-                this.value = value;
+            private IntakeSolenoidState(DoubleSolenoid.Value Value) {
+                this.Value = Value;
             }
         }
 
@@ -167,7 +166,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeExtend() {
         intakeSolenoidState = EXTEND;
 
-        solenoid.set(EXTEND.value);
+        solenoid.set(EXTEND.Value);
         }
 
     /**
@@ -176,7 +175,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeRetract() {
         intakeSolenoidState = RETRACT;
 
-        solenoid.set(RETRACT.value);
+        solenoid.set(RETRACT.Value);
     }
 
     /**

@@ -34,6 +34,7 @@ public class Subsystems {
 
     public Subsystems(Hardware h) {
         hardware = h;
+
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);

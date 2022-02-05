@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
     public Controls controls;
     public Subsystems subsystems;
     public Hardware hardware;
-    private Command autonomousCommand;
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
@@ -98,24 +97,10 @@ public class Robot extends TimedRobot {
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
 
-        // Create the trajectory to follow in autonomous. It is best to initialize
-        // trajectories here to avoid wasting time in autonomous. This is an example
-        // trajectory, you do not need to
-        // to have it, just set trajectory to debug
-        // trajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        // new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-        // new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
-
         // Create and push Field2d to SmartDashboard.
         field = new Field2d();
         SmartDashboard.putData(field);
-        // field.getObject("traj").setTrajectory(trajectory);
 
-        // Push the trajectory to Field2d.
-        // field.getObject("traj").setTrajectory(trajectory);
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
 
@@ -163,27 +148,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        TrajectoryConfig config = new TrajectoryConfig(
-                Constants.AutoConstants.maxSpeedMetersPerSecond,
-                Constants.AutoConstants.maxAccelerationMetersPerSecondSquared)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(Constants.DriveConstants.driveKinematics);
-
-        // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        // // Start at the origin facing the +X direction
-        // new Pose2d(0, 0, new Rotation2d(0)),
-        // // Pass through these two interior waypoints, making an 's' curve path
-        // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // // End 3 meters straight ahead of where we started, facing forward
-        // new Pose2d(3, 0, new Rotation2d(0)),
-        // config);
-
-        // System.out.println(exampleTrajectory.getStates());
-
-        // System.out.println(exampleTrajectory.getTotalTimeSeconds());
-
     }
 
     @Override
@@ -193,9 +157,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
-        }
+        CommandScheduler.getInstance().cancelAll();
     }
 
 }

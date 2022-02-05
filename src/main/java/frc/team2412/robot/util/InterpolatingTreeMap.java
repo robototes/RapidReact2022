@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -42,6 +41,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      * @return An {@link InterpolatingTreeMap} from the data in the CSV file.
      */
     public static InterpolatingTreeMap fromCsv(String fileName) {
+        System.out.println("Deserializing " + fileName + " to an InterpolatingTreeMap...");
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
             InterpolatingTreeMap map = new InterpolatingTreeMap();
@@ -49,16 +49,22 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             while ((line = reader.readLine()) != null) {
                 String[] items = line.split(",");
                 if (items.length < 3) {
-                    System.out.println("Line " + Arrays.toString(items) + " has less than 3 items, skipping...");
+                    System.out.println("Line " + line + " has less than 3 items, skipping...");
                     continue;
                 } else if (items.length > 3) {
                     System.out.println(
-                            "Line " + Arrays.toString(items) + " has more than 3 items, discarding extra data...");
+                            "Line " + line + " has more than 3 items, discarding extra data...");
                 }
-                ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
-                        Double.parseDouble(items[1]),
-                        Double.parseDouble(items[2]));
-                map.put(point.getDistance(), point);
+
+                try {
+                    ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
+                            Double.parseDouble(items[1]),
+                            Double.parseDouble(items[2]));
+                    map.put(point.getDistance(), point);
+                } catch (NumberFormatException Err) {
+                    System.out.println("Line " + line + " contains a value other than a double, skipping...");
+                    continue;
+                }
             }
 
             return map;

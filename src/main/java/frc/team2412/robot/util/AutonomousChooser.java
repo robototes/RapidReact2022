@@ -1,7 +1,8 @@
 package frc.team2412.robot.util;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
@@ -17,7 +18,10 @@ public class AutonomousChooser {
         autonomousModeChooser.setDefaultOption("Square Path Auto", AutonomousMode.SQUARE_PATH_AUTO);
         autonomousModeChooser.addOption("Star Path Auto", AutonomousMode.STAR_PATH_AUTO);
 
-        SmartDashboard.putData("Choose Auto Mode", autonomousModeChooser);
+        ShuffleboardTab drivebaseTab = Shuffleboard.getTab("Drivebase");
+        drivebaseTab.add("Choose Auto Mode", autonomousModeChooser)
+                .withPosition(0, 3)
+                .withSize(2, 1);
     }
 
     private SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
@@ -40,10 +44,13 @@ public class AutonomousChooser {
     public SequentialCommandGroup getCommand(Subsystems subsystems) {
         switch (autonomousModeChooser.getSelected()) {
             case SQUARE_PATH_AUTO:
+                System.out.println("Square path auto chosen");
                 return getSquarePathAutoCommand(subsystems);
             case STAR_PATH_AUTO:
+                System.out.println("Star path auto chosen");
                 return getStarPathAutoCommand(subsystems);
             default:
+                System.out.println("No auto path chosen");
                 return new SequentialCommandGroup();
         }
     }

@@ -101,7 +101,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope.setInverted(false);
         }
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
 

@@ -20,7 +20,6 @@ public class TestingSubsystem extends SubsystemBase {
      * This testing subsystem is intend for testing new hardware,
      * and should not exist on the final robot
      * Since the robotInit() is being called on the first place anyway,
-     * so as mentioned above this subsystem is only for hardware on top of existing hardware
      */
     public TestingSubsystem() {
         sensorValue = tab.add("Sensor Value", 0.0)

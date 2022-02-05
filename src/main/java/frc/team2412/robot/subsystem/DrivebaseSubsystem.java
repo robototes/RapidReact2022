@@ -117,7 +117,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             SmartDashboard.putData("Field", field);
         }
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
 

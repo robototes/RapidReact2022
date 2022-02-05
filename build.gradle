@@ -10,7 +10,7 @@ plugins {
 spotless {
     format "misc", {
         target "*"
-        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**"
+        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
 
         endWithNewline()
         indentWithSpaces()
@@ -18,7 +18,7 @@ spotless {
     }
 
     java {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         eclipse().configFile("eclipse-formatter.xml")
 
         removeUnusedImports()
@@ -28,7 +28,7 @@ spotless {
     }
 
     kotlin {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         ktfmt()
 
         endWithNewline()
@@ -37,7 +37,7 @@ spotless {
     }
 
     groovyGradle {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         greclipse().configFile("eclipse-formatter.xml")
 
         indentWithSpaces()
@@ -54,7 +54,8 @@ repositories {
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
-def ROBOT_MAIN_CLASS = "frc.team2412.robot.Main"
+def ROBOT_MAIN_CLASS = (project.hasProperty('automatedTest') ? Boolean.valueOf(project.getProperty('automatedTest')) : false) ?
+        "frc.team2412.robot.AutomatedTestMain" : "frc.team2412.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -136,8 +137,11 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
-wpi.sim.addDriverstation()
+
+if (!project.hasProperty('automatedTest') || !Boolean.valueOf(project.getProperty('automatedTest'))) {
+    wpi.sim.addGui().defaultEnabled = true
+    wpi.sim.addDriverstation()
+}
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ("fat jar")
 // in order to make them all available at runtime. Also adding the manifest so WPILib

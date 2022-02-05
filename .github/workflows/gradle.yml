@@ -17,3 +17,6 @@ jobs:
 
             - name: Check with Gradle
               run: ./gradlew check --no-daemon
+
+            - name: Run automated test with Gradle
+              run: ./gradlew simulateJavaDebug -PautomatedTest=true --no-daemon

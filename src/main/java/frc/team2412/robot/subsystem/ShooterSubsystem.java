@@ -1,37 +1,54 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
+import frc.team2412.robot.util.InterpolatingTreeMap;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
-    // instance variables
+    // Instance variables
     private final WPI_TalonFX flywheelMotor1;
     private final WPI_TalonFX flywheelMotor2;
     private final WPI_TalonFX turretMotor;
     private final WPI_TalonFX hoodMotor;
 
-    // Constants
-    public static final double FLYWHEEL_VELOCITY = 10;
-    public static final double STOP_MOTOR = 0;
-    public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360; // 2048 ticks per 360 degrees
-    public static final double MIN_TURRET_ANGLE = -180; // Total ~360 degrees of rotation, assumes 0 is center
-    public static final double MAX_TURRET_ANGLE = 180;
-    public static final int TURRET_SLOT_ID = 0;
-    public static final double TURRET_P = 0.01; // Placeholder PID constants
-    public static final double TURRET_I = 0;
-    public static final double TURRET_D = 0;
-    public static final double MAX_HOOD_ANGLE = 40.0;
-    public static final double MIN_HOOD_ANGLE = 5;
-    public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(true,
-            40, 40, 500);
-    public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
-            10, 10, 500);
-    public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+    public static class ShooterConstants {
+        public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
+        public static final double FLYWHEEL_VELOCITY = 10;
+        public static final double STOP_MOTOR = 0;
+        public static final int FLYWHEEL_SLOT_ID = 0;
+        // Placeholder PID constants
+        public static final double FLYWHEEL_P = 0.01;
+        public static final double FLYWHEEL_I = 0;
+        public static final double FLYWHEEL_D = 0;
+        public static final double MIN_TURRET_ANGLE = -180;
+        public static final double MAX_TURRET_ANGLE = 180;
+        public static final int TURRET_SLOT_ID = 0;
+        // Placeholder PID constants
+        public static final double TURRET_P = 0.01;
+        public static final double TURRET_I = 0;
+        public static final double TURRET_D = 0;
+        public static final double MAX_HOOD_ANGLE = 40.0;
+        public static final double MIN_HOOD_ANGLE = 5;
+        public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
+                true,
+                40, 40, 500);
+        public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
+                true,
+                10, 10, 500);
+        public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+        public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
+        public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+    }
 
     /**
      * Constructor for shooter subsystem.
@@ -67,6 +84,9 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor1.configFactoryDefault();
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
+        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, FLYWHEEL_P);
+        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, FLYWHEEL_I);
+        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, FLYWHEEL_D);
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
@@ -115,6 +135,16 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Sets the velocity of both flywheel motors
+     *
+     * @param velocity
+     *            the velocity of the flywheel motors
+     */
+    public void setFlywheelVelocity(double velocity) {
+        flywheelMotor1.set(ControlMode.Velocity, velocity);
+    }
+
+    /**
      * Starts both flywheel motors
      */
     public void startFlywheel() {
@@ -157,11 +187,15 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setTurretAngle(double angle) {
         if (angle < MIN_TURRET_ANGLE) {
+            System.out.println("LOG: Desired turret angle is below min angle");
             if (angle + 360 < MAX_TURRET_ANGLE) {
+                System.out.println("LOG: Targeting desired turret angle in other direction");
                 angle += 360;
             }
         } else if (angle > MAX_TURRET_ANGLE) {
+            System.out.println("LOG: Desired turret angle is above max angle");
             if (angle - 360 > MIN_TURRET_ANGLE) {
+                System.out.println("LOG: Targeting desired turret angle in other direction");
                 angle -= 360;
             }
         }
@@ -176,7 +210,6 @@ public class ShooterSubsystem extends SubsystemBase {
      *            Amount to change the turret angle by in degrees
      */
     public void updateTurretAngle(double deltaAngle) {
-        double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
-        setTurretAngle(currentAngle + deltaAngle);
+        setTurretAngle(getTurretAngle() + deltaAngle);
     }
 }

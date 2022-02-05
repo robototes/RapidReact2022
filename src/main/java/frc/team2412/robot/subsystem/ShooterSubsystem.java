@@ -187,11 +187,15 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void setTurretAngle(double angle) {
         if (angle < MIN_TURRET_ANGLE) {
+            System.out.println("LOG: Desired turret angle is below min angle");
             if (angle + 360 < MAX_TURRET_ANGLE) {
+                System.out.println("LOG: Targeting desired turret angle in other direction");
                 angle += 360;
             }
         } else if (angle > MAX_TURRET_ANGLE) {
+            System.out.println("LOG: Desired turret angle is above max angle");
             if (angle - 360 > MIN_TURRET_ANGLE) {
+                System.out.println("LOG: Targeting desired turret angle in other direction");
                 angle -= 360;
             }
         }
@@ -206,7 +210,6 @@ public class ShooterSubsystem extends SubsystemBase {
      *            Amount to change the turret angle by in degrees
      */
     public void updateTurretAngle(double deltaAngle) {
-        double currentAngle = turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
-        setTurretAngle(currentAngle + deltaAngle);
+        setTurretAngle(getTurretAngle() + deltaAngle);
     }
 }

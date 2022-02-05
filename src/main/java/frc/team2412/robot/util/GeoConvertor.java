@@ -3,13 +3,15 @@ package frc.team2412.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import kotlin.Unit;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 public class GeoConvertor {
-    public static Pose2d rigidToPose(RigidTransform2 trans) {
-        return new Pose2d(trans.translation.x, trans.translation.y, rotation2toRotation2d(trans.rotation));
+    public static Pose2d rigidInchesToPoseMeters(RigidTransform2 trans) {
+        return new Pose2d(Units.inchesToMeters(trans.translation.x) , Units.inchesToMeters(trans.translation.y), rotation2toRotation2d(trans.rotation));
     }
 
     public static RigidTransform2 poseToRigid(Pose2d pose) {

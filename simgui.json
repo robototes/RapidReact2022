@@ -51,11 +51,19 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/Field": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
   "NetworkTables": {
     "Shuffleboard": {
+      "Drivebase": {
+        "open": true
+      },
       "Drivetrain": {
         "open": true
       },

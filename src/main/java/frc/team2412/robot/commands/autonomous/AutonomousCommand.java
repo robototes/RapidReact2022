@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.Constants;
-import org.frcteam2910.common.math.Vector2;
+
 
 import java.util.List;
 
@@ -31,46 +31,20 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 Constants.AutoConstants.maxAccelerationMetersPerSecondSquared)
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(Constants.DriveConstants.driveKinematics);
-
-        // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        // // Start at the origin facing the +X direction
-        // new Pose2d(0, 0, new Rotation2d(0)),
-        // // Pass through these two interior waypoints, making an 's' curve path
-        // List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // // End 3 meters straight ahead of where we started, facing forward
-        // new Pose2d(3, 0, new Rotation2d(0)),
-        // config);
-
-        // Trajectory exampleTrajectory =
-        // TrajectoryGenerator.generateTrajectory(
-        // // Start at the origin facing the +X direction
-        // new Pose2d(0, 0, new Rotation2d(0)),
-        // // Pass through these two interior waypoints, making an 's' curve path
-        // List.of(new Translation2d(-0.3, -0.3)),
-        // // End 3 meters straight ahead of where we started, facing forward
-        // new Pose2d(-0.6, -0.6, new Rotation2d(0)),
-        // config);
+        //creating trajectory path (right now is a square)
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                List.of(new Translation2d(0.05, 0), new Translation2d(0.05, 0.05), new Translation2d(0, 0.05)),
+                List.of(new Translation2d(1, 0), new Translation2d(1, 1), new Translation2d(0, 1)),
                 new Pose2d(0,  0.0, Rotation2d.fromDegrees(0)),
                 config);
-
-        // ProfiledPIDController thetaController =
-        // new ProfiledPIDController(
-        // Constants.AutoConstants.PThetaController, 0, 0,
-        // Constants.AutoConstants.kThetaControllerConstraints);
-        // thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
+        //creates thetacontroller (rotation)
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 0.000000005, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                 exampleTrajectory,
-                drivebaseSubsystem::getPoseAsPose, // Functional interface to feed supplier
+                drivebaseSubsystem::getPoseAsPoseMeters, // Functional interface to feed supplier
                 Constants.DriveConstants.driveKinematics,
 
                 // Position controllers

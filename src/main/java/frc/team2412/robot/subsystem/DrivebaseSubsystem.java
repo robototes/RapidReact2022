@@ -3,7 +3,6 @@ package frc.team2412.robot.subsystem;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -188,9 +187,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public Pose2d getPoseAsPose() {
+    public Pose2d getPoseAsPoseMeters() {
         synchronized (kinematicsLock) {
-            return GeoConvertor.rigidToPose(pose);
+            return GeoConvertor.rigidInchesToPoseMeters(pose);
         }
     }
 
@@ -341,12 +340,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     @Override
     public void periodic() {
-        Pose2d pose = getPoseAsPose();
+        Pose2d pose = getPoseAsPoseMeters();
+        odometryXEntry.setDouble(pose.getX());
+        odometryYEntry.setDouble(pose.getY());
+        odometryAngleEntry.setDouble(pose.getRotation().getDegrees());
        // System.out.println(pose);
         field.setRobotPose(pose);
-        if (follower.getLastState() != null) {
 
-        }
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

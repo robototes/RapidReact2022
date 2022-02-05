@@ -32,7 +32,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         if (floor == null && ceiling == null) {
             // If the floor and ceiling keys are not present, no keys are in the map and
             // there is nothing to interpolate.
-            System.out.println("getInterpolated was called, but InterpolatingTreeMap is empty...");
+            System.out.println("getInterpolated was called, but InterpolatingTreeMap is empty");
             return null;
         } else if (floor == null) {
             // key is below lowest value in map

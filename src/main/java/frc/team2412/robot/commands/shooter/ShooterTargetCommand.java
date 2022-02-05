@@ -1,7 +1,8 @@
 package frc.team2412.robot.commands.shooter;
 
-import java.util.function.DoubleSupplier;
+import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
+import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
@@ -22,7 +23,7 @@ public class ShooterTargetCommand extends CommandBase {
     public void execute() {
         double distance = distanceSupplier.getAsDouble();
         double yaw = yawSupplier.getAsDouble();
-        ShooterDataDistancePoint shooterData = ShooterSubsystem.dataPoints.getInterpolated(distance);
+        ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
         shooter.hoodMotorSetAngle(shooterData.getAngle());
         shooter.setFlywheelVelocity(shooterData.getPower());
         shooter.updateTurretAngle(yaw);

@@ -1,5 +1,7 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -10,33 +12,36 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.InterpolatingTreeMap;
 
 public class ShooterSubsystem extends SubsystemBase {
-    // instance variables
+    // Instance variables
     private final WPI_TalonFX flywheelMotor1;
     private final WPI_TalonFX flywheelMotor2;
     private final WPI_TalonFX turretMotor;
     private final WPI_TalonFX hoodMotor;
 
-    // Constants
-    public static final double FLYWHEEL_VELOCITY = 10;
-    public static final double STOP_MOTOR = 0;
-    // 2048 ticks per 360 degrees
-    public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
-    // Total ~360 degrees of rotation, assumes 0 is center
-    public static final double MIN_TURRET_ANGLE = -180;
-    public static final double MAX_TURRET_ANGLE = 180;
-    public static final int TURRET_SLOT_ID = 0;
-    // Placeholder PID constants
-    public static final double TURRET_P = 0.01;
-    public static final double TURRET_I = 0;
-    public static final double TURRET_D = 0;
-    public static final double MAX_HOOD_ANGLE = 40.0;
-    public static final double MIN_HOOD_ANGLE = 5;
-    public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(true,
-            40, 40, 500);
-    public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
-            10, 10, 500);
-    public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
-    public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
+    public static class ShooterConstants {
+        public static final double FLYWHEEL_VELOCITY = 10;
+        public static final double STOP_MOTOR = 0;
+        // 2048 ticks per 360 degrees
+        public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
+        // Total ~360 degrees of rotation, assumes 0 is center
+        public static final double MIN_TURRET_ANGLE = -180;
+        public static final double MAX_TURRET_ANGLE = 180;
+        public static final int TURRET_SLOT_ID = 0;
+        // Placeholder PID constants
+        public static final double TURRET_P = 0.01;
+        public static final double TURRET_I = 0;
+        public static final double TURRET_D = 0;
+        public static final double MAX_HOOD_ANGLE = 40.0;
+        public static final double MIN_HOOD_ANGLE = 5;
+        public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
+                true,
+                40, 40, 500);
+        public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
+                true,
+                10, 10, 500);
+        public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+        public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
+    }
 
     /**
      * Constructor for shooter subsystem.

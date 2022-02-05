@@ -106,7 +106,7 @@ public class Hardware {
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
-        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kOnboard;
+        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kMXP;
         // which port the I2C device plugged in on the multiplexer
         public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
                 CENTER_INTAKE_COLORSENSOR_PORT = 3;

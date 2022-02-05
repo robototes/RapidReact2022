@@ -1,23 +1,21 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.BLUE_CARGO_COLOR;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.RED_CARGO_COLOR;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.teamColor;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.EXTEND;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
-
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -40,7 +38,7 @@ public class IntakeSubsystem extends SubsystemBase {
         public static Color RED_CARGO_COLOR = new Color(1, 0, 0);
 
         public static final double INTAKE_IN_SPEED = 0.5;
-        public static final double INTAKE_OUT_SPEED = -0.5;
+        public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
@@ -54,20 +52,20 @@ public class IntakeSubsystem extends SubsystemBase {
         public static enum IntakeSolenoidState {
             EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
 
-            public DoubleSolenoid.Value Value;
+            public final DoubleSolenoid.Value value;
 
-            private IntakeSolenoidState(DoubleSolenoid.Value Value) {
-                this.Value = Value;
+            private IntakeSolenoidState(DoubleSolenoid.Value value) {
+                this.value = value;
             }
         }
 
         // public enum IntakeSolenoidState {
-        //     EXTENDED, RETRACTED;
+        // EXTENDED, RETRACTED;
         // }
     }
 
     private ColorMatch colorMatcher = new ColorMatch();
-    
+
     ///// IMPORTANT: Need ball amount variable and make method to stop taking in
     ///// balls when at limit.
 
@@ -78,11 +76,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final DoubleSolenoid solenoid;
 
-    private final ColorSensorV3 colorSensor;
+    // private final ColorSensorV3 colorSensor;
 
-    // private final MultiplexedColorSensor leftColorSensor;
-    // private final MultiplexedColorSensor rightColorSensor;
-    // private final MultiplexedColorSensor centerColorSensor;
+    private final MultiplexedColorSensor leftColorSensor;
+    private final MultiplexedColorSensor rightColorSensor;
+    private final MultiplexedColorSensor centerColorSensor;
 
     // States
 
@@ -91,8 +89,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motorOuterAxle, WPI_TalonFX motorInnerAxle, DoubleSolenoid intakeSolenoid, ColorSensorV3 colorSensor) {
-        
+    public IntakeSubsystem(WPI_TalonFX motorOuterAxle, 
+                           WPI_TalonFX motorInnerAxle, 
+                           DoubleSolenoid intakeSolenoid, 
+                           MultiplexedColorSensor leftColorSensor, 
+                           MultiplexedColorSensor rightColorSensor, 
+                        MultiplexedColorSensor centerColorSensor) {
+
         this.motorOuterAxle = motorOuterAxle;
         this.motorInnerAxle = motorInnerAxle;
         this.motorInnerAxle.setInverted(true);
@@ -103,18 +106,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
         this.solenoid = intakeSolenoid;
 
-        this.colorSensor = colorSensor;
+        this.leftColorSensor = leftColorSensor;
+        this.rightColorSensor = rightColorSensor;
+        this.centerColorSensor = rightColorSensor;
 
         colorMatcher.setConfidenceThreshold(0.9);
-        
+
         // Looking for opposite alliance ball color to extake
         if (teamColor == Alliance.Blue) {
             colorMatcher.addColorMatch(RED_CARGO_COLOR);
-        }
-        else if (teamColor == Alliance.Red) {
+        } else if (teamColor == Alliance.Red) {
             colorMatcher.addColorMatch(BLUE_CARGO_COLOR);
         }
-        
+
         intakeSolenoidState = RETRACT;
         intakeMotorState = STOPPED;
 
@@ -166,8 +170,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeExtend() {
         intakeSolenoidState = EXTEND;
 
-        solenoid.set(EXTEND.Value);
-        }
+        solenoid.set(EXTEND.value);
+    }
 
     /**
      * Retracts solenoid and updates solenoid state
@@ -175,29 +179,36 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeRetract() {
         intakeSolenoidState = RETRACT;
 
-        solenoid.set(RETRACT.Value);
+        solenoid.set(RETRACT.value);
     }
 
     /**
-     * Returns true if the opposing team's cargo is present
+     * Returns true if color sensor detects an enemy cargo
+     */
+    public boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
+        return colorMatcher.matchColor(colorSensor.getColor()) != null;
+    }
+
+    /**
+     * Returns true if any of the color sensors detect an enemy cargo
      */
     public boolean hasOpposingColorCargo() {
-        return colorMatcher.matchColor(colorSensor.getColor()) != null;
+        if (individualHasOpposingColorCargo(leftColorSensor) || individualHasOpposingColorCargo(rightColorSensor) 
+                || individualHasOpposingColorCargo(centerColorSensor)) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Returns current color value detected if matched
      */
-    public Color getMatchedSensorColor() {
+    public Color individualgetMatchedSensorColor(MultiplexedColorSensor colorSensor) {
         return colorMatcher.matchColor(colorSensor.getColor()).color;
     }
 
-    //public void 
-
     @Override
     public void periodic() {
-        intakeSolenoidState = IntakeSolenoidState.EXTEND;
-        
+        // mayb add controls later???? 
     }
-
 }

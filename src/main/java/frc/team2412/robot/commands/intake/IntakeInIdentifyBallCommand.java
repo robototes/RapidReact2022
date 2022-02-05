@@ -1,0 +1,19 @@
+package frc.team2412.robot.commands.intake;
+
+import frc.team2412.robot.subsystem.IntakeSubsystem;
+
+public class IntakeInIdentifyBallCommand extends IntakeInCommand {
+
+    public IntakeInIdentifyBallCommand(IntakeSubsystem subsystem) {
+
+        super(subsystem);
+
+    }
+
+    @Override
+    public boolean isFinished() {
+        return subsystem.hasOpposingColorCargo();
+
+    }
+
+}

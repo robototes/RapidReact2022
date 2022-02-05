@@ -29,7 +29,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.ColorSensorV3;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -96,7 +95,8 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
         // intake can ids are rnage 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0, INTAKE_COLOR_SENSOR = 0;
+        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0,
+                RIGHT_INTAKE_COLOR_SENSOR = 0, LEFT_INTAKE_COLOR_SENSOR = 0, CENTER_INTAKE_COLOR_SENSOR = 0;
 
         // index can ids are range 40-49
         public static final int INDEX = 0;
@@ -128,8 +128,6 @@ public class Hardware {
     public MultiplexedColorSensor leftIntakeColorSensor;
     public MultiplexedColorSensor rightIntakeColorSensor;
     public MultiplexedColorSensor centerIntakeColorSensor;
-    public ColorSensorV3 intakeColorSensor;
-
 
     // climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
@@ -161,7 +159,7 @@ public class Hardware {
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
-            intakeColorSensor = new ColorSensorV3(Port.kOnboard);
+
         }
         if (INDEX_ENABLED) {
             indexMotor = new WPI_TalonFX(INDEX);

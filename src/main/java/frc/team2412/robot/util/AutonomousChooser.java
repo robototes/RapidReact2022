@@ -36,7 +36,8 @@ public class AutonomousChooser {
     private SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        command.addCommands(new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
+        command.addCommands(
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
 
         return command;
     }

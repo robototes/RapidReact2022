@@ -1,12 +1,8 @@
 package frc.team2412.robot;
 
 import frc.team2412.robot.subsystem.*;
-import frc.team2412.robot.util.AutonomousChooser;
-import frc.team2412.robot.util.AutonomousTrajectories;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Subsystems {
     public static class SubsystemConstants {

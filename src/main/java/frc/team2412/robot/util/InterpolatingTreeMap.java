@@ -71,8 +71,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             System.out.println("ERROR, distance between sample points is an illegal value: " + slopeDistanceDifference);
             return null;
         }
-        double angleSlope = (ceiling.getAngle() - floor.getAngle()) / (slopeDistanceDifference);
-        double powerSlope = (ceiling.getPower() - floor.getPower()) / (slopeDistanceDifference);
+        double angleSlope = (ceiling.getAngle() - floor.getAngle()) / slopeDistanceDifference;
+        double powerSlope = (ceiling.getPower() - floor.getPower()) / slopeDistanceDifference;
         double distanceOffset = key - floor.getDistance();
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
         double interpolatePower = powerSlope * distanceOffset + floor.getPower();

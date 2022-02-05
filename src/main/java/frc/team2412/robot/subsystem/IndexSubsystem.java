@@ -163,6 +163,10 @@ public class IndexSubsystem extends SubsystemBase {
         return !(firstMotorState == STOPPED);
     }
 
+    public boolean isSecondMotorOn() {
+        return !(secondMotorState == STOPPED);
+    }
+
     // might need later?
     @Override
     public void periodic() {

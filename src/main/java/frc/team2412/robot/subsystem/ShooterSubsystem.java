@@ -61,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the flywheel P value.
-     * 
+     *
      * @return The flywheel P value
      */
     public static double getFlywheelP() {
@@ -70,7 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the flywheel I value.
-     * 
+     *
      * @return The flywheel I value
      */
     public static double getFlywheelI() {
@@ -79,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the flywheel D value.
-     * 
+     *
      * @return The flywheel D value
      */
     public static double getFlywheelD() {
@@ -88,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the turret P value.
-     * 
+     *
      * @return The turret P value
      */
     public static double getTurretP() {
@@ -97,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the turret I value.
-     * 
+     *
      * @return The turret I value
      */
     public static double getTurretI() {
@@ -106,7 +106,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Returns the turret D value.
-     * 
+     *
      * @return The turret D value
      */
     public static double getTurretD() {

@@ -34,6 +34,7 @@ public class Subsystems {
 
     public Subsystems(Hardware h) {
         hardware = h;
+
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);
@@ -45,11 +46,12 @@ public class Subsystems {
         if (GOAL_VIS_ENABLED)
             goalVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
-            indexSubsystem = new IndexSubsystem(hardware.indexMotor);
+            indexSubsystem = new IndexSubsystem(hardware.firstIndexMotor, hardware.secondIndexMotor,
+                    hardware.firstIndexColorSensor, hardware.secondIndexColorSensor);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
-                    hardware.intakeSolenoid, hardware.leftIntakeColorSensor,
-                    hardware.rightIntakeColorSensor, hardware.centerIntakeColorSensor);
+                    hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,
+                    hardware.centerIntakeColorSensor);
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);

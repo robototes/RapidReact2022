@@ -1,14 +1,8 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Hardware.HardwareConstants.*;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-
-import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -17,6 +11,10 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
@@ -67,7 +65,7 @@ public class Hardware {
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
-        public static final int INDEX = 0;
+        public static final int INDEX_1 = 0, INDEX_2 = 0, INDEX_SENSOR_1 = 0, INDEX_SENSOR_2 = 0;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
@@ -103,7 +101,8 @@ public class Hardware {
     public DoubleSolenoid climbAngle;
 
     // index
-    public WPI_TalonFX indexMotor;
+    public WPI_TalonFX firstIndexMotor, secondIndexMotor;
+    public MultiplexedColorSensor firstIndexColorSensor, secondIndexColorSensor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -127,10 +126,12 @@ public class Hardware {
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
-
         }
         if (INDEX_ENABLED) {
-            indexMotor = new WPI_TalonFX(INDEX);
+            firstIndexMotor = new WPI_TalonFX(INDEX_1);
+            secondIndexMotor = new WPI_TalonFX(INDEX_2);
+            firstIndexColorSensor = new MultiplexedColorSensor(INDEX_SENSOR_1);
+            secondIndexColorSensor = new MultiplexedColorSensor(INDEX_SENSOR_2);
         }
         if (SHOOTER_ENABLED) {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);

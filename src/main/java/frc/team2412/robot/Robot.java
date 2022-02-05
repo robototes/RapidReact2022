@@ -4,12 +4,8 @@
 
 package frc.team2412.robot;
 
-<<<<<<< HEAD
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
-import org.frcteam2910.common.control.SimplePathBuilder;
-=======
->>>>>>> bef1059e651b753bcfff33a5eba226b58af6d764
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 

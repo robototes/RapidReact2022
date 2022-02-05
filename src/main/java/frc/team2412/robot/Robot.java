@@ -4,6 +4,8 @@
 
 package frc.team2412.robot;
 
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -16,15 +18,21 @@ import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 
+import static java.lang.Thread.sleep;
+
 public class Robot extends TimedRobot {
     /**
      * Singleton Stuff
      */
     private static Robot instance = null;
 
-    public static Robot getInstance() {
+    enum RobotType {
+        COMPETITION, AUTOMATED_TEST
+    }
+
+    public static Robot getInstance(RobotType type) {
         if (instance == null)
-            instance = new Robot();
+            instance = new Robot(type);
         return instance;
     }
 
@@ -34,14 +42,45 @@ public class Robot extends TimedRobot {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+    final private RobotType robotType;
+
+    private Thread controlAuto;
 
     public TestingSubsystem testingSubsystem;
 
-    private Robot() {
+    Robot(RobotType type) {
+        System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
+        robotType = type;
     }
 
     // TODO add other override methods
+
+    @Override
+    public void startCompetition() {
+        if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
+            super.startCompetition();
+        } else {
+            try {
+                super.startCompetition();
+            } catch (Throwable throwable) {
+                Throwable cause = throwable.getCause();
+                if (cause != null) {
+                    // We're about to exit, so overwriting the param is fine
+                    // noinspection AssignmentToCatchBlockParameter
+                    throwable = cause;
+                }
+                DriverStation.reportError(
+                        "Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException ignored) {
+                }
+                java.lang.System.exit(-1);
+            }
+        }
+    }
 
     @Override
     public void robotInit() {
@@ -53,6 +92,41 @@ public class Robot extends TimedRobot {
         updateManager.startLoop(5.0e-3);
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+
+        if (robotType.equals(RobotType.AUTOMATED_TEST)) {
+            controlAuto = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Waiting two seconds for robot to finish startup");
+                    try {
+                        sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    System.out.println("Enabling autonomous mode and waiting 10 seconds");
+                    DriverStationDataJNI.setAutonomous(true);
+                    DriverStationDataJNI.setEnabled(true);
+
+                    try {
+                        sleep(10000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    System.out.println("Disabling robot and waiting two seconds");
+                    DriverStationDataJNI.setEnabled(false);
+
+                    try {
+                        sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+
+                    System.out.println("Ending competition");
+                    suppressExitWarning(true);
+                    endCompetition();
+                }
+            });
+            controlAuto.start();
+        }
     }
 
     @Override

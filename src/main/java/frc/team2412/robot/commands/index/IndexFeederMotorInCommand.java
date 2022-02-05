@@ -3,28 +3,28 @@ package frc.team2412.robot.commands.index;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 
-public class IndexFirstMotorOutCommand extends CommandBase {
+public class IndexFeederMotorInCommand extends CommandBase {
     private final IndexSubsystem subsystem;
 
-    public IndexFirstMotorOutCommand(IndexSubsystem subsystem) {
+    public IndexFeederMotorInCommand(IndexSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
     }
 
     @Override
     public void initialize() {
-        subsystem.firstMotorOut();
+        subsystem.feederMotorIn();
     }
 
     @Override
     public void execute() {
-        if (!subsystem.firstSensorHasBallIn()) {
-            subsystem.firstMotorStop();
+        if (!subsystem.feederSensorHasBallIn()) {
+            subsystem.feederMotorStop();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return !subsystem.isFirstMotorOn();
+        return !subsystem.isFeederMotorOn();
     }
 }

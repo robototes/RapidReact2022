@@ -56,42 +56,42 @@ public class IndexSubsystem extends SubsystemBase {
 
     // Define Hardware
 
-    private final MultiplexedColorSensor firstColorSensor;
-    private final MultiplexedColorSensor secondColorSensor;
+    private final MultiplexedColorSensor ingestColorSensor;
+    private final MultiplexedColorSensor feederColorSensor;
 
-    private final WPI_TalonFX firstMotor;
-    private final WPI_TalonFX secondMotor;
+    private final WPI_TalonFX ingestMotor;
+    private final WPI_TalonFX feederMotor;
 
     // States
 
-    private IndexMotorState firstMotorState;
-    private IndexMotorState secondMotorState;
+    private IndexMotorState ingestMotorState;
+    private IndexMotorState feederMotorState;
 
-    private IndexPositionState firstBallState;
-    private IndexPositionState secondBallState;
+    private IndexPositionState ingestBallState;
+    private IndexPositionState feederBallState;
 
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, MultiplexedColorSensor firstColorSensor,
             MultiplexedColorSensor secondColorSensor) {
-        this.firstMotor = firstMotor;
-        this.secondMotor = secondMotor;
-        this.firstColorSensor = firstColorSensor;
-        this.secondColorSensor = secondColorSensor;
+        this.ingestMotor = firstMotor;
+        this.feederMotor = secondMotor;
+        this.ingestColorSensor = firstColorSensor;
+        this.feederColorSensor = secondColorSensor;
 
-        this.firstMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.secondMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
         colorMatcher.addColorMatch(BLUE_CARGO_COLOR); // might change later to account for opposing team color
         colorMatcher.addColorMatch(RED_CARGO_COLOR);
 
         colorMatcher.setConfidenceThreshold(0.9);
 
-        firstMotorStop();
-        secondMotorStop();
+        ingestMotorStop();
+        feederMotorStop();
 
-        firstBallState = HAS_NO_BALL;
-        secondBallState = HAS_NO_BALL;
+        ingestBallState = HAS_NO_BALL;
+        feederBallState = HAS_NO_BALL;
 
         setName("IndexSubsystem");
     }
@@ -101,88 +101,88 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Spins first motor inward and updates first motor state
      */
-    public void firstMotorIn() {
-        firstMotor.set(INDEX_IN_SPEED);
-        firstMotorState = IN;
+    public void ingestMotorIn() {
+        ingestMotor.set(INDEX_IN_SPEED);
+        ingestMotorState = IN;
     }
 
     /**
      * Spins first motor outward and updates first motor state
      */
-    public void firstMotorOut() {
-        firstMotor.set(INDEX_OUT_SPEED);
-        firstMotorState = OUT;
+    public void ingestMotorOut() {
+        ingestMotor.set(INDEX_OUT_SPEED);
+        ingestMotorState = OUT;
     }
 
     /**
      * Stops first motor and updates first motor state
      */
-    public void firstMotorStop() {
-        if (!firstSensorHasBallIn()) {
-            firstMotor.set(0);
-            firstMotorState = STOPPED;
+    public void ingestMotorStop() {
+        if (!ingestSensorHasBallIn()) {
+            ingestMotor.set(0);
+            ingestMotorState = STOPPED;
         }
     }
 
     /**
      * Spins second motor inward and updates second motor state
      */
-    public void secondMotorIn() {
-        secondMotor.set(INDEX_IN_SPEED);
-        secondMotorState = IN;
+    public void feederMotorIn() {
+        feederMotor.set(INDEX_IN_SPEED);
+        feederMotorState = IN;
     }
 
     /**
      * Spins second motor outward and updates second motor state
      */
-    public void secondMotorOut() {
-        secondMotor.set(INDEX_OUT_SPEED);
-        secondMotorState = OUT;
+    public void feederMotorOut() {
+        feederMotor.set(INDEX_OUT_SPEED);
+        feederMotorState = OUT;
     }
 
     /**
      * Stops second motor and updates second motor state
      */
-    public void secondMotorStop() {
-        secondMotor.set(0);
-        secondMotorState = STOPPED;
+    public void feederMotorStop() {
+        feederMotor.set(0);
+        feederMotorState = STOPPED;
     }
 
     /**
      * Checks if ball is positioned at the first sensor
      */
-    public boolean firstSensorHasBallIn() { // also might rename later?
-        return (firstColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
+    public boolean ingestSensorHasBallIn() { // also might rename later?
+        return (ingestColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
-    public boolean secondSensorHasBallIn() { // might rename methods later?
-        return (secondColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
+    public boolean feederSensorHasBallIn() { // might rename methods later?
+        return (feederColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
     }
 
-    public boolean isFirstMotorOn() {
-        return !(firstMotorState == STOPPED);
+    public boolean isIngestMotorOn() {
+        return !(ingestMotorState == STOPPED);
     }
 
-    public boolean isSecondMotorOn() {
-        return !(secondMotorState == STOPPED);
+    public boolean isFeederMotorOn() {
+        return !(feederMotorState == STOPPED);
     }
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :>
     @Override
     public void periodic() {
-        if (firstSensorHasBallIn()) {
-            firstBallState = HAS_BALL;
+        if (ingestSensorHasBallIn()) {
+            ingestBallState = HAS_BALL;
         } else {
-            firstBallState = HAS_NO_BALL;
+            ingestBallState = HAS_NO_BALL;
         }
 
-        if (secondSensorHasBallIn()) {
-            secondBallState = HAS_BALL;
+        if (feederSensorHasBallIn()) {
+            feederBallState = HAS_BALL;
         } else {
-            secondBallState = HAS_NO_BALL;
+            feederBallState = HAS_NO_BALL;
         }
     }
 

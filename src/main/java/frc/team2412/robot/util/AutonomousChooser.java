@@ -43,7 +43,8 @@ public class AutonomousChooser {
 
         return command;
     }
-    private SequentialCommandGroup getAutoWPICommand (Subsystems subsystems){
+
+    private SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand());

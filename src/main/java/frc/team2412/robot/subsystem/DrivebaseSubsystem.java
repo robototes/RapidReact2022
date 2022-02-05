@@ -344,7 +344,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         odometryXEntry.setDouble(pose.getX());
         odometryYEntry.setDouble(pose.getY());
         odometryAngleEntry.setDouble(pose.getRotation().getDegrees());
-       // System.out.println(pose);
+        // System.out.println(pose);
         field.setRobotPose(pose);
 
     }

@@ -9,11 +9,9 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.util.Constants;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
-import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -192,8 +190,10 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousChooser.getCommand(subsystems).schedule();
     }
-    @Override public void autonomousExit(){
-        if (autonomousCommand !=null){
+
+    @Override
+    public void autonomousExit() {
+        if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
     }

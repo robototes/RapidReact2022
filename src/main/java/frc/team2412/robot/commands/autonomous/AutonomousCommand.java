@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.Constants;
 
-
 import java.util.List;
 
 public class AutonomousCommand extends SequentialCommandGroup {
@@ -23,7 +22,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
         drivebaseSubsystem = d;
     }
 
-
     public Command getAutonomousCommand() {
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
@@ -31,13 +29,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 Constants.AutoConstants.maxAccelerationMetersPerSecondSquared)
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(Constants.DriveConstants.driveKinematics);
-        //creating trajectory path (right now is a square)
+        // creating trajectory path (right now is a square)
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
                 List.of(new Translation2d(1, 0), new Translation2d(1, 1), new Translation2d(0, 1)),
-                new Pose2d(0,  0.0, Rotation2d.fromDegrees(0)),
+                new Pose2d(0, 0.0, Rotation2d.fromDegrees(0)),
                 config);
-        //creates thetacontroller (rotation)
+        // creates thetacontroller (rotation)
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 0.000000005, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);

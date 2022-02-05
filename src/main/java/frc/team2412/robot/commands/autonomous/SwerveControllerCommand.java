@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import org.frcteam2910.common.math.Vector2;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -175,20 +174,23 @@ public class SwerveControllerCommand extends CommandBase {
         var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
         outputModuleStates.accept(targetModuleStates);
-//        drivebase.drive(new Vector2(targetChassisSpeeds.vxMetersPerSecond, targetChassisSpeeds.vyMetersPerSecond),
-//                targetChassisSpeeds.omegaRadiansPerSecond, true);
+        // drivebase.drive(new Vector2(targetChassisSpeeds.vxMetersPerSecond,
+        // targetChassisSpeeds.vyMetersPerSecond),
+        // targetChassisSpeeds.omegaRadiansPerSecond, true);
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         System.out.println("Hurray it is called");
-        if (interrupted){
-            //drivebase.drive(Vector2.ZERO, 0, false);
-            outputModuleStates.accept( kinematics.toSwerveModuleStates(new ChassisSpeeds(0,0,0)));
+        if (interrupted) {
+            // drivebase.drive(Vector2.ZERO, 0, false);
+            outputModuleStates.accept(kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));
         }
         timer.stop();
     }
 
     @Override
-    public boolean isFinished() {return timer.hasElapsed(trajectory.getTotalTimeSeconds());}
+    public boolean isFinished() {
+        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
+    }
 }

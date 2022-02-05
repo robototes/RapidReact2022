@@ -32,7 +32,7 @@ public class MultiplexedColorSensor {
 
     /**
      * Create a multiplexed color sensor.
-     * the constructor with most control, make it public if necessary
+     * The constructor with most control, make it public if necessary
      */
     private MultiplexedColorSensor(I2C.Port i2cPort, int sensorPortNumber) {
         this.sensorPortNumber = sensorPortNumber;
@@ -43,20 +43,19 @@ public class MultiplexedColorSensor {
     }
 
     /**
-     * Since there is only one I2C port on roboRIO 2, so just pass in the port
-     * number on multiplexer should be enough
+     * Since there is only one I2C port on roboRIO 2,
+     * So just pass in the port number on multiplexer should be enough
      *
-     * @param sensorPortNumber
-     *            which port the ColorSensorV3 is plugged on the multiplexer
+     * @param sensorPortNumber which port the ColorSensorV3 is plugged on the mux
      */
     public MultiplexedColorSensor(int sensorPortNumber) {
         this(HardwareConstants.I2C_MULTIPLEXER_PORT, sensorPortNumber);
     }
 
     /**
-     * Helper method. This just sets the multiplexer to the correct port before
-     * using the color sensor.
-     * checking if is still on the same port as last time, if so will skip this step
+     * Helper method. This just sets the multiplexer to the correct port
+     * before using the color sensor.
+     * Checking if is still on the same port as last time, if so will skip this step
      */
     private void setChannelUnderLock() {
         if (lastSensorPortNumber != this.sensorPortNumber) {

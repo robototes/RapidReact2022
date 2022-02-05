@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.subsystem.TestingSubsystem;
 
 public class Robot extends TimedRobot {
     /**
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
 
+    public TestingSubsystem testingSubsystem;
+
     private Robot() {
         instance = this;
     }
@@ -47,6 +50,11 @@ public class Robot extends TimedRobot {
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
         autonomousChooser = new AutonomousChooser(new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+    }
+
+    @Override
+    public void testInit() {
+        testingSubsystem = new TestingSubsystem();
     }
 
     @Override

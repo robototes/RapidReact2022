@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
-import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {

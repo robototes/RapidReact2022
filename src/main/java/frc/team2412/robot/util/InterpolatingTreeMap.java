@@ -22,7 +22,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     }
 
     /**
-     * Creates an {@link InterpolatingTreeMap} from an array of {@link ShooterDataDistancePoint}
+     * Creates an {@link InterpolatingTreeMap} from an array of {@link ShooterDataDistancePoint}.
      */
     public InterpolatingTreeMap(ShooterDataDistancePoint[] dataPoints) {
         super();

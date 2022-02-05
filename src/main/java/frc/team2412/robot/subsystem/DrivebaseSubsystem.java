@@ -4,8 +4,10 @@ import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -285,24 +287,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void updateModules(SwerveModuleState[] swerveModuleStates) {
-        module1.setNumber(swerveModuleStates[0].speedMetersPerSecond);
-        module2.setNumber(swerveModuleStates[1].speedMetersPerSecond);
-        module3.setNumber(swerveModuleStates[2].speedMetersPerSecond);
-        module4.setNumber(swerveModuleStates[3].speedMetersPerSecond);
-        double realMaxVelocity = Arrays.stream(swerveModuleStates).mapToDouble((m) -> {
-            return m.speedMetersPerSecond;
-        }).max().orElseThrow();
-        if (realMaxVelocity > 1) {
-            for (int i = 0; i < swerveModuleStates.length; ++i) {
-                swerveModuleStates[i].speedMetersPerSecond /= realMaxVelocity;
-            }
-        }
-
-        for (int i = 0; i < swerveModuleStates.length; i++) {
-            var module = modules[i];
-            module.set(swerveModuleStates[i].speedMetersPerSecond * 12.0, swerveModuleStates[i].angle.getRadians());
-        }
+    public void updateModules(ChassisSpeeds chassisSpeeds) {
+       HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond), Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
+               chassisSpeeds.omegaRadiansPerSecond, false);
+       updateModules(holonomicDriveSignal);
     }
 
     public RigidTransform2 getPoseAtTime(double timestamp) {
@@ -336,6 +324,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 driveSignal = this.driveSignal;
             }
         }
+        updateModules(driveSignal);
     }
 
     @Override

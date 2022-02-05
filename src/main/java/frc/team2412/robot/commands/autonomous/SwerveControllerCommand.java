@@ -25,7 +25,7 @@ public class SwerveControllerCommand extends CommandBase {
     private final Supplier<Pose2d> pose;
     private final SwerveDriveKinematics kinematics;
     private final HolonomicDriveController controller;
-    private final Consumer<SwerveModuleState[]> outputModuleStates;
+    private final Consumer<ChassisSpeeds> outputModuleStates;
     private final Supplier<Rotation2d> desiredRotation;
     private final DrivebaseSubsystem drivebase;
 
@@ -75,7 +75,7 @@ public class SwerveControllerCommand extends CommandBase {
             PIDController yController,
             ProfiledPIDController thetaController,
             Supplier<Rotation2d> desiredRotation,
-            Consumer<SwerveModuleState[]> outputModuleStates,
+            Consumer<ChassisSpeeds> outputModuleStates,
             DrivebaseSubsystem drivebase, Subsystem... requirements) {
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         this.pose = requireNonNullParam(pose, "pose", "SwerveControllerCommand");
@@ -143,7 +143,7 @@ public class SwerveControllerCommand extends CommandBase {
             PIDController xController,
             PIDController yController,
             ProfiledPIDController thetaController,
-            Consumer<SwerveModuleState[]> outputModuleStates, DrivebaseSubsystem drivebase,
+            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase,
             Subsystem... requirements) {
         this(
                 trajectory,
@@ -171,12 +171,9 @@ public class SwerveControllerCommand extends CommandBase {
         var desiredState = trajectory.sample(curTime);
 
         var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
-        var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
+        //var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
-        outputModuleStates.accept(targetModuleStates);
-        // drivebase.drive(new Vector2(targetChassisSpeeds.vxMetersPerSecond,
-        // targetChassisSpeeds.vyMetersPerSecond),
-        // targetChassisSpeeds.omegaRadiansPerSecond, true);
+        outputModuleStates.accept(targetChassisSpeeds);
     }
 
     @Override
@@ -184,7 +181,7 @@ public class SwerveControllerCommand extends CommandBase {
         System.out.println("Hurray it is called");
         if (interrupted) {
             // drivebase.drive(Vector2.ZERO, 0, false);
-            outputModuleStates.accept(kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0)));
+            outputModuleStates.accept(new ChassisSpeeds(0, 0, 0));
         }
         timer.stop();
     }

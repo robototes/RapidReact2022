@@ -35,17 +35,19 @@ public class TestingSubsystem extends SubsystemBase{
          * The testing subsystem have its built-in Hardware class,
          * that no need to initialize and store the Hardware in somewhere else
          */
-        this.colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+        this.colorSensor = new ColorSensorV3(I2C.Port.kMXP);
     }
 
     @Override
     public void periodic(){
         /*
          * to measure how long does the ColorSensorV3 take to measure once
+         * remember only send to value to telemetry outside the time-evaluation block
          */
         Instant start = Instant.now();
-        sensorValue.setDouble(colorSensor.getRed());
+        double ColorSensorRedValue = colorSensor.getRed();
         Duration timeElapsed = Duration.between(start, Instant.now());
+        sensorValue.setDouble(ColorSensorRedValue);
         timeDuration.setDouble(timeElapsed.toMillis());
     }
 }

@@ -27,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final double FLYWHEEL_D = 0;
         public static final double MIN_TURRET_ANGLE = -180;
         public static final double MAX_TURRET_ANGLE = 180;
+        public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
         // Placeholder PID constants
         public static final double TURRET_P = 0.01;
@@ -34,6 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final double TURRET_D = 0;
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
+        public static final double HOOD_ANGLE_TOLERANCE = 1;
         public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true,
                 40, 40, 500);
@@ -185,6 +187,27 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Returns the hood's current angle (in degrees).
+     *
+     * @return The current angle of the hood
+     */
+    public double getHoodAngle() {
+        return hoodMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    }
+
+    /**
+     * Returns whether the hood is at the given angle.
+     *
+     * @param angle
+     *            The angle (in degrees) to compare the hood's angle to.
+     * @return True if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
+     *         False otherwise.
+     */
+    public boolean hoodIsAtAngle(double angle) {
+        return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
+    }
+
+    /**
      * Sets the target angle for the hood motor
      *
      * @param degrees
@@ -242,6 +265,18 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public double getTurretAngle() {
         return turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    }
+
+    /**
+     * Returns whether the turret is at the given angle.
+     *
+     * @param angle
+     *            The angle (in degrees) to compare the turret's angle to.
+     * @return True if difference between turret angle and given angle is less than
+     *         HOOD_ANGLE_TOLERANCE, False otherwise.
+     */
+    public boolean turretIsAtAngle(double angle) {
+        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
     }
 
     /**

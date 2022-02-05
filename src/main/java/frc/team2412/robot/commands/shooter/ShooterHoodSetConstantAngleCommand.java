@@ -3,11 +3,11 @@ package frc.team2412.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-public class ShooterTurretSetAngleCommand extends CommandBase {
+public class ShooterHoodSetConstantAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final double angle;
 
-    public ShooterTurretSetAngleCommand(ShooterSubsystem shooter, double angle) {
+    public ShooterHoodSetConstantAngleCommand(ShooterSubsystem shooter, double angle) {
         this.shooter = shooter;
         this.angle = angle;
         addRequirements(shooter);
@@ -15,11 +15,11 @@ public class ShooterTurretSetAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setTurretAngle(angle);
+        shooter.hoodMotorSetAngle(angle);
     }
 
     @Override
     public boolean isFinished() {
-        return shooter.turretIsAtAngle(angle);
+        return shooter.hoodIsAtAngle(angle);
     }
 }

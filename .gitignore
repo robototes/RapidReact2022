@@ -165,3 +165,7 @@ simgui*.json
 # Vim :)
 Session.vim
 .undodir
+
+# Intellij IDEA platform
+.idea
+local.properties

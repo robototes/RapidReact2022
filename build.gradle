@@ -1,13 +1,54 @@
 plugins {
     id "java"
+    id "com.diffplug.spotless" version "6.2.1"
     id "edu.wpi.first.GradleRIO" version "2022.2.1"
     id "net.ltgt.errorprone"
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id "org.jetbrains.kotlin.jvm" version "1.6.10"
+}
+
+// Enforce formatting
+spotless {
+    format "misc", {
+        target "*"
+        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**"
+
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+    java {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        eclipse().configFile("eclipse-formatter.xml")
+
+        removeUnusedImports()
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+    kotlin {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        ktfmt()
+
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+    groovyGradle {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**"
+        greclipse().configFile("eclipse-formatter.xml")
+
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url "https://jitpack.io" }
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -19,7 +60,7 @@ def ROBOT_MAIN_CLASS = "frc.team2412.robot.Main"
 // This is added by GradleRIO's backing project DeployUtils.
 deploy {
     targets {
-        roborio(getTargetTypeClass('RoboRIO')) {
+        roborio(getTargetTypeClass("RoboRIO")) {
             // Team number is loaded either from the .wpilib/wpilib_preferences.json
             // or from command line. If not found an exception will be thrown.
             // You can use getTeamOrDefault(team) instead of getTeamNumber if you
@@ -31,13 +72,13 @@ deploy {
                 // First part is artifact name, 2nd is artifact type
                 // getTargetTypeClass is a shortcut to get the class type using a string
 
-                frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                frcJava(getArtifactTypeClass("FRCJavaArtifact")) {
                 }
 
                 // Static files artifact
-                frcStaticFileDeploy(getArtifactTypeClass('FileTreeArtifact')) {
-                    files = project.fileTree('src/main/deploy')
-                    directory = '/home/lvuser/deploy'
+                frcStaticFileDeploy(getArtifactTypeClass("FileTreeArtifact")) {
+                    files = project.fileTree("src/main/deploy")
+                    directory = "/home/lvuser/deploy"
                 }
             }
         }
@@ -55,7 +96,7 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
-    compileOnly group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.10.0'
+    compileOnly group: "com.google.errorprone", name: "error_prone_annotations", version: "2.10.0"
 
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
@@ -74,16 +115,16 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation 'com.github.robototes.2910Common:common:2022.0.4'
-    implementation 'com.github.robototes.2910Common:robot:2022.0.4'
+    implementation "com.github.robototes.2910Common:common:2022.0.4"
+    implementation "com.github.robototes.2910Common:robot:2022.0.4"
 
-    implementation 'com.github.robototes:swerve-lib:03b8d8f99f'
+    implementation "com.github.robototes:swerve-lib:4c8cf8a7d0"
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:4.12"
 
-    errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.10.0'
+    errorprone group: "com.google.errorprone", name: "error_prone_core", version: "2.10.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -94,7 +135,7 @@ tasks.withType(JavaCompile).configureEach {
 wpi.sim.addGui().defaultEnabled = true
 wpi.sim.addDriverstation()
 
-// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// Setting up my Jar File. In this case, adding all libraries into the main jar ("fat jar")
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
 jar {

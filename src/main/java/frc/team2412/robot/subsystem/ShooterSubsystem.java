@@ -35,21 +35,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Constructor for shooter subsystem.
-     * 
+     *
      * @param flywheelMotor1
      *            The first motor connected to the flywheel
-     * 
+     *
      * @param flywheelMotor2
      *            The second motor connected to the flywheel
-     * 
+     *
      * @param turretMotor
      *            The motor that controls the horizontal rotation of the
      *            turret
-     * 
+     *
      * @param hoodMotor
      *            The motor that controls the angle of the hood above the
      *            turret
-     * 
+     *
      */
     public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
             WPI_TalonFX hoodMotor) {
@@ -97,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Sets the target angle for the hood motor
-     * 
+     *
      * @param degrees
      *            Target angle for the hood motor in degrees
      */
@@ -138,7 +138,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Gets angle of the turret motor (horizontal swivel)
-     * 
+     *
      * @return Angle, in degrees
      */
     public double getTurretAngle() {
@@ -147,10 +147,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     /**
      * Sets the turret's target angle to the given angle.
-     * 
+     *
      * If angle is too far in one direction but can be reached by rotating in the
      * other direction, the turret will turn in that direction.
-     * 
+     *
      * @param angle
      *            the angle (in degrees) to set the turret to (negative for
      *            counterclockwise)
@@ -171,7 +171,7 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Sets the turret angle realative to the current angle - not the last target
      * angle, but the current position of the motor
-     * 
+     *
      * @param deltaAngle
      *            Amount to change the turret angle by in degrees
      */

@@ -4,10 +4,7 @@
 
 package frc.team2412.robot;
 
-import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.math.RigidTransform2;
-import org.frcteam2910.common.math.Rotation2;
-import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;

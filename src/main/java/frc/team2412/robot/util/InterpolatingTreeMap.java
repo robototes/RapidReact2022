@@ -2,9 +2,15 @@ package frc.team2412.robot.util;
 
 import java.util.TreeMap;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+
+import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
+
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
+    private final NetworkTableEntry distanceBiasEntry;
+
     public InterpolatingTreeMap() {
-        super();
+        this(new ShooterDataDistancePoint[] {});
     }
 
     public InterpolatingTreeMap(ShooterDataDistancePoint[] dataPoints) {
@@ -12,9 +18,14 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         for (ShooterDataDistancePoint dataPoint : dataPoints) {
             put(dataPoint.getDistance(), dataPoint);
         }
+
+        // Initialize shuffleboard
+        distanceBiasEntry = ShooterConstants.tab.add("Distance Bias", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
     }
 
     public ShooterDataDistancePoint getInterpolated(Double key) {
+        key += distanceBiasEntry.getDouble(0.0);
+
         ShooterDataDistancePoint value = get(key);
 
         // Check if we have exact value

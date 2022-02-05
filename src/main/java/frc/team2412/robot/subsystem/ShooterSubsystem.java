@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
+import frc.team2412.robot.util.InterpolatingTreeMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -8,8 +9,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.util.InterpolatingTreeMap;
 
 public class ShooterSubsystem extends SubsystemBase {
     // Instance variables
@@ -41,6 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
                 10, 10, 500);
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
+        // Shuffleboard
+        public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
     }
 
     /**

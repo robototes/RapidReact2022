@@ -170,7 +170,7 @@ public class IndexSubsystem extends SubsystemBase {
         return !(secondMotorState == STOPPED);
     }
 
-    // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} 
+    // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :>
     @Override
     public void periodic() {
         if (firstSensorHasBallIn()) {

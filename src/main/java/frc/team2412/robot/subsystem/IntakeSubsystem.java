@@ -7,6 +7,12 @@ import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.teamC
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.EXTEND;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
+
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -126,10 +132,10 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void intakeIn() {
         if (intakeSolenoidState == EXTEND) {
-            motorOuterAxle.set(IntakeConstants.INTAKE_IN_SPEED);
-            motorInnerAxle.set(IntakeConstants.INTAKE_IN_SPEED);
+            motorOuterAxle.set(INTAKE_IN_SPEED);
+            motorInnerAxle.set(INTAKE_IN_SPEED);
 
-            intakeMotorState = IntakeMotorState.IN;
+            intakeMotorState = IN;
         }
     }
 
@@ -138,10 +144,10 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void intakeOut() {
         if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
-            motorOuterAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
-            motorInnerAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
+            motorOuterAxle.set(INTAKE_OUT_SPEED);
+            motorInnerAxle.set(INTAKE_OUT_SPEED);
 
-            intakeMotorState = IntakeMotorState.OUT;
+            intakeMotorState = OUT;
         }
     }
 
@@ -152,14 +158,14 @@ public class IntakeSubsystem extends SubsystemBase {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
 
-        intakeMotorState = IntakeMotorState.STOPPED;
+        intakeMotorState = STOPPED;
     }
 
     /**
      * Extends solenoid and updates solenoid state
      */
     public void intakeExtend() {
-        intakeSolenoidState = IntakeSolenoidState.EXTEND;
+        intakeSolenoidState = EXTEND;
 
         solenoid.set(EXTEND.value);
         }
@@ -168,7 +174,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * Retracts solenoid and updates solenoid state
      */
     public void intakeRetract() {
-        intakeSolenoidState = IntakeSolenoidState.RETRACT;
+        intakeSolenoidState = RETRACT;
 
         solenoid.set(RETRACT.value);
     }

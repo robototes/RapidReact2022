@@ -4,16 +4,21 @@
 
 package frc.team2412.robot;
 
+<<<<<<< HEAD
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import org.frcteam2910.common.control.SimplePathBuilder;
+=======
+>>>>>>> bef1059e651b753bcfff33a5eba226b58af6d764
 import org.frcteam2910.common.math.RigidTransform2;
-import org.frcteam2910.common.math.Rotation2;
-import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.util.AutonomousChooser;
+import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.subsystem.TestingSubsystem;
 
 import static java.lang.Thread.sleep;
 
@@ -38,8 +43,12 @@ public class Robot extends TimedRobot {
     public Hardware hardware;
 
     private UpdateManager updateManager;
-    private Thread controlAuto;
+    private AutonomousChooser autonomousChooser;
     final private RobotType robotType;
+
+    private Thread controlAuto;
+
+    public TestingSubsystem testingSubsystem;
 
     Robot(RobotType type) {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
@@ -117,7 +126,15 @@ public class Robot extends TimedRobot {
                 }
             });
             controlAuto.start();
+        } else {
+            autonomousChooser = new AutonomousChooser(
+                    new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         }
+    }
+
+    @Override
+    public void testInit() {
+        testingSubsystem = new TestingSubsystem();
     }
 
     @Override
@@ -128,9 +145,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
-        SimplePathBuilder builder = new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0));
-        subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20))
-                .lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());
+
+        autonomousChooser.getCommand(subsystems).schedule();
     }
 
 }

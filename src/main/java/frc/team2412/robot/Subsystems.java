@@ -14,7 +14,6 @@ public class Subsystems {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean I2C_MUX_ENABLED = false;
-
     }
 
     public final Hardware hardware;
@@ -35,6 +34,7 @@ public class Subsystems {
 
     public Subsystems(Hardware h) {
         hardware = h;
+
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);

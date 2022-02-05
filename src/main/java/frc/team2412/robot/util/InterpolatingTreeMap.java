@@ -1,5 +1,10 @@
 package frc.team2412.robot.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.TreeMap;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -9,10 +14,16 @@ import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
     private final NetworkTableEntry distanceBiasEntry;
 
+    /**
+     * Creates an empty {@link InterpolatingTreeMap}.
+     */
     public InterpolatingTreeMap() {
         this(new ShooterDataDistancePoint[] {});
     }
 
+    /**
+     * Creates an {@link InterpolatingTreeMap} from an array of {@link ShooterDataDistancePoint}
+     */
     public InterpolatingTreeMap(ShooterDataDistancePoint[] dataPoints) {
         super();
         for (ShooterDataDistancePoint dataPoint : dataPoints) {
@@ -23,6 +34,60 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         distanceBiasEntry = ShooterConstants.tab.add("Distance Bias", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
     }
 
+    /**
+     * Creates a {@link InterpolatingTreeMap} from a path to a CSV file.
+     *
+     * @param fileName
+     *            The path to the CSV file.
+     * @return An {@link InterpolatingTreeMap} from the data in the CSV file.
+     */
+    public static InterpolatingTreeMap fromCsv(String fileName) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
+            String line;
+            InterpolatingTreeMap map = new InterpolatingTreeMap();
+
+            while ((line = reader.readLine()) != null) {
+                String[] items = line.split(",");
+                if (items.length < 3) {
+                    System.out.println("Line " + Arrays.toString(items) + " has less than 3 items, skipping...");
+                    continue;
+                } else if (items.length > 3) {
+                    System.out.println(
+                            "Line " + Arrays.toString(items) + " has more than 3 items, discarding extra data...");
+                }
+                ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
+                        Double.parseDouble(items[1]),
+                        Double.parseDouble(items[2]));
+                map.put(point.getDistance(), point);
+            }
+
+            return map;
+        } catch (IOException err) {
+            err.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Replaces all data in the {@link InterpolatingTreeMap} with data from a CSV file.
+     *
+     * @param fileName
+     *            The path to the CSV file
+     */
+    public void replaceFromCsv(String fileName) {
+        clear();
+        putAll(fromCsv(fileName));
+    }
+
+    /**
+     * Gets an value at a specified distance from the origin, interpolating it if there isn't an exact
+     * match.
+     *
+     * @param key
+     *            The distance to get the value from.
+     * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact
+     *         match.
+     */
     public ShooterDataDistancePoint getInterpolated(Double key) {
         key += distanceBiasEntry.getDouble(0.0);
 
@@ -62,6 +127,17 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         return interpolate(floorVal, ceilingVal, key);
     }
 
+    /**
+     * Returns an interpolated value at a specified distance from the origin.
+     *
+     * @param floor
+     *            The {@link ShooterDataDistancePoint} closer to the origin.
+     * @param ceiling
+     *            The {@link ShooterDataDistancePoint} father from the origin.
+     * @param key
+     *            The distance to interpolate to.
+     * @return {@link ShooterDataDistancePoint} an interpolated value at the specified distance.
+     */
     private static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor,
             ShooterDataDistancePoint ceiling,
             Double key) {

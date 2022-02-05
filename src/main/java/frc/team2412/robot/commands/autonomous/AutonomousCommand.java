@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -43,14 +44,20 @@ public class AutonomousCommand extends SequentialCommandGroup {
 //                        new Pose2d(3, 0, new Rotation2d(0)),
 //                        config);
 
+//        Trajectory exampleTrajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        new Pose2d(0, 0, new Rotation2d(0)),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        List.of(new Translation2d(-0.3, -0.3)),
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(-0.6, -0.6, new Rotation2d(0)),
+//                        config);
         Trajectory exampleTrajectory =
                 TrajectoryGenerator.generateTrajectory(
-                        // Start at the origin facing the +X direction
-                        new Pose2d(0, 0, new Rotation2d(0)),
-                        // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(-0.01, 0)),
-                        // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(-0.3, 0, new Rotation2d(180)),
+                        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+                        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
                         config);
 
 

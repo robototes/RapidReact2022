@@ -73,8 +73,8 @@ public final class Constants {
         public static final double MaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double MaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-        public static final double PXController = 1;
-        public static final double PYController = 1;
+        public static final double PXController = 0.00055;
+        public static final double PYController = 0.00055;
         public static final double PThetaController = 1;
 
         // Constraint for the motion profilied robot angle controller

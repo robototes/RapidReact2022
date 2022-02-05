@@ -66,13 +66,19 @@ public class Robot extends TimedRobot {
         // Create the trajectory to follow in autonomous. It is best to initialize
         // trajectories here to avoid wasting time in autonomous. This is an example trajectory, you do not need to
         //to have it, just set trajectory to debug
+//        trajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+//                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+//                        new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+//                        new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
 
 
         // Create and push Field2d to SmartDashboard.
         field = new Field2d();
         SmartDashboard.putData(field);
-
+        //field.getObject("traj").setTrajectory(trajectory);
 
 
         // Push the trajectory to Field2d.
@@ -89,16 +95,18 @@ public class Robot extends TimedRobot {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(Constants.DriveConstants.driveKinematics);
 
+
+
         // An example trajectory to follow.  All units in meters.
-        Trajectory exampleTrajectory =
-                TrajectoryGenerator.generateTrajectory(
-                        // Start at the origin facing the +X direction
-                        new Pose2d(0, 0, new Rotation2d(0)),
-                        // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-                        // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(3, 0, new Rotation2d(0)),
-                        config);
+//        Trajectory exampleTrajectory =
+//                TrajectoryGenerator.generateTrajectory(
+//                        // Start at the origin facing the +X direction
+//                        new Pose2d(0, 0, new Rotation2d(0)),
+//                        // Pass through these two interior waypoints, making an 's' curve path
+//                        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+//                        // End 3 meters straight ahead of where we started, facing forward
+//                        new Pose2d(3, 0, new Rotation2d(0)),
+//                        config);
 
    //     System.out.println(exampleTrajectory.getStates());
 

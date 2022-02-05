@@ -12,6 +12,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.subsystem.TestingSubsystem;
 
 public class Robot extends TimedRobot {
     /**
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
 
     private UpdateManager updateManager;
 
+    public TestingSubsystem testingSubsystem;
+
     private Robot() {
         instance = this;
     }
@@ -45,6 +48,11 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+    }
+
+    @Override
+    public void testInit() {
+        testingSubsystem = new TestingSubsystem();
     }
 
     @Override

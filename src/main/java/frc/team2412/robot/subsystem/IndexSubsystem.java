@@ -2,6 +2,7 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexMotorState.*;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexPositionState.*;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -39,11 +40,7 @@ public class IndexSubsystem extends SubsystemBase {
 
         // Position States
 
-        public static enum IndexInnerPositionState {
-            HAS_BALL, HAS_NO_BALL;
-        }
-
-        public static enum IndexOuterPositionState {
+        public static enum IndexPositionState {
             HAS_BALL, HAS_NO_BALL;
         }
 
@@ -70,6 +67,9 @@ public class IndexSubsystem extends SubsystemBase {
     private IndexMotorState firstMotorState;
     private IndexMotorState secondMotorState;
 
+    private IndexPositionState firstBallState;
+    private IndexPositionState secondBallState;
+
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, MultiplexedColorSensor firstColorSensor,
@@ -89,6 +89,9 @@ public class IndexSubsystem extends SubsystemBase {
 
         firstMotorStop();
         secondMotorStop();
+
+        firstBallState = HAS_NO_BALL;
+        secondBallState = HAS_NO_BALL;
 
         setName("IndexSubsystem");
     }
@@ -149,14 +152,14 @@ public class IndexSubsystem extends SubsystemBase {
      * Checks if ball is positioned at the first sensor
      */
     public boolean firstSensorHasBallIn() { // also might rename later?
-        return (firstColorSensor.getProximity() == 0); // value not 0, to be determined actual value
+        return (firstColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
     public boolean secondSensorHasBallIn() { // might rename methods later?
-        return (secondColorSensor.getProximity() == 0); // value not 0, to be determined actual value
+        return (secondColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
     }
 
     public boolean isFirstMotorOn() {
@@ -167,9 +170,20 @@ public class IndexSubsystem extends SubsystemBase {
         return !(secondMotorState == STOPPED);
     }
 
-    // might need later?
+    // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} 
     @Override
     public void periodic() {
+        if (firstSensorHasBallIn()) {
+            firstBallState = HAS_BALL;
+        } else {
+            firstBallState = HAS_NO_BALL;
+        }
+
+        if (secondSensorHasBallIn()) {
+            secondBallState = HAS_BALL;
+        } else {
+            secondBallState = HAS_NO_BALL;
+        }
     }
 
 }

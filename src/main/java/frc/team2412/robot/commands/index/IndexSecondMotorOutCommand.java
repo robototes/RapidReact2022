@@ -9,7 +9,6 @@ public class IndexSecondMotorOutCommand extends CommandBase {
     public IndexSecondMotorOutCommand(IndexSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-
     }
 
     @Override

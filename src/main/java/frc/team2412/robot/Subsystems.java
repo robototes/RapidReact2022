@@ -36,13 +36,8 @@ public class Subsystems {
 
     public ShooterSubsystem shooterSubsystem;
 
-    private AutonomousTrajectories autonomousTrajectories;
-    private final AutonomousChooser autonomousChooser;
-
     public Subsystems(Hardware h) {
         hardware = h;
-        autonomousTrajectories = new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS);
-        autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic, hardware.climbAngle);
@@ -61,9 +56,5 @@ public class Subsystems {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
-    }
-
-    public SequentialCommandGroup getAutonomousCommand() {
-        return autonomousChooser.getCommand(this);
     }
 }

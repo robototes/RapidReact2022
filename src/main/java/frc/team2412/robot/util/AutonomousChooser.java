@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
-import frc.team2412.robot.commands.autonomous.FollowTrajectoryCommand;
+import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 
 public class AutonomousChooser {
     private AutonomousTrajectories trajectories;
@@ -20,15 +20,11 @@ public class AutonomousChooser {
         SmartDashboard.putData("Choose Auto Mode", autonomousModeChooser);
     }
 
-    public SendableChooser<AutonomousMode> getAutonomousModeChooser() {
-        return autonomousModeChooser;
-    }
-
     private SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new FollowTrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
 
         return command;
     }
@@ -36,7 +32,7 @@ public class AutonomousChooser {
     private SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        command.addCommands(new FollowTrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
+        command.addCommands(new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
 
         return command;
     }

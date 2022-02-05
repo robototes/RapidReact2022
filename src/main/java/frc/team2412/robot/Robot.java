@@ -12,6 +12,9 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.util.AutonomousChooser;
+import frc.team2412.robot.util.AutonomousTrajectories;
 
 public class Robot extends TimedRobot {
     /**
@@ -30,6 +33,7 @@ public class Robot extends TimedRobot {
     public Hardware hardware;
 
     private UpdateManager updateManager;
+    private AutonomousChooser autonomousChooser;
 
     private Robot() {
         instance = this;
@@ -45,6 +49,7 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+        autonomousChooser = new AutonomousChooser(new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
     }
 
     @Override
@@ -55,11 +60,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
-        //SimplePathBuilder builder = new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0));
-        //subsystems.drivebaseSubsystem.follow(builder.lineTo(new Vector2(20, 0)).lineTo(new Vector2(20, 20))
-        //        .lineTo(new Vector2(0, 20)).lineTo(new Vector2(0, 0)).build());
 
-        subsystems.getAutonomousCommand().schedule();
+        autonomousChooser.getCommand(subsystems).schedule();
     }
 
 }

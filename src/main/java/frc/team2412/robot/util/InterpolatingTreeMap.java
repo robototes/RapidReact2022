@@ -72,7 +72,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      * Replaces all data in the {@link InterpolatingTreeMap} with data from a CSV file.
      *
      * @param fileName
-     *            The path to the CSV file
+     *            The path to the CSV file.
      */
     public void replaceFromCsv(String fileName) {
         clear();

@@ -61,7 +61,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                             Double.parseDouble(items[1]),
                             Double.parseDouble(items[2]));
                     map.put(point.getDistance(), point);
-                } catch (NumberFormatException Err) {
+                } catch (NumberFormatException err) {
                     System.out.println("Line " + line + " contains a value other than a double, skipping...");
                     continue;
                 }

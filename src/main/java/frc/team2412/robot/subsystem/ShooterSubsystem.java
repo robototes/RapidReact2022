@@ -36,7 +36,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(true,
             10, 10, 500);
     public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
-    // TODO: Add actual values (use JSON?)
     public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
 
     /**

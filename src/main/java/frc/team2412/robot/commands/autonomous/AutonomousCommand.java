@@ -47,10 +47,10 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 TrajectoryGenerator.generateTrajectory(
                         // Start at the origin facing the +X direction
                         new Pose2d(0, 0, new Rotation2d(0)),
-                        // Pass through these two interior waypoints, making an 's' curve path
-                        List.of(new Translation2d(-0.01, 0)),
+                        //path
+                        List.of(new Translation2d(-0.4, 0)),
                         // End 3 meters straight ahead of where we started, facing forward
-                        new Pose2d(-0.3, 0, new Rotation2d(180)),
+                        new Pose2d(-0.9, 0, new Rotation2d(0)),
                         config);
 
 
@@ -79,7 +79,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         drivebaseSubsystem);
 
 
-        System.out.println(exampleTrajectory.getTotalTimeSeconds());
+        //System.out.println(exampleTrajectory.getTotalTimeSeconds());
 
         // Reset odometry to the starting pose of the trajectory.
         drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());

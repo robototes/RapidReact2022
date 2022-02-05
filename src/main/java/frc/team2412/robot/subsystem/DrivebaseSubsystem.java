@@ -64,8 +64,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.4, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(0.000025, 0.0, 0.0),
+            new PidConstants(0.000025, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(

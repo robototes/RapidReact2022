@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.MultiplexedColorSensor;
-
-import com.revrobotics.ColorMatch;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class IndexSubsystem extends SubsystemBase {
 
@@ -32,6 +31,9 @@ public class IndexSubsystem extends SubsystemBase {
         public static final double INDEX_IN_SPEED = 0.5; // will change values later
         public static final double INDEX_OUT_SPEED = -0.5; // will also change later
 
+        // Proximity Threshold
+        public static final double PROXIMITY_THRESHOLD = 1500;
+
         // Index Motor States
 
         public static enum IndexMotorState {
@@ -49,10 +51,6 @@ public class IndexSubsystem extends SubsystemBase {
                 true, 40, 40, 500);
 
     }
-
-    // New ColorMatching Instance
-
-    private ColorMatch colorMatcher = new ColorMatch();
 
     // Define Hardware
 
@@ -79,13 +77,14 @@ public class IndexSubsystem extends SubsystemBase {
         this.ingestColorSensor = firstColorSensor;
         this.feederColorSensor = secondColorSensor;
 
+        this.ingestMotor.configFactoryDefault();
+        this.feederMotor.configFactoryDefault();
+
+        this.ingestMotor.setNeutralMode(NeutralMode.Coast);
+        this.feederMotor.setNeutralMode(NeutralMode.Coast);
+
         this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-
-        colorMatcher.addColorMatch(BLUE_CARGO_COLOR); // might change later to account for opposing team color
-        colorMatcher.addColorMatch(RED_CARGO_COLOR);
-
-        colorMatcher.setConfidenceThreshold(0.9);
 
         ingestMotorStop();
         feederMotorStop();
@@ -152,14 +151,16 @@ public class IndexSubsystem extends SubsystemBase {
      * Checks if ball is positioned at the first sensor
      */
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return (ingestColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
+        return (ingestColorSensor.getProximity() > PROXIMITY_THRESHOLD); // value not 1500, to be determined actual
+                                                                            // value
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return (feederColorSensor.getProximity() > 1500); // value not 1500, to be determined actual value
+        return (feederColorSensor.getProximity() > PROXIMITY_THRESHOLD); // value not 1500, to be determined actual
+                                                                            // value
     }
 
     public boolean isIngestMotorOn() {

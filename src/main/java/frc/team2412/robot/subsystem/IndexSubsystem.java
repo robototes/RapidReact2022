@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.MultiplexedColorSensor;
+import io.github.oblarg.oblog.annotations.Log;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class IndexSubsystem extends SubsystemBase {
@@ -32,7 +34,8 @@ public class IndexSubsystem extends SubsystemBase {
         public static final double INDEX_OUT_SPEED = -0.5; // will also change later
 
         // Proximity Threshold
-        public static final double PROXIMITY_THRESHOLD = 1500;
+        public static final double PROXIMITY_THRESHOLD = 1000; // value not 1500, to be determined actual
+                                                                // value
 
         // Index Motor States
 
@@ -150,17 +153,17 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ball is positioned at the first sensor
      */
+    @Log
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return (ingestColorSensor.getProximity() > PROXIMITY_THRESHOLD); // value not 1500, to be determined actual
-                                                                            // value
+        return (ingestColorSensor.getProximity() > PROXIMITY_THRESHOLD);
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
+    @Log
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return (feederColorSensor.getProximity() > PROXIMITY_THRESHOLD); // value not 1500, to be determined actual
-                                                                            // value
+        return (feederColorSensor.getProximity() > PROXIMITY_THRESHOLD);
     }
 
     public boolean isIngestMotorOn() {
@@ -171,7 +174,7 @@ public class IndexSubsystem extends SubsystemBase {
         return !(feederMotorState == STOPPED);
     }
 
-    // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :>
+    // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
     public void periodic() {
         if (ingestSensorHasBallIn()) {
@@ -187,4 +190,35 @@ public class IndexSubsystem extends SubsystemBase {
         }
     }
 
+    // for logging
+
+    @Log
+    public int getIngestProximity() {
+        return ingestColorSensor.getProximity();
+    }
+
+    @Log
+    public int getFeederProximity() {
+        return feederColorSensor.getProximity();
+    }
+
+    @Log
+    public double getIngestMotorSpeed() {
+        return ingestMotor.get();
+    }
+
+    @Log
+    public double getFeederMotorSpeed() {
+        return feederMotor.get();
+    }
+
+    // @Log
+    // public indexMotorState getIngestMotorState() {
+    //     return ingestMotorState;
+    // }
+
+    // @Log
+    // public indexMotorState getFeederMotorState() {
+    //     return ingestMotorState;
+    // }
 }

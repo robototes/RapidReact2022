@@ -1,6 +1,9 @@
 package frc.team2412.robot;
 
+import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.XboxController;
+
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj.GenericHID.*;
 
@@ -8,6 +11,8 @@ import org.frcteam2910.common.robot.input.DPadButton.Direction;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import frc.team2412.robot.commands.climb.*;
+import frc.team2412.robot.commands.drive.DriveCommand;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 
 public class Controls {
     public static class ControlConstants {
@@ -17,6 +22,8 @@ public class Controls {
     public XboxController controller;
 
     // controls
+
+    // climb
     public final Button buttonFixedArmUp;
     public final Button buttonFixedArmDown;
     public final Button buttonDynamicArmUp;
@@ -24,6 +31,9 @@ public class Controls {
     public final Button buttonAngleDynamicArm;
     public final Button buttonUnangleDynamicArm;
     public final Button buttonNeutralDynamicArm;
+
+    // drive
+    public final Button resetDriveGyro;
 
     public Subsystems subsystems;
 
@@ -38,6 +48,8 @@ public class Controls {
         buttonAngleDynamicArm = controller.getDPadButton(Direction.RIGHT);
         buttonUnangleDynamicArm = controller.getDPadButton(Direction.LEFT);
         buttonNeutralDynamicArm = controller.getDPadButton(Direction.UP);
+
+        resetDriveGyro = controller.getBackButton();
 
         if (CLIMB_ENABLED)
             bindClimbControls();
@@ -63,7 +75,15 @@ public class Controls {
     }
 
     public void bindDriveControls() {
-
+        CommandScheduler.getInstance().setDefaultCommand(subsystems.drivebaseSubsystem,
+                new DriveCommand(
+                        subsystems.drivebaseSubsystem, 
+                        controller.getLeftYAxis(), 
+                        controller.getLeftXAxis(),
+                        controller.getRightXAxis()
+                ));
+        resetDriveGyro.whenPressed(() -> {subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);});
+        
     }
 
     public void bindIndexControls() {

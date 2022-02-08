@@ -50,7 +50,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.4, 0.0, 0.025),
+            new PidConstants(0.2, 0.0, 0.025),
             new PidConstants(5.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
@@ -94,6 +94,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry isFieldOrientedEntry;
 
     public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
         synchronized (sensorLock) {
@@ -148,6 +149,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+
+        isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
     }
 
     public RigidTransform2 getPose() {
@@ -168,9 +171,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, isFieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 
@@ -178,6 +181,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (kinematicsLock) {
             this.pose = pose;
             swerveOdometry.resetPose(pose);
+            resetGyroAngle(Rotation2.ZERO);
         }
     }
 
@@ -230,16 +234,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (driveSignal.isFieldOriented()) {
+        } else if (isFieldOrientedEntry.getBoolean(true)) {
+            System.out.println("is field oriented");
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
+                    driveSignal.getTranslation().rotateBy(getPose().rotation),
                     driveSignal.getRotation());
         } else {
+            System.out.println("not field oriented");
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation(),
                     driveSignal.getRotation());
         }
-
+ 
         Vector2[] moduleOutputs = swerveKinematics.toModuleVelocities(chassisVelocity);
         SwerveKinematics.normalizeModuleVelocities(moduleOutputs, 1);
         for (int i = 0; i < moduleOutputs.length; i++) {
@@ -269,6 +275,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 time,
                 dt);
         if (trajectorySignal.isPresent()) {
+            System.out.println("trajectory signal present");
             driveSignal = trajectorySignal.get();
             driveSignal = new HolonomicDriveSignal(
                     driveSignal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),

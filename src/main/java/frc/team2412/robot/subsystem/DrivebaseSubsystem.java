@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,7 +26,6 @@ import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.util.*;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
@@ -288,9 +286,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {
-       HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond), Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
-               chassisSpeeds.omegaRadiansPerSecond, false);
-       updateModules(holonomicDriveSignal);
+        HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
+                new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond),
+                        Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
+                chassisSpeeds.omegaRadiansPerSecond, false);
+        updateModules(holonomicDriveSignal);
     }
 
     public RigidTransform2 getPoseAtTime(double timestamp) {

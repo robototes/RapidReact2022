@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -171,7 +170,7 @@ public class SwerveControllerCommand extends CommandBase {
         var desiredState = trajectory.sample(curTime);
 
         var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
-        //var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
+        // var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
 
         outputModuleStates.accept(targetChassisSpeeds);
     }

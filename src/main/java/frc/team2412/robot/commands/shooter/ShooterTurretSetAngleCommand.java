@@ -20,6 +20,6 @@ public class ShooterTurretSetAngleCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return shooter.turretIsAtAngle(angle);
+        return shooter.isTurretAtAngle(angle);
     }
 }

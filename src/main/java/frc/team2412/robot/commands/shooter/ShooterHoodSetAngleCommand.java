@@ -18,7 +18,7 @@ public class ShooterHoodSetAngleCommand extends CommandBase {
     @Override
     public void execute() {
         double angle = angleSupplier.getAsDouble();
-        shooter.hoodMotorSetAngle(angle);
+        shooter.setHoodAngle(angle);
     }
 
     @Override

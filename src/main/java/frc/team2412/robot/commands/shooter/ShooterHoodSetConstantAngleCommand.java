@@ -15,11 +15,11 @@ public class ShooterHoodSetConstantAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.hoodMotorSetAngle(angle);
+        shooter.setHoodAngle(angle);
     }
 
     @Override
     public boolean isFinished() {
-        return shooter.hoodIsAtAngle(angle);
+        return shooter.isHoodAtAngle(angle);
     }
 }

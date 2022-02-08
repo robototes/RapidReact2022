@@ -61,60 +61,6 @@ public class ShooterSubsystem extends SubsystemBase {
                 .withSize(1, 1).getEntry();
     }
 
-    /**
-     * Returns the flywheel P value.
-     *
-     * @return The flywheel P value
-     */
-    public static double getFlywheelP() {
-        return flywheelPEntry.getDouble(FLYWHEEL_P);
-    }
-
-    /**
-     * Returns the flywheel I value.
-     *
-     * @return The flywheel I value
-     */
-    public static double getFlywheelI() {
-        return flywheelIEntry.getDouble(FLYWHEEL_I);
-    }
-
-    /**
-     * Returns the flywheel D value.
-     *
-     * @return The flywheel D value
-     */
-    public static double getFlywheelD() {
-        return flywheelDEntry.getDouble(FLYWHEEL_D);
-    }
-
-    /**
-     * Returns the turret P value.
-     *
-     * @return The turret P value
-     */
-    public static double getTurretP() {
-        return turretPEntry.getDouble(TURRET_P);
-    }
-
-    /**
-     * Returns the turret I value.
-     *
-     * @return The turret I value
-     */
-    public static double getTurretI() {
-        return turretIEntry.getDouble(TURRET_I);
-    }
-
-    /**
-     * Returns the turret D value.
-     *
-     * @return The turret D value
-     */
-    public static double getTurretD() {
-        return turretDEntry.getDouble(TURRET_D);
-    }
-
     // Instance variables
     private final WPI_TalonFX flywheelMotor1;
     private final WPI_TalonFX flywheelMotor2;
@@ -187,43 +133,48 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
-     * Returns the hood's current angle (in degrees).
+     * Returns the flywheel P value.
      *
-     * @return The current angle of the hood
+     * @return The flywheel P value
      */
-    public double getHoodAngle() {
-        return hoodMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    public static double getFlywheelP() {
+        return flywheelPEntry.getDouble(FLYWHEEL_P);
     }
 
     /**
-     * Returns whether the hood is at the given angle.
+     * Returns the flywheel I value.
      *
-     * @param angle
-     *            The angle (in degrees) to compare the hood's angle to.
-     * @return True if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
-     *         False otherwise.
+     * @return The flywheel I value
      */
-    public boolean hoodIsAtAngle(double angle) {
-        return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
+    public static double getFlywheelI() {
+        return flywheelIEntry.getDouble(FLYWHEEL_I);
     }
 
     /**
-     * Sets the target angle for the hood motor
+     * Returns the flywheel D value.
      *
-     * @param degrees
-     *            Target angle for the hood motor in degrees
+     * @return The flywheel D value
      */
-    public void hoodMotorSetAngle(double degrees) {
-        degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
-        hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
+    public static double getFlywheelD() {
+        return flywheelDEntry.getDouble(FLYWHEEL_D);
     }
 
     /**
-     * Stops the hood motor
+     * Returns the turret P value.
+     *
+     * @return The turret P value
      */
-    // TODO make hardstop
-    public void hoodMotorStop() {
-        hoodMotor.set(STOP_MOTOR);
+    public static double getTurretP() {
+        return turretPEntry.getDouble(TURRET_P);
+    }
+
+    /**
+     * Returns the turret I value.
+     *
+     * @return The turret I value
+     */
+    public static double getTurretI() {
+        return turretIEntry.getDouble(TURRET_I);
     }
 
     /**
@@ -251,6 +202,55 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Returns the turret D value.
+     *
+     * @return The turret D value
+     */
+    public static double getTurretD() {
+        return turretDEntry.getDouble(TURRET_D);
+    }
+
+    /**
+     * Returns the hood's current angle (in degrees).
+     *
+     * @return The current angle of the hood
+     */
+    public double getHoodAngle() {
+        return hoodMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    }
+
+    /**
+     * Returns whether the hood is at the given angle.
+     *
+     * @param angle
+     *            The angle (in degrees) to compare the hood's angle to.
+     * @return True if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
+     *         False otherwise.
+     */
+    public boolean isHoodAtAngle(double angle) {
+        return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
+    }
+
+    /**
+     * Sets the target angle for the hood motor
+     *
+     * @param degrees
+     *            Target angle for the hood motor in degrees
+     */
+    public void setHoodAngle(double degrees) {
+        degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
+        hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
+    }
+
+    /**
+     * Stops the hood motor
+     */
+    // TODO make hardstop
+    public void stopHoodMotor() {
+        hoodMotor.set(STOP_MOTOR);
+    }
+
+    /**
      * Resets the turret motor's integrated encoder to 0.
      */
     // TODO use limit switches to reset the encoder
@@ -275,7 +275,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return True if difference between turret angle and given angle is less than
      *         HOOD_ANGLE_TOLERANCE, False otherwise.
      */
-    public boolean turretIsAtAngle(double angle) {
+    public boolean isTurretAtAngle(double angle) {
         return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
     }
 

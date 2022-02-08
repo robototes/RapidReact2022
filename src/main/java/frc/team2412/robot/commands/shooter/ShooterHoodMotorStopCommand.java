@@ -13,7 +13,7 @@ public class ShooterHoodMotorStopCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.hoodMotorStop();
+        shooter.stopHoodMotor();
     }
 
     @Override

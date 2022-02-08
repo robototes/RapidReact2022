@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
@@ -25,11 +24,6 @@ public class IndexSubsystem extends SubsystemBase {
     public static class IndexConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
-
-        // Color Sensor values
-
-        public static Color BLUE_CARGO_COLOR = new Color(0, 0, 1);
-        public static Color RED_CARGO_COLOR = new Color(1, 0, 0);
 
         // Index Motor Speeds
 
@@ -111,8 +105,8 @@ public class IndexSubsystem extends SubsystemBase {
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
 
-        this.ingestMotor.setNeutralMode(NeutralMode.Coast);
-        this.feederMotor.setNeutralMode(NeutralMode.Coast);
+        this.ingestMotor.setNeutralMode(NeutralMode.Brake);
+        this.feederMotor.setNeutralMode(NeutralMode.Brake);
 
         this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
@@ -148,10 +142,8 @@ public class IndexSubsystem extends SubsystemBase {
      * Stops first motor and updates first motor state
      */
     public void ingestMotorStop() {
-        if (!ingestSensorHasBallIn()) {
-            ingestMotor.set(0);
-            ingestMotorState = STOPPED;
-        }
+        ingestMotor.set(0);
+        ingestMotorState = STOPPED;
     }
 
     /**

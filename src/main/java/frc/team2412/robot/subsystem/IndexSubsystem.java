@@ -7,6 +7,7 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexPo
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -74,6 +75,7 @@ public class IndexSubsystem extends SubsystemBase {
     private IndexPositionState feederBallState;
 
     // For logging
+    private final NetworkTableEntry proximityThreshold;
 
     // Constructor
 
@@ -82,7 +84,24 @@ public class IndexSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
+        /*
+
+        */
+
+        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
+                .withPosition(0, 0)
+                .withSize(2, 1)
+                .getEntry();
+
+        tab.addNumber("ingest sensor proximity", this::getIngestProximity);
+        tab.addNumber("feeder sensor proximity", this::getFeederProximity);
+        tab.addNumber("ingest motor speed", this::getIngestMotorSpeed);
         tab.addNumber("feeder motor speed", this::getFeederMotorSpeed);
+
+        tab.addBoolean("ingest sensor has ball", this::ingestSensorHasBallIn);
+        tab.addBoolean("feeder sensor has ball", this::feederSensorHasBallIn);
+        tab.addBoolean("feeder is moving", this::isFeederMoving);
+        tab.addBoolean("feeder is not moving", this::isFeederStopped);
 
         this.ingestMotor = firstMotor;
         this.feederMotor = secondMotor;
@@ -163,14 +182,14 @@ public class IndexSubsystem extends SubsystemBase {
      * Checks if ball is positioned at the first sensor
      */
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return (ingestColorSensor.getProximity() > PROXIMITY_THRESHOLD);
+        return (ingestColorSensor.getProximity() > proximityThreshold.getValue().getDouble());
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return (feederColorSensor.getProximity() > PROXIMITY_THRESHOLD);
+        return (feederColorSensor.getProximity() > proximityThreshold.getValue().getDouble());
     }
 
     public boolean isIngestMotorOn() {
@@ -215,12 +234,22 @@ public class IndexSubsystem extends SubsystemBase {
         return feederMotor.get();
     }
 
-    // @Log
+    public boolean isFeederMoving() {
+        return feederMotorState != STOPPED;
+    }
+
+    public boolean isIngestMoving() {
+        return ingestMotorState != STOPPED;
+    }
+
+    public boolean isFeederStopped() {
+        return feederMotorState == STOPPED;
+    }
+
     // public indexMotorState getIngestMotorState() {
     // return ingestMotorState;
     // }
 
-    // @Log
     // public indexMotorState getFeederMotorState() {
     // return ingestMotorState;
     // }

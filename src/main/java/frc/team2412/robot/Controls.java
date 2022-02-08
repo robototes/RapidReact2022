@@ -12,7 +12,6 @@ import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import frc.team2412.robot.commands.climb.*;
 import frc.team2412.robot.commands.drive.DriveCommand;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 
 public class Controls {
     public static class ControlConstants {
@@ -77,13 +76,14 @@ public class Controls {
     public void bindDriveControls() {
         CommandScheduler.getInstance().setDefaultCommand(subsystems.drivebaseSubsystem,
                 new DriveCommand(
-                        subsystems.drivebaseSubsystem, 
-                        controller.getLeftYAxis(), 
+                        subsystems.drivebaseSubsystem,
+                        controller.getLeftYAxis(),
                         controller.getLeftXAxis(),
-                        controller.getRightXAxis()
-                ));
-        resetDriveGyro.whenPressed(() -> {subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);});
-        
+                        controller.getRightXAxis()));
+        resetDriveGyro.whenPressed(() -> {
+            subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
+        });
+
     }
 
     public void bindIndexControls() {

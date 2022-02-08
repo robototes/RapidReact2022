@@ -94,6 +94,16 @@ public class ShooterSubsystem extends SubsystemBase {
         configMotors();
     }
 
+    @Override
+    public void periodic() {
+        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, getFlywheelP());
+        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, getFlywheelI());
+        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, getFlywheelD());
+        turretMotor.config_kP(TURRET_SLOT_ID, getTurretP());
+        turretMotor.config_kI(TURRET_SLOT_ID, getTurretI());
+        turretMotor.config_kD(TURRET_SLOT_ID, getTurretD());
+    }
+
     /**
      * Configures the instance motors
      */
@@ -101,9 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor1.configFactoryDefault();
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
-        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, getFlywheelP());
-        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, getFlywheelI());
-        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, getFlywheelD());
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
@@ -119,9 +126,6 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
-        turretMotor.config_kP(TURRET_SLOT_ID, getTurretP());
-        turretMotor.config_kI(TURRET_SLOT_ID, getTurretI());
-        turretMotor.config_kD(TURRET_SLOT_ID, getTurretD());
 
         hoodMotor.configFactoryDefault();
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);

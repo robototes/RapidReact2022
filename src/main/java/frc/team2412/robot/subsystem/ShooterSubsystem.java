@@ -211,6 +211,13 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Resets the hood motor's integrated encoder to 0.
+     */
+    public void resetHoodEncoder() {
+        hoodMotor.setSelectedSensorPosition(0);
+    }
+
+    /**
      * Returns the hood's current angle (in degrees).
      *
      * @return The current angle of the hood

@@ -3,18 +3,16 @@ package frc.team2412.robot.subsystem;
 import java.time.Duration;
 import java.time.Instant;
 
-import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.MultiplexedColorSensor;
 
 public class TestingSubsystem extends SubsystemBase {
     ShuffleboardTab tab = Shuffleboard.getTab("Testing Hardware");
-    NetworkTableEntry sensorValue, timeDuration;
-    ColorSensorV3 colorSensor;
+    NetworkTableEntry displayTimeDuration, displayRedValue, displayGreenValue, displayBlueValue;
+    MultiplexedColorSensor colorSensor;
 
     /**
      * This testing subsystem is intend for testing new hardware,
@@ -22,19 +20,15 @@ public class TestingSubsystem extends SubsystemBase {
      * Since the robotInit() is being called on the first place anyway,
      */
     public TestingSubsystem() {
-        sensorValue = tab.add("Sensor Value", 0.0)
-                .withPosition(0, 0)
-                .withSize(1, 1)
-                .getEntry();
-        timeDuration = tab.add("Time Duration", 0.0)
-                .withPosition(0, 1)
-                .withSize(1, 1)
-                .getEntry();
+        displayTimeDuration = tab.add("Time Duration", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
+        displayRedValue = tab.add("Red Value", 0.0).withPosition(1, 0).withSize(1, 1).getEntry();
+        displayGreenValue = tab.add("Green Value", 0.0).withPosition(1, 1).withSize(1, 1).getEntry();
+        displayBlueValue = tab.add("Blue Value", 0.0).withPosition(1, 1).withSize(1, 1).getEntry();
         /*
          * The testing subsystem have its built-in Hardware class,
          * that no need to initialize and store the Hardware in somewhere else
          */
-        this.colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+        this.colorSensor = new MultiplexedColorSensor(0);
     }
 
     @Override
@@ -44,9 +38,16 @@ public class TestingSubsystem extends SubsystemBase {
          * remember only send to value to telemetry outside the time-evaluation block
          */
         Instant start = Instant.now();
+        // get raw data start
         double ColorSensorRedValue = colorSensor.getRed();
+        double ColorSensorGreenValue = colorSensor.getGreen();
+        double ColorSensorBlueValue = colorSensor.getBlue();
+        // get raw data end
         Duration timeElapsed = Duration.between(start, Instant.now());
-        sensorValue.setDouble(ColorSensorRedValue);
-        timeDuration.setDouble(timeElapsed.toMillis());
+        // output to shuffleboard here
+        displayTimeDuration.setDouble(timeElapsed.toNanos() / 1000f);
+        displayRedValue.setDouble(ColorSensorRedValue);
+        displayGreenValue.setDouble(ColorSensorGreenValue);
+        displayBlueValue.setDouble(ColorSensorBlueValue);
     }
 }

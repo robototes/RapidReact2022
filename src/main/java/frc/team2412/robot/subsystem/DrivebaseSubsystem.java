@@ -235,12 +235,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (isFieldOrientedEntry.getBoolean(true)) {
-            System.out.println("is field oriented");
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation().rotateBy(getPose().rotation),
                     driveSignal.getRotation());
         } else {
-            System.out.println("not field oriented");
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation(),
                     driveSignal.getRotation());

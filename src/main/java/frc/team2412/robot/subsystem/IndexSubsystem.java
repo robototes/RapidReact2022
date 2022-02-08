@@ -214,11 +214,11 @@ public class IndexSubsystem extends SubsystemBase {
 
     // @Log
     // public indexMotorState getIngestMotorState() {
-    //     return ingestMotorState;
+    // return ingestMotorState;
     // }
 
     // @Log
     // public indexMotorState getFeederMotorState() {
-    //     return ingestMotorState;
+    // return ingestMotorState;
     // }
 }

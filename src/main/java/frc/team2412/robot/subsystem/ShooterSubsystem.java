@@ -252,7 +252,6 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Stops the hood motor
      */
-    // TODO make hardstop
     public void stopHoodMotor() {
         hoodMotor.set(STOP_MOTOR);
     }
@@ -260,7 +259,6 @@ public class ShooterSubsystem extends SubsystemBase {
     /**
      * Resets the turret motor's integrated encoder to 0.
      */
-    // TODO use limit switches to reset the encoder
     public void resetTurretEncoder() {
         turretMotor.setSelectedSensorPosition(0);
     }

@@ -9,6 +9,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
@@ -69,7 +70,9 @@ public class Robot extends TimedRobot {
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
         autonomousChooser.getCommand(subsystems).schedule();
-        new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        if (SubsystemConstants.SHOOTER_ENABLED) {
+            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        }
     }
 
 }

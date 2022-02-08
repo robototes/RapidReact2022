@@ -47,12 +47,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
-                new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
+                new MaxAccelerationConstraint(1.0), // old value was 12.5 * 12.0
                 new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
                 // in inches
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-                new MaxAccelerationConstraint(12.5 * 12.0),
+                new MaxAccelerationConstraint(1),
                 new CentripetalAccelerationConstraint(15 * 12.0)
         };
 
@@ -290,7 +290,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond),
                         Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
                 chassisSpeeds.omegaRadiansPerSecond, false);
-        updateModules(holonomicDriveSignal);
+        synchronized (stateLock) {
+            this.driveSignal = holonomicDriveSignal;
+        }
     }
 
     public RigidTransform2 getPoseAtTime(double timestamp) {

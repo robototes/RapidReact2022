@@ -273,7 +273,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 time,
                 dt);
         if (trajectorySignal.isPresent()) {
-            System.out.println("trajectory signal present");
             driveSignal = trajectorySignal.get();
             driveSignal = new HolonomicDriveSignal(
                     driveSignal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),

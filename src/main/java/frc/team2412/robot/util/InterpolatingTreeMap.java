@@ -6,13 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-
 import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
-    private final NetworkTableEntry distanceBiasEntry;
-
     /**
      * Creates an empty {@link InterpolatingTreeMap}.
      */
@@ -26,11 +22,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     public InterpolatingTreeMap(ShooterDataDistancePoint[] dataPoints) {
         super();
         for (ShooterDataDistancePoint dataPoint : dataPoints) {
-            put(dataPoint.getDistance(), dataPoint);
+            addDataPoint(dataPoint);
         }
-
-        // Initialize shuffleboard
-        distanceBiasEntry = ShooterConstants.tab.add("Distance Bias", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
     }
 
     /**
@@ -40,8 +33,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *            The path to the CSV file.
      * @return An {@link InterpolatingTreeMap} from the data in the CSV file.
      */
-    public static InterpolatingTreeMap fromCsv(String fileName) {
-        System.out.println("Deserializing " + fileName + " to an InterpolatingTreeMap...");
+    public static InterpolatingTreeMap fromCSV(String fileName) {
+        System.out.println("Deserializing " + fileName + " to an InterpolatingTreeMap");
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
             InterpolatingTreeMap map = new InterpolatingTreeMap();
@@ -49,20 +42,20 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             while ((line = reader.readLine()) != null) {
                 String[] items = line.split(",");
                 if (items.length < 3) {
-                    System.out.println("Line " + line + " has less than 3 items, skipping...");
+                    System.out.println("Line " + line + " has less than 3 items, skipping line");
                     continue;
                 } else if (items.length > 3) {
                     System.out.println(
-                            "Line " + line + " has more than 3 items, discarding extra data...");
+                            "Line " + line + " has more than 3 items, ignoring extra items");
                 }
 
                 try {
                     ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
                             Double.parseDouble(items[1]),
                             Double.parseDouble(items[2]));
-                    map.put(point.getDistance(), point);
+                    map.addDataPoint(point);
                 } catch (NumberFormatException err) {
-                    System.out.println("Line " + line + " contains a value other than a double, skipping...");
+                    System.out.println("Line " + line + " contains a non-numerical value, skipping line");
                     continue;
                 }
             }
@@ -80,9 +73,19 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      * @param fileName
      *            The path to the CSV file.
      */
-    public void replaceFromCsv(String fileName) {
+    public void replaceFromCSV(String fileName) {
         clear();
-        putAll(fromCsv(fileName));
+        putAll(fromCSV(fileName));
+    }
+
+    /**
+     * Adds a {@link ShooterDataDistancePoint}.
+     *
+     * @param dataPoint
+     *            The {@link ShooterDataDistancePoint} to add
+     */
+    private void addDataPoint(ShooterDataDistancePoint dataPoint) {
+        put(dataPoint.getDistance(), dataPoint);
     }
 
     /**
@@ -95,7 +98,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *         match.
      */
     public ShooterDataDistancePoint getInterpolated(Double key) {
-        key += distanceBiasEntry.getDouble(0.0);
+        key += ShooterConstants.distanceBiasEntry.getDouble(0.0);
 
         ShooterDataDistancePoint value = get(key);
 

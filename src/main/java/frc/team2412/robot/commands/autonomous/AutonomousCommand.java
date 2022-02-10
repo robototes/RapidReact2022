@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -12,7 +13,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.util.Constants;
 
 import java.util.List;
 
@@ -31,6 +31,15 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
         public static final double maxSpeedMetersPerSecond = 0.3;
         public static final double maxAccelerationMetersPerSecondSquared = 0.1;
+        public static final double trackWidth = 1.0;
+        // Distance between centers of right and left wheels on robot
+        public static final double wheelBase = 1.0;
+        // Distance between front and back wheels on robot
+        public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
+                new Translation2d(wheelBase / 2, trackWidth / 2),
+                new Translation2d(wheelBase / 2, -trackWidth / 2),
+                new Translation2d(-wheelBase / 2, trackWidth / 2),
+                new Translation2d(-wheelBase / 2, -trackWidth / 2));
     }
     DrivebaseSubsystem drivebaseSubsystem;
 
@@ -44,7 +53,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 AutoConstants.maxSpeedMetersPerSecond,
                 AutoConstants.maxAccelerationMetersPerSecondSquared)
                         // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(Constants.DriveConstants.driveKinematics);
+                        .setKinematics(AutoConstants.driveKinematics);
         // creating trajectory path (right now is a square)
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
@@ -59,7 +68,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                 exampleTrajectory,
                 drivebaseSubsystem::getPoseAsPoseMeters, // Functional interface to feed supplier
-                Constants.DriveConstants.driveKinematics,
+                AutoConstants.driveKinematics,
 
                 // Position controllers
                 new PIDController(AutoConstants.PXController, 0, 0),

@@ -46,8 +46,8 @@ public class Subsystems {
         if (GOAL_VIS_ENABLED)
             goalVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
-            indexSubsystem = new IndexSubsystem(hardware.firstIndexMotor, hardware.secondIndexMotor,
-                    hardware.firstIndexColorSensor, hardware.secondIndexColorSensor);
+            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
+                    hardware.ingestIndexColorSensor, hardware.feederIndexColorSensor);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
                     hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,

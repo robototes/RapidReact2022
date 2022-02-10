@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexMotorState.*;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -13,8 +14,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.MultiplexedColorSensor;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class IndexSubsystem extends SubsystemBase {
 
@@ -221,13 +220,4 @@ public class IndexSubsystem extends SubsystemBase {
     public boolean isFeederStopped() {
         return feederMotorState == STOPPED;
     }
-
-    // public indexMotorState getIngestMotorState() {
-    // return ingestMotorState;
-    // }
-
-    // public indexMotorState getFeederMotorState() {
-    // return ingestMotorState;
-    // }
-
 }

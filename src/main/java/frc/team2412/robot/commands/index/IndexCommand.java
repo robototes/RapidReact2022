@@ -8,6 +8,7 @@ public class IndexCommand extends SequentialCommandGroup {
 
     public IndexCommand(IndexSubsystem subsystem) {
         this.subsystem = subsystem;
+        addRequirements(subsystem);
     }
 
     @Override
@@ -20,11 +21,6 @@ public class IndexCommand extends SequentialCommandGroup {
             // move ball from first to seconds
             addCommands(new IndexMoveBallToSecondSensor(subsystem));
         }
-    }
-
-    @Override
-    public void execute() {
-
     }
 
     @Override

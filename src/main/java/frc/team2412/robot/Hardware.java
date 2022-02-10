@@ -65,7 +65,8 @@ public class Hardware {
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
-        public static final int INDEX_1 = 40, INDEX_2 = 41, INDEX_SENSOR_1 = 42, INDEX_SENSOR_2 = 43;
+        public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
+                INDEX_FEEDER_SENSOR = 5;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
@@ -101,8 +102,8 @@ public class Hardware {
     public DoubleSolenoid climbAngle;
 
     // index
-    public WPI_TalonFX firstIndexMotor, secondIndexMotor;
-    public MultiplexedColorSensor firstIndexColorSensor, secondIndexColorSensor;
+    public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
+    public MultiplexedColorSensor ingestIndexColorSensor, feederIndexColorSensor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -128,10 +129,10 @@ public class Hardware {
             }
         }
         if (INDEX_ENABLED) {
-            firstIndexMotor = new WPI_TalonFX(INDEX_1);
-            secondIndexMotor = new WPI_TalonFX(INDEX_2);
-            firstIndexColorSensor = new MultiplexedColorSensor(INDEX_SENSOR_1);
-            secondIndexColorSensor = new MultiplexedColorSensor(INDEX_SENSOR_2);
+            ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+            feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+            ingestIndexColorSensor = new MultiplexedColorSensor(INDEX_INGEST_SENSOR);
+            feederIndexColorSensor = new MultiplexedColorSensor(INDEX_FEEDER_SENSOR);
         }
         if (SHOOTER_ENABLED) {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);

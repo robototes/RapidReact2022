@@ -18,28 +18,27 @@ import java.util.List;
 
 public class AutonomousCommand extends SequentialCommandGroup {
     public static class AutoConstants {
-        public static final double MaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double MaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+        public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
+        public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 
-        public static final double PXController = 0.15;
-        public static final double PYController = 0.15;
-        public static final double PThetaController = 1;
+        public static final double PX_CONTROLLER = 0.15;
+        public static final double PY_CONTROLLER = 0.15;
 
         // Constraint for the motion profilied robot angle controller
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-                MaxAngularSpeedRadiansPerSecond, MaxAngularSpeedRadiansPerSecondSquared);
+        public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double maxSpeedMetersPerSecond = 0.3;
-        public static final double maxAccelerationMetersPerSecondSquared = 0.1;
-        public static final double trackWidth = 1.0;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 0.3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.1;
+        public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot
-        public static final double wheelBase = 1.0;
+        public static final double WHEEL_BASE = 1.0;
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
-                new Translation2d(wheelBase / 2, trackWidth / 2),
-                new Translation2d(wheelBase / 2, -trackWidth / 2),
-                new Translation2d(-wheelBase / 2, trackWidth / 2),
-                new Translation2d(-wheelBase / 2, -trackWidth / 2));
+                new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2));
     }
 
     DrivebaseSubsystem drivebaseSubsystem;
@@ -51,8 +50,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
     public Command getAutonomousCommand() {
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.maxSpeedMetersPerSecond,
-                AutoConstants.maxAccelerationMetersPerSecondSquared)
+                AutoConstants.MAX_SPEED_METERS_PER_SECOND,
+                AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutoConstants.driveKinematics);
         // creating trajectory path (right now is a square)
@@ -63,7 +62,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 config);
         // creates thetacontroller (rotation)
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                0.000000005, 0, 0, AutoConstants.kThetaControllerConstraints);
+                0.000000005, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
@@ -72,8 +71,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 AutoConstants.driveKinematics,
 
                 // Position controllers
-                new PIDController(AutoConstants.PXController, 0, 0),
-                new PIDController(AutoConstants.PYController, 0, 0),
+                new PIDController(AutoConstants.PX_CONTROLLER, 0, 0),
+                new PIDController(AutoConstants.PY_CONTROLLER, 0, 0),
                 thetaController,
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);

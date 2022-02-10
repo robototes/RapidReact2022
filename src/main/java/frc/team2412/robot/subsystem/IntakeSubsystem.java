@@ -14,13 +14,15 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.ConfigSubsystem;
 import frc.team2412.robot.util.MultiplexedColorSensor;
+import io.github.oblarg.oblog.Loggable;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends ConfigSubsystem {
 
     // Constants
-
-    public static class IntakeConstants {
+    @Constants
+    public static class IntakeConstants implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 

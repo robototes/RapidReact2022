@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ShooterSubsystem extends SubsystemBase {
     public static class ShooterConstants {
         public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
-        public static final double FLYWHEEL_VELOCITY = 10;
+        public static final double INITIAL_FLYWHEEL_VELOCITY = 10;
         public static final double STOP_MOTOR = 0;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
@@ -45,19 +45,33 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
         public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+
+        // Row 1 (Flywheel)
         public static final NetworkTableEntry flywheelPEntry = tab.add("Flywheel P", FLYWHEEL_P).withPosition(0, 0)
                 .withSize(1, 1).getEntry();
         public static final NetworkTableEntry flywheelIEntry = tab.add("Flywheel I", FLYWHEEL_I).withPosition(0, 1)
                 .withSize(1, 1).getEntry();
         public static final NetworkTableEntry flywheelDEntry = tab.add("Flywheel D", FLYWHEEL_D).withPosition(0, 2)
                 .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretPEntry = tab.add("Turret P", TURRET_P).withPosition(1, 0)
+        public static final NetworkTableEntry flywheelVelocityEntry = tab
+                .add("Flywheel Velocity", INITIAL_FLYWHEEL_VELOCITY).withPosition(0, 0).withSize(1, 1).getEntry();
+
+        // Row 2 (Hood)
+        public static final NetworkTableEntry hoodAngleEntry = tab.add("Hood Angle", MIN_HOOD_ANGLE).withPosition(1, 0)
                 .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretIEntry = tab.add("Turret I", TURRET_I).withPosition(1, 1)
+
+        // Row 3 (Turret)
+        public static final NetworkTableEntry turretPEntry = tab.add("Turret P", TURRET_P).withPosition(2, 0)
                 .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretDEntry = tab.add("Turret D", TURRET_D).withPosition(1, 2)
+        public static final NetworkTableEntry turretIEntry = tab.add("Turret I", TURRET_I).withPosition(2, 1)
                 .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry distanceBiasEntry = tab.add("Distance Bias", 0.0).withPosition(2, 0)
+        public static final NetworkTableEntry turretDEntry = tab.add("Turret D", TURRET_D).withPosition(2, 2)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry turretAngleBiasEntry = tab.add("Turret Angle Bias", 0).withPosition(2, 3)
+                .withSize(1, 1).getEntry();
+
+        // Row 4 (Distance)
+        public static final NetworkTableEntry distanceBiasEntry = tab.add("Distance Bias", 0.0).withPosition(3, 0)
                 .withSize(1, 1).getEntry();
     }
 
@@ -182,6 +196,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Returns the turret D value.
+     *
+     * @return The turret D value
+     */
+    public static double getTurretD() {
+        return turretDEntry.getDouble(TURRET_D);
+    }
+
+    /**
      * Sets the velocity of both flywheel motors
      *
      * @param velocity
@@ -195,7 +218,7 @@ public class ShooterSubsystem extends SubsystemBase {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_VELOCITY);
+        flywheelMotor1.set(ControlMode.Velocity, flywheelVelocityEntry.getDouble(INITIAL_FLYWHEEL_VELOCITY));
     }
 
     /**
@@ -203,15 +226,6 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
-    }
-
-    /**
-     * Returns the turret D value.
-     *
-     * @return The turret D value
-     */
-    public static double getTurretD() {
-        return turretDEntry.getDouble(TURRET_D);
     }
 
     /**

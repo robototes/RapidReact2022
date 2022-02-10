@@ -1,10 +1,12 @@
 package frc.team2412.robot;
 
 import frc.team2412.robot.subsystem.*;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
-public class Subsystems {
+public class Subsystems implements Loggable {
     public static class SubsystemConstants {
         public static final boolean CLIMB_ENABLED = false;
         public static final boolean DRIVE_ENABLED = true;
@@ -12,7 +14,7 @@ public class Subsystems {
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
         public static final boolean INTAKE_ENABLED = false;
-        public static final boolean SHOOTER_ENABLED = false;
+        public static final boolean SHOOTER_ENABLED = true;
         public static final boolean I2C_MUX_ENABLED = false;
     }
 
@@ -30,6 +32,7 @@ public class Subsystems {
 
     public IntakeSubsystem intakeSubsystem;
 
+    @Log
     public ShooterSubsystem shooterSubsystem;
 
     public Subsystems(Hardware h) {

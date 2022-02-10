@@ -2,6 +2,8 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
 import frc.team2412.robot.util.InterpolatingTreeMap;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -15,7 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
         public static final double INITIAL_FLYWHEEL_VELOCITY = 10;
@@ -44,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 10, 10, 500);
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
-        public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+        public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter Subsystem");
 
         // Row 1 (Flywheel)
         public static final NetworkTableEntry flywheelPEntry = tab.add("Flywheel P", FLYWHEEL_P).withPosition(0, 0)
@@ -76,9 +78,13 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // Instance variables
+    @Log.MotorController
     private final WPI_TalonFX flywheelMotor1;
+    @Log.MotorController
     private final WPI_TalonFX flywheelMotor2;
+    @Log.MotorController
     private final WPI_TalonFX turretMotor;
+    @Log.MotorController
     private final WPI_TalonFX hoodMotor;
 
     /**

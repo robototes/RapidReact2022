@@ -20,12 +20,8 @@ public class IndexShootCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        // stop motors when there are no balls left
-        if (!subsystem.ingestSensorHasBallIn() && !subsystem.feederSensorHasBallIn()) {
-            subsystem.ingestMotorStop();
-            subsystem.feederMotorStop();
-            return true;
-        }
+        subsystem.ingestMotorStop();
+        subsystem.feederMotorStop();
         return false;
     }
 }

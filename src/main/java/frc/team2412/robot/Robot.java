@@ -147,6 +147,10 @@ public class Robot extends TimedRobot {
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
+
+        // CommandScheduler.getInstance().schedule(new
+        // IndexMoveBallToSecondSensor(Subsystems.indexSubsystem));
+
     }
 
 }

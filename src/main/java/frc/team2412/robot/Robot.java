@@ -56,7 +56,6 @@ public class Robot extends TimedRobot {
 
     // TODO add other override methods
 
-    public Trajectory trajectory;
     public Field2d field;
 
     @Override

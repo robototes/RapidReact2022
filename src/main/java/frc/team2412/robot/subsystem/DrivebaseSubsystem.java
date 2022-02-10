@@ -289,7 +289,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
                 new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond),
                         Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
-                chassisSpeeds.omegaRadiansPerSecond, false);
+                chassisSpeeds.omegaRadiansPerSecond, true);
         synchronized (stateLock) {
             this.driveSignal = holonomicDriveSignal;
         }

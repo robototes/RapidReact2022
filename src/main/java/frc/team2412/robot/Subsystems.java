@@ -2,7 +2,6 @@ package frc.team2412.robot;
 
 import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Log;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
@@ -32,7 +31,6 @@ public class Subsystems implements Loggable {
 
     public IntakeSubsystem intakeSubsystem;
 
-    @Log
     public ShooterSubsystem shooterSubsystem;
 
     public Subsystems(Hardware h) {

@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
 import frc.team2412.robot.util.InterpolatingTreeMap;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -12,15 +13,12 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
-        public static final double INITIAL_FLYWHEEL_VELOCITY = 10;
+        public static final double DEFAULT_FLYWHEEL_VELOCITY = 10;
         public static final double STOP_MOTOR = 0;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
@@ -35,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_P = 0.01;
         public static final double TURRET_I = 0;
         public static final double TURRET_D = 0;
+        public static final double TURRET_ANGLE_BIAS = 0; // Move to subsystem instance field to configure
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
@@ -45,36 +44,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true,
                 10, 10, 500);
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+        public static final double DISTANCE_BIAS = 0; // Move to subsystem instance field to configure
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
-        public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter Subsystem");
-
-        // Row 1 (Flywheel)
-        public static final NetworkTableEntry flywheelPEntry = tab.add("Flywheel P", FLYWHEEL_P).withPosition(0, 0)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry flywheelIEntry = tab.add("Flywheel I", FLYWHEEL_I).withPosition(0, 1)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry flywheelDEntry = tab.add("Flywheel D", FLYWHEEL_D).withPosition(0, 2)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry flywheelVelocityEntry = tab
-                .add("Flywheel Velocity", INITIAL_FLYWHEEL_VELOCITY).withPosition(0, 0).withSize(1, 1).getEntry();
-
-        // Row 2 (Hood)
-        public static final NetworkTableEntry hoodAngleEntry = tab.add("Hood Angle", MIN_HOOD_ANGLE).withPosition(1, 0)
-                .withSize(1, 1).getEntry();
-
-        // Row 3 (Turret)
-        public static final NetworkTableEntry turretPEntry = tab.add("Turret P", TURRET_P).withPosition(2, 0)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretIEntry = tab.add("Turret I", TURRET_I).withPosition(2, 1)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretDEntry = tab.add("Turret D", TURRET_D).withPosition(2, 2)
-                .withSize(1, 1).getEntry();
-        public static final NetworkTableEntry turretAngleBiasEntry = tab.add("Turret Angle Bias", 0).withPosition(2, 3)
-                .withSize(1, 1).getEntry();
-
-        // Row 4 (Distance)
-        public static final NetworkTableEntry distanceBiasEntry = tab.add("Distance Bias", 0.0).withPosition(3, 0)
-                .withSize(1, 1).getEntry();
     }
 
     // Instance variables
@@ -86,6 +57,38 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final WPI_TalonFX turretMotor;
     @Log.MotorController
     private final WPI_TalonFX hoodMotor;
+
+    @Config
+    private double flywheelTestVelocity; // TODO: Make actually show up in shuffleboard
+
+    public double getFlywheelTestVelocity() {
+        return flywheelTestVelocity;
+    }
+
+    @Config
+    private double hoodTestAngle;
+
+    public double getHoodTestAngle() {
+        return hoodTestAngle;
+    }
+
+    @Config
+    private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_P) double p,
+            @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_I) double i,
+            @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_D) double d) {
+        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
+        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
+        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);
+    }
+
+    @Config
+    private void setTurretPID(@Config(name = "turretP", defaultValueNumeric = TURRET_P) double p,
+            @Config(name = "turretI", defaultValueNumeric = TURRET_I) double i,
+            @Config(name = "turretD", defaultValueNumeric = TURRET_D) double turretD) {
+        turretMotor.config_kP(TURRET_SLOT_ID, p);
+        turretMotor.config_kI(TURRET_SLOT_ID, i);
+        turretMotor.config_kD(TURRET_SLOT_ID, turretD);
+    }
 
     /**
      * Constructor for shooter subsystem.
@@ -114,16 +117,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         configMotors();
     }
 
-    @Override
-    public void periodic() {
-        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, getFlywheelP());
-        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, getFlywheelI());
-        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, getFlywheelD());
-        turretMotor.config_kP(TURRET_SLOT_ID, getTurretP());
-        turretMotor.config_kI(TURRET_SLOT_ID, getTurretI());
-        turretMotor.config_kD(TURRET_SLOT_ID, getTurretD());
-    }
-
     /**
      * Configures the instance motors
      */
@@ -137,6 +130,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
+        setFlywheelPID(FLYWHEEL_P, FLYWHEEL_I, FLYWHEEL_D);
 
         turretMotor.configFactoryDefault();
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
@@ -146,6 +140,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
+        setTurretPID(TURRET_P, TURRET_I, TURRET_D);
 
         hoodMotor.configFactoryDefault();
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);
@@ -154,60 +149,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.configReverseSoftLimitEnable(true);
         hoodMotor.configSupplyCurrentLimit(hoodCurrentLimit);
         hoodMotor.setNeutralMode(NeutralMode.Brake);
-    }
-
-    /**
-     * Returns the flywheel P value.
-     *
-     * @return The flywheel P value
-     */
-    public static double getFlywheelP() {
-        return flywheelPEntry.getDouble(FLYWHEEL_P);
-    }
-
-    /**
-     * Returns the flywheel I value.
-     *
-     * @return The flywheel I value
-     */
-    public static double getFlywheelI() {
-        return flywheelIEntry.getDouble(FLYWHEEL_I);
-    }
-
-    /**
-     * Returns the flywheel D value.
-     *
-     * @return The flywheel D value
-     */
-    public static double getFlywheelD() {
-        return flywheelDEntry.getDouble(FLYWHEEL_D);
-    }
-
-    /**
-     * Returns the turret P value.
-     *
-     * @return The turret P value
-     */
-    public static double getTurretP() {
-        return turretPEntry.getDouble(TURRET_P);
-    }
-
-    /**
-     * Returns the turret I value.
-     *
-     * @return The turret I value
-     */
-    public static double getTurretI() {
-        return turretIEntry.getDouble(TURRET_I);
-    }
-
-    /**
-     * Returns the turret D value.
-     *
-     * @return The turret D value
-     */
-    public static double getTurretD() {
-        return turretDEntry.getDouble(TURRET_D);
     }
 
     /**
@@ -224,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.Velocity, flywheelVelocityEntry.getDouble(INITIAL_FLYWHEEL_VELOCITY));
+        flywheelMotor1.set(ControlMode.Velocity, DEFAULT_FLYWHEEL_VELOCITY);
     }
 
     /**

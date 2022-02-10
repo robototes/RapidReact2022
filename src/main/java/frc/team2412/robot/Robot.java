@@ -86,7 +86,6 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void robotInit() {
-        Logger.configureLoggingAndConfig(this, false);
         hardware = new Hardware();
         subsystems = new Subsystems(hardware);
         controls = new Controls(subsystems);
@@ -95,6 +94,7 @@ public class Robot extends TimedRobot implements Loggable {
         updateManager.startLoop(5.0e-3);
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        Logger.configureLoggingAndConfig(subsystems, false);
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {

@@ -98,7 +98,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *         match.
      */
     public ShooterDataDistancePoint getInterpolated(Double key) {
-        key += ShooterConstants.distanceBiasEntry.getDouble(0.0);
+        key += ShooterConstants.DISTANCE_BIAS;
 
         ShooterDataDistancePoint value = get(key);
 

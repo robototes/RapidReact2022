@@ -91,6 +91,7 @@ public class SwerveControllerCommand extends CommandBase {
         this.desiredRotation = requireNonNullParam(desiredRotation, "desiredRotation", "SwerveControllerCommand");
 
         addRequirements(requirements);
+        addRequirements(drivebase);
     }
 
     /**

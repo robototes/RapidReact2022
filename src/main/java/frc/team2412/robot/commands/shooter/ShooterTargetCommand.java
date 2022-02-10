@@ -24,7 +24,7 @@ public class ShooterTargetCommand extends CommandBase {
         double distance = distanceSupplier.getAsDouble();
         double yaw = yawSupplier.getAsDouble();
         ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
-        shooter.hoodMotorSetAngle(shooterData.getAngle());
+        shooter.setHoodAngle(shooterData.getAngle());
         shooter.setFlywheelVelocity(shooterData.getPower());
         shooter.updateTurretAngle(yaw);
     }

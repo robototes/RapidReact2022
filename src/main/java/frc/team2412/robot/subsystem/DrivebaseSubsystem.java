@@ -106,6 +106,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry module1, module2, module3, module4;
+    private final NetworkTableEntry isFieldOrientedEntry;
 
     private final Field2d field = new Field2d();
 
@@ -181,6 +182,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withPosition(1, 3)
                 .withSize(1, 1)
                 .getEntry();
+
+        isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
     }
 
     public RigidTransform2 getPose() {
@@ -207,9 +210,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, isFieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 
@@ -217,6 +220,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
             swerveOdometry.resetPose(this.pose);
+        }
+    }
+    public void resetPose(RigidTransform2 pose) {
+        synchronized (kinematicsLock) {
+            this.pose = pose;
+            swerveOdometry.resetPose(pose);
+            resetGyroAngle(Rotation2.ZERO);
         }
     }
 
@@ -269,9 +279,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (driveSignal.isFieldOriented()) {
+        } else if (isFieldOrientedEntry.getBoolean(true)) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
+                    driveSignal.getTranslation().rotateBy(getPose().rotation),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(

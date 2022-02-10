@@ -10,17 +10,12 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
-    // Instance variables
-    private final WPI_TalonFX flywheelMotor1;
-    private final WPI_TalonFX flywheelMotor2;
-    private final WPI_TalonFX turretMotor;
-    private final WPI_TalonFX hoodMotor;
-
     public static class ShooterConstants {
         public static final double DEGREES_TO_ENCODER_TICKS = 2048 / 360;
         public static final double FLYWHEEL_VELOCITY = 10;
@@ -32,6 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final double FLYWHEEL_D = 0;
         public static final double MIN_TURRET_ANGLE = -180;
         public static final double MAX_TURRET_ANGLE = 180;
+        public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
         // Placeholder PID constants
         public static final double TURRET_P = 0.01;
@@ -39,6 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final double TURRET_D = 0;
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
+        public static final double HOOD_ANGLE_TOLERANCE = 1;
         public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true,
                 40, 40, 500);
@@ -48,7 +45,27 @@ public class ShooterSubsystem extends SubsystemBase {
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
         public static final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+        public static final NetworkTableEntry flywheelPEntry = tab.add("Flywheel P", FLYWHEEL_P).withPosition(0, 0)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry flywheelIEntry = tab.add("Flywheel I", FLYWHEEL_I).withPosition(0, 1)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry flywheelDEntry = tab.add("Flywheel D", FLYWHEEL_D).withPosition(0, 2)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry turretPEntry = tab.add("Turret P", TURRET_P).withPosition(1, 0)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry turretIEntry = tab.add("Turret I", TURRET_I).withPosition(1, 1)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry turretDEntry = tab.add("Turret D", TURRET_D).withPosition(1, 2)
+                .withSize(1, 1).getEntry();
+        public static final NetworkTableEntry distanceBiasEntry = tab.add("Distance Bias", 0.0).withPosition(2, 0)
+                .withSize(1, 1).getEntry();
     }
+
+    // Instance variables
+    private final WPI_TalonFX flywheelMotor1;
+    private final WPI_TalonFX flywheelMotor2;
+    private final WPI_TalonFX turretMotor;
+    private final WPI_TalonFX hoodMotor;
 
     /**
      * Constructor for shooter subsystem.
@@ -77,6 +94,16 @@ public class ShooterSubsystem extends SubsystemBase {
         configMotors();
     }
 
+    @Override
+    public void periodic() {
+        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, getFlywheelP());
+        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, getFlywheelI());
+        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, getFlywheelD());
+        turretMotor.config_kP(TURRET_SLOT_ID, getTurretP());
+        turretMotor.config_kI(TURRET_SLOT_ID, getTurretI());
+        turretMotor.config_kD(TURRET_SLOT_ID, getTurretD());
+    }
+
     /**
      * Configures the instance motors
      */
@@ -84,9 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelMotor1.configFactoryDefault();
         flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
-        flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, FLYWHEEL_P);
-        flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, FLYWHEEL_I);
-        flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, FLYWHEEL_D);
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
@@ -102,9 +126,6 @@ public class ShooterSubsystem extends SubsystemBase {
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
-        turretMotor.config_kP(TURRET_SLOT_ID, TURRET_P);
-        turretMotor.config_kI(TURRET_SLOT_ID, TURRET_I);
-        turretMotor.config_kD(TURRET_SLOT_ID, TURRET_D);
 
         hoodMotor.configFactoryDefault();
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);
@@ -116,22 +137,48 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
-     * Sets the target angle for the hood motor
+     * Returns the flywheel P value.
      *
-     * @param degrees
-     *            Target angle for the hood motor in degrees
+     * @return The flywheel P value
      */
-    public void hoodMotorSetAngle(double degrees) {
-        degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
-        hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
+    public static double getFlywheelP() {
+        return flywheelPEntry.getDouble(FLYWHEEL_P);
     }
 
     /**
-     * Stops the hood motor
+     * Returns the flywheel I value.
+     *
+     * @return The flywheel I value
      */
-    // TODO make hardstop
-    public void hoodMotorStop() {
-        hoodMotor.set(STOP_MOTOR);
+    public static double getFlywheelI() {
+        return flywheelIEntry.getDouble(FLYWHEEL_I);
+    }
+
+    /**
+     * Returns the flywheel D value.
+     *
+     * @return The flywheel D value
+     */
+    public static double getFlywheelD() {
+        return flywheelDEntry.getDouble(FLYWHEEL_D);
+    }
+
+    /**
+     * Returns the turret P value.
+     *
+     * @return The turret P value
+     */
+    public static double getTurretP() {
+        return turretPEntry.getDouble(TURRET_P);
+    }
+
+    /**
+     * Returns the turret I value.
+     *
+     * @return The turret I value
+     */
+    public static double getTurretI() {
+        return turretIEntry.getDouble(TURRET_I);
     }
 
     /**
@@ -159,9 +206,63 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     /**
+     * Returns the turret D value.
+     *
+     * @return The turret D value
+     */
+    public static double getTurretD() {
+        return turretDEntry.getDouble(TURRET_D);
+    }
+
+    /**
+     * Resets the hood motor's integrated encoder to 0.
+     */
+    public void resetHoodEncoder() {
+        hoodMotor.setSelectedSensorPosition(0);
+    }
+
+    /**
+     * Returns the hood's current angle (in degrees).
+     *
+     * @return The current angle of the hood
+     */
+    public double getHoodAngle() {
+        return hoodMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    }
+
+    /**
+     * Returns whether the hood is at the given angle.
+     *
+     * @param angle
+     *            The angle (in degrees) to compare the hood's angle to.
+     * @return True if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
+     *         False otherwise.
+     */
+    public boolean isHoodAtAngle(double angle) {
+        return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
+    }
+
+    /**
+     * Sets the target angle for the hood motor
+     *
+     * @param degrees
+     *            Target angle for the hood motor in degrees
+     */
+    public void setHoodAngle(double degrees) {
+        degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
+        hoodMotor.set(ControlMode.Position, DEGREES_TO_ENCODER_TICKS * degrees);
+    }
+
+    /**
+     * Stops the hood motor
+     */
+    public void stopHoodMotor() {
+        hoodMotor.set(STOP_MOTOR);
+    }
+
+    /**
      * Resets the turret motor's integrated encoder to 0.
      */
-    // TODO use limit switches to reset the encoder
     public void resetTurretEncoder() {
         turretMotor.setSelectedSensorPosition(0);
     }
@@ -173,6 +274,18 @@ public class ShooterSubsystem extends SubsystemBase {
      */
     public double getTurretAngle() {
         return turretMotor.getSelectedSensorPosition() / DEGREES_TO_ENCODER_TICKS;
+    }
+
+    /**
+     * Returns whether the turret is at the given angle.
+     *
+     * @param angle
+     *            The angle (in degrees) to compare the turret's angle to.
+     * @return True if difference between turret angle and given angle is less than
+     *         HOOD_ANGLE_TOLERANCE, False otherwise.
+     */
+    public boolean isTurretAtAngle(double angle) {
+        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
     }
 
     /**

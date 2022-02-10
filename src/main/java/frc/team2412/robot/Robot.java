@@ -13,6 +13,8 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.Subsystems.SubsystemConstants;
+import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
@@ -149,6 +151,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         autonomousChooser.getCommand(subsystems).schedule();
+        if (SubsystemConstants.SHOOTER_ENABLED) {
+            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        }
     }
 
     @Override

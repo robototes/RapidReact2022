@@ -93,6 +93,16 @@ public class Robot extends TimedRobot {
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
 
+        CommandScheduler.getInstance()
+                .onCommandInitialize(
+                        command -> System.out.println("Command initialized: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandInterrupt(
+                        command -> System.out.println("Command interrupted: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandFinish(
+                        command -> System.out.println("Command finished: " + command.getName()));
+
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
                 @Override
@@ -132,8 +142,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         testingSubsystem = new TestingSubsystem();
-
-        // CommandScheduler.getInstance().schedule();
     }
 
     @Override

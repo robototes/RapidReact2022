@@ -23,9 +23,4 @@ public class IndexTestCommand extends SequentialCommandGroup {
                 new WaitCommand(1),
                 new IndexFeederMotorStop(subsystem));
     }
-
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
 }

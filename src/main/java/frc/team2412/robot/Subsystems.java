@@ -26,7 +26,7 @@ public class Subsystems {
 
     public ShooterVisionSubsystem goalVisionSubsystem;
 
-    public static IndexSubsystem indexSubsystem;
+    public IndexSubsystem indexSubsystem;
 
     public IntakeSubsystem intakeSubsystem;
 

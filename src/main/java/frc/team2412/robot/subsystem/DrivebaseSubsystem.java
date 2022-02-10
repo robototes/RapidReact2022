@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -80,6 +79,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     );
 
     private final SwerveModule[] modules;
+    private final double moduleMaxVelocityMetersPerSec;
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
@@ -109,7 +109,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final Field2d field = new Field2d();
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
+    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g,
+            double moduleMaxVelocityMetersPerSec) {
         synchronized (sensorLock) {
             gyroscope = g;
             gyroscope.setInverted(false);
@@ -119,6 +120,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
+        this.moduleMaxVelocityMetersPerSec = moduleMaxVelocityMetersPerSec;
 
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)
@@ -287,9 +289,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {
         HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
-                new Vector2(Units.metersToInches(chassisSpeeds.vxMetersPerSecond),
-                        Units.metersToInches(chassisSpeeds.vyMetersPerSecond)),
+                new Vector2(
+                        (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
+                        (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
                 chassisSpeeds.omegaRadiansPerSecond, true);
+
         synchronized (stateLock) {
             this.driveSignal = holonomicDriveSignal;
         }

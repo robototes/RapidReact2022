@@ -1,52 +1,57 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
-
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
+import frc.team2412.robot.util.MultiplexedColorSensor;
 
 public class IntakeSubsystem extends SubsystemBase {
 
     // Constants
 
     public static class IntakeConstants {
+
         public static Alliance teamColor = DriverStation.getAlliance();
 
+        public static Color BLUE_CARGO_COLOR = new Color(0, 0, 1);
+        public static Color RED_CARGO_COLOR = new Color(1, 0, 0);
+
         public static final double INTAKE_IN_SPEED = 0.5;
-        public static final double INTAKE_OUT_SPEED = -0.5;
+        public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
 
-    }
+        // Enums
 
-    // Enums
+        public static enum IntakeMotorState {
+            IN, OUT, STOPPED;
+        }
 
-    public enum IntakeMotorState {
-        IN, OUT, STOPPED;
-    }
+        public static enum IntakeSolenoidState {
+            EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
 
-    public enum IntakeSolenoidState {
-        EXTENDED, RETRACTED;
-    }
+            public final DoubleSolenoid.Value value;
 
-    public enum IntakeState {
-        EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
-
-        public DoubleSolenoid.Value value;
-
-        private IntakeState(DoubleSolenoid.Value value) {
-            this.value = value;
+            private IntakeSolenoidState(DoubleSolenoid.Value value) {
+                this.value = value;
+            }
         }
     }
+
+    private ColorMatch allyColorMatcher = new ColorMatch();
+    private ColorMatch enemyColorMatcher = new ColorMatch();
 
     ///// IMPORTANT: Need ball amount variable and make method to stop taking in
     ///// balls when at limit.
@@ -54,33 +59,59 @@ public class IntakeSubsystem extends SubsystemBase {
     // Define Hardware
 
     private final WPI_TalonFX motorOuterAxle;
-
     private final WPI_TalonFX motorInnerAxle;
 
     private final DoubleSolenoid solenoid;
 
-    /// private final ColorSensorV3 colorSensor = new colorSensorV3(i2cPort);
+    // private final ColorSensorV3 colorSensor;
+
+    private final MultiplexedColorSensor leftColorSensor;
+    private final MultiplexedColorSensor rightColorSensor;
+    private final MultiplexedColorSensor centerColorSensor;
+
+    // States
 
     private IntakeMotorState intakeMotorState;
-
     private IntakeSolenoidState intakeSolenoidState;
 
     // CONSTRUCTOR!
-    public IntakeSubsystem(WPI_TalonFX motorOuterAxle, WPI_TalonFX motorInnerAxle, DoubleSolenoid intakeSolenoid) {
+
+    public IntakeSubsystem(WPI_TalonFX motorOuterAxle,
+            WPI_TalonFX motorInnerAxle,
+            DoubleSolenoid intakeSolenoid,
+            MultiplexedColorSensor leftColorSensor,
+            MultiplexedColorSensor rightColorSensor,
+            MultiplexedColorSensor centerColorSensor) {
+
         this.motorOuterAxle = motorOuterAxle;
         this.motorInnerAxle = motorInnerAxle;
         this.motorInnerAxle.setInverted(true);
-
         this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
-
         this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.motorInnerAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
         this.solenoid = intakeSolenoid;
-        // this.colorSensor = intakeColorSensor;
-        intakeSolenoidState = IntakeSolenoidState.RETRACTED;
-        intakeMotorState = IntakeMotorState.STOPPED;
+
+        this.leftColorSensor = leftColorSensor;
+        this.rightColorSensor = rightColorSensor;
+        this.centerColorSensor = centerColorSensor;
+
+        allyColorMatcher.setConfidenceThreshold(0.9);
+        enemyColorMatcher.setConfidenceThreshold(0.9);
+
+        // Creates two different color matchers to differentiate between enemy and ally cargo
+        if (teamColor == Alliance.Blue) {
+            allyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
+            enemyColorMatcher.addColorMatch(RED_CARGO_COLOR);
+
+        } else if (teamColor == Alliance.Red) {
+            allyColorMatcher.addColorMatch(RED_CARGO_COLOR);
+            enemyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
+        }
+
+        intakeSolenoidState = RETRACT;
+        intakeMotorState = STOPPED;
 
         intakeRetract();
         intakeStop();
@@ -88,56 +119,93 @@ public class IntakeSubsystem extends SubsystemBase {
         setName("IntakeSubsystem");
     }
 
-    // Methods.
+    // Methods
 
+    /**
+     * Spins motors inwards and updates motor state
+     */
     public void intakeIn() {
-        if (intakeSolenoidState == IntakeSolenoidState.EXTENDED) {
-            motorOuterAxle.set(IntakeConstants.INTAKE_IN_SPEED);
-            motorInnerAxle.set(IntakeConstants.INTAKE_IN_SPEED);
+        if (intakeSolenoidState == EXTEND) {
+            motorOuterAxle.set(INTAKE_IN_SPEED);
+            motorInnerAxle.set(INTAKE_IN_SPEED);
 
-            intakeMotorState = IntakeMotorState.IN;
+            intakeMotorState = IN;
         }
     }
 
+    /**
+     * Spins motors outwards and updates motor state
+     */
     public void intakeOut() {
-        if (intakeSolenoidState == IntakeSolenoidState.EXTENDED) {
-            motorOuterAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
-            motorInnerAxle.set(IntakeConstants.INTAKE_OUT_SPEED);
+        if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
+            motorOuterAxle.set(INTAKE_OUT_SPEED);
+            motorInnerAxle.set(INTAKE_OUT_SPEED);
 
-            intakeMotorState = IntakeMotorState.OUT;
+            intakeMotorState = OUT;
         }
     }
 
+    /**
+     * Stops motors and updates motor state
+     */
     public void intakeStop() {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
 
-        intakeMotorState = IntakeMotorState.STOPPED;
+        intakeMotorState = STOPPED;
     }
 
+    /**
+     * Extends solenoid and updates solenoid state
+     */
     public void intakeExtend() {
-        intakeSolenoidState = IntakeSolenoidState.EXTENDED;
+        intakeSolenoidState = EXTEND;
 
-        solenoid.set(IntakeState.EXTEND.value);
+        solenoid.set(EXTEND.value);
     }
 
+    /**
+     * Retracts solenoid and updates solenoid state
+     */
     public void intakeRetract() {
-        intakeSolenoidState = IntakeSolenoidState.RETRACTED;
-
-        solenoid.set(IntakeState.RETRACT.value);
+        intakeSolenoidState = RETRACT;
+        intakeStop();
+        solenoid.set(RETRACT.value);
     }
 
-    public boolean colorIdentify() {
-        return true;
+    /**
+     * Returns true if color sensor detects an enemy cargo
+     */
+    private boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
+        return enemyColorMatcher.matchColor(colorSensor.getColor()) != null;
+    }
+
+    /**
+     * Returns true if any of the color sensors detect an enemy cargo
+     */
+    public boolean hasOpposingColorCargo() {
+        return (individualHasOpposingColorCargo(leftColorSensor)
+                || individualHasOpposingColorCargo(rightColorSensor)
+                || individualHasOpposingColorCargo(centerColorSensor));
+    }
+
+    /**
+     * Returns current color value detected if matched
+     */
+    private boolean individualHasMatchingColorCargo(MultiplexedColorSensor colorSensor) {
+        return allyColorMatcher.matchColor(colorSensor.getColor()) != null;
+    }
+
+    public boolean hasMatchingColorCargo() {
+        return (individualHasMatchingColorCargo(leftColorSensor)
+                || individualHasMatchingColorCargo(rightColorSensor)
+                || individualHasMatchingColorCargo(centerColorSensor));
     }
 
     @Override
     public void periodic() {
-        intakeSolenoidState = IntakeSolenoidState.EXTENDED;
-        Joystick joystick = new Joystick(0);
-        solenoid.set(joystick.getTwist() != 0 ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-        motorInnerAxle.set(joystick.getX());
-        motorOuterAxle.set(joystick.getY());
+        if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
+            intakeStop();
+        }
     }
-
 }

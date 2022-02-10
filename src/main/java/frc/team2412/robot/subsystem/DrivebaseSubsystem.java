@@ -1,13 +1,11 @@
 package frc.team2412.robot.subsystem;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +18,6 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
-import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.*;
 
 import java.util.Optional;
@@ -53,7 +50,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.4, 0.0, 0.025),
+            new PidConstants(0.2, 0.0, 0.025),
             new PidConstants(5.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
@@ -97,6 +94,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry isFieldOrientedEntry;
 
     public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
         synchronized (sensorLock) {
@@ -104,7 +102,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope.setInverted(false);
         }
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
 
@@ -151,6 +149,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+
+        isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
     }
 
     public RigidTransform2 getPose() {
@@ -171,9 +171,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, isFieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 
@@ -181,6 +181,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (kinematicsLock) {
             this.pose = pose;
             swerveOdometry.resetPose(pose);
+            resetGyroAngle(Rotation2.ZERO);
         }
     }
 
@@ -233,9 +234,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (driveSignal.isFieldOriented()) {
+        } else if (isFieldOrientedEntry.getBoolean(true)) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
+                    driveSignal.getTranslation().rotateBy(getPose().rotation),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(

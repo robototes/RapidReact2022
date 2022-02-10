@@ -5,23 +5,20 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeStopCommand extends CommandBase {
 
-    public final IntakeSubsystem subsystem;
+    private final IntakeSubsystem subsystem;
 
     public IntakeStopCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-
     }
 
     @Override
     public void execute() {
         subsystem.intakeStop();
-
     }
 
     @Override
-	public boolean isFinished() {
-		return true;
-	}
-    
+    public boolean isFinished() {
+        return true;
+    }
 }

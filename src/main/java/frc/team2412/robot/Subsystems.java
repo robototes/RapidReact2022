@@ -11,10 +11,9 @@ public class Subsystems {
         public static final boolean DRIVER_VIS_ENABLED = false;
         public static final boolean GOAL_VIS_ENABLED = false;
         public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = true;
+        public static final boolean INTAKE_ENABLED = false;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean I2C_MUX_ENABLED = false;
-
     }
 
     public final Hardware hardware;
@@ -36,7 +35,8 @@ public class Subsystems {
     public Subsystems(Hardware h) {
         hardware = h;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic, hardware.climbAngle);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
+                    hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.navX);
@@ -48,7 +48,8 @@ public class Subsystems {
             indexSubsystem = new IndexSubsystem(hardware.indexMotor);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
-                    hardware.intakeSolenoid);
+                    hardware.intakeSolenoid, hardware.leftIntakeColorSensor,
+                    hardware.rightIntakeColorSensor, hardware.centerIntakeColorSensor);
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);

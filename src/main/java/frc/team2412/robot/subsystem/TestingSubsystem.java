@@ -42,7 +42,7 @@ public class TestingSubsystem extends SubsystemBase {
                 .withPosition(1, 2)
                 .withSize(1, 1)
                 .getEntry();
-        
+
         /*
          * The testing subsystem have its built-in Hardware class,
          * that no need to initialize and store the Hardware in somewhere else
@@ -66,6 +66,6 @@ public class TestingSubsystem extends SubsystemBase {
         greenValue.setDouble(gValue);
         blueValue.setDouble(bValue);
         proximityValue.setDouble(pValue);
-        timeDuration.setDouble(timeElapsed.toNanos()/1000);
+        timeDuration.setDouble(timeElapsed.toNanos() / 1000);
     }
 }

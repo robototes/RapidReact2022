@@ -11,8 +11,6 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.commands.climb.ExtendAngledHookCommand;
-import frc.team2412.robot.commands.climb.ExtendFixedHookCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;

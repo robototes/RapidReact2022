@@ -14,7 +14,7 @@ public class ExtendAngledHookCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-       return subsystem.isDynamicFullyExtended();
+        return subsystem.isDynamicFullyExtended();
     }
 
 }

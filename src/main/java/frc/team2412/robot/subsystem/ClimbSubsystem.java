@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ClimbSubsystemState;
 
-import java.time.chrono.MinguoDate;
-
 public class ClimbSubsystem extends SubsystemBase {
 
     public static class ClimbConstants {
@@ -63,7 +61,8 @@ public class ClimbSubsystem extends SubsystemBase {
     private final NetworkTableEntry gearboxReduction;
     private final NetworkTableEntry encoderTicksPerRevolution;
 
-    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle, boolean enabled) {
+    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle,
+            boolean enabled) {
         setName("ClimbSubsystem");
         this.climbFixedMotor = climbFixedMotor;
         this.climbDynamicMotor = climbDynamicMotor;
@@ -76,7 +75,7 @@ public class ClimbSubsystem extends SubsystemBase {
         motorConfig.reverseSoftLimitEnable = false;
         motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
-        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;    
+        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
         climbFixedMotor.configAllSettings(motorConfig);
         climbDynamicMotor.configAllSettings(motorConfig);
@@ -84,38 +83,38 @@ public class ClimbSubsystem extends SubsystemBase {
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
         maxEncoderTicks = tab.add("Max encoder ticks", MAX_ENCODER_TICKS)
-            .withPosition(0, 0)
-            .withSize(2, 1)
-            .getEntry();
+                .withPosition(0, 0)
+                .withSize(2, 1)
+                .getEntry();
         minEncoderTicks = tab.add("Min encoder ticks", MIN_ENCODER_TICKS)
-            .withPosition(0, 1)
-            .withSize(2, 1)
-            .getEntry();
+                .withPosition(0, 1)
+                .withSize(2, 1)
+                .getEntry();
         encoderTicksPerRevolution = tab.add("Encoder ticks per revolution", ENCODER_TICKS_PER_REVOLUTION)
-            .withPosition(0, 2)
-            .withSize(2, 1)
-            .getEntry();
+                .withPosition(0, 2)
+                .withSize(2, 1)
+                .getEntry();
         testSpeedExtend = tab.add("Test speed: Extension", TEST_SPEED_EXTEND)
-            .withPosition(2, 0)
-            .withSize(2, 1)
-            .getEntry();
+                .withPosition(2, 0)
+                .withSize(2, 1)
+                .getEntry();
         testSpeedRetract = tab.add("Test speed: Retraction", TEST_SPEED_RETRACT)
-            .withPosition(2, 1)
-            .withSize(2, 1)
-            .getEntry();
+                .withPosition(2, 1)
+                .withSize(2, 1)
+                .getEntry();
         rungDistance = tab.add("Rung distance", RUNG_DISTANCE)
-            .withPosition(4, 0)
-            .withSize(1, 2)
-            .getEntry();
+                .withPosition(4, 0)
+                .withSize(1, 2)
+                .getEntry();
         gearboxReduction = tab.add("Gearbox reduction", GEARBOX_REDUCTION)
-            .withPosition(2, 2)
-            .withSize(2, 1)
-            .getEntry(); 
-        tab.addNumber("Solenoid state", () -> { 
+                .withPosition(2, 2)
+                .withSize(2, 1)
+                .getEntry();
+        tab.addNumber("Solenoid state", () -> {
             return solenoidState == SolenoidState.BACK ? -1 : solenoidState == SolenoidState.MID ? 0 : 1;
         })
-            .withPosition(4, 4)
-            .withSize(2, 1);
+                .withPosition(4, 4)
+                .withSize(2, 1);
     }
 
     public void setEnabled() {
@@ -135,11 +134,11 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void extendFixedArm() {
-        setMotor(TEST_SPEED_EXTEND, climbFixedMotor);
+        setMotor(testSpeedExtend.getValue().getDouble(), climbFixedMotor);
     }
 
     public void retractFixedArm() {
-        setMotor(testSpeedExtend.getValue().getDouble(), climbFixedMotor);
+        setMotor(testSpeedRetract.getValue().getDouble(), climbFixedMotor);
     }
 
     public void stopFixedArm() {
@@ -161,28 +160,24 @@ public class ClimbSubsystem extends SubsystemBase {
     public void setMotor(double position, WPI_TalonFX motor) {
         if (state == ClimbSubsystemState.ENABLED) {
             System.out.println("motor set: " + position);
-            //motor.set(ControlMode.Position, position)   >:( bad
-            motor.set(ControlMode.PercentOutput, 1);
+            motor.set(ControlMode.Position, position);
+            // motor.set(ControlMode.PercentOutput, 1); simulator only
         }
     }
 
     public boolean isFixedFullyExtended() {
-        System.out.println(climbFixedMotor.getSelectedSensorPosition());
         return climbFixedMotor.getSelectedSensorPosition() >= maxEncoderTicks.getValue().getDouble();
     }
 
     public boolean isFixedFullyRetracted() {
-        System.out.println(climbFixedMotor.getSelectedSensorPosition());
         return climbFixedMotor.getSelectedSensorPosition() <= minEncoderTicks.getValue().getDouble();
     }
 
     public boolean isDynamicFullyExtended() {
-        System.out.println(climbDynamicMotor.getSelectedSensorPosition());
         return climbDynamicMotor.getSelectedSensorPosition() >= maxEncoderTicks.getValue().getDouble();
     }
 
     public boolean isDynamicFullyRetracted() {
-        System.out.println(climbDynamicMotor.getSelectedSensorPosition());
         return climbDynamicMotor.getSelectedSensorPosition() <= minEncoderTicks.getValue().getDouble();
     }
 

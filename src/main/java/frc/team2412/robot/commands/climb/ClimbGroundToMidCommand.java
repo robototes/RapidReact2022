@@ -15,13 +15,13 @@ public class ClimbGroundToMidCommand extends CommandBase {
     @Override
     public void initialize() {
         new UnangleClimbHookCommand(subsystem)
-        .andThen(new ExtendAngledHookCommand(subsystem))
-        .andThen(new RetractAngledHookCommand(subsystem));
+                .andThen(new ExtendAngledHookCommand(subsystem))
+                .andThen(new RetractAngledHookCommand(subsystem));
     }
 
     @Override
     public boolean isFinished() {
-       return subsystem.isDynamicFullyExtended();
+        return subsystem.isDynamicFullyExtended();
     }
 
 }

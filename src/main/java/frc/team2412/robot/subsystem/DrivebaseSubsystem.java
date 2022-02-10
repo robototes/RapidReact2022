@@ -104,7 +104,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
-        
+
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)
                 .withSize(1, 1)

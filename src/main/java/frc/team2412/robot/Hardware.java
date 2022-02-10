@@ -84,10 +84,10 @@ public class Hardware {
         /*
          * According to
          * https://docs.wpilib.org/en/stable/docs/software/can-devices/power-distribution-module.html
-         * The CAN ID for CTRE should be 0
-         * Or 1 for Rev (we're using Rev for the new robot)
+         * The CAN ID for CTRE should be 0 or 1 for Rev
+         * But in our case is neither which need be figure out
          */
-        public static final int PDP_CAN_ID = 9;
+        public static final int PDP_CAN_ID = null;
         public static final ModuleType PDP_MODULE_TYPE = ModuleType.kCTRE;
     }
 
@@ -160,7 +160,6 @@ public class Hardware {
         }
         if (MONITOR_ENABLED) {
             powerDistributionPanel = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
-            // powerDistributionPanel = new PowerDistribution();
         }
     }
 }

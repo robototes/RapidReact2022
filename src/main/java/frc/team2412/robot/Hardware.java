@@ -12,7 +12,9 @@ import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
@@ -78,6 +80,10 @@ public class Hardware {
         // which port the I2C device plugged in on the multiplexer
         public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
                 CENTER_INTAKE_COLORSENSOR_PORT = 3;
+
+        // CAN ID unknown for now
+        public static final int PDP_CAN_ID = -1;
+        public static final ModuleType PDP_MODULE_TYPE = ModuleType.kCTRE;
     }
 
     // drive
@@ -104,6 +110,9 @@ public class Hardware {
 
     // index
     public WPI_TalonFX indexMotor;
+
+    // monitoring
+    public PowerDistribution powerDistributionPanel;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -143,6 +152,9 @@ public class Hardware {
         }
         if (GOAL_VIS_ENABLED) {
             limelight = new PhotonCamera(LIMELIGHT);
+        }
+        if (MONITOR_ENABLED) {
+            powerDistributionPanel = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
         }
     }
 }

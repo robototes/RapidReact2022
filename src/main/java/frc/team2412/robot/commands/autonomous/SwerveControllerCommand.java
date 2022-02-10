@@ -169,7 +169,6 @@ public class SwerveControllerCommand extends CommandBase {
         // gets current time and desired location in trajectory
         double curTime = timer.get();
         var desiredState = trajectory.sample(curTime);
-        System.out.println(desiredState.velocityMetersPerSecond +"    "+ pose.get());
 
         var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
         // var targetModuleStates = kinematics.toSwerveModuleStates(targetChassisSpeeds);
@@ -179,7 +178,6 @@ public class SwerveControllerCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Hurray it is called");
         if (interrupted) {
             // drivebase.drive(Vector2.ZERO, 0, false);
             outputModuleStates.accept(new ChassisSpeeds(0, 0, 0));

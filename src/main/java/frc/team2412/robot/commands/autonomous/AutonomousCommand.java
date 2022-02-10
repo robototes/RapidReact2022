@@ -77,12 +77,11 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);
 
-        System.out.println(exampleTrajectory.getTotalTimeSeconds());
 
         // Reset odometry to the starting pose of the trajectory.
         drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());
 
-        System.out.println("Created Trajectory");
+
         // Run path following command, then stop at the end.
         // have to fix this later, the parameters are just placeholders to get program
         // to build

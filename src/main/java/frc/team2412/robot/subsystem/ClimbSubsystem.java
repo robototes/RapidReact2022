@@ -41,6 +41,10 @@ public class ClimbSubsystem extends SubsystemBase {
         enum ClimbSubsystemState {
             ENABLED, DISABLED
         }
+
+        enum SolenoidState {
+            BACK, MID, FRONT
+        }
     }
 
     private final WPI_TalonFX climbFixedMotor;
@@ -49,6 +53,7 @@ public class ClimbSubsystem extends SubsystemBase {
     private final DoubleSolenoid solenoid;
 
     private static ClimbSubsystemState state = ClimbSubsystemState.DISABLED;
+    private static SolenoidState solenoidState = SolenoidState.MID;
 
     private final NetworkTableEntry testSpeedExtend;
     private final NetworkTableEntry testSpeedRetract;
@@ -71,7 +76,7 @@ public class ClimbSubsystem extends SubsystemBase {
         motorConfig.reverseSoftLimitEnable = false;
         motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
-        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
+        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;    
 
         climbFixedMotor.configAllSettings(motorConfig);
         climbDynamicMotor.configAllSettings(motorConfig);
@@ -105,7 +110,12 @@ public class ClimbSubsystem extends SubsystemBase {
         gearboxReduction = tab.add("Gearbox reduction", GEARBOX_REDUCTION)
             .withPosition(2, 2)
             .withSize(2, 1)
-            .getEntry();       
+            .getEntry(); 
+        tab.addNumber("Solenoid state", () -> { 
+            return solenoidState == SolenoidState.BACK ? -1 : solenoidState == SolenoidState.MID ? 0 : 1;
+        })
+            .withPosition(4, 4)
+            .withSize(2, 1);
     }
 
     public void setEnabled() {

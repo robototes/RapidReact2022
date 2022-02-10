@@ -17,7 +17,7 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import java.util.List;
 
 public class AutonomousCommand extends SequentialCommandGroup {
-    public static class AutoConstants{
+    public static class AutoConstants {
         public static final double MaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double MaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -41,6 +41,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 new Translation2d(-wheelBase / 2, trackWidth / 2),
                 new Translation2d(-wheelBase / 2, -trackWidth / 2));
     }
+
     DrivebaseSubsystem drivebaseSubsystem;
 
     public AutonomousCommand(DrivebaseSubsystem d) {
@@ -77,10 +78,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);
 
-
         // Reset odometry to the starting pose of the trajectory.
         drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());
-
 
         // Run path following command, then stop at the end.
         // have to fix this later, the parameters are just placeholders to get program

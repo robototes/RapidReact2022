@@ -4,7 +4,6 @@
 
 package frc.team2412.robot;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;

@@ -222,6 +222,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             swerveOdometry.resetPose(this.pose);
         }
     }
+
     public void resetPose(RigidTransform2 pose) {
         synchronized (kinematicsLock) {
             this.pose = pose;

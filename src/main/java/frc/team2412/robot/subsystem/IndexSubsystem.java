@@ -2,7 +2,6 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexMotorState.*;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexPositionState.*;
 
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -40,12 +39,6 @@ public class IndexSubsystem extends SubsystemBase {
             IN, OUT, STOPPED;
         }
 
-        // Position States
-
-        public static enum IndexPositionState {
-            HAS_BALL, HAS_NO_BALL;
-        }
-
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
@@ -65,8 +58,8 @@ public class IndexSubsystem extends SubsystemBase {
     private IndexMotorState ingestMotorState;
     private IndexMotorState feederMotorState;
 
-    private IndexPositionState ingestBallState;
-    private IndexPositionState feederBallState;
+    private boolean ingestBallState;
+    private boolean feederBallState;
 
     // For logging
     private final NetworkTableEntry proximityThreshold;
@@ -114,8 +107,8 @@ public class IndexSubsystem extends SubsystemBase {
         ingestMotorStop();
         feederMotorStop();
 
-        ingestBallState = HAS_NO_BALL;
-        feederBallState = HAS_NO_BALL;
+        ingestBallState = false;
+        feederBallState = false;
 
         setName("IndexSubsystem");
     }
@@ -195,17 +188,8 @@ public class IndexSubsystem extends SubsystemBase {
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
     public void periodic() {
-        if (ingestSensorHasBallIn()) {
-            ingestBallState = HAS_BALL;
-        } else {
-            ingestBallState = HAS_NO_BALL;
-        }
-
-        if (feederSensorHasBallIn()) {
-            feederBallState = HAS_BALL;
-        } else {
-            feederBallState = HAS_NO_BALL;
-        }
+        ingestBallState = ingestSensorHasBallIn();
+        feederBallState = feederSensorHasBallIn();
     }
 
     // for logging

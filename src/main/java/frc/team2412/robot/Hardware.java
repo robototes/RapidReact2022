@@ -65,7 +65,7 @@ public class Hardware {
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
-        public static final int INDEX_1 = 0, INDEX_2 = 0, INDEX_SENSOR_1 = 0, INDEX_SENSOR_2 = 0;
+        public static final int INDEX_1 = 40, INDEX_2 = 41, INDEX_SENSOR_1 = 42, INDEX_SENSOR_2 = 43;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;

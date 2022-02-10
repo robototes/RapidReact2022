@@ -81,8 +81,13 @@ public class Hardware {
         public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
                 CENTER_INTAKE_COLORSENSOR_PORT = 3;
 
-        // CAN ID unknown for now
-        public static final int PDP_CAN_ID = -1;
+        /*
+         * According to
+         * https://docs.wpilib.org/en/stable/docs/software/can-devices/power-distribution-module.html
+         * The CAN ID for CTRE should be 0
+         * Or 1 for Rev (we're using Rev for the new robot)
+         */
+        public static final int PDP_CAN_ID = 9;
         public static final ModuleType PDP_MODULE_TYPE = ModuleType.kCTRE;
     }
 
@@ -155,6 +160,7 @@ public class Hardware {
         }
         if (MONITOR_ENABLED) {
             powerDistributionPanel = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
+            // powerDistributionPanel = new PowerDistribution();
         }
     }
 }

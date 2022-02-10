@@ -132,6 +132,8 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         testingSubsystem = new TestingSubsystem();
+
+        // CommandScheduler.getInstance().schedule();
     }
 
     @Override

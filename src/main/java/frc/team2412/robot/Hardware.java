@@ -29,25 +29,25 @@ public class Hardware {
 
         // TODO set encoder offset values
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
                 -Math.toRadians(0));
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
                 -Math.toRadians(0));
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 -Math.toRadians(0));
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,

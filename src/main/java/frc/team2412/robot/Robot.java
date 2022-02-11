@@ -4,23 +4,24 @@
 
 package frc.team2412.robot;
 
-import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.wpilibj.DriverStation;
-import org.frcteam2910.common.math.RigidTransform2;
+import static java.lang.Thread.sleep;
+
 import org.frcteam2910.common.robot.UpdateManager;
 
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
-import frc.team2412.robot.subsystem.TestingSubsystem;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.Logger;
 
-import static java.lang.Thread.sleep;
-
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
@@ -92,6 +93,7 @@ public class Robot extends TimedRobot {
         updateManager.startLoop(5.0e-3);
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        Logger.configureLoggingAndConfig(subsystems, false);
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -136,16 +138,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        Logger.updateEntries();
         CommandScheduler.getInstance().run();
     }
 
     @Override
     public void autonomousInit() {
-        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+
+        // new IntakeExtendCommand(subsystems.intakeSubsystem).schedule();
+        // new IntakeInCommand(subsystems.intakeSubsystem).schedule();
+        // subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
     }
 

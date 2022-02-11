@@ -1,17 +1,26 @@
 package frc.team2412.robot;
 
+import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+
 import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import edu.wpi.first.wpilibj.GenericHID.*;
-
-import org.frcteam2910.common.robot.input.DPadButton.Direction;
-
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-import frc.team2412.robot.commands.climb.*;
+import frc.team2412.robot.commands.climb.AngleClimbHookCommand;
+import frc.team2412.robot.commands.climb.ExtendAngledHookCommand;
+import frc.team2412.robot.commands.climb.ExtendFixedHookCommand;
+import frc.team2412.robot.commands.climb.RetractAngledHookCommand;
+import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
+import frc.team2412.robot.commands.climb.UnangleClimbHookCommand;
 import frc.team2412.robot.commands.drive.DriveCommand;
+import frc.team2412.robot.commands.intake.IntakeExtendCommand;
+import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 
 public class Controls {
     public static class ControlConstants {
@@ -47,6 +56,8 @@ public class Controls {
         buttonAngleDynamicArm = controller.getDPadButton(Direction.RIGHT);
         buttonUnangleDynamicArm = controller.getDPadButton(Direction.LEFT);
         buttonNeutralDynamicArm = controller.getDPadButton(Direction.UP);
+
+        
 
         resetDriveGyro = controller.getBackButton();
 
@@ -91,6 +102,8 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
+        buttonFixedArmDown.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        buttonFixedArmUp.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
 
     }
 

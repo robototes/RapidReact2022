@@ -1,8 +1,16 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.BLUE_CARGO_COLOR;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.MAX_MOTOR_CURRENT;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.RED_CARGO_COLOR;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.teamColor;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.IN;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.OUT;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.STOPPED;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.EXTEND;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.RETRACT;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -14,18 +22,24 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import frc.team2412.robot.util.MultiplexedColorSensor;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
 
     public static class IntakeConstants {
 
+        // public static final ShuffleboardTab tab = Shuffleboard.getTab("Intake Subsystem");
+
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static Color BLUE_CARGO_COLOR = new Color(0, 0, 1);
-        public static Color RED_CARGO_COLOR = new Color(1, 0, 0);
+        public static Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
+        public static Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
 
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
@@ -37,6 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         public static enum IntakeMotorState {
             IN, OUT, STOPPED;
+
         }
 
         public static enum IntakeSolenoidState {
@@ -58,9 +73,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Define Hardware
 
+    @Log.MotorController(tabName = "IntakeSubsystem")
     private final WPI_TalonFX motorOuterAxle;
+    @Log.MotorController(tabName = "IntakeSubsystem")
     private final WPI_TalonFX motorInnerAxle;
 
+    @Log
+    public int value = 1;
+
+    @Log
     private final DoubleSolenoid solenoid;
 
     // private final ColorSensorV3 colorSensor;
@@ -97,8 +118,9 @@ public class IntakeSubsystem extends SubsystemBase {
         this.rightColorSensor = rightColorSensor;
         this.centerColorSensor = centerColorSensor;
 
-        allyColorMatcher.setConfidenceThreshold(0.9);
-        enemyColorMatcher.setConfidenceThreshold(0.9);
+        allyColorMatcher.setConfidenceThreshold(0.7);
+        enemyColorMatcher.setConfidenceThreshold(0.7);
+
 
         // Creates two different color matchers to differentiate between enemy and ally cargo
         if (teamColor == Alliance.Blue) {
@@ -176,6 +198,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /**
      * Returns true if color sensor detects an enemy cargo
      */
+
     private boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
         return enemyColorMatcher.matchColor(colorSensor.getColor()) != null;
     }

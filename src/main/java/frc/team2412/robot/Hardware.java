@@ -136,9 +136,9 @@ public class Hardware {
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new WPI_TalonFX(INTAKE_1);
-            intakeMotor2 = new WPI_TalonFX(INTAKE_2);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
+            intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP, INTAKE_SOLENOID_DOWN);
             if (I2C_MUX_ENABLED) {
                 this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);

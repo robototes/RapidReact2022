@@ -217,6 +217,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
+    public void setFieldOriented(boolean fieldOriented) {
+        isFieldOrientedEntry.setBoolean(fieldOriented);
+    }
+
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);

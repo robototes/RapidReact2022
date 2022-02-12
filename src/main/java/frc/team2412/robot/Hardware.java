@@ -1,14 +1,8 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Hardware.HardwareConstants.*;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-
-import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -17,6 +11,10 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
@@ -67,7 +65,8 @@ public class Hardware {
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
 
         // index can ids are range 40-49
-        public static final int INDEX = 0;
+        public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
+                INDEX_FEEDER_SENSOR = 5;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
@@ -103,7 +102,8 @@ public class Hardware {
     public DoubleSolenoid climbAngle;
 
     // index
-    public WPI_TalonFX indexMotor;
+    public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
+    public MultiplexedColorSensor ingestIndexColorSensor, feederIndexColorSensor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -127,10 +127,12 @@ public class Hardware {
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
                 this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
             }
-
         }
         if (INDEX_ENABLED) {
-            indexMotor = new WPI_TalonFX(INDEX);
+            ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+            feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+            ingestIndexColorSensor = new MultiplexedColorSensor(INDEX_INGEST_SENSOR);
+            feederIndexColorSensor = new MultiplexedColorSensor(INDEX_FEEDER_SENSOR);
         }
         if (SHOOTER_ENABLED) {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);

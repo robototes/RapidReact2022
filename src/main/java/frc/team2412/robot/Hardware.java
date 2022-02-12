@@ -77,7 +77,8 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
+        public static final int INTAKE_INNER_MOTOR = 32, INTAKE_OUTER_MOTOR = 34, INTAKE_SOLENOID_UP = 14,
+                INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
@@ -135,9 +136,9 @@ public class Hardware {
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new WPI_TalonFX(INTAKE_1);
-            intakeMotor2 = new WPI_TalonFX(INTAKE_2);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
+            intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP, INTAKE_SOLENOID_DOWN);
             if (I2C_MUX_ENABLED) {
                 this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);

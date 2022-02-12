@@ -1,23 +1,10 @@
 package frc.team2412.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-public class ShooterFlywheelStartCommand extends CommandBase {
-    private final ShooterSubsystem shooter;
-
+public class ShooterFlywheelStartCommand extends InstantCommand {
     public ShooterFlywheelStartCommand(ShooterSubsystem shooter) {
-        this.shooter = shooter;
-        addRequirements(shooter);
-    }
-
-    @Override
-    public void execute() {
-        shooter.startFlywheel();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
+        super(() -> shooter.startFlywheel(), shooter);
     }
 }

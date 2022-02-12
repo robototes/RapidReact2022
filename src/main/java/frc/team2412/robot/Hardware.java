@@ -70,7 +70,7 @@ public class Hardware {
         public static final int INDEX = 0;
 
         // climb can ids are range 50-59
-        public static final int CLIMB_DYNAMIC = 5, CLIMB_FIXED = 4, CLIMB_ANGLE_UP = 6, CLIMB_ANGLE_DOWN = 7;
+        public static final int CLIMB_DYNAMIC = 50, CLIMB_FIXED = 51, CLIMB_ANGLE_UP = 52, CLIMB_ANGLE_DOWN = 53;
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;

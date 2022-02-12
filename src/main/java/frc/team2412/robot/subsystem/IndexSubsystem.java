@@ -23,9 +23,9 @@ public class IndexSubsystem extends SubsystemBase {
     public static class IndexConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
-        public static double CURRENT_LIMIT_TIMEOUT1 = 5;
-        public static double CURRENT_LIMIT_TIMEOUT2 = 10;
-        public static double CURRENT_LIMIT_TIMEOUT3 = 20;
+        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
+        public static double CURRENT_LIMIT_RESET_AMPS = 10;
+        public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
@@ -196,42 +196,40 @@ public class IndexSubsystem extends SubsystemBase {
         feederBallState = feederSensorHasBallIn();
 
         double ingestCurrent = ingestMotor.getSupplyCurrent();
-        if (ingestCurrent > CURRENT_LIMIT_TIMEOUT3) {
+        if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
             if (ingestOverCurrentStart == 0) {
                 ingestOverCurrentStart = Timer.getFPGATimestamp();
             }
         }
-        if (ingestCurrent > CURRENT_LIMIT_TIMEOUT2) {
+        if (ingestCurrent > CURRENT_LIMIT_RESET_AMPS) {
             if (ingestOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TIMEOUT1) {
+                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
                     ingestMotorStop();
                 }
 
             }
         } else {
             ingestOverCurrentStart = 0;
-
         }
-        Timer.getFPGATimestamp();
+        
 
         double feederCurrent = feederMotor.getSupplyCurrent();
-        if (feederCurrent > 20) {
+        if (feederCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
             if (feederOverCurrentStart == 0) {
                 feederOverCurrentStart = Timer.getFPGATimestamp();
             }
         }
-        if (feederCurrent > 10) {
+        if (feederCurrent > CURRENT_LIMIT_RESET_AMPS) {
             if (feederOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - feederOverCurrentStart > 5) {
+                if (Timer.getFPGATimestamp() - feederOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
                     feederMotorStop();
                 }
 
             }
         } else {
             feederOverCurrentStart = 0;
-
         }
-        Timer.getFPGATimestamp();
+    
     }
 
     // for logging

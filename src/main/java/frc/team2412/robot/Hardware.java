@@ -84,7 +84,8 @@ public class Hardware {
                 INDEX_FEEDER_SENSOR = 5;
 
         // climb can ids are range 50-59
-        public static final int CLIMB_DYNAMIC_MOTOR = 5, CLIMB_FIXED_MOTOR = 6, CLIMB_ANGLE_UP_SOLENOID = 7, CLIMB_ANGLE_DOWN_SOLENOID = 8;
+        public static final int CLIMB_DYNAMIC_MOTOR = 5, CLIMB_FIXED_MOTOR = 6, CLIMB_ANGLE_UP_SOLENOID = 7,
+                CLIMB_ANGLE_DOWN_SOLENOID = 8;
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
@@ -130,9 +131,10 @@ public class Hardware {
             navX = new NavX(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
-            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC);
-            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED);
-            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
+            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
+            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
+                    CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
             intakeMotor1 = new WPI_TalonFX(INTAKE_1);

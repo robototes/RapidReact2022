@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
+
+import frc.team2412.robot.Robot;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ClimbSubsystemState;
 
 public class ClimbSubsystem extends SubsystemBase {
@@ -160,10 +162,14 @@ public class ClimbSubsystem extends SubsystemBase {
         setMotor(ClimbConstants.STOP_SPEED, climbDynamicMotor);
     }
 
-    public void setMotor(double position, WPI_TalonFX motor) {
+    public void setMotor(double value, WPI_TalonFX motor) {
         if (state == ClimbSubsystemState.ENABLED) {
-            System.out.println("motor set: " + position);
-            motor.set(ControlMode.Position, position);
+            System.out.println("motor set: " + value);
+            if (Robot.isSimulation()) {
+                motor.getSimCollection().setIntegratedSensorVelocity((int) value);
+            } else {
+                motor.set(ControlMode.Position, value);
+            }
             // motor.set(ControlMode.PercentOutput, 1); simulator only
         }
     }

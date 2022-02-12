@@ -105,7 +105,7 @@ public class Robot extends TimedRobot implements Loggable {
 
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
-        testModeChooser = new TestModeChooser();
+        testModeChooser = new TestModeChooser(subsystems);
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
@@ -156,7 +156,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void testInit() {
-        testModeChooser.getCommand(subsystems).schedule();
+        testModeChooser.getCommand().schedule();
     }
 
     @Override

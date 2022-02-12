@@ -4,20 +4,21 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
 
 public class TestModeChooser {
 
     private SendableChooser<TestMode> testModeChooser = new SendableChooser<>();
+    private static Subsystems subsystems;
 
-    public TestModeChooser() {
-        testModeChooser.setDefaultOption("Climb test", TestMode.CLIMB);
-        testModeChooser.addOption("Index test", TestMode.INDEX);
-        testModeChooser.addOption("Intake test", TestMode.INTAKE);
-        testModeChooser.addOption("Shooter test", TestMode.SHOOTER);
+    public TestModeChooser(Subsystems subsystems) {
+        this.subsystems = subsystems;
+
+        testModeChooser.setDefaultOption(TestMode.CLIMB.uiName, TestMode.CLIMB);
+        testModeChooser.addOption(TestMode.INDEX.uiName, TestMode.INDEX);
+        testModeChooser.addOption(TestMode.INTAKE.uiName, TestMode.INTAKE);
+        testModeChooser.addOption(TestMode.SHOOTER.uiName, TestMode.SHOOTER);
 
         ShuffleboardTab testTab = Shuffleboard.getTab("Tests");
 
@@ -26,29 +27,23 @@ public class TestModeChooser {
                 .withSize(2, 1);
     }
 
-    public CommandBase getCommand(Subsystems subsystems) {
-        switch (testModeChooser.getSelected()) {
-            case CLIMB:
-                System.out.println("Climb test command chosen");
-                return new ClimbTestCommand(subsystems.climbSubsystem);
-            case INDEX:
-                System.out.println("Index test command chosen");
-                return new IntakeInCommand(subsystems.intakeSubsystem);
-            case INTAKE:
-                System.out.println("Intake test command chosen");
-                // return new IntakeTestCommand(subsystems);
-                return new IntakeInCommand(subsystems.intakeSubsystem);
-            case SHOOTER:
-                System.out.println("Shooter test command chosen");
-                // return new ShooterTestCommand(subsystems);
-                return new SequentialCommandGroup();
-            default:
-                System.out.println("No command chosen");
-                return new SequentialCommandGroup();
-        }
+    public CommandBase getCommand() {
+        return testModeChooser.getSelected().command;
     }
 
-    private enum TestMode {
-        CLIMB, INDEX, INTAKE, SHOOTER
+    public enum TestMode {
+        // Replace with individual testing commands
+        CLIMB(new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"), INDEX(
+                new ClimbTestCommand(subsystems.climbSubsystem),
+                "Index test"), INTAKE(new ClimbTestCommand(subsystems.climbSubsystem),
+                        "Intake test"), SHOOTER(new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
+
+        public final CommandBase command;
+        public final String uiName;
+
+        private TestMode(CommandBase command, String uiName) {
+            this.command = command;
+            this.uiName = uiName;
+        }
     }
 }

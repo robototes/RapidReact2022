@@ -84,7 +84,7 @@ public class Hardware {
                 INDEX_FEEDER_SENSOR = 5;
 
         // climb can ids are range 50-59
-        public static final int CLIMB_DYNAMIC = 50, CLIMB_FIXED = 51, CLIMB_ANGLE_UP = 52, CLIMB_ANGLE_DOWN = 53;
+        public static final int CLIMB_DYNAMIC_MOTOR = 5, CLIMB_FIXED_MOTOR = 6, CLIMB_ANGLE_UP_SOLENOID = 7, CLIMB_ANGLE_DOWN_SOLENOID = 8;
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;

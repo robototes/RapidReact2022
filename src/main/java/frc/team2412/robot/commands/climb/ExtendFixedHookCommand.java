@@ -10,7 +10,6 @@ public class ExtendFixedHookCommand extends CommandBase {
     public ExtendFixedHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-        System.out.println("ExtendFixedHookCommand");
     }
 
     @Override

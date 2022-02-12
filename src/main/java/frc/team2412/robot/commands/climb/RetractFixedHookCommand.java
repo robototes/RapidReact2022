@@ -10,7 +10,6 @@ public class RetractFixedHookCommand extends CommandBase {
     public RetractFixedHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-        System.out.println("RetractFixedHookCommand");
     }
 
     @Override

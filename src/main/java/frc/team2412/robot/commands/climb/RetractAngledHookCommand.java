@@ -10,7 +10,6 @@ public class RetractAngledHookCommand extends CommandBase {
     public RetractAngledHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
-        System.out.println("RetractAngledHookCommand");
     }
 
     @Override

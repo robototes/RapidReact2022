@@ -58,6 +58,11 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                 }
             }
 
+            // Debug code
+            for (ShooterDataDistancePoint point : map.values()) {
+                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getPower());
+            }
+
             return map;
         } catch (IOException err) {
             err.printStackTrace();

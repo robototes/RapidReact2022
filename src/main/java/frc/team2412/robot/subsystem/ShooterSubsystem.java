@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
@@ -53,17 +54,18 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 40, 40, 500);
         public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true, 10, 10, 500);
-        public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
+        public static final InterpolatingTreeMap dataPoints = InterpolatingTreeMap
+                .fromCSV(Filesystem.getDeployDirectory().getPath() + "\\shooterData.csv");
     }
 
     // Instance variables
-    @Log.MotorController
+    @Log.MotorController(name = "Flywheel motor 1")
     private final WPI_TalonFX flywheelMotor1;
-    @Log.MotorController
+    @Log.MotorController(name = "Flywheel motor 2")
     private final WPI_TalonFX flywheelMotor2;
-    @Log.MotorController
+    @Log.MotorController(name = "Turret motor")
     private final WPI_TalonFX turretMotor;
-    // TODO: Check if revrobotics classes are loggable
+    // TODO: Manually log important properties?
     private final CANSparkMax hoodMotor;
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;

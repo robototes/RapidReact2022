@@ -13,7 +13,7 @@ public class IntakeInCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         subsystem.intakeIn();
     }
 

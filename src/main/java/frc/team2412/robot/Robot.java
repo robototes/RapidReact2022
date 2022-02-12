@@ -21,6 +21,8 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.util.TestModeChooser;
+import frc.team2412.robot.subsystem.TestingSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
@@ -46,6 +48,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+    private TestModeChooser testModeChooser;
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -102,6 +105,7 @@ public class Robot extends TimedRobot implements Loggable {
 
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        testModeChooser = new TestModeChooser(subsystems);
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
@@ -152,7 +156,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void testInit() {
-        testingSubsystem = new TestingSubsystem();
+        testModeChooser.getCommand().schedule();
     }
 
     @Override
@@ -176,5 +180,4 @@ public class Robot extends TimedRobot implements Loggable {
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
     }
-
 }

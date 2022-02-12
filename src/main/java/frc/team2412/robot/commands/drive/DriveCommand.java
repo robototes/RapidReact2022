@@ -11,23 +11,27 @@ public class DriveCommand extends CommandBase {
     private final Axis forward;
     private final Axis strafe;
     private final Axis rotation;
+    private final boolean fieldOriented;
 
-    public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation) {
+    public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation,
+            boolean fieldOriented) {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
+        this.fieldOriented = fieldOriented;
 
         addRequirements(drivebaseSubsystem);
     }
 
     @Override
     public void execute() {
-        drivebaseSubsystem.drive(new Vector2(-forward.get(false), strafe.get(false)), rotation.get(false));
+        drivebaseSubsystem.drive(new Vector2(-forward.get(false), strafe.get(false)), rotation.get(false),
+                fieldOriented);
     }
 
     @Override
     public void end(boolean interrupted) {
-        drivebaseSubsystem.drive(Vector2.ZERO, 0.0);
+        drivebaseSubsystem.drive(Vector2.ZERO, 0.0, fieldOriented);
     }
 }

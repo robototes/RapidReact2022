@@ -91,7 +91,8 @@ public class Controls {
                         subsystems.drivebaseSubsystem,
                         controller.getLeftYAxis(),
                         controller.getLeftXAxis(),
-                        controller.getRightXAxis()));
+                        controller.getRightXAxis(),
+                        true)); // this parameter controls if robot drives field oriented
         resetDriveGyro.whenPressed(() -> {
             subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
         });

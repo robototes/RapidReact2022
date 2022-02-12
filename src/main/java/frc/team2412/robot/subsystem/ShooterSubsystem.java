@@ -1,6 +1,9 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
+
+import java.io.File;
+
 import frc.team2412.robot.util.InterpolatingTreeMap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -55,7 +58,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap dataPoints = InterpolatingTreeMap
-                .fromCSV(Filesystem.getDeployDirectory().getPath() + "\\shooterData.csv");
+                .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
     }
 
     // Instance variables

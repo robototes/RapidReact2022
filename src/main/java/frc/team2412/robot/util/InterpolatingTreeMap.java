@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
+import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
+
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
     /**
      * Creates an empty {@link InterpolatingTreeMap}.
@@ -47,15 +49,31 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                             "Line " + line + " has more than 3 items, ignoring extra items");
                 }
 
+                double distance, angle, power;
+
                 try {
-                    ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
-                            Double.parseDouble(items[1]),
-                            Double.parseDouble(items[2]));
-                    map.addDataPoint(point);
+                    distance = Double.parseDouble(items[0]);
+                    angle = Double.parseDouble(items[1]);
+                    power = Double.parseDouble(items[2]);
                 } catch (NumberFormatException err) {
                     System.out.println("Line " + line + " contains a non-numerical value, skipping line");
                     continue;
                 }
+
+                if (distance < 0) {
+                    System.out.println("Warning: Distance " + distance + " is negative");
+                }
+                if (angle < ShooterConstants.MIN_HOOD_ANGLE) {
+                    System.out.println("Warning: Hood angle " + angle + " is less than the min value");
+                }
+                if (angle < ShooterConstants.MAX_HOOD_ANGLE) {
+                    System.out.println("Warning: Hood angle " + angle + " is greater than the max value");
+                }
+                if (power < 0) {
+                    System.out.println("Warning: Flywheel power " + power + " is negative");
+                }
+
+                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, power));
             }
 
             // Debug code

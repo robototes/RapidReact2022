@@ -94,11 +94,13 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *
      * @param key
      *            The distance to get the value from.
+     * @param distanceBias
+     *            A bias of the distance to use
      * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact
      *         match.
      */
-    public ShooterDataDistancePoint getInterpolated(Double key) {
-        key += ShooterConstants.DISTANCE_BIAS;
+    public ShooterDataDistancePoint getInterpolated(Double key, double distanceBias) {
+        key += distanceBias;
 
         ShooterDataDistancePoint value = get(key);
 

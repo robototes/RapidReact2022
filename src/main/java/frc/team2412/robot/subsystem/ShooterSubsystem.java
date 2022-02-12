@@ -36,13 +36,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_DEFAULT_P = 0.01;
         public static final double TURRET_DEFAULT_I = 0;
         public static final double TURRET_DEFAULT_D = 0;
-        public static final double TURRET_ANGLE_BIAS = 0; // Move to subsystem instance field to configure
         public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
         public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = new SupplyCurrentLimitConfiguration(
                 true, 10, 10, 500);
         public static final SupplyCurrentLimitConfiguration turretCurrentLimit = hoodCurrentLimit;
-        public static final double DISTANCE_BIAS = 0; // Move to subsystem instance field to configure
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
     }
 
@@ -56,21 +54,51 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX hoodMotor;
 
-    @Config
-    private double flywheelTestVelocity; // TODO: Make actually show up in shuffleboard
+    private double flywheelTestVelocity;
+
+    @Config(name = "Flywheel test velocity")
+    private void setFlywheelTestVelocity(double newVelocity) {
+        flywheelTestVelocity = newVelocity;
+    }
 
     public double getFlywheelTestVelocity() {
         return flywheelTestVelocity;
     }
 
-    @Config
     private double hoodTestAngle;
+
+    @Config(name = "Hood test angle")
+    private void setHoodTestAngle(double newAngle) {
+        hoodTestAngle = newAngle;
+    }
 
     public double getHoodTestAngle() {
         return hoodTestAngle;
     }
 
-    @Config
+    private double turretAngleBias;
+
+    @Config(name = "Turret angle bias")
+    private void setTurretAngleBias(double newBias) {
+        turretAngleBias = newBias;
+    }
+
+    public double getTurretAngleBias() {
+        return turretAngleBias;
+    }
+
+    private double distanceBias;
+
+    @Config(name = "Distance bias")
+    private void setDistanceBias(double newBias) {
+        distanceBias = newBias;
+    }
+
+    public double getDistanceBias() {
+        return distanceBias;
+    }
+
+    @Config(name = "Flywheel PID")
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d) {
@@ -79,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);
     }
 
-    @Config
+    @Config(name = "Turret PID")
     private void setTurretPID(@Config(name = "turretP", defaultValueNumeric = TURRET_DEFAULT_P) double p,
             @Config(name = "turretI", defaultValueNumeric = TURRET_DEFAULT_I) double i,
             @Config(name = "turretD", defaultValueNumeric = TURRET_DEFAULT_D) double turretD) {

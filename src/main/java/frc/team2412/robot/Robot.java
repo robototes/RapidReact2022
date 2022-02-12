@@ -4,9 +4,10 @@
 
 package frc.team2412.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
-import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -56,6 +57,8 @@ public class Robot extends TimedRobot {
 
     // TODO add other override methods
 
+    public Field2d field = new Field2d();;
+
     @Override
     public void startCompetition() {
         if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
@@ -90,6 +93,10 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+
+        // Create and push Field2d to SmartDashboard.
+        SmartDashboard.putData(field);
+
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
 
@@ -151,12 +158,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
-
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
+    }
+
+    @Override
+    public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
 }

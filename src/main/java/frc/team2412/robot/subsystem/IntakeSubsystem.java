@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -12,7 +13,6 @@ import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
@@ -28,22 +28,16 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
-        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
-
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
 
-        public static final double confidenceThreshold = 0.7;
-
         // Enums
 
         public static enum IntakeMotorState {
             IN, OUT, STOPPED;
-
         }
 
         public static enum IntakeSolenoidState {

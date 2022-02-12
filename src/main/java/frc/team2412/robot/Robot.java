@@ -17,11 +17,13 @@ import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.Logger;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 
 import static java.lang.Thread.sleep;
 
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
@@ -99,6 +101,7 @@ public class Robot extends TimedRobot {
 
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
                 .onCommandInitialize(
@@ -153,6 +156,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        Logger.updateEntries();
         CommandScheduler.getInstance().run();
     }
 

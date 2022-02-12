@@ -175,6 +175,7 @@ public class Robot extends TimedRobot implements Loggable {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
     }
+
     @Override
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();

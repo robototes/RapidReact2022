@@ -3,18 +3,11 @@ package frc.team2412.robot;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import org.frcteam2910.common.math.Rotation2;
-import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-import frc.team2412.robot.commands.climb.AngleClimbHookCommand;
-import frc.team2412.robot.commands.climb.ExtendAngledHookCommand;
-import frc.team2412.robot.commands.climb.ExtendFixedHookCommand;
-import frc.team2412.robot.commands.climb.RetractAngledHookCommand;
-import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
-import frc.team2412.robot.commands.climb.UnangleClimbHookCommand;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;

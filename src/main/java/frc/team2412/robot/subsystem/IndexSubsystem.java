@@ -211,7 +211,6 @@ public class IndexSubsystem extends SubsystemBase {
         } else {
             ingestOverCurrentStart = 0;
         }
-        
 
         double feederCurrent = feederMotor.getSupplyCurrent();
         if (feederCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
@@ -229,7 +228,7 @@ public class IndexSubsystem extends SubsystemBase {
         } else {
             feederOverCurrentStart = 0;
         }
-    
+
     }
 
     // for logging

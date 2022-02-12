@@ -8,6 +8,7 @@ public class ShooterResetEncodersCommand extends CommandBase {
 
     public ShooterResetEncodersCommand(ShooterSubsystem shooter) {
         this.shooter = shooter;
+        addRequirements(shooter);
     }
 
     @Override

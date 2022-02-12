@@ -22,28 +22,26 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double STOP_MOTOR = 0;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
-        public static final double FLYWHEEL_P = 0.01;
-        public static final double FLYWHEEL_I = 0;
-        public static final double FLYWHEEL_D = 0;
+        public static final double FLYWHEEL_DEFAULT_P = 0.01;
+        public static final double FLYWHEEL_DEFAULT_I = 0;
+        public static final double FLYWHEEL_DEFAULT_D = 0;
+        public static final double MAX_HOOD_ANGLE = 40.0;
+        public static final double MIN_HOOD_ANGLE = 5;
+        public static final double HOOD_ANGLE_TOLERANCE = 1;
         public static final double MIN_TURRET_ANGLE = -180;
         public static final double MAX_TURRET_ANGLE = 180;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
         // Placeholder PID constants
-        public static final double TURRET_P = 0.01;
-        public static final double TURRET_I = 0;
-        public static final double TURRET_D = 0;
+        public static final double TURRET_DEFAULT_P = 0.01;
+        public static final double TURRET_DEFAULT_I = 0;
+        public static final double TURRET_DEFAULT_D = 0;
         public static final double TURRET_ANGLE_BIAS = 0; // Move to subsystem instance field to configure
-        public static final double MAX_HOOD_ANGLE = 40.0;
-        public static final double MIN_HOOD_ANGLE = 5;
-        public static final double HOOD_ANGLE_TOLERANCE = 1;
         public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
-                true,
-                40, 40, 500);
-        public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
-                true,
-                10, 10, 500);
-        public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = turretCurrentLimit;
+                true, 40, 40, 500);
+        public static final SupplyCurrentLimitConfiguration hoodCurrentLimit = new SupplyCurrentLimitConfiguration(
+                true, 10, 10, 500);
+        public static final SupplyCurrentLimitConfiguration turretCurrentLimit = hoodCurrentLimit;
         public static final double DISTANCE_BIAS = 0; // Move to subsystem instance field to configure
         public static final InterpolatingTreeMap dataPoints = new InterpolatingTreeMap();
     }
@@ -73,18 +71,18 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Config
-    private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_P) double p,
-            @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_I) double i,
-            @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_D) double d) {
+    private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
+            @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
+            @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d) {
         flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
         flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);
     }
 
     @Config
-    private void setTurretPID(@Config(name = "turretP", defaultValueNumeric = TURRET_P) double p,
-            @Config(name = "turretI", defaultValueNumeric = TURRET_I) double i,
-            @Config(name = "turretD", defaultValueNumeric = TURRET_D) double turretD) {
+    private void setTurretPID(@Config(name = "turretP", defaultValueNumeric = TURRET_DEFAULT_P) double p,
+            @Config(name = "turretI", defaultValueNumeric = TURRET_DEFAULT_I) double i,
+            @Config(name = "turretD", defaultValueNumeric = TURRET_DEFAULT_D) double turretD) {
         turretMotor.config_kP(TURRET_SLOT_ID, p);
         turretMotor.config_kI(TURRET_SLOT_ID, i);
         turretMotor.config_kD(TURRET_SLOT_ID, turretD);
@@ -130,7 +128,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
-        setFlywheelPID(FLYWHEEL_P, FLYWHEEL_I, FLYWHEEL_D);
+        setFlywheelPID(FLYWHEEL_DEFAULT_P, FLYWHEEL_DEFAULT_I, FLYWHEEL_DEFAULT_D);
 
         turretMotor.configFactoryDefault();
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * DEGREES_TO_ENCODER_TICKS);
@@ -140,7 +138,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
-        setTurretPID(TURRET_P, TURRET_I, TURRET_D);
+        setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
         hoodMotor.configFactoryDefault();
         hoodMotor.configForwardSoftLimitThreshold(MAX_HOOD_ANGLE * DEGREES_TO_ENCODER_TICKS);

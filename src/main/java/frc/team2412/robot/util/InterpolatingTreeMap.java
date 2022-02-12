@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
-import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
-
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
     /**
      * Creates an empty {@link InterpolatingTreeMap}.

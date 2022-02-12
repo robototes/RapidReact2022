@@ -66,7 +66,7 @@ public class Hardware {
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
 
         // shooter can ids are range 20-29
-        public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
+        public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
         public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;

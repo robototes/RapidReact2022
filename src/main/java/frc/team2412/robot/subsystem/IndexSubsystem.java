@@ -9,11 +9,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.util.MultiplexedColorSensor;
+import frc.team2412.robot.util.MultiplexedColorSensor;do
 
 public class IndexSubsystem extends SubsystemBase {
 
@@ -22,6 +25,9 @@ public class IndexSubsystem extends SubsystemBase {
     public static class IndexConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
+        public static double CurrentLimit1 = 5;
+        public static double CurrentLimit2 = 10;
+        public static double CurrentLimit3 = 20;
 
         // Index Motor Speeds
 
@@ -53,7 +59,8 @@ public class IndexSubsystem extends SubsystemBase {
     private final WPI_TalonFX feederMotor;
 
     // States
-
+    double  ingestOverCurrentStart = 0;
+    double feederOverCurrentStart = 0;
     private IndexMotorState ingestMotorState;
     private IndexMotorState feederMotorState;
 
@@ -189,6 +196,44 @@ public class IndexSubsystem extends SubsystemBase {
     public void periodic() {
         ingestBallState = ingestSensorHasBallIn();
         feederBallState = feederSensorHasBallIn();
+
+        double ingestCurrent = ingestMotor.getSupplyCurrent();
+        if (ingestCurrent > 20) {
+            if (ingestOverCurrentStart == 0 ){
+                ingestOverCurrentStart = Timer.getFPGATimestamp();
+            } 
+        }
+        if (ingestCurrent > 10) {
+            if (ingestOverCurrentStart > 0) {
+                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > 5) {
+                    ingestMotorStop();
+                }
+
+            } 
+        }else {
+            ingestOverCurrentStart = 0;
+
+        }
+        Timer.getFPGATimestamp();
+        
+        double feederCurrent = feederMotor.getSupplyCurrent();
+        if (feederCurrent > 20) {
+            if (feederOverCurrentStart == 0 ){
+                feederOverCurrentStart = Timer.getFPGATimestamp();
+            } 
+        }
+        if (feederCurrent > 10) {
+            if (feederOverCurrentStart > 0) {
+                if (Timer.getFPGATimestamp() - feederOverCurrentStart > 5) {
+                    feederMotorStop();
+                }
+
+            } 
+        }else {
+            feederOverCurrentStart = 0;
+            
+        }
+        Timer.getFPGATimestamp();
     }
 
     // for logging

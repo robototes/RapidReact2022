@@ -68,7 +68,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     System.out.println("Hood angle " + angle + " is less than the min value, skipping line");
                     continue;
                 }
-                if (angle < ShooterConstants.MAX_HOOD_ANGLE) {
+                if (angle > ShooterConstants.MAX_HOOD_ANGLE) {
                     System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
                     continue;
                 }
@@ -81,10 +81,12 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             }
 
             // Debug code
+            System.out.println("All points:");
             for (ShooterDataDistancePoint point : map.values()) {
                 System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getPower());
             }
 
+            System.out.println("Done deserializing CSV");
             return map;
         } catch (IOException err) {
             err.printStackTrace();

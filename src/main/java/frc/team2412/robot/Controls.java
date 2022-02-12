@@ -103,9 +103,10 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        buttonIntakeExtend.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
-        buttonIntakeRetract.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
-
+        if (INTAKE_ENABLED) {
+            buttonIntakeExtend.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+            buttonIntakeRetract.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        }
     }
 
     public void bindShooterControls() {

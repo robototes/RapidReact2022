@@ -28,14 +28,16 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
-        public static Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
+        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
+        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
 
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
+
+        public static final double confidenceThreshold = 0.7;
 
         // Enums
 
@@ -105,8 +107,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         this.rightColorSensor = rightColorSensor;
         this.centerColorSensor = centerColorSensor;
 
-        allyColorMatcher.setConfidenceThreshold(0.7);
-        enemyColorMatcher.setConfidenceThreshold(0.7);
+        allyColorMatcher.setConfidenceThreshold(confidenceThreshold);
+        enemyColorMatcher.setConfidenceThreshold(confidenceThreshold);
 
         // Creates two different color matchers to differentiate between enemy and ally cargo
         if (teamColor == Alliance.Blue) {

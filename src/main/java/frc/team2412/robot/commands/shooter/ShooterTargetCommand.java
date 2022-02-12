@@ -22,8 +22,9 @@ public class ShooterTargetCommand extends CommandBase {
     @Override
     public void execute() {
         double distance = distanceSupplier.getAsDouble();
-        double yaw = yawSupplier.getAsDouble();
-        ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
+        double yaw = yawSupplier.getAsDouble() + shooter.getTurretAngleBias();
+        ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance,
+                shooter.getDistanceBias());
         shooter.setHoodAngle(shooterData.getAngle());
         shooter.setFlywheelVelocity(shooterData.getPower());
         shooter.updateTurretAngle(yaw);

@@ -3,6 +3,10 @@ package frc.team2412.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -10,17 +14,21 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
-
-import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
+
+        // Color Sensor V3 Constants
+        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
+        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
+        public static final double confidenceThreshold = 0.7;
+
         // drive can ids are range 1-19
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;

@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.Hardware.HardwareConstants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -12,20 +13,20 @@ import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
+import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import frc.team2412.robot.util.MultiplexedColorSensor;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
 
     public static class IntakeConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
-
-        public static Color BLUE_CARGO_COLOR = new Color(0, 0, 1);
-        public static Color RED_CARGO_COLOR = new Color(1, 0, 0);
 
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
@@ -40,12 +41,14 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         public static enum IntakeSolenoidState {
-            EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
+            EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
 
             public final DoubleSolenoid.Value value;
+            public final String state;
 
-            private IntakeSolenoidState(DoubleSolenoid.Value value) {
+            private IntakeSolenoidState(DoubleSolenoid.Value value, String state) {
                 this.value = value;
+                this.state = state;
             }
         }
     }
@@ -58,12 +61,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Define Hardware
 
+    @Log.MotorController(tabName = "IntakeSubsystem")
     private final WPI_TalonFX motorOuterAxle;
+    @Log.MotorController(tabName = "IntakeSubsystem")
     private final WPI_TalonFX motorInnerAxle;
 
+    @Log
     private final DoubleSolenoid solenoid;
-
-    // private final ColorSensorV3 colorSensor;
 
     private final MultiplexedColorSensor leftColorSensor;
     private final MultiplexedColorSensor rightColorSensor;
@@ -97,8 +101,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.rightColorSensor = rightColorSensor;
         this.centerColorSensor = centerColorSensor;
 
-        allyColorMatcher.setConfidenceThreshold(0.9);
-        enemyColorMatcher.setConfidenceThreshold(0.9);
+        allyColorMatcher.setConfidenceThreshold(confidenceThreshold);
+        enemyColorMatcher.setConfidenceThreshold(confidenceThreshold);
 
         // Creates two different color matchers to differentiate between enemy and ally cargo
         if (teamColor == Alliance.Blue) {
@@ -128,7 +132,6 @@ public class IntakeSubsystem extends SubsystemBase {
         if (intakeSolenoidState == EXTEND) {
             motorOuterAxle.set(INTAKE_IN_SPEED);
             motorInnerAxle.set(INTAKE_IN_SPEED);
-
             intakeMotorState = IN;
         }
     }
@@ -140,7 +143,6 @@ public class IntakeSubsystem extends SubsystemBase {
         if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
             motorOuterAxle.set(INTAKE_OUT_SPEED);
             motorInnerAxle.set(INTAKE_OUT_SPEED);
-
             intakeMotorState = OUT;
         }
     }
@@ -151,7 +153,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void intakeStop() {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
-
         intakeMotorState = STOPPED;
     }
 
@@ -160,7 +161,6 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void intakeExtend() {
         intakeSolenoidState = EXTEND;
-
         solenoid.set(EXTEND.value);
     }
 
@@ -176,6 +176,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /**
      * Returns true if color sensor detects an enemy cargo
      */
+
     private boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
         return enemyColorMatcher.matchColor(colorSensor.getColor()) != null;
     }
@@ -183,6 +184,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /**
      * Returns true if any of the color sensors detect an enemy cargo
      */
+    // @Log (hates javaSim without actual color sensor)
     public boolean hasOpposingColorCargo() {
         return (individualHasOpposingColorCargo(leftColorSensor)
                 || individualHasOpposingColorCargo(rightColorSensor)
@@ -196,6 +198,7 @@ public class IntakeSubsystem extends SubsystemBase {
         return allyColorMatcher.matchColor(colorSensor.getColor()) != null;
     }
 
+    // @Log (hates javaSim without actual color sensor)
     public boolean hasMatchingColorCargo() {
         return (individualHasMatchingColorCargo(leftColorSensor)
                 || individualHasMatchingColorCargo(rightColorSensor)

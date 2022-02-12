@@ -1,5 +1,6 @@
 package frc.team2412.robot.commands.index;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -12,15 +13,15 @@ public class IndexTestCommand extends SequentialCommandGroup {
         addRequirements(subsystem);
 
         addCommands(
-                new IndexIngestMotorIn(subsystem),
+                new InstantCommand(() -> subsystem.ingestMotorIn()),
                 new WaitCommand(1),
-                new IndexIngestMotorOut(subsystem),
+                new InstantCommand(() -> subsystem.ingestMotorOut()),
                 new WaitCommand(1),
-                new IndexIngestMotorStop(subsystem),
-                new IndexFeederMotorIn(subsystem),
+                new InstantCommand(() -> subsystem.ingestMotorStop()),
+                new InstantCommand(() -> subsystem.feederMotorIn()),
                 new WaitCommand(1),
-                new IndexFeederMotorOut(subsystem),
+                new InstantCommand(() -> subsystem.feederMotorOut()),
                 new WaitCommand(1),
-                new IndexFeederMotorStop(subsystem));
+                new InstantCommand(() -> subsystem.feederMotorStop()));
     }
 }

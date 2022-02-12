@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-public class DiagnosticEverythingCommand extends SequentialCommandGroup {
-    public DiagnosticEverythingCommand(
+public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
+    public DiagnosticRobotCommandGroup(
             IntakeSubsystem intakeSubsystem,
             ShooterSubsystem shooterSubsystem,
             IndexSubsystem indexSubsystem,

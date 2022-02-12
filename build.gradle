@@ -20,7 +20,7 @@ spotless {
     java {
         targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         eclipse().configFile("eclipse-formatter.xml")
-
+        toggleOffOn()
         removeUnusedImports()
         endWithNewline()
         indentWithSpaces()

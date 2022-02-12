@@ -33,10 +33,12 @@ public class TestModeChooser {
 
     public enum TestMode {
         // Replace with individual testing commands
-        CLIMB(new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"), INDEX(
-                new ClimbTestCommand(subsystems.climbSubsystem),
-                "Index test"), INTAKE(new ClimbTestCommand(subsystems.climbSubsystem),
-                        "Intake test"), SHOOTER(new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
+        // spotless:off
+        CLIMB(new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"), 
+        INDEX(new ClimbTestCommand(subsystems.climbSubsystem), "Index test"), 
+        INTAKE(new ClimbTestCommand(subsystems.climbSubsystem), "Intake test"), 
+        SHOOTER(new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
+        // spotless:on
 
         public final CommandBase command;
         public final String uiName;

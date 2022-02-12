@@ -68,10 +68,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final WPI_TalonFX flywheelMotor2;
     @Log.MotorController(name = "Turret motor")
     private final WPI_TalonFX turretMotor;
-    // TODO: Manually log important properties?
     private final CANSparkMax hoodMotor;
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
+
+    @Log(name = "Hood motor speed")
+    private double getHoodMotorSpeed() {
+        return hoodMotor.get();
+    }
 
     private double flywheelTestVelocity;
 

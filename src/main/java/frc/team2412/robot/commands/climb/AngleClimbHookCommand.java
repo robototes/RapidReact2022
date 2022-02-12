@@ -11,6 +11,7 @@ public class AngleClimbHookCommand extends CommandBase {
     public AngleClimbHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
+        System.out.println("AngleCimbHookCommand");
     }
 
     @Override

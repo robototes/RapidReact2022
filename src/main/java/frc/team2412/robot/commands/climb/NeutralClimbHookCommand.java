@@ -12,6 +12,7 @@ public class NeutralClimbHookCommand extends CommandBase {
     public NeutralClimbHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
+        System.out.println("NeutralClimbHookCommand");
     }
 
     @Override

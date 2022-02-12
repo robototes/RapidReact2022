@@ -16,6 +16,7 @@ import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.util.TestModeChooser;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 
 import static java.lang.Thread.sleep;
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+    private TestModeChooser testModeChooser;
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -92,6 +94,7 @@ public class Robot extends TimedRobot {
         updateManager.startLoop(5.0e-3);
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        testModeChooser = new TestModeChooser();
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -131,7 +134,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        testingSubsystem = new TestingSubsystem();
+        testModeChooser.getCommand(subsystems).schedule();
     }
 
     @Override

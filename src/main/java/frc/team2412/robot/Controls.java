@@ -6,10 +6,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
-import org.frcteam2910.common.robot.input.DPadButton.Direction;
-
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-import frc.team2412.robot.commands.climb.*;
 import frc.team2412.robot.commands.drive.DriveCommand;
 
 public class Controls {
@@ -20,15 +17,11 @@ public class Controls {
     public XboxController controller;
 
     // controls
-
-    // climb
-    public final Button buttonFixedArmUp;
-    public final Button buttonFixedArmDown;
-    public final Button buttonDynamicArmUp;
-    public final Button buttonDynamicArmDown;
-    public final Button buttonAngleDynamicArm;
-    public final Button buttonUnangleDynamicArm;
-    public final Button buttonNeutralDynamicArm;
+    public final Button climbFixedArmUp;
+    public final Button climbDynamicArmUp;
+    // public final Button climbFixedArmDown;
+    // public final Button climbDynamicArmDown;
+    // public final Button climbRungMovement;
 
     // drive
     public final Button resetDriveGyro;
@@ -39,13 +32,8 @@ public class Controls {
         subsystems = s;
         controller = new XboxController(ControlConstants.CONTROLLER_PORT);
 
-        buttonFixedArmUp = controller.getAButton();
-        buttonFixedArmDown = controller.getBButton();
-        buttonDynamicArmUp = controller.getXButton();
-        buttonDynamicArmDown = controller.getYButton();
-        buttonAngleDynamicArm = controller.getDPadButton(Direction.RIGHT);
-        buttonUnangleDynamicArm = controller.getDPadButton(Direction.LEFT);
-        buttonNeutralDynamicArm = controller.getDPadButton(Direction.UP);
+        climbFixedArmUp = controller.getAButton();
+        climbDynamicArmUp = controller.getAButton();
 
         resetDriveGyro = controller.getBackButton();
 
@@ -64,12 +52,7 @@ public class Controls {
     // TODO these yay
 
     public void bindClimbControls() {
-        buttonFixedArmUp.whenPressed(new ExtendFixedHookCommand(subsystems.climbSubsystem));
-        buttonFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
-        buttonDynamicArmUp.whenPressed(new ExtendAngledHookCommand(subsystems.climbSubsystem));
-        buttonDynamicArmDown.whenPressed(new RetractAngledHookCommand(subsystems.climbSubsystem));
-        buttonAngleDynamicArm.whenPressed(new AngleClimbHookCommand(subsystems.climbSubsystem));
-        buttonUnangleDynamicArm.whenPressed(new UnangleClimbHookCommand(subsystems.climbSubsystem));
+
     }
 
     public void bindDriveControls() {

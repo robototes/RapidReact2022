@@ -11,6 +11,7 @@ public class UnangleClimbHookCommand extends CommandBase {
     public UnangleClimbHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
+        System.out.println("UnangleCimbHookCommand");
     }
 
     @Override

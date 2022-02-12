@@ -10,6 +10,12 @@ public class ExtendAngledHookCommand extends CommandBase {
     public ExtendAngledHookCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
+        System.out.println("ExtendAngledHookCommand");
+    }
+
+    @Override
+    public void initialize() {
+        subsystem.extendAngledArm();
     }
 
     @Override

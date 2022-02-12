@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,15 +19,15 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
-        public static double TEST_SPEED_EXTEND = 0.7;
-        public static double TEST_SPEED_RETRACT = -0.5;
+        public static final double TEST_SPEED_EXTEND = 0.7;
+        public static final double TEST_SPEED_RETRACT = -0.5;
         public static final double STOP_SPEED = 0;
-        public static double MAX_ENCODER_TICKS = 1000;
-        public static double MIN_ENCODER_TICKS = 0.8;
-        public static double RUNG_DISTANCE = 24; // inches
-        public static double GEARBOX_REDUCTION = 10.61;
-        public static double ENCODER_TICKS_PER_REVOLUTION = 2048;
-        public static double ARM_REACH_DISTANCE = Math.PI * RUNG_DISTANCE * GEARBOX_REDUCTION
+        public static final double MAX_ENCODER_TICKS = 1000;
+        public static final double MIN_ENCODER_TICKS = 0.8;
+        public static final double RUNG_DISTANCE = 24; // inches
+        public static final double GEARBOX_REDUCTION = 10.61;
+        public static final double ENCODER_TICKS_PER_REVOLUTION = 2048;
+        public static final double ARM_REACH_DISTANCE = Math.PI * RUNG_DISTANCE * GEARBOX_REDUCTION
                 * ENCODER_TICKS_PER_REVOLUTION;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -60,6 +61,8 @@ public class ClimbSubsystem extends SubsystemBase {
     private final NetworkTableEntry rungDistance;
     private final NetworkTableEntry gearboxReduction;
     private final NetworkTableEntry encoderTicksPerRevolution;
+
+    private double lastUpdatedTime = Timer.getFPGATimestamp();
 
     public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle,
             boolean enabled) {
@@ -181,4 +184,15 @@ public class ClimbSubsystem extends SubsystemBase {
         return climbDynamicMotor.getSelectedSensorPosition() <= minEncoderTicks.getValue().getDouble();
     }
 
+    @Override
+    public void simulationPeriodic() {
+        // max speed 6000 rpm, 2048 ticks per rotation
+        double timeNow = Timer.getFPGATimestamp();
+        double timeElapsed = timeNow - lastUpdatedTime;
+        double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
+        double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
+        climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
+        climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed / timeElapsed));
+        lastUpdatedTime = timeNow;
+    }
 }

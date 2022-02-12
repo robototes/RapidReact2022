@@ -20,7 +20,7 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
             IndexSubsystem indexSubsystem,
             ClimbSubsystem climbSubsystem) {
         /*
-         * The Shuffleboard having issue of 
+         * The Shuffleboard having issue of
          * cannot properly display more than 3 rows of entry in one column
          */
         indexStatus = tab.add("Index Status", "Waiting").withPosition(0, 0).withSize(1, 1).getEntry();

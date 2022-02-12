@@ -4,7 +4,14 @@
 
 package frc.team2412.robot;
 
+
 import static java.lang.Thread.sleep;
+
+
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -57,6 +64,8 @@ public class Robot extends TimedRobot implements Loggable {
 
     // TODO add other override methods
 
+    public Field2d field = new Field2d();;
+
     @Override
     public void startCompetition() {
         if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
@@ -91,9 +100,23 @@ public class Robot extends TimedRobot implements Loggable {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
+
+        // Create and push Field2d to SmartDashboard.
+        SmartDashboard.putData(field);
+
         autonomousChooser = new AutonomousChooser(
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         Logger.configureLoggingAndConfig(subsystems, false);
+
+        CommandScheduler.getInstance()
+                .onCommandInitialize(
+                        command -> System.out.println("Command initialized: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandInterrupt(
+                        command -> System.out.println("Command interrupted: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandFinish(
+                        command -> System.out.println("Command finished: " + command.getName()));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -145,14 +168,17 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        // new IntakeExtendCommand(subsystems.intakeSubsystem).schedule();
-        // new IntakeInCommand(subsystems.intakeSubsystem).schedule();
         // subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
+    }
+
+    @Override
+    public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
 }

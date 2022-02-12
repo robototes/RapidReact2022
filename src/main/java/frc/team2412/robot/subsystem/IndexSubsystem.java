@@ -25,9 +25,9 @@ public class IndexSubsystem extends SubsystemBase {
     public static class IndexConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
-        public static double CurrentLimit1 = 5;
-        public static double CurrentLimit2 = 10;
-        public static double CurrentLimit3 = 20;
+        public static double CURRENT_LIMIT_TIMEOUT1 = 5;
+        public static double CURRENT_LIMIT_TIMEOUT2 = 10;
+        public static double CURRENT_LIMIT_TIMEOUT3 = 20;
 
         // Index Motor Speeds
 
@@ -198,14 +198,14 @@ public class IndexSubsystem extends SubsystemBase {
         feederBallState = feederSensorHasBallIn();
 
         double ingestCurrent = ingestMotor.getSupplyCurrent();
-        if (ingestCurrent > 20) {
+        if (ingestCurrent > CURRENT_LIMIT_TIMEOUT3) {
             if (ingestOverCurrentStart == 0 ){
                 ingestOverCurrentStart = Timer.getFPGATimestamp();
             } 
         }
-        if (ingestCurrent > 10) {
+        if (ingestCurrent > CURRENT_LIMIT_TIMEOUT2) {
             if (ingestOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > 5) {
+                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TIMEOUT1) {
                     ingestMotorStop();
                 }
 

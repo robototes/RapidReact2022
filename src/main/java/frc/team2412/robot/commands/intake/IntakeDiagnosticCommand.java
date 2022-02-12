@@ -11,9 +11,9 @@ public class IntakeDiagnosticCommand extends SequentialCommandGroup {
     public IntakeDiagnosticCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
         addCommands(new IntakeExtendCommand(subsystem), new WaitCommand(0.5),
-                    new IntakeInCommand(subsystem), new WaitCommand(0.5),
-                    new IntakeOutCommand(subsystem), new WaitCommand(0.5),
-                    new IntakeStopCommand(subsystem), new WaitCommand(0.5),
-                    new IntakeRetractCommand(subsystem));
+                new IntakeInCommand(subsystem), new WaitCommand(0.5),
+                new IntakeOutCommand(subsystem), new WaitCommand(0.5),
+                new IntakeStopCommand(subsystem), new WaitCommand(0.5),
+                new IntakeRetractCommand(subsystem));
     }
 }

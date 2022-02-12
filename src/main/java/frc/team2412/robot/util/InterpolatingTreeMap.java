@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
 
+import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
+
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
     /**
      * Creates an empty {@link InterpolatingTreeMap}.
@@ -47,17 +49,44 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                             "Line " + line + " has more than 3 items, ignoring extra items");
                 }
 
+                double distance, angle, power;
+
                 try {
-                    ShooterDataDistancePoint point = new ShooterDataDistancePoint(Double.parseDouble(items[0]),
-                            Double.parseDouble(items[1]),
-                            Double.parseDouble(items[2]));
-                    map.addDataPoint(point);
+                    distance = Double.parseDouble(items[0]);
+                    angle = Double.parseDouble(items[1]);
+                    power = Double.parseDouble(items[2]);
                 } catch (NumberFormatException err) {
                     System.out.println("Line " + line + " contains a non-numerical value, skipping line");
                     continue;
                 }
+
+                if (distance < 0) {
+                    System.out.println("Distance " + distance + " is negative, skipping line");
+                    continue;
+                }
+                if (angle < ShooterConstants.MIN_HOOD_ANGLE) {
+                    System.out.println("Hood angle " + angle + " is less than the min value, skipping line");
+                    continue;
+                }
+                if (angle > ShooterConstants.MAX_HOOD_ANGLE) {
+                    System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
+                    continue;
+                }
+                if (power < 0) {
+                    System.out.println("Flywheel power " + power + " is negative, skipping line");
+                    continue;
+                }
+
+                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, power));
             }
 
+            // Debug code
+            System.out.println("All points:");
+            for (ShooterDataDistancePoint point : map.values()) {
+                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getPower());
+            }
+
+            System.out.println("Done deserializing CSV");
             return map;
         } catch (IOException err) {
             err.printStackTrace();
@@ -92,14 +121,10 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      *
      * @param key
      *            The distance to get the value from.
-     * @param distanceBias
-     *            A bias of the distance to use
      * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact
      *         match.
      */
-    public ShooterDataDistancePoint getInterpolated(Double key, double distanceBias) {
-        key += distanceBias;
-
+    public ShooterDataDistancePoint getInterpolated(Double key) {
         ShooterDataDistancePoint value = get(key);
 
         // Check if we have exact value

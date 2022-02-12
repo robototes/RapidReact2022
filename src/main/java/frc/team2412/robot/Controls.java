@@ -1,10 +1,6 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
@@ -107,8 +103,8 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        buttonIntakeExtend.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
-        buttonIntakeRetract.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        buttonIntakeExtend.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        buttonIntakeRetract.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
 
     }
 

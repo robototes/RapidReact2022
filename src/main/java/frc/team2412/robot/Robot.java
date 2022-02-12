@@ -6,16 +6,14 @@ package frc.team2412.robot;
 
 import static java.lang.Thread.sleep;
 
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.wpilibj.DriverStation;
-
+import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
@@ -166,7 +164,7 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        // subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {

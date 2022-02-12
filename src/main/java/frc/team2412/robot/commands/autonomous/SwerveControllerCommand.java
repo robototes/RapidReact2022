@@ -83,7 +83,7 @@ public class SwerveControllerCommand extends CommandBase {
 
         controller = new HolonomicDriveController(
                 requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
-                requireNonNullParam(yController, "xController", "SwerveControllerCommand"),
+                requireNonNullParam(yController, "yController", "SwerveControllerCommand"),
                 requireNonNullParam(thetaController, "thetaController", "SwerveControllerCommand"));
 
         this.outputModuleStates = requireNonNullParam(outputModuleStates, "frontLeftOutput", "SwerveControllerCommand");

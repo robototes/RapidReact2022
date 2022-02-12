@@ -64,7 +64,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 0.000000005, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
+        exampleTrajectory.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                 exampleTrajectory,
                 drivebaseSubsystem::getPoseAsPoseMeters, // Functional interface to feed supplier
@@ -77,14 +77,6 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);
 
-        // Reset odometry to the starting pose of the trajectory.
-        drivebaseSubsystem.resetPose(exampleTrajectory.getInitialPose());
-
-        // Run path following command, then stop at the end.
-        // have to fix this later, the parameters are just placeholders to get program
-        // to build
-        // first paratmer used to be that we ocmented out
-        // GeoConvertor.translation2dToVector2(exampleTrajectory.getInitialPose().getTranslation())
         return swerveControllerCommand;
     }
 

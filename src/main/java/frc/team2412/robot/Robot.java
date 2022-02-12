@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
 
     // TODO add other override methods
 
-    public Field2d field;
+    public Field2d field = new Field2d();;
 
     @Override
     public void startCompetition() {
@@ -95,7 +95,6 @@ public class Robot extends TimedRobot {
         updateManager.startLoop(5.0e-3);
 
         // Create and push Field2d to SmartDashboard.
-        field = new Field2d();
         SmartDashboard.putData(field);
 
         autonomousChooser = new AutonomousChooser(

@@ -86,8 +86,9 @@ public class Hardware {
          * https://docs.wpilib.org/en/stable/docs/software/can-devices/power-distribution-module.html
          * The CAN ID for CTRE should be 0 or 1 for Rev
          * But in our case is neither which need be figure out
+         * Right now the value just a placeholder, change to 0 or 1 will not work
          */
-        public static final int PDP_CAN_ID = null;
+        public static final int PDP_CAN_ID = 0;
         public static final ModuleType PDP_MODULE_TYPE = ModuleType.kCTRE;
     }
 

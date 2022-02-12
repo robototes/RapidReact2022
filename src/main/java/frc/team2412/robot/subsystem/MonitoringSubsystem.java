@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class MonitoringSubsystem extends SubsystemBase {
-    ShuffleboardTab tab = Shuffleboard.getTab("Power Monitoring");
-    NetworkTableEntry totalPower;
-    PowerDistribution powerDistributionPanel;
+    private ShuffleboardTab tab = Shuffleboard.getTab("Power Monitoring");
+    private NetworkTableEntry totalPower;
+    private PowerDistribution powerDistributionPanel;
 
     public MonitoringSubsystem(PowerDistribution powerDistributionPanel) {
         this.powerDistributionPanel = powerDistributionPanel;
@@ -20,7 +20,10 @@ public class MonitoringSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         totalPower.setDouble(powerDistributionPanel.getTotalPower());
-        // System.out.println("Module Type: " + powerDistributionPanel.getType());
+        /*
+         * Shouldn't use System.out.println()
+         * Will change to Shuffleboard later
+         */
         System.out.println("Temperature: " + powerDistributionPanel.getTemperature());
         System.out.println("Total Power: " + powerDistributionPanel.getTotalPower());
         System.out.println("Total Current: " + powerDistributionPanel.getTotalCurrent());

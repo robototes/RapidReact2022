@@ -18,6 +18,7 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
+import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.*;
 
 import java.util.Optional;
@@ -72,7 +73,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private final Gyroscope gyroscope;
+    private final NavX gyroscope;
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")
@@ -96,7 +97,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry isFieldOrientedEntry;
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
+    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, NavX g) {
         synchronized (sensorLock) {
             gyroscope = g;
             gyroscope.setInverted(false);
@@ -151,6 +152,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
+
+        defaultX = gyroscope.getAxis(NavX.Axis.ROLL);
+        defaultY = gyroscope.getAxis(NavX.Axis.PITCH);
     }
 
     public RigidTransform2 getPose() {
@@ -171,9 +175,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
+    public static final double P = 0.01, THRESHOLD = 5;
+
+    private double defaultX, defaultY;
+
     public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
+            double xAdj = gyroscope.getAxis(NavX.Axis.ROLL)-defaultX, yAdj = gyroscope.getAxis(NavX.Axis.PITCH)-defaultY;
+            driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
+                    .add(Math.abs(xAdj) > THRESHOLD ? xAdj*P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj*P : 0)
+                    , rotationalVelocity, false);
         }
     }
 
@@ -189,6 +200,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             gyroscope.setAdjustmentAngle(
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
+            defaultX = gyroscope.getAxis(NavX.Axis.ROLL);
+            defaultY = gyroscope.getAxis(NavX.Axis.PITCH);
         }
     }
 

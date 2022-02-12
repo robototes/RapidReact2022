@@ -1,26 +1,34 @@
 package frc.team2412.robot.util;
 
-import kotlin.collections.SetsKt;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.XboxController;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+
+
+@SuppressWarnings("unused")
 public class SwitchableController<T, U extends Controller> {
     private final Map<T, OptionalController<U>> controllers;
     private T choice;
     public SwitchableController(Map<T, U> map){
-        this(map, null);
+        this(null, map);
     }
-    public SwitchableController(Map<T, U> map, T start){
+    public SwitchableController(T start, Map<T, U> map){
         choice = start;
         controllers = new LinkedHashMap<>();
         map.forEach((a, b) -> controllers.put(a, new OptionalController<>(b)));
     }
+    @SafeVarargs
+    public SwitchableController(Map.Entry<T, U>... args){
+        this(Map.ofEntries(args));
+    }
+    @SafeVarargs
+    public SwitchableController(T start, Map.Entry<T, U>... args){
+        this(start, Map.ofEntries(args));
+    }
+
     public T getChoice(){
         return choice;
     }
@@ -50,21 +58,26 @@ public class SwitchableController<T, U extends Controller> {
     }
 
 
-    static{
-        Controller a, b, c;
+    public enum Controllers {
+        PRIMARY, SECONDARY, TERTIARY, BACKUP, DRIVER, CODRIVER, DEBUG, TEST;
 
-        SwitchableController<Integer, XboxController> s = new SwitchableController<>(Map.of(
-                0, new XboxController(0),
-                1, new XboxController(1),
-                2, new XboxController(2)));
-
-        a=s.getController(0);
-        b=s.getController(1);
-        c=s.getController(2);
-
-        s.activate(0);
-
-
+        public Map.Entry<Controllers, XboxController> on(int port){
+            return SwitchableController.on(this, port);
+        }
     }
 
+    public static <T extends Enum<T>> Map.Entry<T, XboxController> on(T num, int port){
+        return new AbstractMap.SimpleEntry<>(num, new XboxController(port));
+    }
+
+
+    public static SwitchableController<Integer, XboxController> of(int... args){
+        Map<Integer, XboxController> controllerMap = new LinkedHashMap<>();
+        for(int i : args){
+            controllerMap.put(i, new XboxController(i));
+        }
+        return new SwitchableController<>(controllerMap);
+    }
+
+ 
 }

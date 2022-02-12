@@ -270,7 +270,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setHoodAngle(double degrees) {
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
-        hoodPID.setReference(degrees / HOOD_GEAR_RATIO, CANSparkMax.ControlType.kPosition);
+        hoodPID.setReference(degrees, CANSparkMax.ControlType.kPosition);
     }
 
     /**

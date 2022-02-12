@@ -75,7 +75,7 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
+        public static final int INTAKE_1 = 32, INTAKE_2 = 34, INTAKE_UP = 36, INTAKE_DOWN = 38;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,

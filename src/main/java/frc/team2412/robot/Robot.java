@@ -24,6 +24,10 @@ import frc.team2412.robot.util.AutonomousTrajectories;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
+import frc.team2412.robot.subsystem.TestingSubsystem;
+
+import static java.lang.Thread.sleep;
+
 public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff

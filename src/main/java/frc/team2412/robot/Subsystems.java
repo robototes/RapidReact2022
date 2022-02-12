@@ -4,7 +4,6 @@ import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Subsystems implements Loggable {

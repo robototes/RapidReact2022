@@ -16,6 +16,6 @@ public class DiagnosticIntakeCommandGroup extends SequentialCommandGroup {
                 new IntakeOutCommand(intakeSubsystem), new WaitCommand(5),
                 new IntakeStopCommand(intakeSubsystem), new WaitCommand(5),
                 new IntakeExtendCommand(intakeSubsystem), new WaitCommand(5),
-                new IntakeRetractCommand(intakeSubsystem), new WaitCommand(5));
+                new IntakeRetractCommand(intakeSubsystem));
     }
 }

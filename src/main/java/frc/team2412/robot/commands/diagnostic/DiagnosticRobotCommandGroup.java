@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
@@ -32,12 +33,15 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
                 new InstantCommand(() -> intakeStatus.setString("In Progress")),
                 new DiagnosticIntakeCommandGroup(intakeSubsystem),
                 new InstantCommand(() -> intakeStatus.setString("Finished")),
+                new WaitCommand(5),
                 new InstantCommand(() -> shooterStatus.setString("In Progress")),
                 new DiagnosticShooterCommandGroup(shooterSubsystem),
                 new InstantCommand(() -> shooterStatus.setString("Finished")),
+                new WaitCommand(5),
                 new InstantCommand(() -> indexStatus.setString("In Progress")),
                 new DiagnosticIndexCommandGroup(indexSubsystem),
                 new InstantCommand(() -> indexStatus.setString("Finished")),
+                new WaitCommand(5),
                 new InstantCommand(() -> climbStatus.setString("In Progress")),
                 new DiagnosticClimbCommandGroup(climbSubsystem),
                 new InstantCommand(() -> climbStatus.setString("Finished")));

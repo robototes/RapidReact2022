@@ -55,6 +55,11 @@ public class Hardware {
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
                 -Math.toRadians(0));
 
+        public static final double MODULE_MAX_RPM = 6000.0;
+        public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio().getConfiguration()
+                .getWheelDiameter() * Math.PI *
+                FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM / 60.0;
+
         public static final SPI.Port GYRO_PORT = SPI.Port.kMXP;
 
         // cameras

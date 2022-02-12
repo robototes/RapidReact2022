@@ -2,13 +2,18 @@ package frc.team2412.robot.subsystem;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -33,7 +38,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.042746,
+                0.072746,
                 0.0032181,
                 0.30764);
 
@@ -42,7 +47,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
                 new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
-                new CentripetalAccelerationConstraint(3.0) // old value was 15 * 12.0
+                new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
+                // in inches
+                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
+                new MaxAccelerationConstraint(3),
+                new CentripetalAccelerationConstraint(15 * 12.0)
         };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
@@ -50,8 +60,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.2, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(0.1, 0.0, 0.0),
+            new PidConstants(0.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -69,6 +79,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     );
 
     private final SwerveModule[] modules;
+    private final double moduleMaxVelocityMetersPerSec;
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
@@ -94,17 +105,23 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
+    private final NetworkTableEntry module1, module2, module3, module4;
     private final NetworkTableEntry isFieldOrientedEntry;
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g) {
+    private final Field2d field = new Field2d();
+
+    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g,
+            double moduleMaxVelocityMetersPerSec) {
         synchronized (sensorLock) {
             gyroscope = g;
             gyroscope.setInverted(false);
+            SmartDashboard.putData("Field", field);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
         modules = new SwerveModule[] { fl, fr, bl, br };
+        this.moduleMaxVelocityMetersPerSec = moduleMaxVelocityMetersPerSec;
 
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)
@@ -149,6 +166,22 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+        module1 = tab.add("Module 1", 0.0)
+                .withPosition(1, 0)
+                .withSize(1, 1)
+                .getEntry();
+        module2 = tab.add("Module 2", 0.0)
+                .withPosition(1, 1)
+                .withSize(1, 1)
+                .getEntry();
+        module3 = tab.add("Module 3", 0.0)
+                .withPosition(1, 2)
+                .withSize(1, 1)
+                .getEntry();
+        module4 = tab.add("Module 4", 0.0)
+                .withPosition(1, 3)
+                .withSize(1, 1)
+                .getEntry();
 
         isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
     }
@@ -156,6 +189,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public RigidTransform2 getPose() {
         synchronized (kinematicsLock) {
             return pose;
+        }
+    }
+
+    public Pose2d getPoseAsPoseMeters() {
+        synchronized (kinematicsLock) {
+            return GeoConvertor.rigidInchesToPoseMeters(pose);
         }
     }
 
@@ -171,9 +210,21 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+        isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
+        }
+    }
+
+    public void setFieldOriented(boolean fieldOriented) {
+        isFieldOrientedEntry.setBoolean(fieldOriented);
+    }
+
+    public void resetPose(Pose2d pose) {
+        synchronized (kinematicsLock) {
+            this.pose = GeoConvertor.poseToRigid(pose);
+            swerveOdometry.resetPose(this.pose);
         }
     }
 
@@ -230,7 +281,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    private void updateModules(HolonomicDriveSignal driveSignal, double dt) {
+    public void updateModules(HolonomicDriveSignal driveSignal) {
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
@@ -249,6 +300,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         for (int i = 0; i < moduleOutputs.length; i++) {
             var module = modules[i];
             module.set(moduleOutputs[i].length * 12.0, moduleOutputs[i].getAngle().toRadians());
+        }
+    }
+
+    public void updateModules(ChassisSpeeds chassisSpeeds) {
+        HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
+                new Vector2(
+                        (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
+                        (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
+                chassisSpeeds.omegaRadiansPerSecond, true);
+
+        synchronized (stateLock) {
+            this.driveSignal = holonomicDriveSignal;
         }
     }
 
@@ -283,16 +346,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 driveSignal = this.driveSignal;
             }
         }
-
-        updateModules(driveSignal, dt);
+        updateModules(driveSignal);
     }
 
     @Override
     public void periodic() {
-        RigidTransform2 pose = getPose();
-        odometryXEntry.setDouble(pose.translation.x);
-        odometryYEntry.setDouble(pose.translation.y);
-        odometryAngleEntry.setDouble(getPose().rotation.toDegrees());
+        Pose2d pose = getPoseAsPoseMeters();
+        odometryXEntry.setDouble(pose.getX());
+        odometryYEntry.setDouble(pose.getY());
+        odometryAngleEntry.setDouble(pose.getRotation().getDegrees());
+        // System.out.println(pose);
+        field.setRobotPose(pose);
+
     }
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {

@@ -61,16 +61,20 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                 }
 
                 if (distance < 0) {
-                    System.out.println("Warning: Distance " + distance + " is negative");
+                    System.out.println("Distance " + distance + " is negative, skipping line");
+                    continue;
                 }
                 if (angle < ShooterConstants.MIN_HOOD_ANGLE) {
-                    System.out.println("Warning: Hood angle " + angle + " is less than the min value");
+                    System.out.println("Hood angle " + angle + " is less than the min value, skipping line");
+                    continue;
                 }
                 if (angle < ShooterConstants.MAX_HOOD_ANGLE) {
-                    System.out.println("Warning: Hood angle " + angle + " is greater than the max value");
+                    System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
+                    continue;
                 }
                 if (power < 0) {
-                    System.out.println("Warning: Flywheel power " + power + " is negative");
+                    System.out.println("Flywheel power " + power + " is negative, skipping line");
+                    continue;
                 }
 
                 map.addDataPoint(new ShooterDataDistancePoint(distance, angle, power));

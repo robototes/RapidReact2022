@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,6 +23,9 @@ public class IndexSubsystem extends SubsystemBase {
     public static class IndexConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
+        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
+        public static double CURRENT_LIMIT_RESET_AMPS = 10;
+        public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
@@ -53,7 +57,8 @@ public class IndexSubsystem extends SubsystemBase {
     private final WPI_TalonFX feederMotor;
 
     // States
-
+    double ingestOverCurrentStart = 0;
+    double feederOverCurrentStart = 0;
     private IndexMotorState ingestMotorState;
     private IndexMotorState feederMotorState;
 
@@ -189,6 +194,41 @@ public class IndexSubsystem extends SubsystemBase {
     public void periodic() {
         ingestBallState = ingestSensorHasBallIn();
         feederBallState = feederSensorHasBallIn();
+
+        double ingestCurrent = ingestMotor.getSupplyCurrent();
+        if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
+            if (ingestOverCurrentStart == 0) {
+                ingestOverCurrentStart = Timer.getFPGATimestamp();
+            }
+        }
+        if (ingestCurrent > CURRENT_LIMIT_RESET_AMPS) {
+            if (ingestOverCurrentStart > 0) {
+                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+                    ingestMotorStop();
+                }
+
+            }
+        } else {
+            ingestOverCurrentStart = 0;
+        }
+
+        double feederCurrent = feederMotor.getSupplyCurrent();
+        if (feederCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
+            if (feederOverCurrentStart == 0) {
+                feederOverCurrentStart = Timer.getFPGATimestamp();
+            }
+        }
+        if (feederCurrent > CURRENT_LIMIT_RESET_AMPS) {
+            if (feederOverCurrentStart > 0) {
+                if (Timer.getFPGATimestamp() - feederOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+                    feederMotorStop();
+                }
+
+            }
+        } else {
+            feederOverCurrentStart = 0;
+        }
+
     }
 
     // for logging

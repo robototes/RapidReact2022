@@ -1,6 +1,8 @@
 package frc.team2412.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -100,7 +102,8 @@ public class Hardware {
     public PhotonCamera limelight, frontCamera;
 
     // shooter
-    public WPI_TalonFX flywheelMotor1, flywheelMotor2, turretMotor, hoodMotor;
+    public WPI_TalonFX flywheelMotor1, flywheelMotor2, turretMotor;
+    public CANSparkMax hoodMotor;
 
     // intake
     public WPI_TalonFX intakeMotor1, intakeMotor2;
@@ -151,7 +154,7 @@ public class Hardware {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
             flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
             turretMotor = new WPI_TalonFX(TURRET);
-            hoodMotor = new WPI_TalonFX(HOOD);
+            hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         }
         if (DRIVER_VIS_ENABLED) {
             frontCamera = new PhotonCamera(FRONT_CAM);

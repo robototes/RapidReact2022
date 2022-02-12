@@ -151,7 +151,7 @@ public class Robot extends TimedRobot implements Loggable {
 
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
-        new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
     }
 

@@ -34,8 +34,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     public static class IntakeConstants {
 
-        // public static final ShuffleboardTab tab = Shuffleboard.getTab("Intake Subsystem");
-
         public static Alliance teamColor = DriverStation.getAlliance();
 
         public static Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
@@ -55,12 +53,14 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         }
 
         public static enum IntakeSolenoidState {
-            EXTEND(DoubleSolenoid.Value.kForward), RETRACT(DoubleSolenoid.Value.kReverse);
+            EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
 
             public final DoubleSolenoid.Value value;
+            public final String state;
 
-            private IntakeSolenoidState(DoubleSolenoid.Value value) {
+            private IntakeSolenoidState(DoubleSolenoid.Value value, String state) {
                 this.value = value;
+                this.state = state;
             }
         }
     }
@@ -83,8 +83,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     @Log
     private final DoubleSolenoid solenoid;
-
-    // private final ColorSensorV3 colorSensor;
 
     private final MultiplexedColorSensor leftColorSensor;
     private final MultiplexedColorSensor rightColorSensor;
@@ -121,7 +119,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         allyColorMatcher.setConfidenceThreshold(0.7);
         enemyColorMatcher.setConfidenceThreshold(0.7);
 
-
         // Creates two different color matchers to differentiate between enemy and ally cargo
         if (teamColor == Alliance.Blue) {
             allyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
@@ -150,7 +147,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         if (intakeSolenoidState == EXTEND) {
             motorOuterAxle.set(INTAKE_IN_SPEED);
             motorInnerAxle.set(INTAKE_IN_SPEED);
-
             intakeMotorState = IN;
         }
     }
@@ -162,7 +158,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
             motorOuterAxle.set(INTAKE_OUT_SPEED);
             motorInnerAxle.set(INTAKE_OUT_SPEED);
-
             intakeMotorState = OUT;
         }
     }
@@ -173,7 +168,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public void intakeStop() {
         motorOuterAxle.set(0);
         motorInnerAxle.set(0);
-
         intakeMotorState = STOPPED;
     }
 
@@ -182,7 +176,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeExtend() {
         intakeSolenoidState = EXTEND;
-
         solenoid.set(EXTEND.value);
     }
 
@@ -206,6 +199,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     /**
      * Returns true if any of the color sensors detect an enemy cargo
      */
+    // @Log (hates javaSim without actual color sensor)
     public boolean hasOpposingColorCargo() {
         return (individualHasOpposingColorCargo(leftColorSensor)
                 || individualHasOpposingColorCargo(rightColorSensor)
@@ -219,6 +213,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         return allyColorMatcher.matchColor(colorSensor.getColor()) != null;
     }
 
+    // @Log (hates javaSim without actual color sensor)
     public boolean hasMatchingColorCargo() {
         return (individualHasMatchingColorCargo(leftColorSensor)
                 || individualHasMatchingColorCargo(rightColorSensor)

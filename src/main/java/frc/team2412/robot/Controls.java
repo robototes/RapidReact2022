@@ -40,6 +40,10 @@ public class Controls {
     public final Button buttonUnangleDynamicArm;
     public final Button buttonNeutralDynamicArm;
 
+    // intake
+    public final Button buttonIntakeRetract;
+    public final Button buttonIntakeExtend;
+
     // drive
     public final Button resetDriveGyro;
 
@@ -57,7 +61,8 @@ public class Controls {
         buttonUnangleDynamicArm = controller.getDPadButton(Direction.LEFT);
         buttonNeutralDynamicArm = controller.getDPadButton(Direction.UP);
 
-        
+        buttonIntakeExtend = controller.getLeftBumperButton();
+        buttonIntakeRetract = controller.getRightBumperButton();
 
         resetDriveGyro = controller.getBackButton();
 
@@ -102,8 +107,8 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        buttonFixedArmDown.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
-        buttonFixedArmUp.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        buttonIntakeExtend.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        buttonIntakeRetract.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
 
     }
 

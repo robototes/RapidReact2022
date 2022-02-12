@@ -15,7 +15,6 @@ public class IntakeExtendCommand extends CommandBase {
     @Override
     public void execute() {
         subsystem.intakeExtend();
-        System.out.println("1");
     }
 
     @Override

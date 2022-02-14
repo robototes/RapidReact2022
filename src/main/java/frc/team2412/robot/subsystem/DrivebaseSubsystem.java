@@ -38,7 +38,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.042746,
+                0.072746,
                 0.0032181,
                 0.30764);
 
@@ -60,8 +60,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.2, 0.0, 0.025),
-            new PidConstants(5.0, 0.0, 0.0),
+            new PidConstants(0.1, 0.0, 0.0),
+            new PidConstants(0.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -210,10 +210,15 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+        isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
+    }
+
+    public void setFieldOriented(boolean fieldOriented) {
+        isFieldOrientedEntry.setBoolean(fieldOriented);
     }
 
     public void resetPose(Pose2d pose) {

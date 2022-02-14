@@ -10,6 +10,6 @@ public class IntakeInIdentifyBallCommand extends IntakeInCommand {
 
     @Override
     public boolean isFinished() {
-        return subsystem.hasOpposingColorCargo();
+        return true; // subsystem.hasOpposingColorCargo();
     }
 }

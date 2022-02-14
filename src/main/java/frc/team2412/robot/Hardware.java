@@ -5,22 +5,30 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
-
-import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
+
+        // Color Sensor V3 Constants
+        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
+        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
+        public static final double confidenceThreshold = 0.7;
+
         // drive can ids are range 1-19
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
@@ -69,14 +77,16 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_1 = 0, INTAKE_2 = 0, INTAKE_UP = 0, INTAKE_DOWN = 0;
+        public static final int INTAKE_INNER_MOTOR = 32, INTAKE_OUTER_MOTOR = 34, INTAKE_SOLENOID_UP = 14,
+                INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
                 INDEX_FEEDER_SENSOR = 5;
 
         // climb can ids are range 50-59
-        public static final int CLIMB_DYNAMIC = 0, CLIMB_FIXED = 0, CLIMB_ANGLE_UP = 0, CLIMB_ANGLE_DOWN = 0;
+        public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
+                CLIMB_ANGLE_DOWN_SOLENOID = 8;
 
         // default address of TCA9548A
         public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
@@ -122,14 +132,15 @@ public class Hardware {
             navX = new NavX(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
-            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC);
-            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED);
-            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP, CLIMB_ANGLE_DOWN);
+            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
+            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
+                    CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new WPI_TalonFX(INTAKE_1);
-            intakeMotor2 = new WPI_TalonFX(INTAKE_2);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_UP, INTAKE_DOWN);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
+            intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP, INTAKE_SOLENOID_DOWN);
             if (I2C_MUX_ENABLED) {
                 this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);

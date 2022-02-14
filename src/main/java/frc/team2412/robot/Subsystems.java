@@ -46,7 +46,7 @@ public class Subsystems implements Loggable {
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (GOAL_VIS_ENABLED)
-            goalVisionSubsystem = new ShooterVisionSubsystem();
+            goalVisionSubsystem = new ShooterVisionSubsystem(hardware.navX);
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestIndexColorSensor, hardware.feederIndexColorSensor);

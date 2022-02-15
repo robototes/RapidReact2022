@@ -10,7 +10,6 @@ import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.XboxController;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;

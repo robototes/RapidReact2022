@@ -20,7 +20,7 @@ import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.AutonomousTrajectories;
-import frc.team2412.robot.util.TestModeChooser;
+import frc.team2412.robot.util.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot implements Loggable {
     public Hardware hardware;
 
     private UpdateManager updateManager;
-    private TestModeChooser testModeChooser;
+    private AutonomousChooser testModeChooser;
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -100,7 +100,8 @@ public class Robot extends TimedRobot implements Loggable {
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
-        testModeChooser = new TestModeChooser(subsystems,  new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        testModeChooser = new AutonomousChooser(subsystems,
+                new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
@@ -165,7 +166,7 @@ public class Robot extends TimedRobot implements Loggable {
 
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
-       testModeChooser.getCommand().schedule();
+        testModeChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }

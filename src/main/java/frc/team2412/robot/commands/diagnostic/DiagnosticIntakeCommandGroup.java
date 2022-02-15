@@ -12,10 +12,10 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 public class DiagnosticIntakeCommandGroup extends SequentialCommandGroup {
     public DiagnosticIntakeCommandGroup(IntakeSubsystem intakeSubsystem) {
         super(
-            new IntakeExtendCommand(intakeSubsystem), new WaitCommand(0.5),
-            new IntakeInCommand(intakeSubsystem), new WaitCommand(0.5),
-            new IntakeOutCommand(intakeSubsystem), new WaitCommand(0.5),
-            new IntakeStopCommand(intakeSubsystem), new WaitCommand(0.5),
-            new IntakeRetractCommand(intakeSubsystem));
+                new IntakeExtendCommand(intakeSubsystem), new WaitCommand(0.5),
+                new IntakeInCommand(intakeSubsystem), new WaitCommand(0.5),
+                new IntakeOutCommand(intakeSubsystem), new WaitCommand(0.5),
+                new IntakeStopCommand(intakeSubsystem), new WaitCommand(0.5),
+                new IntakeRetractCommand(intakeSubsystem));
     }
 }

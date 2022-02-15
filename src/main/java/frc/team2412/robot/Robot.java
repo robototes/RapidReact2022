@@ -60,7 +60,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     // TODO add other override methods
 
-    public Field2d field = new Field2d();;
+    public Field2d field = new Field2d();
 
     @Override
     public void startCompetition() {

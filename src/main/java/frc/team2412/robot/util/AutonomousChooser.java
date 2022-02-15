@@ -12,7 +12,7 @@ import frc.team2412.robot.commands.climb.ClimbTestCommand;
 
 public class AutonomousChooser {
 
-    private SendableChooser<TestMode> testModeChooser = new SendableChooser<>();
+    private SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
     private static Subsystems subsystems;
     private static AutonomousTrajectories trajectories;
 
@@ -20,23 +20,23 @@ public class AutonomousChooser {
         this.subsystems = subsystems;
         AutonomousChooser.trajectories = trajectories;
 
-        testModeChooser.setDefaultOption(TestMode.SQUARE_PATH.uiName, TestMode.SQUARE_PATH);
+        autonomousModeChooser.setDefaultOption(AutonomousMode.SQUARE_PATH.uiName, AutonomousMode.SQUARE_PATH);
 
-        for (var mode : TestMode.values()) {
-            if (mode != TestMode.SQUARE_PATH) {
-                testModeChooser.addOption(mode.uiName, mode);
+        for (var mode : AutonomousMode.values()) {
+            if (mode != AutonomousMode.SQUARE_PATH) {
+                autonomousModeChooser.addOption(mode.uiName, mode);
             }
         }
 
-        ShuffleboardTab testTab = Shuffleboard.getTab("Tests");
+        ShuffleboardTab autonomousTab = Shuffleboard.getTab("Autonomous");
 
-        testTab.add("Choose Auto Mode", testModeChooser)
+        autonomousTab.add("Choose Auto Mode", autonomousModeChooser)
                 .withPosition(0, 0)
                 .withSize(2, 1);
     }
 
     public CommandBase getCommand() {
-        return testModeChooser.getSelected().command;
+        return autonomousModeChooser.getSelected().command;
     }
 
     private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
@@ -64,7 +64,7 @@ public class AutonomousChooser {
         return command;
     }
 
-    public enum TestMode {
+    public enum AutonomousMode {
         // Replace with individual testing commands
         // spotless:off
         STAR_PATH(AutonomousChooser.getStarPathAutoCommand(subsystems), "Star Test"),
@@ -79,7 +79,7 @@ public class AutonomousChooser {
         public final CommandBase command;
         public final String uiName;
 
-        private TestMode(CommandBase command, String uiName) {
+        private AutonomousMode(CommandBase command, String uiName) {
             this.command = command;
             this.uiName = uiName;
         }

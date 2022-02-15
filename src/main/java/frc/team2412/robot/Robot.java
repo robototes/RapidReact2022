@@ -45,7 +45,7 @@ public class Robot extends TimedRobot implements Loggable {
     public Hardware hardware;
 
     private UpdateManager updateManager;
-    private AutonomousChooser testModeChooser;
+    private AutonomousChooser autonomousChooser;
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot implements Loggable {
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
-        testModeChooser = new AutonomousChooser(subsystems,
+        autonomousChooser = new AutonomousChooser(subsystems,
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         Logger.configureLoggingAndConfig(subsystems, false);
 
@@ -152,7 +152,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void testInit() {
-        testModeChooser.getCommand().schedule();
+        autonomousChooser.getCommand().schedule();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class Robot extends TimedRobot implements Loggable {
 
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
-        testModeChooser.getCommand().schedule();
+        autonomousChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }

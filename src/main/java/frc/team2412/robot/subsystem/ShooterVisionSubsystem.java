@@ -13,10 +13,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterVisionSubsystem extends SubsystemBase {
     public static class ShooterVisionConstants {
+        // Angles are in degrees
+        public static final double DEFAULT_PITCH = 45;
         public static final double LIMELIGHT_ANGLE_OFFSET = 0;
+        // Heights are in inches
         public static final double LIMELIGHT_HEIGHT_OFFSET = 0;
-        public static final double RIM_HEIGHT = 104; // 8ft8in
+        public static final double RIM_HEIGHT = 8 * 12 + 8;
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
+        // Rotation2 can be specified by degrees or radians
         public static final Rotation2 STARTING_ROBOT_ROTATION = Rotation2.ZERO; // Placeholder
     }
 
@@ -41,26 +45,37 @@ public class ShooterVisionSubsystem extends SubsystemBase {
         return limelight.getEntry("tv").getDouble(0) == 1;
     }
 
-    // x-axis
+    /**
+     * Returns the yaw from the limelight to the hub.
+     *
+     * @return The yaw (horizontal rotation) in degrees.
+     */
     public double getYaw() {
         return limelight.getEntry("tx").getDouble(0);
     }
 
-    // returns in inches
+    /**
+     * Returns the distance from the limelight to the hub.
+     *
+     * @return THe distance in inches.
+     */
     public double getDistance() {
-        double distance = HEIGHT_TO_RIM / Math.tan(LIMELIGHT_ANGLE_OFFSET + getPitch());
-        return distance;
+        return HEIGHT_TO_RIM / Math.tan(Math.toRadians(LIMELIGHT_ANGLE_OFFSET + getPitch()));
     }
 
-    // y-axis
+    /**
+     * Returns the pitch from the robot to the hub.
+     *
+     * @return The pitch (vertical rotation) in degrees.
+     */
     public double getPitch() {
-        return limelight.getEntry("ty").getDouble(0);
+        return limelight.getEntry("ty").getDouble(DEFAULT_PITCH);
     }
 
     /**
      * Returns the estimated robot pose as a {@link RigidTransform2}.
      *
-     * The translation is relative to the hub, and the rotation has the same reference as
+     * The translation (inches) is relative to the hub, and the rotation has the same reference as
      * STARTING_ROBOT_ROTATION. Positive rotation is clockwise, negative is counterclockwise.
      *
      * @return The estimated robot pose as a {@link RigidTransform2}.

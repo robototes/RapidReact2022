@@ -12,6 +12,7 @@ public class SpitBallCommand extends ParallelCommandGroup {
     public SpitBallCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
         this.indexSubsystem = indexSubsystem;
         this.intakeSubsystem = intakeSubsystem;
+        addRequirements(indexSubsystem, intakeSubsystem);
         addCommands(
                 new IntakeExtendCommand(intakeSubsystem),
                 new IntakeOutCommand(intakeSubsystem),

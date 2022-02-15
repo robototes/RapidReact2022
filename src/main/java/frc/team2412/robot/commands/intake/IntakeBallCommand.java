@@ -12,6 +12,7 @@ public class IntakeBallCommand extends ParallelCommandGroup {
     public IntakeBallCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
         this.indexSubsystem = indexSubsystem;
         this.intakeSubsystem = intakeSubsystem;
+        addRequirements(indexSubsystem, intakeSubsystem);
         addCommands(
                 new IntakeExtendCommand(intakeSubsystem),
                 new IntakeInCommand(intakeSubsystem),

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
-import frc.team2412.robot.util.MultiplexedColorSensor;
+import frc.team2412.robot.util.MultiplexedColorSensor; 
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -129,7 +129,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Spins motors inwards and updates motor state
      */
     public void intakeIn() {
-        if (intakeSolenoidState == EXTEND) {
+        if (intakeSolenoidState == RETRACT) {
             motorOuterAxle.set(INTAKE_IN_SPEED);
             motorInnerAxle.set(INTAKE_IN_SPEED);
             intakeMotorState = IN;
@@ -140,7 +140,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Spins motors outwards and updates motor state
      */
     public void intakeOut() {
-        if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
+        if (intakeSolenoidState == RETRACT) {
             motorOuterAxle.set(INTAKE_OUT_SPEED);
             motorInnerAxle.set(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
@@ -160,17 +160,17 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Extends solenoid and updates solenoid state
      */
     public void intakeExtend() {
-        intakeSolenoidState = EXTEND;
-        solenoid.set(EXTEND.value);
+        intakeSolenoidState = RETRACT;
+        solenoid.set(RETRACT.value);
     }
 
     /**
      * Retracts solenoid and updates solenoid state
      */
     public void intakeRetract() {
-        intakeSolenoidState = RETRACT;
+        intakeSolenoidState = EXTEND;
         intakeStop();
-        solenoid.set(RETRACT.value);
+        solenoid.set(EXTEND.value);
     }
 
     /**

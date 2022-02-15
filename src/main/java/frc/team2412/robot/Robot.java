@@ -62,7 +62,6 @@ public class Robot extends TimedRobot implements Loggable {
 
     public Field2d field = new Field2d();
 
-
     @Override
     public void startCompetition() {
         if (!robotType.equals(RobotType.AUTOMATED_TEST)) {

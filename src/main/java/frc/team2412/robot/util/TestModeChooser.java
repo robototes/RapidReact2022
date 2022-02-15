@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
+import frc.team2412.robot.commands.intake.IntakeTestCommand;
 
 public class TestModeChooser {
 
@@ -36,7 +37,7 @@ public class TestModeChooser {
         // spotless:off
         CLIMB(new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"), 
         INDEX(new ClimbTestCommand(subsystems.climbSubsystem), "Index test"), 
-        INTAKE(new ClimbTestCommand(subsystems.climbSubsystem), "Intake test"), 
+        INTAKE(new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test"), 
         SHOOTER(new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
         // spotless:on
 

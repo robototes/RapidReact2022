@@ -15,7 +15,7 @@ public class Subsystems implements Loggable {
         public static final boolean INDEX_ENABLED = true;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
-        public static final boolean I2C_MUX_ENABLED = false;
+        public static final boolean I2C_MUX_ENABLED = true;
     }
 
     public final Hardware hardware;

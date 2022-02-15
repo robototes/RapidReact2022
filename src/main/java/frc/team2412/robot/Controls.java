@@ -8,6 +8,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Controls.ControlConstants.*;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
@@ -15,37 +16,30 @@ import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 public class Controls {
     public static class ControlConstants {
         public static final int CONTROLLER_PORT = 0;
+
+        public static final XboxController controller = new XboxController(ControlConstants.CONTROLLER_PORT);
+
+        // Climb
+        public static final Button climbFixedArmUp = controller.getAButton();
+        public static final Button climbDynamicArmUp = controller.getAButton();
+        // public final Button
+        // climbFixedArmDown;
+        // public final Button climbDynamicArmDown;
+        // public final Button climbRungMovement;
+
+        // Drive
+        public static final Button resetDriveGyro = controller.getBackButton();
+
+        // Intake
+        public static final Button buttonIntakeExtend = controller.getLeftBumperButton();
+        public static final Button buttonIntakeRetract = controller.getRightBumperButton();
+
     }
-
-    public XboxController controller;
-
-    // controls
-    public final Button climbFixedArmUp;
-    public final Button climbDynamicArmUp;
-    // public final Button climbFixedArmDown;
-    // public final Button climbDynamicArmDown;
-    // public final Button climbRungMovement;
-
-    // intake
-    public final Button buttonIntakeRetract;
-    public final Button buttonIntakeExtend;
-
-    // drive
-    public final Button resetDriveGyro;
 
     public Subsystems subsystems;
 
     public Controls(Subsystems s) {
         subsystems = s;
-        controller = new XboxController(ControlConstants.CONTROLLER_PORT);
-
-        climbFixedArmUp = controller.getAButton();
-        climbDynamicArmUp = controller.getAButton();
-
-        buttonIntakeExtend = controller.getLeftBumperButton();
-        buttonIntakeRetract = controller.getRightBumperButton();
-
-        resetDriveGyro = controller.getBackButton();
 
         if (CLIMB_ENABLED)
             bindClimbControls();

@@ -66,41 +66,44 @@ public class Controls {
         driveController = new XboxController(CONTROLLER_PORT);
         codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
+        fixedArmUpManualButton = codriverController.getDPadButton(Direction.UP);
+        fixedArmDownManualButton = codriverController.getDPadButton(Direction.DOWN);
+        dynamicArmUpManualButton = codriverController.getDPadButton(Direction.LEFT);
+        dynamicArmDownManualButton = codriverController.getDPadButton(Direction.RIGHT);
+
+        fixedArmUpButton = codriverController.getXButton();
+        fixedArmDownButton = codriverController.getYButton();
+        dynamicArmUpButton = codriverController.getAButton();
+        dynamicArmDownButton = codriverController.getBButton();
+
+        rungClimbButton = codriverController.getRightBumperButton();
+
+        resetDriveGyroButton = driveController.getRightJoystickButton();
+
+        intakeInButton = driveController.getRightBumperButton();
+        intakeSpitButton = driveController.getAButton();
+        intakeRetractButton = driveController.getBButton();
+
+        shootButton = driveController.getLeftBumperButton();
+        hoodUpButton = driveController.getDPadButton(Direction.UP);
+        hoodDownButton = driveController.getDPadButton(Direction.DOWN);
+        turretLeftButton = driveController.getDPadButton(Direction.LEFT);
+        turretRightButton = driveController.getDPadButton(Direction.RIGHT);
+
         if (CLIMB_ENABLED) {
-            fixedArmUpManualButton = codriverController.getDPadButton(Direction.UP);
-            fixedArmDownManualButton = codriverController.getDPadButton(Direction.DOWN);
-            dynamicArmUpManualButton = codriverController.getDPadButton(Direction.LEFT);
-            dynamicArmDownManualButton = codriverController.getDPadButton(Direction.RIGHT);
-
-            fixedArmUpButton = codriverController.getXButton();
-            fixedArmDownButton = codriverController.getYButton();
-            dynamicArmUpButton = codriverController.getAButton();
-            dynamicArmDownButton = codriverController.getBButton();
-
-            rungClimbButton = codriverController.getRightBumperButton();
-
             bindClimbControls();
         }
         if (DRIVE_ENABLED) {
-            resetDriveGyroButton = driveController.getRightJoystickButton();
             bindDriveControls();
         }
         if (INDEX_ENABLED)
             bindIndexControls();
 
         if (INTAKE_ENABLED) {
-            intakeInButton = driveController.getRightBumperButton();
-            intakeSpitButton = driveController.getAButton();
-            intakeRetractButton = driveController.getBButton();
             bindIntakeControls();
         }
 
         if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED) {
-            shootButton = driveController.getLeftBumperButton();
-            hoodUpButton = driveController.getDPadButton(Direction.UP);
-            hoodDownButton = driveController.getDPadButton(Direction.DOWN);
-            turretLeftButton = driveController.getDPadButton(Direction.LEFT);
-            turretRightButton = driveController.getDPadButton(Direction.RIGHT);
             bindShooterControls();
         }
     }

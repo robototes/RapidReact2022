@@ -1,32 +1,49 @@
 package frc.team2412.robot.util;
 
+import com.google.errorprone.annotations.Immutable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
+import frc.team2412.robot.commands.climb.ClimbTestCommand;
+import frc.team2412.robot.commands.index.IndexTestCommand;
+import frc.team2412.robot.commands.intake.IntakeTestCommand;
 
 public class AutonomousChooser {
-    private AutonomousTrajectories trajectories;
 
-    private SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
+    private final SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
+    private final Subsystems subsystems;
+    private final AutonomousTrajectories trajectories;
 
-    public AutonomousChooser(AutonomousTrajectories trajectories) {
+    public AutonomousChooser(Subsystems subsystems, AutonomousTrajectories trajectories) {
+        this.subsystems = subsystems;
         this.trajectories = trajectories;
 
-        autonomousModeChooser.setDefaultOption("Square Path Auto", AutonomousMode.SQUARE_PATH_AUTO);
-        autonomousModeChooser.addOption("Star Path Auto", AutonomousMode.STAR_PATH_AUTO);
-        autonomousModeChooser.addOption("Wpi Lib Auto", AutonomousMode.WPI_PATH_AUTO);
+        autonomousModeChooser.setDefaultOption(AutonomousMode.SQUARE_PATH.uiName, AutonomousMode.SQUARE_PATH);
 
-        ShuffleboardTab drivebaseTab = Shuffleboard.getTab("Drivebase");
-        drivebaseTab.add("Choose Auto Mode", autonomousModeChooser)
-                .withPosition(0, 3)
+        for (var mode : AutonomousMode.values()) {
+            if (mode != AutonomousMode.SQUARE_PATH) {
+                autonomousModeChooser.addOption(mode.uiName, mode);
+            }
+        }
+
+        ShuffleboardTab autonomousTab = Shuffleboard.getTab("Autonomous");
+
+        autonomousTab.add("Choose Auto Mode", autonomousModeChooser)
+                .withPosition(0, 0)
                 .withSize(2, 1);
     }
 
-    private SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
+    public CommandBase getCommand() {
+        return autonomousModeChooser.getSelected().commandSupplier.getCommand(subsystems, trajectories);
+    }
+
+    private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems,
+            AutonomousTrajectories trajectories) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
@@ -35,7 +52,8 @@ public class AutonomousChooser {
         return command;
     }
 
-    private SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems) {
+    private static SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems,
+            AutonomousTrajectories trajectories) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
@@ -44,31 +62,37 @@ public class AutonomousChooser {
         return command;
     }
 
-    private SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
+    private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand());
         return command;
     }
 
-    public SequentialCommandGroup getCommand(Subsystems subsystems) {
-        switch (autonomousModeChooser.getSelected()) {
-            case SQUARE_PATH_AUTO:
-                System.out.println("Square path auto chosen");
-                return getSquarePathAutoCommand(subsystems);
-            case STAR_PATH_AUTO:
-                System.out.println("Star path auto chosen");
-                return getStarPathAutoCommand(subsystems);
-            case WPI_PATH_AUTO:
-                System.out.println("Wpi lib path chosen");
-                return getAutoWPICommand(subsystems);
-            default:
-                System.out.println("No auto path chosen");
-                return new SequentialCommandGroup();
-        }
+    @Immutable
+    @FunctionalInterface
+    private interface CommandSupplier {
+        CommandBase getCommand(Subsystems subsystems, AutonomousTrajectories trajectories);
     }
 
-    private enum AutonomousMode {
-        SQUARE_PATH_AUTO, STAR_PATH_AUTO, WPI_PATH_AUTO
+    public enum AutonomousMode {
+        // Replace with individual testing commands
+        // spotless:off
+        SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path"),
+        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path"),
+        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path"),
+        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"),
+        INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem), "Index test"),
+        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test"),
+        SHOOTER((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
+        // spotless:on
+
+        public final CommandSupplier commandSupplier;
+        public final String uiName;
+
+        private AutonomousMode(CommandSupplier commandSupplier, String uiName) {
+            this.commandSupplier = commandSupplier;
+            this.uiName = uiName;
+        }
     }
 }

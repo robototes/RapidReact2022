@@ -79,11 +79,11 @@ public class Controls {
 
             rungClimbButton = codriverController.getRightBumperButton();
 
-            bindClimbControls(); 
+            bindClimbControls();
         }
         if (DRIVE_ENABLED) {
             resetDriveGyroButton = driveController.getRightJoystickButton();
-            bindDriveControls(); 
+            bindDriveControls();
         }
         if (INDEX_ENABLED)
             bindIndexControls();
@@ -111,9 +111,9 @@ public class Controls {
     }
 
     public void bindDriveControls() {
-            resetDriveGyroButton.whenPressed(() -> {
-                subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
-            });
+        resetDriveGyroButton.whenPressed(() -> {
+            subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
+        });
     }
 
     public void bindIndexControls() {

@@ -114,7 +114,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             enemyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
         }
 
-        intakeSolenoidState = RETRACT;
+        intakeSolenoidState = EXTEND;
         intakeMotorState = STOPPED;
 
         intakeRetract();
@@ -126,7 +126,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Methods
 
     /**
-     * Spins motors inwards and updates motor state
+     * Spins motors inwards and updates motor state.
+     * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
         if (intakeSolenoidState == RETRACT) {
@@ -137,7 +138,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motors outwards and updates motor state
+     * Spins motors outwards and updates motor state.
+     * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
         if (intakeSolenoidState == RETRACT) {

@@ -162,7 +162,7 @@ public class Hardware {
         if (DRIVER_VIS_ENABLED) {
             frontCamera = new PhotonCamera(FRONT_CAM);
         }
-        if (GOAL_VIS_ENABLED) {
+        if (SHOOTER_VISION_ENABLED) {
             limelight = new PhotonCamera(LIMELIGHT);
         }
     }

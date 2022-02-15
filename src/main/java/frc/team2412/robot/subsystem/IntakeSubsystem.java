@@ -159,7 +159,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Retracts Intake by extending solenoid and updates solenoid state
+     * Extends Intake by retract solenoid and updates solenoid state
      */
     public void intakeExtend() {
         intakeSolenoidState = RETRACT;
@@ -167,7 +167,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Extends Intake by retracting solenoid and updates solenoid state
+     * Retracts Intake by extending solenoid and updates solenoid state
      */
     public void intakeRetract() {
         intakeSolenoidState = EXTEND;

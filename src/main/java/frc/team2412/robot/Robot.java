@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
+import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
@@ -173,6 +174,15 @@ public class Robot extends TimedRobot implements Loggable {
         autonomousChooser.getCommand(subsystems).schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
+                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getRightXAxis()));
         }
     }
 

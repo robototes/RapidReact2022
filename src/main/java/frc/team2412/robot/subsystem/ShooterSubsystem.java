@@ -4,11 +4,6 @@ import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
 
 import java.io.File;
 
-import frc.team2412.robot.util.InterpolatingTreeMap;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -21,6 +16,10 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.util.InterpolatingTreeMap;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {

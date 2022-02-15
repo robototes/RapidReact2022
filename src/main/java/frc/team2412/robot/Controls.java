@@ -1,10 +1,13 @@
 package frc.team2412.robot;
 
+import static frc.team2412.robot.Controls.ControlConstants.CODRIVER_CONTROLLER_PORT;
+import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
 
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
@@ -16,6 +19,7 @@ import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeOutCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
+import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class Controls {
     public static class ControlConstants {
@@ -23,9 +27,8 @@ public class Controls {
         public static final int CODRIVER_CONTROLLER_PORT = 1;
     }
 
-    public XboxController driveController;
-
-    public XboxController codriverController;
+    public XboxController driveController = new XboxController(CONTROLLER_PORT);
+    public XboxController codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
     // controls
     // public final Button climbFixedArmUp;
@@ -66,8 +69,6 @@ public class Controls {
 
     public Controls(Subsystems s) {
         subsystems = s;
-        driveController = new XboxController(ControlConstants.CONTROLLER_PORT);
-        codriverController = new XboxController(ControlConstants.CODRIVER_CONTROLLER_PORT);
 
         if (CLIMB_ENABLED)
             bindClimbControls();
@@ -82,7 +83,6 @@ public class Controls {
     }
 
     // TODO these yay
-
     public void bindClimbControls() {
 
     }
@@ -90,14 +90,15 @@ public class Controls {
     public void bindDriveControls() {
         if (DRIVE_ENABLED) {
             resetDriveGyroButton.whenPressed(() -> {
-
                 subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
             });
         }
     }
 
     public void bindIndexControls() {
-
+        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED) {
+            shootButton.whenPressed(new IndexShootCommand(subsystems.indexSubsystem));
+        }
     }
 
     public void bindIntakeControls() {
@@ -110,8 +111,9 @@ public class Controls {
     }
 
     public void bindShooterControls() {
-        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED) {
-            shootButton.whenPressed(new IndexShootCommand(subsystems.indexSubsystem));
+        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED) {
+            subsystems.shooterSubsystem.setDefaultCommand(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
     }
 }

@@ -4,21 +4,29 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
+import frc.team2412.robot.commands.autonomous.AutonomousCommand;
+import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 
 public class TestModeChooser {
 
     private SendableChooser<TestMode> testModeChooser = new SendableChooser<>();
     private static Subsystems subsystems;
+    private static AutonomousTrajectories trajectories;
 
-    public TestModeChooser(Subsystems subsystems) {
+    public TestModeChooser(Subsystems subsystems, AutonomousTrajectories trajectories) {
         this.subsystems = subsystems;
+        TestModeChooser.trajectories = trajectories;
 
-        testModeChooser.setDefaultOption(TestMode.CLIMB.uiName, TestMode.CLIMB);
-        testModeChooser.addOption(TestMode.INDEX.uiName, TestMode.INDEX);
-        testModeChooser.addOption(TestMode.INTAKE.uiName, TestMode.INTAKE);
-        testModeChooser.addOption(TestMode.SHOOTER.uiName, TestMode.SHOOTER);
+        testModeChooser.setDefaultOption(TestMode.SQUARE_PATH.uiName, TestMode.SQUARE_PATH);
+
+        for (var mode: TestMode.values()){
+            if(mode != TestMode.SQUARE_PATH){
+                testModeChooser.addOption(mode.uiName, mode);
+            }
+        }
 
         ShuffleboardTab testTab = Shuffleboard.getTab("Tests");
 
@@ -30,10 +38,36 @@ public class TestModeChooser {
     public CommandBase getCommand() {
         return testModeChooser.getSelected().command;
     }
+    private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
 
+        command.addCommands(
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
+
+        return command;
+    }
+
+    private static SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
+
+        return command;
+    }
+
+    private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand());
+        return command;
+    }
     public enum TestMode {
         // Replace with individual testing commands
         // spotless:off
+        STAR_PATH(TestModeChooser.getStarPathAutoCommand(subsystems), "Star Test"),
+        SQUARE_PATH(TestModeChooser.getSquarePathAutoCommand(subsystems), "Square Path"),
+        WPI_PATH(TestModeChooser.getAutoWPICommand(subsystems), "WPI Lib Path"),
         CLIMB(new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"), 
         INDEX(new ClimbTestCommand(subsystems.climbSubsystem), "Index test"), 
         INTAKE(new ClimbTestCommand(subsystems.climbSubsystem), "Intake test"), 

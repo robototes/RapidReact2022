@@ -74,7 +74,7 @@ public class Hardware {
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
 
         // shooter can ids are range 20-29
-        public static final int FLYWHEEL_1 = 0, FLYWHEEL_2 = 0, TURRET = 0, HOOD = 0;
+        public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
         public static final int INTAKE_INNER_MOTOR = 32, INTAKE_OUTER_MOTOR = 34, INTAKE_SOLENOID_UP = 14,
@@ -162,7 +162,7 @@ public class Hardware {
         if (DRIVER_VIS_ENABLED) {
             frontCamera = new PhotonCamera(FRONT_CAM);
         }
-        if (GOAL_VIS_ENABLED) {
+        if (SHOOTER_VISION_ENABLED) {
             limelight = new PhotonCamera(LIMELIGHT);
         }
     }

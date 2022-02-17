@@ -47,8 +47,6 @@ public class Subsystems implements Loggable {
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
-        if (SHOOTER_VISION_ENABLED)
-            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.navX);
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestIndexColorSensor, hardware.feederIndexColorSensor);
@@ -59,5 +57,8 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
+        if (SHOOTER_VISION_ENABLED)
+            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.navX,
+                    SHOOTER_ENABLED ? shooterSubsystem::getTurretAngle : () -> 0);
     }
 }

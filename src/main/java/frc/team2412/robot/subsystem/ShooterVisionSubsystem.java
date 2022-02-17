@@ -2,6 +2,8 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
@@ -16,11 +18,14 @@ public class ShooterVisionSubsystem extends SubsystemBase {
         // Angles are in degrees
         public static final double DEFAULT_PITCH = 45;
         public static final double LIMELIGHT_ANGLE_OFFSET = 0;
-        // Heights are in inches
+        // Dimensions are in inches
         public static final double LIMELIGHT_HEIGHT_OFFSET = 0;
         public static final double RIM_HEIGHT = 8 * 12 + 8;
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
+        public static final double HUB_RADIUS = 4 * 12 / 2;
+        public static final Vector2 STARTING_ROBOT_POSITION = new Vector2(5 * 12, 5 * 12);
         // Rotation2 can be specified by degrees or radians
+        // STARTING_ROBOT_ROTATION of 0 means straight forward from the driver station
         public static final Rotation2 STARTING_ROBOT_ROTATION = Rotation2.ZERO; // Placeholder
     }
 
@@ -30,10 +35,13 @@ public class ShooterVisionSubsystem extends SubsystemBase {
 
     private final Rotation2 gyroAdjustmentAngle;
 
-    public ShooterVisionSubsystem(Gyroscope gyro) {
+    private final DoubleSupplier turretAngleSupplier;
+
+    public ShooterVisionSubsystem(Gyroscope gyro, DoubleSupplier turretAngleSupplier) {
         this.limelight = NetworkTableInstance.getDefault().getTable("limelight");
         this.gyro = gyro;
         this.gyroAdjustmentAngle = STARTING_ROBOT_ROTATION.rotateBy(gyro.getUnadjustedAngle().inverse());
+        this.turretAngleSupplier = turretAngleSupplier;
     }
 
     @Override
@@ -46,7 +54,9 @@ public class ShooterVisionSubsystem extends SubsystemBase {
     }
 
     /**
-     * Returns the yaw from the limelight to the hub.
+     * Returns the yaw from the limelight to the (estimated) center of the hub.
+     * Note: The limelight returns measurements relative to the center of the targets in its field of
+     * view, which may differ from the center of the hub.
      *
      * @return The yaw (horizontal rotation) in degrees.
      */
@@ -55,37 +65,57 @@ public class ShooterVisionSubsystem extends SubsystemBase {
     }
 
     /**
-     * Returns the distance from the limelight to the hub.
+     * Returns the distance from the limelight to the (estimated) center of the hub.
+     * Note: The limelight returns measurements relative to the center of the targets in its field of
+     * view, which may differ from the center of the hub.
      *
-     * @return THe distance in inches.
+     * @return The distance in inches.
      */
     public double getDistance() {
-        return HEIGHT_TO_RIM / Math.tan(Math.toRadians(LIMELIGHT_ANGLE_OFFSET + getPitch()));
+        double distanceToHubRim = HEIGHT_TO_RIM / Math.tan(Math.toRadians(getPitch()));
+        return distanceToHubRim + HUB_RADIUS;
     }
 
     /**
-     * Returns the pitch from the robot to the hub.
+     * Returns the pitch from the robot's horizontal plane to the hub.
      *
      * @return The pitch (vertical rotation) in degrees.
      */
     public double getPitch() {
-        return limelight.getEntry("ty").getDouble(DEFAULT_PITCH);
+        return LIMELIGHT_ANGLE_OFFSET + limelight.getEntry("ty").getDouble(DEFAULT_PITCH);
     }
 
     /**
      * Returns the estimated robot pose as a {@link RigidTransform2}.
      *
-     * The translation (inches) is relative to the hub, and the rotation has the same reference as
-     * STARTING_ROBOT_ROTATION. Positive rotation is clockwise, negative is counterclockwise.
+     * The translation (inches) is relative to the hub, and the rotation is relative to straight forward
+     * from the driver station. Positive rotation is clockwise, negative is counterclockwise.
      *
      * @return The estimated robot pose as a {@link RigidTransform2}.
      */
     public RigidTransform2 getEstimatedPose() {
         double distanceToHub = getDistance();
-        Rotation2 robotAngle = gyro.getAdjustmentAngle().rotateBy(gyroAdjustmentAngle);
-        Rotation2 hubRobotAngle = robotAngle.rotateBy(Rotation2.fromDegrees(180 - getYaw()));
-        Vector2 translation = Vector2.fromAngle(hubRobotAngle).scale(distanceToHub);
-        return new RigidTransform2(translation, robotAngle);
+        Rotation2 fieldCentricRobotAngle = gyro.getUnadjustedAngle().rotateBy(gyroAdjustmentAngle);
+        Rotation2 robotCentricAngleToHub = Rotation2.fromDegrees(getYaw() + turretAngleSupplier.getAsDouble());
+        Rotation2 fieldCentricRobotToHubAngle = fieldCentricRobotAngle.rotateBy(robotCentricAngleToHub);
+        Rotation2 fieldCentricHubToRobotAngle = fieldCentricRobotToHubAngle.rotateBy(Rotation2.fromDegrees(180));
+        Vector2 translation = Vector2.fromAngle(fieldCentricHubToRobotAngle).scale(distanceToHub);
+        return new RigidTransform2(translation, fieldCentricRobotAngle);
+    }
+
+    /**
+     * Returns the estimated robot pose relative to the start as a {@link RigidTransform2}.
+     *
+     * The translation (inches) is relative to the starting position, and the rotation is relative to
+     * the starting rotation. Positive is clockwise, negative is counterclockwise.
+     *
+     * @return The estimated robot pose relative to the start as a {@link RigidTransform2}.
+     */
+    public RigidTransform2 getEstimatedPoseRelativeToStart() {
+        RigidTransform2 hubRelativePose = getEstimatedPose();
+        Vector2 translationFromStart = hubRelativePose.translation.subtract(STARTING_ROBOT_POSITION);
+        Rotation2 rotationFromStart = hubRelativePose.rotation.rotateBy(STARTING_ROBOT_ROTATION.inverse());
+        return new RigidTransform2(translationFromStart, rotationFromStart);
     }
 
     public void setLedOn() {

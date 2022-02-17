@@ -18,12 +18,14 @@ public class IndexMoveBallToSecondSensor extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        subsystem.ingestMotorStop();
+        subsystem.feederMotorStop();
+    }
+
+    @Override
     public boolean isFinished() {
-        if (subsystem.feederSensorHasBallIn()) {
-            subsystem.ingestMotorStop();
-            subsystem.feederMotorStop();
-            return true;
-        }
-        return false;
+        return subsystem.feederSensorHasBallIn();
+
     }
 }

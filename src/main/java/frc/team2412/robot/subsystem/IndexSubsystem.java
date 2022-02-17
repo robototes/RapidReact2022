@@ -14,15 +14,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.util.MultiplexedColorSensor;
+import edu.wpi.first.wpilibj.DigitalInput;
 
+ 
 public class IndexSubsystem extends SubsystemBase {
 
     // Constants
 
     public static class IndexConstants {
 
-        public static Alliance teamColor = DriverStation.getAlliance();
         public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
         public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
@@ -50,8 +50,8 @@ public class IndexSubsystem extends SubsystemBase {
 
     // Define Hardware
 
-    private final MultiplexedColorSensor ingestColorSensor;
-    private final MultiplexedColorSensor feederColorSensor;
+    private final DigitalInput ingestProximity;
+    private final DigitalInput feederProximity;
 
     private final WPI_TalonFX ingestMotor;
     private final WPI_TalonFX feederMotor;
@@ -70,8 +70,8 @@ public class IndexSubsystem extends SubsystemBase {
 
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, MultiplexedColorSensor firstColorSensor,
-            MultiplexedColorSensor secondColorSensor) {
+    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
+    DigitalInput feederProximity) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -84,8 +84,8 @@ public class IndexSubsystem extends SubsystemBase {
                 .withSize(2, 1)
                 .getEntry();
 
-        tab.addNumber("ingest sensor proximity", this::getIngestProximity);
-        tab.addNumber("feeder sensor proximity", this::getFeederProximity);
+        tab.addBoolean("ingest sensor proximity", this::getIngestProximity);
+        tab.addBoolean("feeder sensor proximity", this::getFeederProximity);
         tab.addNumber("ingest motor speed", this::getIngestMotorSpeed);
         tab.addNumber("feeder motor speed", this::getFeederMotorSpeed);
 
@@ -96,8 +96,8 @@ public class IndexSubsystem extends SubsystemBase {
 
         this.ingestMotor = firstMotor;
         this.feederMotor = secondMotor;
-        this.ingestColorSensor = firstColorSensor;
-        this.feederColorSensor = secondColorSensor;
+        this.ingestProximity = ingestProximity;
+        this.feederProximity = feederProximity;
 
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
@@ -171,14 +171,14 @@ public class IndexSubsystem extends SubsystemBase {
      * Checks if ball is positioned at the first sensor
      */
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return (ingestColorSensor.getProximity() > proximityThreshold.getValue().getDouble());
+        return ingestProximity.get();
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return (feederColorSensor.getProximity() > proximityThreshold.getValue().getDouble());
+        return feederProximity.get();
     }
 
     public boolean isIngestMotorOn() {
@@ -233,12 +233,12 @@ public class IndexSubsystem extends SubsystemBase {
 
     // for logging
 
-    public int getIngestProximity() {
-        return ingestColorSensor.getProximity();
+    public boolean getIngestProximity() {
+        return ingestProximity.get();
     }
 
-    public int getFeederProximity() {
-        return feederColorSensor.getProximity();
+    public boolean getFeederProximity() {
+        return feederProximity.get();
     }
 
     public double getIngestMotorSpeed() {

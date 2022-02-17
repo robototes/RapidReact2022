@@ -9,6 +9,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -121,7 +122,10 @@ public class Hardware {
 
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
-    public MultiplexedColorSensor ingestIndexColorSensor, feederIndexColorSensor;
+    DigitalInput ingestProximity;
+    DigitalInput feederProximity;
+           
+
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -150,8 +154,11 @@ public class Hardware {
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            ingestIndexColorSensor = new MultiplexedColorSensor(INDEX_INGEST_SENSOR);
-            feederIndexColorSensor = new MultiplexedColorSensor(INDEX_FEEDER_SENSOR);
+             ingestProximity  = new DigitalInput(0);
+             feederProximity  = new DigitalInput(1);
+
+           
+
         }
         if (SHOOTER_ENABLED) {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);

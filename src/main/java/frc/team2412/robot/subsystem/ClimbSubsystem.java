@@ -43,6 +43,10 @@ public class ClimbSubsystem extends SubsystemBase {
             ENABLED, DISABLED
         }
 
+        public enum AutoClimbState {
+            GROUND_MID, MID_HIGH, HIGH_TRAV
+        }
+
         enum SolenoidState {
             BACK, MID, FRONT
         }
@@ -55,6 +59,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private static ClimbSubsystemState state = ClimbSubsystemState.DISABLED;
     private static SolenoidState solenoidState = SolenoidState.MID;
+    private static AutoClimbState autoClimbState = AutoClimbState.GROUND_MID;
 
     private final NetworkTableEntry testSpeedExtend;
     private final NetworkTableEntry testSpeedRetract;
@@ -124,6 +129,14 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void setEnabled() {
         state = ClimbSubsystemState.ENABLED;
+    }
+
+    public void setAutoClimbState(AutoClimbState newState) {
+        autoClimbState = newState;
+    }
+
+    public AutoClimbState getAutoClimbState() {
+        return autoClimbState;
     }
 
     public void setDisabled() {

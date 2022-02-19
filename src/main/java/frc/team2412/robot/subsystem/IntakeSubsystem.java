@@ -114,7 +114,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             enemyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
         }
 
-        intakeSolenoidState = RETRACT;
+        intakeSolenoidState = EXTEND;
         intakeMotorState = STOPPED;
 
         intakeRetract();
@@ -126,10 +126,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Methods
 
     /**
-     * Spins motors inwards and updates motor state
+     * Spins motors inwards and updates motor state.
+     * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
-        if (intakeSolenoidState == EXTEND) {
+        if (intakeSolenoidState == RETRACT) {
             motorOuterAxle.set(INTAKE_IN_SPEED);
             motorInnerAxle.set(INTAKE_IN_SPEED);
             intakeMotorState = IN;
@@ -137,10 +138,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motors outwards and updates motor state
+     * Spins motors outwards and updates motor state.
+     * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
-        if (intakeSolenoidState == IntakeSolenoidState.EXTEND) {
+        if (intakeSolenoidState == RETRACT) {
             motorOuterAxle.set(INTAKE_OUT_SPEED);
             motorInnerAxle.set(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
@@ -157,20 +159,20 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Extends solenoid and updates solenoid state
+     * Retracts Intake by extending solenoid and updates solenoid state
      */
     public void intakeExtend() {
-        intakeSolenoidState = EXTEND;
-        solenoid.set(EXTEND.value);
+        intakeSolenoidState = RETRACT;
+        solenoid.set(RETRACT.value);
     }
 
     /**
-     * Retracts solenoid and updates solenoid state
+     * Extends Intake by retracting solenoid and updates solenoid state
      */
     public void intakeRetract() {
-        intakeSolenoidState = RETRACT;
+        intakeSolenoidState = EXTEND;
         intakeStop();
-        solenoid.set(RETRACT.value);
+        solenoid.set(EXTEND.value);
     }
 
     /**

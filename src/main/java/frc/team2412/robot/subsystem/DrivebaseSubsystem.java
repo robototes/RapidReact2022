@@ -222,10 +222,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             if(isFieldOriented) {
-                double xAdj = gyroscope.getAxis(NavX.Axis.ROLL) - defaultX, yAdj = gyroscope.getAxis(NavX.Axis.PITCH) - defaultY;
-                driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
-                        .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0)
-                        , rotationalVelocity, false);
+                synchronized (sensorLock) {
+                    double xAdj = gyroscope.getAxis(NavX.Axis.ROLL) - defaultX, yAdj = gyroscope.getAxis(NavX.Axis.PITCH) - defaultY;
+                    driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
+                            .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0)
+                            , rotationalVelocity, false);
+                }
             } else {
                 driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
             }

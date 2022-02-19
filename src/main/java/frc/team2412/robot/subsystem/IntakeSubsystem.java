@@ -18,11 +18,10 @@ import frc.team2412.robot.util.ConfigSubsystem;
 import frc.team2412.robot.util.MultiplexedColorSensor;
 import io.github.oblarg.oblog.Loggable;
 
-public class IntakeSubsystem extends ConfigSubsystem {
+public class IntakeSubsystem extends SubsystemBase {
 
     // Constants
-    @Constants
-    public static class IntakeConstants implements Loggable {
+    public static class IntakeConstants {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 

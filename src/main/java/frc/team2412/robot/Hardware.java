@@ -33,6 +33,10 @@ public class Hardware {
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 8, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 11;
         public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT = -1, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = -1;
+        public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(247.852);
+        public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(41.924);
+        public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(34.980);
+        public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(348.398);
 
         // TODO set encoder offset values
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
@@ -40,25 +44,25 @@ public class Hardware {
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET);
 
         public static final double MODULE_MAX_RPM = 6000.0;
         public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio().getConfiguration()

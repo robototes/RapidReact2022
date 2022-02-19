@@ -74,6 +74,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // States
 
+    @Log
+    public static String state = "";
     private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
 
@@ -87,8 +89,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             MultiplexedColorSensor centerColorSensor) {
 
         this.motorOuterAxle = motorOuterAxle;
+        this.motorOuterAxle.setInverted(true);
         this.motorInnerAxle = motorInnerAxle;
-        this.motorInnerAxle.setInverted(true);
         this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
@@ -158,20 +160,22 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Retracts Intake by extending solenoid and updates solenoid state
+     * Extends Intake by retract solenoid and updates solenoid state
      */
     public void intakeExtend() {
         intakeSolenoidState = RETRACT;
         solenoid.set(RETRACT.value);
+        state = EXTEND.toString();
     }
 
     /**
-     * Extends Intake by retracting solenoid and updates solenoid state
+     * Retracts Intake by extending solenoid and updates solenoid state
      */
     public void intakeRetract() {
         intakeSolenoidState = EXTEND;
         intakeStop();
         solenoid.set(EXTEND.value);
+        state = RETRACT.toString();
     }
 
     /**

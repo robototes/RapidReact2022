@@ -23,7 +23,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
-        public static final double DEFAULT_FLYWHEEL_VELOCITY = 10;
+        public static final double DEFAULT_FLYWHEEL_VELOCITY = 0.5;
         public static final double STOP_MOTOR = 0;
         // Placeholder gearing constant of 1
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = 1 * 2048 / 360;
@@ -211,6 +211,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         hoodEncoder.setPositionConversionFactor(HOOD_DEGREES_TO_REVS);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D);
+    }
+
+    @Override
+    public void periodic() {
+        turretMotor.set(0);
     }
 
     /**

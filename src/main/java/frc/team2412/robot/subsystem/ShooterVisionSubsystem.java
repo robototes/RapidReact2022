@@ -9,8 +9,8 @@ public class ShooterVisionSubsystem extends SubsystemBase {
 
     public static class ShooterVisionConstants {
 
-        public static double LIMELIGHT_ANGLE_OFFSET = 0;
-        public static double LIMELIGHT_HEIGHT_OFFSET = 0;
+        public static double LIMELIGHT_ANGLE_OFFSET = 56.3;
+        public static double LIMELIGHT_HEIGHT_OFFSET = 39;
         public static double RIM_HEIGHT = 104; // 8ft8in
         public static double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
     }

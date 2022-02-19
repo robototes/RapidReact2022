@@ -29,7 +29,7 @@ public class Hardware {
         public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
         public static final double confidenceThreshold = 0.7;
 
-        // drive can ids are range 1-19
+        // drive can ids are range 1-19 (1 is taken by power distribution module)
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
@@ -77,7 +77,7 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_INNER_MOTOR = 32, INTAKE_OUTER_MOTOR = 34, INTAKE_SOLENOID_UP = 14,
+        public static final int INTAKE_INNER_MOTOR = 30, INTAKE_OUTER_MOTOR = 31, INTAKE_SOLENOID_UP = 14,
                 INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49

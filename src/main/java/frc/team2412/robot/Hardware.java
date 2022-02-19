@@ -124,8 +124,6 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     DigitalInput ingestProximity;
     DigitalInput feederProximity;
-           
-
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -154,10 +152,8 @@ public class Hardware {
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-             ingestProximity  = new DigitalInput(0);
-             feederProximity  = new DigitalInput(1);
-
-           
+            ingestProximity = new DigitalInput(0);
+            feederProximity = new DigitalInput(1);
 
         }
         if (SHOOTER_ENABLED) {

@@ -6,6 +6,7 @@ package frc.team2412.robot;
 
 import static java.lang.Thread.sleep;
 
+import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -17,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.drive.DriveCommand;
-import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.AutonomousTrajectories;
@@ -94,9 +94,11 @@ public class Robot extends TimedRobot implements Loggable {
         hardware = new Hardware();
         subsystems = new Subsystems(hardware);
         controls = new Controls(subsystems);
-        updateManager = new UpdateManager(
-                subsystems.drivebaseSubsystem);
-        updateManager.startLoop(5.0e-3);
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            updateManager = new UpdateManager(
+                    subsystems.drivebaseSubsystem);
+            updateManager.startLoop(5.0e-3);
+        }
 
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
@@ -165,12 +167,15 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        }
 
-        autonomousChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
+
+        autonomousChooser.getCommand().schedule();
     }
 
     @Override

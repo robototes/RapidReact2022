@@ -6,15 +6,11 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.*;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.photonvision.PhotonCamera;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
@@ -30,7 +26,7 @@ public class Hardware {
         public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
         public static final double confidenceThreshold = 0.7;
 
-        // drive can ids are range 1-19
+        // drive can ids are range 1-19 (1 is taken by power distribution module)
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
@@ -69,7 +65,7 @@ public class Hardware {
                 .getWheelDiameter() * Math.PI *
                 FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM / 60.0;
 
-        public static final SPI.Port GYRO_PORT = SPI.Port.kMXP;
+        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
 
         // cameras
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
@@ -78,7 +74,7 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_INNER_MOTOR = 32, INTAKE_OUTER_MOTOR = 34, INTAKE_SOLENOID_UP = 14,
+        public static final int INTAKE_INNER_MOTOR = 30, INTAKE_OUTER_MOTOR = 31, INTAKE_SOLENOID_UP = 14,
                 INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49

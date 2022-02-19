@@ -12,11 +12,12 @@ import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
+import frc.team2412.robot.commands.shooter.ShooterFlywheelStartCommand;
 
 public class AutonomousChooser {
 
     private final SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
-    private final Subsystems subsystems;
+    public final Subsystems subsystems;
     private final AutonomousTrajectories trajectories;
 
     public AutonomousChooser(Subsystems subsystems, AutonomousTrajectories trajectories) {
@@ -84,7 +85,7 @@ public class AutonomousChooser {
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"),
         INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem), "Index test"),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test"),
-        SHOOTER((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Shooter test");
+        SHOOTER((subsystems, trajectories) -> new ShooterFlywheelStartCommand(subsystems.shooterSubsystem), "Shooter test");
         // spotless:on
 
         public final CommandSupplier commandSupplier;

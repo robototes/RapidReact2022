@@ -23,7 +23,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
-
         // Color Sensor V3 Constants
         public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
         public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
@@ -164,6 +163,9 @@ public class Hardware {
         }
         if (SHOOTER_VISION_ENABLED) {
             limelight = new PhotonCamera(LIMELIGHT);
+            if (navX == null) {
+                navX = new NavX(GYRO_PORT);
+            }
         }
     }
 }

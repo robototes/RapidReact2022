@@ -20,7 +20,7 @@ spotless {
     java {
         targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         eclipse().configFile("eclipse-formatter.xml")
-
+        toggleOffOn()
         removeUnusedImports()
         endWithNewline()
         indentWithSpaces()
@@ -122,7 +122,6 @@ dependencies {
     implementation "com.github.robototes:swerve-lib:4c8cf8a7d0"
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
-
     testImplementation "junit:junit:4.12"
 
     errorprone group: "com.google.errorprone", name: "error_prone_core", version: "2.10.0"

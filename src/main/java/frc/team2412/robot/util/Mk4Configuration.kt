@@ -3,6 +3,7 @@ package frc.team2412.robot.util
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper
 import com.swervedrivespecialties.swervelib.SwerveModule
 
+
 // kotlin is very fun
 data class Mk4Configuration(
     val ratio: Mk4SwerveModuleHelper.GearRatio,
@@ -14,4 +15,5 @@ data class Mk4Configuration(
   fun falcons(): SwerveModule {
     return Mk4SwerveModuleHelper.createFalcon500(ratio, drive, angle, encoder, offset)
   }
+
 }

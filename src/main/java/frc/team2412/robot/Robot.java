@@ -4,23 +4,28 @@
 
 package frc.team2412.robot;
 
-import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.wpilibj.DriverStation;
+import static java.lang.Thread.sleep;
+
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
+import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.util.AutonomousChooser;
-import frc.team2412.robot.util.AutonomousTrajectories;
 import frc.team2412.robot.subsystem.TestingSubsystem;
+import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.util.AutonomousChooser;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.Logger;
 
-import static java.lang.Thread.sleep;
-
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
@@ -56,6 +61,8 @@ public class Robot extends TimedRobot {
 
     // TODO add other override methods
 
+    public Field2d field = new Field2d();
+
     @Override
     public void startCompetition() {
         if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
@@ -90,8 +97,23 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 subsystems.drivebaseSubsystem);
         updateManager.startLoop(5.0e-3);
-        autonomousChooser = new AutonomousChooser(
+
+        // Create and push Field2d to SmartDashboard.
+        SmartDashboard.putData(field);
+
+        autonomousChooser = new AutonomousChooser(subsystems,
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        Logger.configureLoggingAndConfig(subsystems, false);
+
+        CommandScheduler.getInstance()
+                .onCommandInitialize(
+                        command -> System.out.println("Command initialized: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandInterrupt(
+                        command -> System.out.println("Command interrupted: " + command.getName()));
+        CommandScheduler.getInstance()
+                .onCommandFinish(
+                        command -> System.out.println("Command finished: " + command.getName()));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -131,22 +153,37 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        testingSubsystem = new TestingSubsystem();
+        autonomousChooser.getCommand().schedule();
     }
 
     @Override
     public void robotPeriodic() {
+        Logger.updateEntries();
         CommandScheduler.getInstance().run();
     }
 
     @Override
     public void autonomousInit() {
+
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
-        autonomousChooser.getCommand(subsystems).schedule();
+        autonomousChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
     }
 
+    @Override
+    public void teleopInit() {
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
+                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getRightXAxis(), true));
+        }
+    }
+
+    @Override
+    public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
 }

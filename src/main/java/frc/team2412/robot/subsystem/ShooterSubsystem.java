@@ -23,7 +23,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
-        public static final double DEFAULT_FLYWHEEL_VELOCITY = 0.5;
+        public static final double DEFAULT_FLYWHEEL_VELOCITY = 204; // Units of ticks per 100ms
         public static final double STOP_MOTOR = 0;
         // Placeholder gearing constant of 1
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = 1 * 2048 / 360;

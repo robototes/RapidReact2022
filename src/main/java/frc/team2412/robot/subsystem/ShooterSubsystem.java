@@ -221,7 +221,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        //System.out.println("Shooter: " + flywheelMotor1.get());
+        // System.out.println("Shooter: " + flywheelMotor1.get());
     }
 
     /**

@@ -70,7 +70,8 @@ public class AutonomousChooser {
         return command;
     }
 
-    private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems, AutonomousTrajectories trajectories) {
+    private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,
+            AutonomousTrajectories trajectories) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(

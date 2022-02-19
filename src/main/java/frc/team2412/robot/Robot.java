@@ -16,11 +16,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.Subsystems.SubsystemConstants;
+import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
-import frc.team2412.robot.util.AutonomousChooser;
 import frc.team2412.robot.util.AutonomousTrajectories;
+import frc.team2412.robot.util.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     // TODO add other override methods
 
-    public Field2d field = new Field2d();;
+    public Field2d field = new Field2d();
 
     @Override
     public void startCompetition() {
@@ -100,7 +101,7 @@ public class Robot extends TimedRobot implements Loggable {
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
-        autonomousChooser = new AutonomousChooser(
+        autonomousChooser = new AutonomousChooser(subsystems,
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         Logger.configureLoggingAndConfig(subsystems, false);
 
@@ -152,7 +153,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void testInit() {
-        testingSubsystem = new TestingSubsystem();
+        autonomousChooser.getCommand().schedule();
     }
 
     @Override
@@ -166,9 +167,18 @@ public class Robot extends TimedRobot implements Loggable {
 
         subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
 
-        autonomousChooser.getCommand(subsystems).schedule();
+        autonomousChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        }
+    }
+
+    @Override
+    public void teleopInit() {
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
+                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getRightXAxis(), true));
         }
     }
 
@@ -176,5 +186,4 @@ public class Robot extends TimedRobot implements Loggable {
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
     }
-
 }

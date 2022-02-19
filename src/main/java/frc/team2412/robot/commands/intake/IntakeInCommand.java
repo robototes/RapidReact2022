@@ -12,7 +12,7 @@ public class IntakeInCommand extends SequentialCommandGroup {
     public IntakeInCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new IntakeExtendCommand(intakeSubsystem),
-                new WaitCommand(0.1),
+                new WaitCommand(0.2),
                 new ParallelCommandGroup(
                         new IntakeMotorInCommand(intakeSubsystem),
                         new IndexCommand(indexSubsystem)));

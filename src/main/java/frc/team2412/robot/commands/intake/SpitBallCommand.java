@@ -12,7 +12,7 @@ public class SpitBallCommand extends SequentialCommandGroup {
     public SpitBallCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new IntakeExtendCommand(intakeSubsystem),
-                new WaitCommand(0.1),
+                new WaitCommand(0.2),
                 new ParallelCommandGroup(
                         new IntakeMotorOutCommand(intakeSubsystem),
                         new IndexSpitCommand(indexSubsystem)));

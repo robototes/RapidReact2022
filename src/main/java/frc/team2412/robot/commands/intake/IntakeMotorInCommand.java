@@ -9,7 +9,7 @@ public class IntakeMotorInCommand extends CommandBase {
 
     public IntakeMotorInCommand(IntakeSubsystem subsystem) {
         this.subsystem = subsystem;
-        // addRequirements(subsystem);
+        addRequirements(subsystem);
     }
 
     @Override

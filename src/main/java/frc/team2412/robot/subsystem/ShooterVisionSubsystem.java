@@ -17,9 +17,9 @@ public class ShooterVisionSubsystem extends SubsystemBase {
     public static class ShooterVisionConstants {
         // Angles are in degrees
         public static final double DEFAULT_PITCH = 45;
-        public static final double LIMELIGHT_ANGLE_OFFSET = 0;
+        public static double LIMELIGHT_ANGLE_OFFSET = 56.3;
         // Dimensions are in inches
-        public static final double LIMELIGHT_HEIGHT_OFFSET = 0;
+        public static double LIMELIGHT_HEIGHT_OFFSET = 39;
         public static final double RIM_HEIGHT = 8 * 12 + 8;
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
         public static final double HUB_RADIUS = 4 * 12 / 2;

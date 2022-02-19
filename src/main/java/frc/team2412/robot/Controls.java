@@ -15,10 +15,10 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
-import frc.team2412.robot.commands.intake.IntakeOutCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
+import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class Controls {
@@ -126,16 +126,16 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        intakeInButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem)
-                .andThen(new IntakeInCommand(subsystems.intakeSubsystem)));
+        intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
+        intakeSpitButton.whenPressed(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
-        intakeSpitButton.whenPressed(new IntakeOutCommand(subsystems.intakeSubsystem));
-
     }
 
     public void bindShooterControls() {
-        subsystems.shooterSubsystem.setDefaultCommand(
-                new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+        if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
+            subsystems.shooterSubsystem.setDefaultCommand(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+        }
 
     }
 }

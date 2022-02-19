@@ -8,14 +8,15 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
-        public static final boolean CLIMB_ENABLED = true;
+        public static final boolean CLIMB_ENABLED = false;
         public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = false;
-        public static final boolean SHOOTER_VISION_ENABLED = true;
-        public static final boolean INDEX_ENABLED = true;
-        public static final boolean INTAKE_ENABLED = true;
+        public static final boolean SHOOTER_VISION_ENABLED = false;
+        public static final boolean INDEX_ENABLED = false;
+        public static final boolean INTAKE_ENABLED = false;
         public static final boolean SHOOTER_ENABLED = true;
-        public static final boolean I2C_MUX_ENABLED = true;
+        public static final boolean I2C_MUX_ENABLED = false;
+        public static final boolean SHOOTER_TESTING = true;
     }
 
     public final Hardware hardware;
@@ -49,7 +50,7 @@ public class Subsystems implements Loggable {
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestIndexColorSensor, hardware.feederIndexColorSensor);
+                    hardware.ingestProximity, hardware.feederProximity);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
                     hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,

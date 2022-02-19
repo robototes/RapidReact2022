@@ -14,14 +14,14 @@ public class IndexCommand extends CommandBase {
     @Override
     public void execute() {
         if (!subsystem.feederSensorHasBallIn() || !subsystem.ingestSensorHasBallIn()) {
-            subsystem.feederMotorIn();
+            subsystem.ingestMotorIn();
         } else {
-            subsystem.feederMotorStop();
+            subsystem.ingestMotorStop();
         }
     }
 
     @Override
     public void end(boolean cancel) {
-        subsystem.feederMotorStop();
+        subsystem.ingestMotorStop();
     }
 }

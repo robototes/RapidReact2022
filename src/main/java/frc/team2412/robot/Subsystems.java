@@ -44,7 +44,7 @@ public class Subsystems implements Loggable {
                     hardware.climbAngle, CLIMB_ENABLED);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.navX,
+                    hardware.backLeftModule, hardware.backRightModule, hardware.pidgeon,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (DRIVER_VIS_ENABLED)
             frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);

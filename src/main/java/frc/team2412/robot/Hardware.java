@@ -8,6 +8,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import edu.wpi.first.wpilibj.*;
 import org.frcteam2910.common.robot.drivers.NavX;
+import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -65,7 +66,7 @@ public class Hardware {
                 .getWheelDiameter() * Math.PI *
                 FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM / 60.0;
 
-        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+        public static final int GYRO_PORT = 62;
 
         // cameras
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
@@ -95,7 +96,7 @@ public class Hardware {
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
-    public NavX navX;
+    public Pigeon pidgeon;
 
     // cameras
     public PhotonCamera limelight, frontCamera;
@@ -127,7 +128,7 @@ public class Hardware {
             frontRightModule = FRONT_RIGHT_CONFIG.falcons();
             backLeftModule = BACK_LEFT_CONFIG.falcons();
             backRightModule = BACK_RIGHT_CONFIG.falcons();
-            navX = new NavX(GYRO_PORT);
+            pidgeon = new Pigeon(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);

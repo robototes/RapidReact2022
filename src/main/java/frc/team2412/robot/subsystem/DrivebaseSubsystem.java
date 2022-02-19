@@ -23,6 +23,7 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
+import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.frcteam2910.common.util.*;
 
 import java.util.Optional;
@@ -83,7 +84,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private final NavX gyroscope;
+    private final Pigeon gyroscope;
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")
@@ -110,7 +111,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final Field2d field = new Field2d();
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, NavX g,
+    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Pigeon g,
             double moduleMaxVelocityMetersPerSec) {
         synchronized (sensorLock) {
             gyroscope = g;
@@ -185,8 +186,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
 
-        defaultX = gyroscope.getAxis(NavX.Axis.ROLL);
-        defaultY = gyroscope.getAxis(NavX.Axis.PITCH);
+        defaultX = gyroscope.getAxis(Pigeon.Axis.ROLL);
+        defaultY = gyroscope.getAxis(Pigeon.Axis.PITCH);
     }
 
     public RigidTransform2 getPose() {
@@ -222,8 +223,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (stateLock) {
             if (isFieldOriented) {
                 synchronized (sensorLock) {
-                    double xAdj = gyroscope.getAxis(NavX.Axis.ROLL) - defaultX,
-                            yAdj = gyroscope.getAxis(NavX.Axis.PITCH) - defaultY;
+                    double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
+                            yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
                     driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
                             .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
                             rotationalVelocity, false);
@@ -257,8 +258,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             gyroscope.setAdjustmentAngle(
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
-            defaultX = gyroscope.getAxis(NavX.Axis.ROLL);
-            defaultY = gyroscope.getAxis(NavX.Axis.PITCH);
+            defaultX = gyroscope.getAxis(Pigeon.Axis.ROLL);
+            defaultY = gyroscope.getAxis(Pigeon.Axis.PITCH);
         }
     }
 

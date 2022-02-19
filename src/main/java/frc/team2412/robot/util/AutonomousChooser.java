@@ -70,6 +70,14 @@ public class AutonomousChooser {
         return command;
     }
 
+    private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems, AutonomousTrajectories trajectories) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getLinePathAuto()));
+        return command;
+    }
+
     @Immutable
     @FunctionalInterface
     private interface CommandSupplier {
@@ -80,6 +88,7 @@ public class AutonomousChooser {
         // Replace with individual testing commands
         // spotless:off
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path"),
+        LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path"),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path"),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path"),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"),

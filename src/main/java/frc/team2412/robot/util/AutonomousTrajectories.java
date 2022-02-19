@@ -10,6 +10,7 @@ public class AutonomousTrajectories {
 
     private Trajectory squarePathAuto;
     private Trajectory starPathAuto;
+    private Trajectory linePathAuto;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
         squarePathAuto = new Trajectory(
@@ -20,6 +21,12 @@ public class AutonomousTrajectories {
                         .lineTo(new Vector2(0, 0))
                         .build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
+
+                linePathAuto = new Trajectory(
+                    new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+                            .lineTo(new Vector2(24, 0))
+                            .build(),
+                    trajectoryConstraints, SAMPLE_DISTANCE);    
 
         starPathAuto = new Trajectory(
                 new SimplePathBuilder(new Vector2(12, 0), Rotation2.ZERO)
@@ -43,5 +50,9 @@ public class AutonomousTrajectories {
 
     public Trajectory getStarPathAuto() {
         return starPathAuto;
+    }
+
+    public Trajectory getLinePathAuto() {
+        return linePathAuto;
     }
 }

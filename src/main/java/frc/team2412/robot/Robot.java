@@ -6,6 +6,7 @@ package frc.team2412.robot;
 
 import static java.lang.Thread.sleep;
 
+import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -170,10 +171,11 @@ public class Robot extends TimedRobot implements Loggable {
             subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
         }
 
-        autonomousChooser.getCommand().schedule();
         if (SubsystemConstants.SHOOTER_ENABLED) {
-            // new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
+
+        autonomousChooser.getCommand().schedule();
     }
 
     @Override

@@ -216,6 +216,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D);
     }
 
+    @Override
+    public void periodic() {
+        turretMotor.set(0);
+    }
+
     /**
      * Sets the velocity of both flywheel motors
      *

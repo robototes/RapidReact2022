@@ -90,8 +90,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             MultiplexedColorSensor centerColorSensor) {
 
         this.motorOuterAxle = motorOuterAxle;
+        this.motorOuterAxle.setInverted(true);
         this.motorInnerAxle = motorInnerAxle;
-        this.motorInnerAxle.setInverted(true);
         this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
         this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);

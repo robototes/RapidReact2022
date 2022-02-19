@@ -49,12 +49,12 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                             "Line " + line + " has more than 3 items, ignoring extra items");
                 }
 
-                double distance, angle, power;
+                double distance, angle, RPM;
 
                 try {
                     distance = Double.parseDouble(items[0]);
                     angle = Double.parseDouble(items[1]);
-                    power = Double.parseDouble(items[2]);
+                    RPM = Double.parseDouble(items[2]);
                 } catch (NumberFormatException err) {
                     System.out.println("Line " + line + " contains a non-numerical value, skipping line");
                     continue;
@@ -72,18 +72,18 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
                     continue;
                 }
-                if (power < 0) {
-                    System.out.println("Flywheel power " + power + " is negative, skipping line");
+                if (RPM < 0) {
+                    System.out.println("Flywheel RPM " + RPM + " is negative, skipping line");
                     continue;
                 }
 
-                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, power));
+                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, RPM));
             }
 
             // Debug code
             System.out.println("All points:");
             for (ShooterDataDistancePoint point : map.values()) {
-                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getPower());
+                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getRPM());
             }
 
             System.out.println("Done deserializing CSV");
@@ -182,12 +182,12 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             return null;
         }
         double angleSlope = (ceiling.getAngle() - floor.getAngle()) / slopeDistanceDifference;
-        double powerSlope = (ceiling.getPower() - floor.getPower()) / slopeDistanceDifference;
+        double rpmSlope = (ceiling.getRPM() - floor.getRPM()) / slopeDistanceDifference;
         double distanceOffset = key - floor.getDistance();
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
-        double interpolatePower = powerSlope * distanceOffset + floor.getPower();
+        double interpolateRPM = rpmSlope * distanceOffset + floor.getRPM();
         ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle,
-                interpolatePower);
+                interpolateRPM);
 
         return interpolatePoint;
     }

@@ -23,15 +23,19 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
-        public static final double DEFAULT_FLYWHEEL_VELOCITY = 204; // Units of ticks per 100ms
         public static final double STOP_MOTOR = 0;
         // Placeholder gearing constant of 1
-        public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = 1 * 2048 / 360;
+        public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 1 * 2048;
+        public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
+        public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
+        // Placeholder RPM of 60
+        public static final double FLYWHEEL_DEFAULT_VELOCITY = 60 * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
         public static final double FLYWHEEL_DEFAULT_P = 0.01;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
+        public static final double FLYWHEEL_DEFAULT_F = 0;
         // Placeholder gearing constant
         public static final double HOOD_GEAR_RATIO = 20;
         public static final double HOOD_DEGREES_TO_REVS = HOOD_GEAR_RATIO / 360;
@@ -123,10 +127,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     @Config(name = "Flywheel PID")
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
-            @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d) {
+            @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
+            @Config(name = "flywheelF", defaultValueNumeric = FLYWHEEL_DEFAULT_F) double f) {
         flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
         flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);
+        flywheelMotor1.config_kF(FLYWHEEL_SLOT_ID, f);
     }
 
     @Config(name = "Hood PID")
@@ -189,7 +195,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
-        setFlywheelPID(FLYWHEEL_DEFAULT_P, FLYWHEEL_DEFAULT_I, FLYWHEEL_DEFAULT_D);
+        setFlywheelPID(FLYWHEEL_DEFAULT_P, FLYWHEEL_DEFAULT_I, FLYWHEEL_DEFAULT_D, FLYWHEEL_DEFAULT_F);
 
         turretMotor.configFactoryDefault();
         turretMotor.configForwardSoftLimitThreshold(MAX_TURRET_ANGLE * TURRET_DEGREES_TO_ENCODER_TICKS);
@@ -219,10 +225,20 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
+     * Sets the RPM of both flywheel motors.
+     *
+     * @param RPM
+     *            The RPM of the flywheel motors.
+     */
+    public void setFlywheelRPM(double RPM) {
+        setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
+    }
+
+    /**
      * Sets the velocity of both flywheel motors
      *
      * @param velocity
-     *            the velocity of the flywheel motors
+     *            the velocity of the flywheel motors (ticks per 100 ms)
      */
     public void setFlywheelVelocity(double velocity) {
         flywheelMotor1.set(ControlMode.Velocity, velocity);
@@ -232,8 +248,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.PercentOutput, 0.25);
-        //flywheelMotor1.set(ControlMode.Velocity, DEFAULT_FLYWHEEL_VELOCITY);
+        flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_DEFAULT_VELOCITY);
     }
 
     /**

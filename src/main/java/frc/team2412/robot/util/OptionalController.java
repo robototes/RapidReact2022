@@ -4,41 +4,42 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class OptionalController<T extends Controller> extends Controller {
 
     private final T controller;
 
     private boolean active;
-    public OptionalController(T c){
+
+    public OptionalController(T c) {
         this(c, false);
     }
-    public OptionalController(T c, boolean enabled){
+
+    public OptionalController(T c, boolean enabled) {
         controller = c;
         active = enabled;
     }
-    public boolean isActive(){
+
+    public boolean isActive() {
         return active;
     }
 
-    public boolean deactivate(){
+    public boolean deactivate() {
         return set(false);
     }
-    public boolean activate(){
+
+    public boolean activate() {
         return set(true);
     }
 
-
-    public boolean set(boolean a){
-        if(active==a) return false;
+    public boolean set(boolean a) {
+        if (active == a)
+            return false;
         active = a;
         return true;
     }
 
-    protected Axis get(Axis a){
+    protected Axis get(Axis a) {
         return new Axis() {
             @Override
             public double getRaw() {
@@ -47,11 +48,9 @@ public class OptionalController<T extends Controller> extends Controller {
         };
     }
 
-    protected Button get(Button a){
-        return new Button(()-> active && a.getAsBoolean());
+    protected Button get(Button a) {
+        return new Button(() -> active && a.getAsBoolean());
     }
-
-
 
     @Override
     public Axis getLeftTriggerAxis() {

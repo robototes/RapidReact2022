@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.GeoConvertor;
 import org.frcteam2910.common.control.*;
-import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
 import org.frcteam2910.common.kinematics.SwerveKinematics;
 import org.frcteam2910.common.kinematics.SwerveOdometry;
@@ -221,12 +220,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
         isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
-            if(isFieldOriented) {
+            if (isFieldOriented) {
                 synchronized (sensorLock) {
-                    double xAdj = gyroscope.getAxis(NavX.Axis.ROLL) - defaultX, yAdj = gyroscope.getAxis(NavX.Axis.PITCH) - defaultY;
+                    double xAdj = gyroscope.getAxis(NavX.Axis.ROLL) - defaultX,
+                            yAdj = gyroscope.getAxis(NavX.Axis.PITCH) - defaultY;
                     driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
-                            .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0)
-                            , rotationalVelocity, false);
+                            .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
+                            rotationalVelocity, false);
                 }
             } else {
                 driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);

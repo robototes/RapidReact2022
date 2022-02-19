@@ -222,10 +222,20 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
+     * Sets the RPM of both flywheel motors.
+     *
+     * @param RPM
+     *            The RPM of the flywheel motors.
+     */
+    public void setFlywheelRPM(double RPM) {
+        setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
+    }
+
+    /**
      * Sets the velocity of both flywheel motors
      *
      * @param velocity
-     *            the velocity of the flywheel motors
+     *            the velocity of the flywheel motors (ticks per 100 ms)
      */
     public void setFlywheelVelocity(double velocity) {
         flywheelMotor1.set(ControlMode.Velocity, velocity);

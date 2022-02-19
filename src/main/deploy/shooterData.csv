@@ -1,4 +1,4 @@
-Distance,Angle,Power
+Distance (inches),Angle (degrees),Velocity (RPM)
 Bounds test values
 -1,30,5
 20,0,5

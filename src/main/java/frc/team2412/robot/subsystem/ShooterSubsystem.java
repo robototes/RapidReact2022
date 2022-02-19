@@ -215,7 +215,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        turretMotor.set(0);
+        //System.out.println("Shooter: " + flywheelMotor1.get());
     }
 
     /**
@@ -232,7 +232,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.Velocity, DEFAULT_FLYWHEEL_VELOCITY);
+        flywheelMotor1.set(ControlMode.PercentOutput, 0.25);
+        //flywheelMotor1.set(ControlMode.Velocity, DEFAULT_FLYWHEEL_VELOCITY);
     }
 
     /**

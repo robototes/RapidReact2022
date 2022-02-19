@@ -54,7 +54,7 @@ public class Subsystems implements Loggable {
             shooterVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestIndexColorSensor, hardware.feederIndexColorSensor);
+                    hardware.ingestProximity, hardware.feederProximity);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
                     hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,

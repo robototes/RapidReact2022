@@ -75,6 +75,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // States
 
+    @Log
+    public static String state = "";
     private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
 
@@ -159,20 +161,22 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Retracts Intake by extending solenoid and updates solenoid state
+     * Extends Intake by retract solenoid and updates solenoid state
      */
     public void intakeExtend() {
         intakeSolenoidState = RETRACT;
         solenoid.set(RETRACT.value);
+        state = EXTEND.toString();
     }
 
     /**
-     * Extends Intake by retracting solenoid and updates solenoid state
+     * Retracts Intake by extending solenoid and updates solenoid state
      */
     public void intakeRetract() {
         intakeSolenoidState = EXTEND;
         intakeStop();
         solenoid.set(EXTEND.value);
+        state = RETRACT.toString();
     }
 
     /**

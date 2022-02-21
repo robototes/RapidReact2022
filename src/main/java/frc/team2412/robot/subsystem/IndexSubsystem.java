@@ -13,12 +13,16 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class IndexSubsystem extends SubsystemBase {
 
     // Constants
 
     public static class IndexConstants {
+
+        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
@@ -50,6 +54,11 @@ public class IndexSubsystem extends SubsystemBase {
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
 
+    private final DigitalInput ingestBlueColor;
+    private final DigitalInput ingestRedColor;
+    private final DigitalInput feederBlueColor;
+    private final DigitalInput feederRedColor;
+
     private final WPI_TalonFX ingestMotor;
     private final WPI_TalonFX feederMotor;
 
@@ -68,13 +77,10 @@ public class IndexSubsystem extends SubsystemBase {
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity) {
+            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
+            DigitalInput feederBlueColor, DigitalInput feederRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
-
-        /*
-
-        */
 
         proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
                 .withPosition(0, 0)
@@ -95,6 +101,10 @@ public class IndexSubsystem extends SubsystemBase {
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
+        this.ingestBlueColor = ingestBlueColor;
+        this.ingestRedColor = ingestRedColor;
+        this.feederBlueColor = feederBlueColor;
+        this.feederRedColor = feederRedColor;
 
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
@@ -115,6 +125,11 @@ public class IndexSubsystem extends SubsystemBase {
     }
 
     // Methods
+
+    public void setSpeed(double ingestSpeed, double feederSpeed) {
+        ingestMotor.set(ingestSpeed);
+        feederMotor.set(feederSpeed);
+    }
 
     /**
      * Spins first motor inward and updates first motor state
@@ -178,12 +193,34 @@ public class IndexSubsystem extends SubsystemBase {
         return feederProximity.get();
     }
 
+    /**
+     * Checks if ingest motor is on
+     */
     public boolean isIngestMotorOn() {
         return !(ingestMotorState == STOPPED);
     }
 
+    /**
+     * Checks if feeder motor is on
+     */
     public boolean isFeederMotorOn() {
         return !(feederMotorState == STOPPED);
+    }
+
+    /**
+     * Checks if ingest has the correct cargo
+     */
+    public boolean ingestHasCorrectCargo() {
+        return ((teamColor == Alliance.Blue && ingestBlueColor.get())
+                || teamColor == Alliance.Red && ingestRedColor.get());
+    }
+
+    /**
+     * Checks if feeder has the correct cargo
+     */
+    public boolean feederHasCorrectCargo() {
+        return ((teamColor == Alliance.Blue && feederBlueColor.get())
+                || teamColor == Alliance.Red && feederRedColor.get());
     }
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.

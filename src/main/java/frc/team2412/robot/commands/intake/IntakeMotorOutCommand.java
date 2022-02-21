@@ -13,7 +13,7 @@ public class IntakeMotorOutCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         subsystem.intakeOut();
     }
 

@@ -120,6 +120,10 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     DigitalInput ingestProximity;
     DigitalInput feederProximity;
+    DigitalInput ingestBlueColor;
+    DigitalInput ingestRedColor;
+    DigitalInput feederBlueColor;
+    DigitalInput feederRedColor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -150,6 +154,10 @@ public class Hardware {
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             ingestProximity = new DigitalInput(0);
             feederProximity = new DigitalInput(1);
+            ingestBlueColor = new DigitalInput(2);
+            ingestRedColor = new DigitalInput(3);
+            feederBlueColor = new DigitalInput(4);
+            feederRedColor = new DigitalInput(5);
 
         }
         if (SHOOTER_ENABLED) {

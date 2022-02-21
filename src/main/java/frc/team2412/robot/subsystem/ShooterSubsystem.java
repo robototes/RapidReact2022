@@ -249,7 +249,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_DEFAULT_VELOCITY);
+        flywheelMotor1.set(ControlMode.Velocity, 1);
     }
 
     /**

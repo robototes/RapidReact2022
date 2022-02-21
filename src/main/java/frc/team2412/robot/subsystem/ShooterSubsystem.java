@@ -57,15 +57,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 1 * 2048;
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
         public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
-        // Placeholder RPM of 60
-        public static final double FLYWHEEL_DEFAULT_VELOCITY = 1 * FLYWHEEL_RPM_TO_VELOCITY;
+        // Placeholder RPM of 2000
+        public static final double FLYWHEEL_DEFAULT_VELOCITY = 2000 * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.01;
-        public static final double FLYWHEEL_DEFAULT_I = 0.05;
-        public static final double FLYWHEEL_DEFAULT_D = 0.05;
-        public static final double FLYWHEEL_DEFAULT_F = 0.05;
+        public static final double FLYWHEEL_DEFAULT_P = 0.2;
+        public static final double FLYWHEEL_DEFAULT_I = 0;
+        public static final double FLYWHEEL_DEFAULT_D = 0;
+        public static final double FLYWHEEL_DEFAULT_F = 0;
         // Placeholder gearing constant
         public static final double HOOD_GEAR_RATIO = 20;
         public static final double HOOD_DEGREES_TO_REVS = HOOD_GEAR_RATIO / 360;
@@ -231,6 +231,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param RPM
      *            The RPM of the flywheel motors.
      */
+    @Config.NumberSlider(name = "Flywheel RPM", min = 0, max = 6000)
     public void setFlywheelRPM(double RPM) {
         setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
     }

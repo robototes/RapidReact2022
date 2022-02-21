@@ -58,7 +58,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
         public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
         // Placeholder RPM of 60
-        public static final double FLYWHEEL_DEFAULT_VELOCITY = 60 * FLYWHEEL_RPM_TO_VELOCITY;
+        public static final double FLYWHEEL_DEFAULT_VELOCITY = 1 * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
         // TODO non-scuffed constants
@@ -249,7 +249,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Starts both flywheel motors
      */
     public void startFlywheel() {
-        flywheelMotor1.set(ControlMode.Velocity, 1);
+        flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_DEFAULT_VELOCITY);
     }
 
     /**

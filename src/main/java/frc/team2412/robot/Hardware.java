@@ -118,12 +118,12 @@ public class Hardware {
 
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
-    DigitalInput ingestProximity;
-    DigitalInput feederProximity;
-    DigitalInput ingestBlueColor;
-    DigitalInput ingestRedColor;
-    DigitalInput feederBlueColor;
-    DigitalInput feederRedColor;
+    public DigitalInput ingestProximity;
+    public DigitalInput feederProximity;
+    public DigitalInput ingestBlueColor;
+    public DigitalInput ingestRedColor;
+    public DigitalInput feederBlueColor;
+    public DigitalInput feederRedColor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {

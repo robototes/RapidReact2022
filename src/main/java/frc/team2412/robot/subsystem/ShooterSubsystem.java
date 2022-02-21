@@ -22,6 +22,35 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
+    /**
+     * Constructor for shooter subsystem.
+     *
+     * @param flywheelMotor1
+     *            The first motor connected to the flywheel
+     *
+     * @param flywheelMotor2
+     *            The second motor connected to the flywheel
+     *
+     * @param turretMotor
+     *            The motor that controls the horizontal rotation of the
+     *            turret
+     *
+     * @param hoodMotor
+     *            The motor that controls the angle of the hood above the
+     *            turret
+     *
+     */
+    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
+            CANSparkMax hoodMotor) {
+        this.flywheelMotor1 = flywheelMotor1;
+        this.flywheelMotor2 = flywheelMotor2;
+        this.turretMotor = turretMotor;
+        this.hoodMotor = hoodMotor;
+        this.hoodEncoder = hoodMotor.getEncoder();
+        this.hoodPID = hoodMotor.getPIDController();
+        configMotors();
+    }
+
     public static class ShooterConstants {
         public static final double STOP_MOTOR = 0;
         // Placeholder gearing constant of 1
@@ -32,10 +61,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_VELOCITY = 60 * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
         // Placeholder PID constants
+        // TODO non-scuffed constants
         public static final double FLYWHEEL_DEFAULT_P = 0.01;
-        public static final double FLYWHEEL_DEFAULT_I = 0;
-        public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0;
+        public static final double FLYWHEEL_DEFAULT_I = 0.05;
+        public static final double FLYWHEEL_DEFAULT_D = 0.05;
+        public static final double FLYWHEEL_DEFAULT_F = 0.05;
         // Placeholder gearing constant
         public static final double HOOD_GEAR_RATIO = 20;
         public static final double HOOD_DEGREES_TO_REVS = HOOD_GEAR_RATIO / 360;
@@ -151,35 +181,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.config_kP(TURRET_SLOT_ID, p);
         turretMotor.config_kI(TURRET_SLOT_ID, i);
         turretMotor.config_kD(TURRET_SLOT_ID, turretD);
-    }
-
-    /**
-     * Constructor for shooter subsystem.
-     *
-     * @param flywheelMotor1
-     *            The first motor connected to the flywheel
-     *
-     * @param flywheelMotor2
-     *            The second motor connected to the flywheel
-     *
-     * @param turretMotor
-     *            The motor that controls the horizontal rotation of the
-     *            turret
-     *
-     * @param hoodMotor
-     *            The motor that controls the angle of the hood above the
-     *            turret
-     *
-     */
-    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
-            CANSparkMax hoodMotor) {
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
-        this.hoodEncoder = hoodMotor.getEncoder();
-        this.hoodPID = hoodMotor.getPIDController();
-        configMotors();
     }
 
     /**

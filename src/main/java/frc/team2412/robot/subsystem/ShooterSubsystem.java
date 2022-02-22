@@ -263,7 +263,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * <<<<<<< HEAD
      * Returns the velocity of the flywheel motors according to the encoder.
      *
      * @return The velocity of the flywheel motors.

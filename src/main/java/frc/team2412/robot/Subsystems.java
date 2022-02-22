@@ -26,8 +26,6 @@ public class Subsystems implements Loggable {
 
     public DrivebaseSubsystem drivebaseSubsystem;
 
-    public DriverVisionSubsystem frontVisionSubsystem;
-
     public IndexSubsystem indexSubsystem;
 
     @Log(tabName = "IntakeSubsystem")
@@ -45,8 +43,6 @@ public class Subsystems implements Loggable {
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.navX,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (DRIVER_VIS_ENABLED)
-            frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (INDEX_ENABLED)
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestProximity, hardware.feederProximity);

@@ -6,9 +6,10 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
@@ -100,7 +101,7 @@ public class Hardware {
     public NavX navX;
 
     // cameras
-    public PhotonCamera frontCamera;
+    public UsbCamera frontCamera;
 
     // shooter
     public WPI_TalonFX flywheelMotor1, flywheelMotor2, turretMotor;
@@ -165,7 +166,8 @@ public class Hardware {
             hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         }
         if (DRIVER_VIS_ENABLED) {
-            frontCamera = new PhotonCamera(FRONT_CAM);
+            CameraServer.addCamera(frontCamera);
+            CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
             shooterVision = new ShooterVision();

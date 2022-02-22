@@ -7,6 +7,9 @@ package frc.team2412.robot;
 import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import frc.team2412.robot.sim.PhysicsSim;
+
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -190,5 +193,34 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void simulationInit() {
+        PhysicsSim physicsSim = PhysicsSim.getInstance();
+        // TODO Find reasonable values
+        if (CLIMB_ENABLED) {
+            physicsSim.addTalonFX(hardware.climbMotorFixed, 0, 0);
+            physicsSim.addTalonFX(hardware.climbMotorDynamic, 0, 0);
+        }
+        if (INTAKE_ENABLED) {
+            physicsSim.addTalonFX(hardware.intakeMotor1, 0, 0);
+            physicsSim.addTalonFX(hardware.intakeMotor2, 0, 0);
+        }
+        if (INDEX_ENABLED) {
+            physicsSim.addTalonFX(hardware.ingestIndexMotor, 0, 0);
+            physicsSim.addTalonFX(hardware.feederIndexMotor, 0, 0);
+        }
+        if (SHOOTER_ENABLED) {
+            physicsSim.addTalonFX(hardware.flywheelMotor1, 0, 0);
+            physicsSim.addTalonFX(hardware.flywheelMotor2, 0, 0);
+            physicsSim.addTalonFX(hardware.turretMotor, 0, 0);
+            physicsSim.addSparkMax(hardware.hoodMotor, 0, 0);
+        }
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        PhysicsSim.getInstance().run();
     }
 }

@@ -13,12 +13,12 @@ public class IntakeMotorOutCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         subsystem.intakeOut();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

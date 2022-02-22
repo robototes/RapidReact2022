@@ -110,15 +110,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodMotor.get();
     }
 
-    private double flywheelTestVelocity;
+    private double flywheelTestRPM;
 
-    @Config(name = "Flywheel test velocity")
-    private void setFlywheelTestVelocity(double newVelocity) {
-        flywheelTestVelocity = newVelocity;
+    @Config.NumberSlider(name = "Flywheel test RPM", min = 0, max = 6000)
+    private void setFlywheelTestRPM(double newRPM) {
+        flywheelTestRPM = newRPM;
     }
 
-    public double getFlywheelTestVelocity() {
-        return flywheelTestVelocity;
+    public double getFlywheelTestRPM() {
+        return flywheelTestRPM;
     }
 
     private double hoodTestAngle;
@@ -225,15 +225,28 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.set(0);
     }
 
+    @Log
+    double setRPM;
+
     /**
      * Sets the RPM of both flywheel motors.
      *
      * @param RPM
      *            The RPM of the flywheel motors.
      */
-    @Config.NumberSlider(name = "Flywheel RPM", min = 0, max = 6000)
     public void setFlywheelRPM(double RPM) {
+        setRPM = RPM;
         setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
+    }
+
+    /**
+     * Returns the RPM of the flywheel motors according to the encoder.
+     *
+     * @return The RPM of the flywheel motors.
+     */
+    @Log(name = "Flywheel RPM")
+    public double getFlywheelRPM() {
+        return flywheelMotor1.getSelectedSensorVelocity() / FLYWHEEL_RPM_TO_VELOCITY;
     }
 
     /**

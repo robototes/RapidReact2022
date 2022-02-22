@@ -24,7 +24,7 @@ public class IntakeBitmapCommand extends CommandBase {
         // feederspeed, misfire
         A(false, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false), // no balls in systems
         B(true, false, true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false), // correct ball in ingest
-        C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false), // wrong ball in ingest
+        C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true), // wrong ball in ingest
         D(false, true, false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, false), // correct ball in feeder
         E(false, true, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true), // wrong ball in feeder
         F(true, true, true, true, 0, 0, 0, false), // correct ball in both

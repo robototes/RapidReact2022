@@ -123,7 +123,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     private double hoodTestAngle;
 
-    @Config(name = "Hood test angle")
+    @Config.NumberSlider(name = "Hood test angle", min = MIN_HOOD_ANGLE, max = MAX_HOOD_ANGLE)
     private void setHoodTestAngle(double newAngle) {
         hoodTestAngle = newAngle;
     }
@@ -225,8 +225,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.set(0);
     }
 
-    @Log
-    double setRPM;
+    @Log(name = "Flywheel target RPM")
+    private double setRPM;
 
     /**
      * Sets the RPM of both flywheel motors.
@@ -249,6 +249,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return flywheelMotor1.getSelectedSensorVelocity() / FLYWHEEL_RPM_TO_VELOCITY;
     }
 
+    @Log(name = "Flywheel target velocity")
+    private double setVelocity;
+
     /**
      * Sets the velocity of both flywheel motors
      *
@@ -257,6 +260,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setFlywheelVelocity(double velocity) {
         flywheelMotor1.set(ControlMode.Velocity, velocity);
+    }
+
+    /**
+     * Returns the velocity of the flywheel motors according to the encoder.
+     *
+     * @return The velocity of the flywheel motors.
+     */
+    @Log(name = "Flywheel velocity")
+    public double getFlywheelVelocity() {
+        return flywheelMotor1.getSelectedSensorVelocity();
     }
 
     /**

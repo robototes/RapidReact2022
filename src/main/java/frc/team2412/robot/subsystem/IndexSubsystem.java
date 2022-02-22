@@ -223,6 +223,14 @@ public class IndexSubsystem extends SubsystemBase {
                 || teamColor == Alliance.Red && feederRedColor.get());
     }
 
+    public boolean ingestHasBall() {
+        return (ingestSensorHasBallIn() || ingestBlueColor.get() || ingestRedColor.get());
+    }
+
+    public boolean feederHasBall() {
+        return (ingestSensorHasBallIn() || ingestBlueColor.get() || ingestRedColor.get());
+    }
+
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
     public void periodic() {

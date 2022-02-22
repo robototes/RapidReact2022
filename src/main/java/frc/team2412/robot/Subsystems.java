@@ -17,6 +17,7 @@ public class Subsystems implements Loggable {
         public static final boolean SHOOTER_ENABLED = true;
         public static final boolean I2C_MUX_ENABLED = false;
         public static final boolean SHOOTER_TESTING = true;
+        public static final boolean POSE_ESTIMATION_ENABLED = false;
     }
 
     public final Hardware hardware;
@@ -26,8 +27,6 @@ public class Subsystems implements Loggable {
     public DrivebaseSubsystem drivebaseSubsystem;
 
     public DriverVisionSubsystem frontVisionSubsystem;
-
-    public ShooterVisionSubsystem shooterVisionSubsystem;
 
     public IndexSubsystem indexSubsystem;
 
@@ -58,8 +57,5 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
-        if (SHOOTER_VISION_ENABLED)
-            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.navX,
-                    SHOOTER_ENABLED ? shooterSubsystem::getTurretAngle : () -> 0);
     }
 }

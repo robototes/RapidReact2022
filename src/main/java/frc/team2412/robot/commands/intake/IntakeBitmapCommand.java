@@ -89,18 +89,18 @@ public class IntakeBitmapCommand extends CommandBase {
                 intakeSubsystem.setSpeed(value.intakeMotorSpeed);
                 indexSubsystem.setSpeed(value.ingestMotorSpeed, value.feederMotorSpeed);
 
+                double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
+                shooterSubsystem.updateTurretAngle(yaw);
+
                 if (value.shooterMisfire) {
                     shooterSubsystem.setHoodAngle(0);
                     shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
 
                 } else {
                     double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-                    double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
                     ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
                     shooterSubsystem.setHoodAngle(shooterData.getAngle());
                     shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-                    shooterSubsystem.updateTurretAngle(yaw);
-
                 }
             }
         }

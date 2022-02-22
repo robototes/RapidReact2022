@@ -10,7 +10,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 import org.frcteam2910.common.robot.drivers.NavX;
-import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
@@ -161,8 +160,8 @@ public class Hardware {
             hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         }
         if (DRIVER_VIS_ENABLED) {
-        CameraServer.addCamera(frontCamera);
-        CameraServer.startAutomaticCapture();
+            CameraServer.addCamera(frontCamera);
+            CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
         }

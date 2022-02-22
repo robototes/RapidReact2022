@@ -232,7 +232,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Sets the RPM of both flywheel motors.
      *
      * @param RPM
-     *            The RPM of the flywheel motors.
+     *            The target RPM for the flywheel motors.
      */
     public void setFlywheelRPM(double RPM) {
         setRPM = RPM;
@@ -242,7 +242,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Returns the RPM of the flywheel motors according to the encoder.
      *
-     * @return The RPM of the flywheel motors.
+     * @return The current RPM of the flywheel motors.
      */
     @Log(name = "Flywheel RPM")
     public double getFlywheelRPM() {
@@ -256,13 +256,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Sets the velocity of both flywheel motors
      *
      * @param velocity
-     *            the velocity of the flywheel motors (ticks per 100 ms)
+     *            The target velocity of the flywheel motors (in ticks per 100ms).
      */
     public void setFlywheelVelocity(double velocity) {
         flywheelMotor1.set(ControlMode.Velocity, velocity);
     }
 
     /**
+<<<<<<< HEAD
      * Returns the velocity of the flywheel motors according to the encoder.
      *
      * @return The velocity of the flywheel motors.
@@ -274,13 +275,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Starts both flywheel motors
+=======
+     * Starts both flywheel motors at the default velocity.
+>>>>>>> e7979c2 (Improve docs because idk what else to do)
      */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_DEFAULT_VELOCITY);
     }
 
     /**
-     * Stops both flywheel motors
+     * Stops both flywheel motors.
      */
     public void stopFlywheel() {
         flywheelMotor1.set(STOP_MOTOR);
@@ -296,7 +300,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Returns the hood's current angle (in degrees).
      *
-     * @return The current angle of the hood
+     * @return The current angle of the hood.
      */
     public double getHoodAngle() {
         return hoodEncoder.getPosition();
@@ -307,8 +311,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @param angle
      *            The angle (in degrees) to compare the hood's angle to.
-     * @return True if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
-     *         False otherwise.
+     * @return true if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE,
+     *         false otherwise.
      */
     public boolean isHoodAtAngle(double angle) {
         return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
@@ -318,7 +322,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Sets the target angle for the hood motor
      *
      * @param degrees
-     *            Target angle for the hood motor in degrees
+     *            Target angle for the hood motor in degrees.
      */
     public void setHoodAngle(double degrees) {
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
@@ -326,7 +330,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Stops the hood motor
+     * Stops the hood motor.
      */
     public void stopHoodMotor() {
         hoodMotor.set(STOP_MOTOR);
@@ -340,9 +344,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Gets angle of the turret motor (horizontal swivel)
+     * Gets angle of the turret motor (horizontal swivel).
      *
-     * @return Angle, in degrees
+     * @return Angle, in degrees.
      */
     public double getTurretAngle() {
         return turretMotor.getSelectedSensorPosition() / TURRET_DEGREES_TO_ENCODER_TICKS;
@@ -363,12 +367,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Sets the turret's target angle to the given angle.
      *
-     * If angle is too far in one direction but can be reached by rotating in the
-     * other direction, the turret will turn in that direction.
+     * If angle is too far in one direction but can be reached by rotating in the other direction, the
+     * turret will turn in that direction.
      *
      * @param angle
-     *            the angle (in degrees) to set the turret to (negative for
-     *            counterclockwise)
+     *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
     public void setTurretAngle(double angle) {
         if (angle < MIN_TURRET_ANGLE) {
@@ -388,11 +391,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Sets the turret angle realative to the current angle - not the last target
-     * angle, but the current position of the motor
+     * Sets the turret angle relative to the current position of the motor (not the last target angle).
      *
      * @param deltaAngle
-     *            Amount to change the turret angle by in degrees
+     *            Amount to change the turret angle by (in degrees).
      */
     public void updateTurretAngle(double deltaAngle) {
         setTurretAngle(getTurretAngle() + deltaAngle);

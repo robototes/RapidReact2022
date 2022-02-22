@@ -4,19 +4,16 @@ import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
-import io.github.oblarg.oblog.annotations.Log;
 
 public class IntakeBitmapCommand extends CommandBase {
 
     public final double MISFIRE_VELOCITY = 400;
-
 
     // bitmap
     public enum Bitmap {
@@ -37,14 +34,13 @@ public class IntakeBitmapCommand extends CommandBase {
         boolean ingestSensor, feederSensor, ingestColor, feederColor, shooterMisfire;
         double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;
 
-
         // enum initializer
         private Bitmap(boolean ingestSensor, boolean feederSensor, boolean ingestColor, boolean feederColor,
                 double intakeMotorSpeed, double ingestMotorSpeed, double feederMotorSpeed, boolean shooterMisfire) {
             this.ingestSensor = ingestSensor;
             this.feederSensor = feederSensor;
             this.ingestColor = ingestColor;
-            this.feederColor = feederColor; 
+            this.feederColor = feederColor;
             this.intakeMotorSpeed = intakeMotorSpeed;
             this.ingestMotorSpeed = ingestMotorSpeed;
             this.feederMotorSpeed = feederMotorSpeed;
@@ -59,7 +55,7 @@ public class IntakeBitmapCommand extends CommandBase {
         }
     }
 
-    // 
+    //
     private IntakeSubsystem intakeSubsystem;
     private IndexSubsystem indexSubsystem;
     private ShooterSubsystem shooterSubsystem;

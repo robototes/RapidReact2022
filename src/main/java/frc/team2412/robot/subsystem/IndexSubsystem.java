@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class IndexSubsystem extends SubsystemBase {
 
@@ -182,6 +183,7 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ball is positioned at the first sensor
      */
+    @Log
     public boolean ingestSensorHasBallIn() { // also might rename later?
         return ingestProximity.get();
     }
@@ -189,6 +191,7 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ball is positioned at the second sensor
      */
+    @Log
     public boolean feederSensorHasBallIn() { // might rename methods later?
         return feederProximity.get();
     }
@@ -210,6 +213,7 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ingest has the correct cargo
      */
+    @Log
     public boolean ingestHasCorrectCargo() {
         return ((teamColor == Alliance.Blue && ingestBlueColor.get())
                 || teamColor == Alliance.Red && ingestRedColor.get());
@@ -218,6 +222,7 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if feeder has the correct cargo
      */
+    @Log
     public boolean feederHasCorrectCargo() {
         return ((teamColor == Alliance.Blue && feederBlueColor.get())
                 || teamColor == Alliance.Red && feederRedColor.get());

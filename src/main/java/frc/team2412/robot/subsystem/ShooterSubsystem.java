@@ -263,7 +263,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-<<<<<<< HEAD
+     * <<<<<<< HEAD
      * Returns the velocity of the flywheel motors according to the encoder.
      *
      * @return The velocity of the flywheel motors.
@@ -274,10 +274,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Starts both flywheel motors
-=======
      * Starts both flywheel motors at the default velocity.
->>>>>>> e7979c2 (Improve docs because idk what else to do)
      */
     public void startFlywheel() {
         flywheelMotor1.set(ControlMode.Velocity, FLYWHEEL_DEFAULT_VELOCITY);

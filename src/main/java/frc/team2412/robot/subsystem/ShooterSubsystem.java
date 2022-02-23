@@ -37,17 +37,18 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_D = 0;
         public static final double FLYWHEEL_DEFAULT_F = 0;
         // Placeholder gearing constant
-        public static final double HOOD_GEAR_RATIO = 20;
+        public static final double HOOD_GEAR_RATIO = -4*360 * (65/17);
         public static final double HOOD_DEGREES_TO_REVS = HOOD_GEAR_RATIO / 360;
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.01;
+        public static final double HOOD_DEFAULT_P = 0.005;
         public static final double HOOD_DEFAULT_I = 0;
         public static final double HOOD_DEFAULT_D = 0;
-        // Placeholder gearing constant of 1
-        public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 1 * 2048 / 360;
+        public static final double HOOD_DEFAULT_F = 0.002;
+        // Estimated gearing constant of 41
+        public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; //233
         public static final double MIN_TURRET_ANGLE = -180;
         public static final double MAX_TURRET_ANGLE = 180;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
@@ -99,7 +100,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     public double getHoodTestAngle() {
-        return hoodTestAngle;
+        return 45;
     }
 
     private double turretAngleBias;
@@ -135,13 +136,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.config_kF(FLYWHEEL_SLOT_ID, f);
     }
 
-    @Config(name = "Hood PID")
+     @Config(name = "Hood PID")
     private void setHoodPID(@Config(name = "hoodP", defaultValueNumeric = HOOD_DEFAULT_P) double p,
             @Config(name = "hoodI", defaultValueNumeric = HOOD_DEFAULT_I) double i,
-            @Config(name = "hoodD", defaultValueNumeric = HOOD_DEFAULT_D) double d) {
+            @Config(name = "hoodD", defaultValueNumeric = HOOD_DEFAULT_D) double d,
+            @Config(name = "hoodF", defaultValueNumeric = HOOD_DEFAULT_F) double f) {
         hoodPID.setP(p);
         hoodPID.setI(i);
         hoodPID.setD(d);
+        hoodPID.setFF(f);
     }
 
     @Config(name = "Turret PID")
@@ -208,15 +211,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
         hoodMotor.restoreFactoryDefaults();
-        hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) MAX_HOOD_ANGLE / 360);
-        hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0); // Current hood setup plan starts hood at 0,
-                                                                            // below MIN_HOOD_ANGLE
+        // hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        // hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        // hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) MAX_HOOD_ANGLE / 360);
+        // hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0); // Current hood setup plan starts hood at 0,
+        //                                                                     // below MIN_HOOD_ANGLE
         hoodMotor.setSmartCurrentLimit(40);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        hoodEncoder.setPositionConversionFactor(HOOD_DEGREES_TO_REVS);
-        setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D);
+        hoodMotor.setInverted(true);
+        hoodEncoder.setPositionConversionFactor(45 / 11.690532684326172);
+        setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
     }
 
     @Override
@@ -232,6 +236,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setFlywheelRPM(double RPM) {
         setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
+    }
+
+    @Config.NumberSlider(name = "hood speed")
+    public void setHood(double speed){
+        hoodMotor.set(speed);
     }
 
     /**
@@ -261,8 +270,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Resets the hood motor's integrated encoder to 0.
      */
-    public void resetHoodEncoder() {
+    @Config
+    public void resetHoodEncoder(boolean bool) {
+        
+        if(bool){
         hoodEncoder.setPosition(0);
+    }
     }
 
     /**
@@ -270,6 +283,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The current angle of the hood
      */
+    @Log
     public double getHoodAngle() {
         return hoodEncoder.getPosition();
     }
@@ -307,8 +321,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Resets the turret motor's integrated encoder to 0.
      */
-    public void resetTurretEncoder() {
-        turretMotor.setSelectedSensorPosition(0);
+    @Config
+    public void resetTurretEncoder(boolean bool) {
+       if(bool) turretMotor.setSelectedSensorPosition(0);
     }
 
     /**
@@ -316,6 +331,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return Angle, in degrees
      */
+    @Log
     public double getTurretAngle() {
         return turretMotor.getSelectedSensorPosition() / TURRET_DEGREES_TO_ENCODER_TICKS;
     }

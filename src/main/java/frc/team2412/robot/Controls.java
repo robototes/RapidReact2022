@@ -15,7 +15,10 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
+import frc.team2412.robot.commands.intake.IntakeMotorOutCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
@@ -39,6 +42,7 @@ public class Controls {
 
     // intake
     public final Button intakeInButton;
+    public final Button intakeExtendButton;
     public final Button intakeSpitButton;
     public final Button intakeRetractButton;
 
@@ -81,6 +85,7 @@ public class Controls {
         resetDriveGyroButton = driveController.getRightJoystickButton();
 
         intakeInButton = driveController.getRightBumperButton();
+        intakeExtendButton = driveController.getXButton();
         intakeSpitButton = driveController.getAButton();
         intakeRetractButton = driveController.getBButton();
 
@@ -126,8 +131,9 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
-        intakeSpitButton.whenPressed(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
+        intakeInButton.whileHeld(new IntakeMotorInCommand(subsystems.intakeSubsystem));
+        intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 

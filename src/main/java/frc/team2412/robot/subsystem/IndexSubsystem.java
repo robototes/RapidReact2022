@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class IndexSubsystem extends SubsystemBase {
+public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
 
@@ -50,7 +52,9 @@ public class IndexSubsystem extends SubsystemBase {
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
 
+    @Log
     private final WPI_TalonFX ingestMotor;
+    @Log
     private final WPI_TalonFX feederMotor;
 
     // States
@@ -104,6 +108,8 @@ public class IndexSubsystem extends SubsystemBase {
 
         this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+
+        this.feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();

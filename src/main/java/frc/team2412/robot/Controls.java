@@ -19,7 +19,9 @@ import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
+import frc.team2412.robot.commands.shooter.ShooterHoodSetConstantAngleCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 public class Controls {
     public static class ControlConstants {
@@ -135,6 +137,14 @@ public class Controls {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
             subsystems.shooterSubsystem.setDefaultCommand(
                     new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getHoodAngle() + 1));
+            hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getHoodAngle() - 1));
+            turretLeftButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getTurretAngle() - 1));
+            turretRightButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getTurretAngle() + 1));
         }
 
     }

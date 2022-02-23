@@ -395,4 +395,5 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void updateTurretAngle(double deltaAngle) {
         setTurretAngle(getTurretAngle() + deltaAngle);
     }
+
 }

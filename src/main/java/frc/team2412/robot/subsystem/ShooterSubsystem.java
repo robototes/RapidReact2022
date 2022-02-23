@@ -376,8 +376,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 System.out.println("LOG: Targeting desired turret angle in other direction...");
                 angle += 360;
             } else {
-                System.out.println("LOG: Couldn't wrap around turret angle, aborting...");
-                return;
+                System.out.println("LOG: Couldn't wrap around turret angle!");
             }
         } else if (angle > MAX_TURRET_ANGLE) {
             System.out.println("LOG: Desired turret angle is above max angle!");
@@ -385,8 +384,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 System.out.println("LOG: Targeting desired turret angle in other direction...");
                 angle -= 360;
             } else {
-                System.out.println("LOG: Couldn't wrap around turret angle, aborting...");
-                return;
+                System.out.println("LOG: Couldn't wrap around turret angle!");
             }
         }
         turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);

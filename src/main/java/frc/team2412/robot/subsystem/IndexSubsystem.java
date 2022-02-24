@@ -72,10 +72,6 @@ public class IndexSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
-        /*
-
-        */
-
         proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
                 .withPosition(0, 0)
                 .withSize(2, 1)
@@ -96,6 +92,7 @@ public class IndexSubsystem extends SubsystemBase {
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
 
+        this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
 

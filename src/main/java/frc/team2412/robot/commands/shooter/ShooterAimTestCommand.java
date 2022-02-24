@@ -8,6 +8,7 @@ public class ShooterAimTestCommand extends CommandBase {
 
     public ShooterAimTestCommand(ShooterSubsystem shooter) {
         this.shooter = shooter;
+        addRequirements(shooter);
     }
 
     @Override

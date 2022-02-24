@@ -198,24 +198,24 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void simulationInit() {
         PhysicsSim physicsSim = PhysicsSim.getInstance();
-        // TODO Find reasonable values
+        // TODO Find more accurate values
         if (CLIMB_ENABLED) {
-            physicsSim.addTalonFX(hardware.climbMotorFixed, 0, 0);
-            physicsSim.addTalonFX(hardware.climbMotorDynamic, 0, 0);
+            physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 5000 * 2048 / 600.);
+            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 5000 * 2048 / 600.);
         }
         if (INTAKE_ENABLED) {
-            physicsSim.addTalonFX(hardware.intakeMotor1, 0, 0);
-            physicsSim.addTalonFX(hardware.intakeMotor2, 0, 0);
+            physicsSim.addTalonFX(hardware.intakeMotor1, 1, 5000 * 2048 / 600.);
+            physicsSim.addTalonFX(hardware.intakeMotor2, 1, 5000 * 2048 / 600.);
         }
         if (INDEX_ENABLED) {
-            physicsSim.addTalonFX(hardware.ingestIndexMotor, 0, 0);
-            physicsSim.addTalonFX(hardware.feederIndexMotor, 0, 0);
+            physicsSim.addTalonFX(hardware.ingestIndexMotor, 1, 5000 * 2048 / 600.);
+            physicsSim.addTalonFX(hardware.feederIndexMotor, 1, 5000 * 2048 / 600.);
         }
         if (SHOOTER_ENABLED) {
-            physicsSim.addTalonFX(hardware.flywheelMotor1, 0, 0);
-            physicsSim.addTalonFX(hardware.flywheelMotor2, 0, 0);
-            physicsSim.addTalonFX(hardware.turretMotor, 0, 0);
-            physicsSim.addSparkMax(hardware.hoodMotor, 0, 0);
+            physicsSim.addTalonFX(hardware.flywheelMotor1, 3, 5000 * 2048 / 600.);
+            physicsSim.addTalonFX(hardware.flywheelMotor2, 3, 5000 * 2048 / 600.);
+            physicsSim.addTalonFX(hardware.turretMotor, 2, 4000 * 2048 / 600.);
+            physicsSim.addSparkMax(hardware.hoodMotor, 0.97, 11000); // Incorporate gearing?
         }
     }
 

@@ -169,8 +169,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         return feederMotor.get() != 0;
     }
 
-    double ingestOverCurrentStart = 0;
-    double feederOverCurrentStart = 0;
+    private double ingestOverCurrentStart = 0;
+    private double feederOverCurrentStart = 0;
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override

@@ -1,7 +1,6 @@
 package frc.team2412.robot;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVER_VIS_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
@@ -11,7 +10,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_EN
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.DriverVisionSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
@@ -70,8 +68,8 @@ public class Subsystems implements Loggable {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
                     hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
-        indexSubsystem.setDefaultCommand(
-                new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem)); 
-            }
+            indexSubsystem.setDefaultCommand(
+                    new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem));
+        }
     }
 }

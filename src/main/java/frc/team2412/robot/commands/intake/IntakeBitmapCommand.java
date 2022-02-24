@@ -74,6 +74,8 @@ public class IntakeBitmapCommand extends CommandBase {
     @Override
     public void execute() {
 
+        //System.out.println("I AM RUNNING");
+
         boolean ingestSensor = indexSubsystem.ingestSensorHasBallIn();
         boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
         boolean ingestColor = indexSubsystem.ingestHasCorrectCargo() && ingestSensor;

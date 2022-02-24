@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class IndexSubsystem extends SubsystemBase {
+public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
 
@@ -128,6 +130,7 @@ public class IndexSubsystem extends SubsystemBase {
     // Methods
 
     public void setSpeed(double ingestSpeed, double feederSpeed) {
+        System.out.println(ingestSpeed);
         ingestMotor.set(ingestSpeed);
         feederMotor.set(feederSpeed);
     }
@@ -183,17 +186,33 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ball is positioned at the first sensor
      */
-    @Log
+    @Log(tabName = "indexSubsystem")
+    boolean ingestCargoColor = false;
+
+    @Config
+    public void setIngestCC(boolean a) {
+        ingestCargoColor = a;
+    }
+
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get();
+        return ingestCargoColor;
+        // return ingestProximity.get();
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Log
+    @Config
+    boolean feederCargoColor = false;
+
+    @Config
+    public void setIngestFC(boolean a) {
+        feederCargoColor = a;
+    }
+
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return feederProximity.get();
+        return feederCargoColor;
+        // return feederProximity.get();
     }
 
     /**
@@ -213,19 +232,35 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ingest has the correct cargo
      */
-    @Log
+    @Config(tabName = "indexSubsystem")
+    boolean ingestCargo = false;
+
+    @Config
+    public void setIngestC(boolean a) {
+        ingestCargo = a;
+    }
+
     public boolean ingestHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && ingestBlueColor.get())
-                || teamColor == Alliance.Red && ingestRedColor.get());
+        return ingestCargo;
+        // return ((teamColor == Alliance.Blue && ingestBlueColor.get())
+        // || teamColor == Alliance.Red && ingestRedColor.get());
     }
 
     /**
      * Checks if feeder has the correct cargo
      */
-    @Log
+    @Config(tabName = "indexSubsystem")
+    boolean feederCargo = false;
+
+    @Config
+    public void setIngestF(boolean a) {
+        feederCargo = a;
+    }
+
     public boolean feederHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && feederBlueColor.get())
-                || teamColor == Alliance.Red && feederRedColor.get());
+        return feederCargo;
+        // return ((teamColor == Alliance.Blue && feederBlueColor.get())
+        // || teamColor == Alliance.Red && feederRedColor.get());
     }
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.

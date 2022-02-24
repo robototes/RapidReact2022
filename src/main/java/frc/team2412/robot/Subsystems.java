@@ -9,7 +9,7 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
         public static final boolean CLIMB_ENABLED = false;
-        public static final boolean DRIVE_ENABLED = true;
+        public static final boolean DRIVE_ENABLED = false;
         public static final boolean DRIVER_VIS_ENABLED = false;
         public static final boolean SHOOTER_VISION_ENABLED = true;
         public static final boolean INDEX_ENABLED = true;
@@ -39,7 +39,7 @@ public class Subsystems implements Loggable {
 
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle, CLIMB_ENABLED);
+                    hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.navX,

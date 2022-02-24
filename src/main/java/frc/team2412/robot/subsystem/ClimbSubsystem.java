@@ -1,5 +1,14 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ENCODER_TICKS_PER_REVOLUTION;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.GEARBOX_REDUCTION;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MAX_ENCODER_TICKS;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MIN_ENCODER_TICKS;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MOTOR_CURRENT_LIMIT;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.RUNG_DISTANCE;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_EXTEND;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_RETRACT;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -8,16 +17,15 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
-
 import frc.team2412.robot.Robot;
-import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ClimbSubsystemState;
+import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
-public class ClimbSubsystem extends SubsystemBase {
+public class ClimbSubsystem extends SubsystemBase implements Loggable{
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
@@ -48,12 +56,14 @@ public class ClimbSubsystem extends SubsystemBase {
         }
     }
 
+    @Log.MotorController
     private final WPI_TalonFX climbFixedMotor;
+    @Log.MotorController
     private final WPI_TalonFX climbDynamicMotor;
 
     private final DoubleSolenoid solenoid;
 
-    private static ClimbSubsystemState state = ClimbSubsystemState.DISABLED;
+    private boolean enabled;
     private static SolenoidState solenoidState = SolenoidState.MID;
 
     private final NetworkTableEntry testSpeedExtend;
@@ -66,14 +76,11 @@ public class ClimbSubsystem extends SubsystemBase {
 
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle,
-            boolean enabled) {
+    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle) {
         setName("ClimbSubsystem");
         this.climbFixedMotor = climbFixedMotor;
         this.climbDynamicMotor = climbDynamicMotor;
         solenoid = climbAngle;
-
-        state = enabled ? ClimbSubsystemState.ENABLED : ClimbSubsystemState.DISABLED;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -123,15 +130,15 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setEnabled() {
-        state = ClimbSubsystemState.ENABLED;
+        enabled = true;
     }
 
     public void setDisabled() {
-        state = ClimbSubsystemState.DISABLED;
+        enabled = false;
     }
 
     public boolean getState() {
-        return state == ClimbSubsystemState.ENABLED;
+        return enabled;
     }
 
     public void angleClimbHook(DoubleSolenoid.Value value) {
@@ -163,7 +170,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setMotor(double value, WPI_TalonFX motor) {
-        if (state == ClimbSubsystemState.ENABLED) {
+        if (enabled) {
             System.out.println("motor set: " + value);
             if (Robot.isSimulation()) {
                 motor.getSimCollection().setIntegratedSensorVelocity((int) value);

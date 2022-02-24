@@ -72,10 +72,6 @@ public class IndexSubsystem extends SubsystemBase {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
-        /*
-        
-        */
-
         proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
                 .withPosition(0, 0)
                 .withSize(2, 1)

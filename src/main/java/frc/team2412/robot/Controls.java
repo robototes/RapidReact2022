@@ -134,7 +134,7 @@ public class Controls {
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
             subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.hardware.shooterVision));
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
 
     }

@@ -13,11 +13,8 @@ import org.frcteam2910.common.robot.drivers.NavX;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
-import frc.team2412.robot.util.PoseEstimator;
-import frc.team2412.robot.util.ShooterVision;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
@@ -71,7 +68,7 @@ public class Hardware {
         public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
 
         // cameras
-        public static final String FRONT_CAM = "front";
+        public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
 
         // shooter can ids are range 20-29
         public static final int FLYWHEEL_1 = 21, FLYWHEEL_2 = 20, TURRET = 22, HOOD = 23;
@@ -124,10 +121,6 @@ public class Hardware {
     DigitalInput ingestProximity;
     DigitalInput feederProximity;
 
-    // general sensors
-    public ShooterVision shooterVision;
-    public PoseEstimator poseEstimator;
-
     public Hardware() {
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.falcons();
@@ -170,15 +163,10 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
-            shooterVision = new ShooterVision();
-        }
-        if (POSE_ESTIMATION_ENABLED && SHOOTER_VISION_ENABLED) {
+            limelight = new PhotonCamera(LIMELIGHT);
             if (navX == null) {
                 navX = new NavX(GYRO_PORT);
             }
-            poseEstimator = PoseEstimator.getInstance(shooterVision, navX, SHOOTER_ENABLED
-                    ? () -> turretMotor.getSelectedSensorPosition() / ShooterConstants.TURRET_DEGREES_TO_ENCODER_TICKS
-                    : () -> 0);
         }
     }
 }

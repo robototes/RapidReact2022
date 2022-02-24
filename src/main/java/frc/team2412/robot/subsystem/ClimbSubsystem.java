@@ -25,7 +25,7 @@ import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-public class ClimbSubsystem extends SubsystemBase implements Loggable{
+public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;

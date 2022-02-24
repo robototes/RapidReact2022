@@ -163,7 +163,6 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
-            limelight = new PhotonCamera(LIMELIGHT);
             if (navX == null) {
                 navX = new NavX(GYRO_PORT);
             }

@@ -246,9 +246,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     public boolean feederHasCorrectCargo() {
         return feederCargo;
-        // return ((teamColor == Alliance.Blue && feederBlueColor.get())
-        // || teamColor == Alliance.Red && feederRedColor.get());
     }
+    
     private double ingestOverCurrentStart = 0;
     private double feederOverCurrentStart = 0;
 

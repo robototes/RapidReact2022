@@ -1,13 +1,16 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexMotorState.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,7 +46,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS * 1000);
 
     }
 
@@ -51,17 +54,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
-
-    @Log
+  
+    @Log.MotorController
     private final WPI_TalonFX ingestMotor;
-    @Log
+  
+    @Log.MotorController    
     private final WPI_TalonFX feederMotor;
-
-    // States
-    double ingestOverCurrentStart = 0;
-    double feederOverCurrentStart = 0;
-    private IndexMotorState ingestMotorState;
-    private IndexMotorState feederMotorState;
 
     private boolean ingestBallState;
     private boolean feederBallState;
@@ -76,30 +74,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
-        /*
-
-        */
-
         proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
                 .withPosition(0, 0)
                 .withSize(2, 1)
                 .getEntry();
-
-        tab.addBoolean("ingest sensor proximity", this::getIngestProximity);
-        tab.addBoolean("feeder sensor proximity", this::getFeederProximity);
-        tab.addNumber("ingest motor speed", this::getIngestMotorSpeed);
-        tab.addNumber("feeder motor speed", this::getFeederMotorSpeed);
-
-        tab.addBoolean("ingest sensor has ball", this::ingestSensorHasBallIn);
-        tab.addBoolean("feeder sensor has ball", this::feederSensorHasBallIn);
-        tab.addBoolean("feeder is moving", this::isFeederMoving);
-        tab.addBoolean("feeder is not moving", this::isFeederStopped);
 
         this.ingestMotor = firstMotor;
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
 
+        this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
 
@@ -127,7 +112,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void ingestMotorIn() {
         ingestMotor.set(INDEX_IN_SPEED);
-        ingestMotorState = IN;
     }
 
     /**
@@ -135,7 +119,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void ingestMotorOut() {
         ingestMotor.set(INDEX_OUT_SPEED);
-        ingestMotorState = OUT;
     }
 
     /**
@@ -143,7 +126,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void ingestMotorStop() {
         ingestMotor.set(0);
-        ingestMotorState = STOPPED;
     }
 
     /**
@@ -151,7 +133,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void feederMotorIn() {
         feederMotor.set(INDEX_IN_SPEED);
-        feederMotorState = IN;
     }
 
     /**
@@ -159,7 +140,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void feederMotorOut() {
         feederMotor.set(INDEX_OUT_SPEED);
-        feederMotorState = OUT;
     }
 
     /**
@@ -167,12 +147,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     public void feederMotorStop() {
         feederMotor.set(0);
-        feederMotorState = STOPPED;
     }
 
     /**
      * Checks if ball is positioned at the first sensor
      */
+    @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
         return ingestProximity.get();
     }
@@ -180,17 +160,21 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the second sensor
      */
+    @Log(name = "Feeder Proximity")
     public boolean feederSensorHasBallIn() { // might rename methods later?
         return feederProximity.get();
     }
 
     public boolean isIngestMotorOn() {
-        return !(ingestMotorState == STOPPED);
+        return ingestMotor.get() != 0;
     }
 
     public boolean isFeederMotorOn() {
-        return !(feederMotorState == STOPPED);
+        return feederMotor.get() != 0;
     }
+
+    private double ingestOverCurrentStart = 0;
+    private double feederOverCurrentStart = 0;
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
@@ -198,6 +182,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         ingestBallState = ingestSensorHasBallIn();
         feederBallState = feederSensorHasBallIn();
 
+        // Checking for jamming
         double ingestCurrent = ingestMotor.getSupplyCurrent();
         if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
             if (ingestOverCurrentStart == 0) {
@@ -236,31 +221,24 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // for logging
 
-    public boolean getIngestProximity() {
-        return ingestProximity.get();
-    }
-
-    public boolean getFeederProximity() {
-        return feederProximity.get();
-    }
-
+    @Log(name = "Ingest Motor Speed")
     public double getIngestMotorSpeed() {
         return ingestMotor.get();
     }
 
+    @Log(name = "Feeder Motor Speed")
     public double getFeederMotorSpeed() {
         return feederMotor.get();
     }
 
+    @Log(name = "Feeder motor moving")
     public boolean isFeederMoving() {
-        return feederMotorState != STOPPED;
+        return isFeederMotorOn();
     }
 
+    @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
-        return ingestMotorState != STOPPED;
+        return isIngestMotorOn();
     }
 
-    public boolean isFeederStopped() {
-        return feederMotorState == STOPPED;
-    }
 }

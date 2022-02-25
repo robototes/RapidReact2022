@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 
 import org.frcteam2910.common.robot.drivers.Pigeon;
@@ -103,7 +105,7 @@ public class Hardware {
     public Pigeon pigeon;
 
     // cameras
-    public PhotonCamera limelight, frontCamera;
+    public UsbCamera frontCamera;
 
     // shooter
     public WPI_TalonFX flywheelMotor1, flywheelMotor2, turretMotor;
@@ -164,10 +166,10 @@ public class Hardware {
             hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         }
         if (DRIVER_VIS_ENABLED) {
-            frontCamera = new PhotonCamera(FRONT_CAM);
+            CameraServer.addCamera(frontCamera);
+            CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
-            limelight = new PhotonCamera(LIMELIGHT);
         }
     }
 }

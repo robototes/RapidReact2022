@@ -25,8 +25,6 @@ public class Subsystems implements Loggable {
 
     public DrivebaseSubsystem drivebaseSubsystem;
 
-    public DriverVisionSubsystem frontVisionSubsystem;
-
     public ShooterVisionSubsystem shooterVisionSubsystem;
 
     public IndexSubsystem indexSubsystem;
@@ -41,13 +39,11 @@ public class Subsystems implements Loggable {
 
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle, CLIMB_ENABLED);
+                    hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.pigeon,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (DRIVER_VIS_ENABLED)
-            frontVisionSubsystem = new DriverVisionSubsystem(hardware.frontCamera);
         if (SHOOTER_VISION_ENABLED)
             shooterVisionSubsystem = new ShooterVisionSubsystem();
         if (INDEX_ENABLED)

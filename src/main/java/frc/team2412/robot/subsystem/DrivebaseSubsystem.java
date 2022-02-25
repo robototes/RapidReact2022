@@ -231,7 +231,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             } else {
                 driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
             }
-            //driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
+            // driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 
@@ -282,7 +282,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         double angularVelocity;
         synchronized (sensorLock) {
             angle = gyroscope.getAngle();
-            //angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
+            // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
             angularVelocity = gyroscope.getRate();
         }
 
@@ -370,7 +370,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     @Override
     public void periodic() {
-        //Pose2d pose = getPoseAsPoseMeters();
+        // Pose2d pose = getPoseAsPoseMeters();
         synchronized (kinematicsLock) {
             odometryXEntry.setDouble(pose.translation.x);
             odometryYEntry.setDouble(pose.translation.y);

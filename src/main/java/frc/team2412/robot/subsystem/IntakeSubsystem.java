@@ -66,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController(tabName = "IntakeSubsystem")
     private final WPI_TalonFX motorInnerAxle;
 
-    
+    @Log
     private final DoubleSolenoid solenoid;
 
     private final MultiplexedColorSensor leftColorSensor;

@@ -1,6 +1,7 @@
 package frc.team2412.robot.util;
 
 import com.google.errorprone.annotations.Immutable;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,7 +13,8 @@ import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
-import frc.team2412.robot.commands.shooter.ShooterAimTestCommand;
+import frc.team2412.robot.commands.shooter.FullShootCommand;
+import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class AutonomousChooser {
 
@@ -85,7 +87,8 @@ public class AutonomousChooser {
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"),
         INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test"),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test"),
-        SHOOTER((subsystems, trajectories) -> new ShooterAimTestCommand(subsystems.shooterSubsystem), "Shooter test");
+        SHOOTER((subsystems, trajectories) -> new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem), "Shooter test"),
+        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), "Intake and shoot");
         // spotless:on
 
         public final CommandSupplier commandSupplier;

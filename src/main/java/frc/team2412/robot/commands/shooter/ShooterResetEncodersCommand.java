@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 public class ShooterResetEncodersCommand extends InstantCommand {
     public ShooterResetEncodersCommand(ShooterSubsystem shooter) {
         super(() -> {
-            shooter.resetHoodEncoder();
-            shooter.resetTurretEncoder();
+            shooter.resetHoodEncoder(true);
+            shooter.resetTurretEncoder(true);
         }, shooter);
     }
 }

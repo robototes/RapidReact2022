@@ -32,6 +32,9 @@ public class Controls {
     public XboxController driveController;
     public XboxController codriverController;
 
+    // index
+    public final Button indexShootButton;
+
     // shooter
     public final Button shootButton;
     public final Button hoodUpButton;
@@ -88,7 +91,8 @@ public class Controls {
         intakeSpitButton = driveController.getAButton();
         intakeRetractButton = driveController.getBButton();
 
-        shootButton = driveController.getLeftBumperButton();
+        indexShootButton = driveController.getLeftBumperButton();
+        shootButton = driveController.getLeftTriggerAxis().getButton(0.5);
         hoodUpButton = driveController.getDPadButton(Direction.UP);
         hoodDownButton = driveController.getDPadButton(Direction.DOWN);
         turretLeftButton = driveController.getDPadButton(Direction.LEFT);
@@ -125,7 +129,7 @@ public class Controls {
 
     public void bindIndexControls() {
         if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED) {
-            shootButton.whenPressed(new IndexShootCommand(subsystems.indexSubsystem));
+            indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
         }
     }
 
@@ -138,8 +142,9 @@ public class Controls {
 
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
-            subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            shootButton.whileHeld(new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            // subsystems.shooterSubsystem.setDefaultCommand(
+            //         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
                     subsystems.shooterSubsystem.getHoodAngle() + 1));
             hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,

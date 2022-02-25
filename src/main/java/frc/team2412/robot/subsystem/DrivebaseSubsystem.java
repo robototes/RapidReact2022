@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -25,6 +26,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.frcteam2910.common.util.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
@@ -105,8 +107,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
-    private final NetworkTableEntry module1, module2, module3, module4;
     private final NetworkTableEntry isFieldOrientedEntry;
+    private final NetworkTableEntry speedModifier;
 
     private final Field2d field = new Field2d();
 
@@ -165,23 +167,14 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
+        speedModifier = tab.add("Speed Modifier", 1.0f)
+            .withPosition(2, 1)
+            .withSize(2, 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0.0, "max", 1.0))
+            .getEntry();
+
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
-        module1 = tab.add("Module 1", 0.0)
-                .withPosition(1, 0)
-                .withSize(1, 1)
-                .getEntry();
-        module2 = tab.add("Module 2", 0.0)
-                .withPosition(1, 1)
-                .withSize(1, 1)
-                .getEntry();
-        module3 = tab.add("Module 3", 0.0)
-                .withPosition(1, 2)
-                .withSize(1, 1)
-                .getEntry();
-        module4 = tab.add("Module 4", 0.0)
-                .withPosition(1, 3)
-                .withSize(1, 1)
-                .getEntry();
 
         isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
 
@@ -220,18 +213,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
         isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
-            if (isFieldOriented) {
-                synchronized (sensorLock) {
-                    double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
-                            yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
-                    driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
-                            .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
-                            rotationalVelocity, true);
-                }
-            } else {
-                driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
-            }
-            // driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
+            // if (isFieldOriented) {
+            //     synchronized (sensorLock) {
+            //         double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
+            //                 yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
+            //         driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
+            //                 .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
+            //                 rotationalVelocity, true);
+            //     }
+            // } else {
+            //     driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
+            // }
+            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)), rotationalVelocity * speedModifier.getDouble(1.0), true);
         }
     }
 

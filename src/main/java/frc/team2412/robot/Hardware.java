@@ -32,7 +32,8 @@ public class Hardware {
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 8, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 11;
-        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
+        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1,
+                DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT = -1, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = -1;
 
         // TODO set encoder offset values
@@ -62,9 +63,11 @@ public class Hardware {
                 -Math.toRadians(0));
 
         public static final double MODULE_MAX_RPM = 6000.0;
-        public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio().getConfiguration()
+        public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio()
+                .getConfiguration()
                 .getWheelDiameter() * Math.PI *
-                FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM / 60.0;
+                FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM
+                / 60.0;
 
         public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
 
@@ -80,7 +83,8 @@ public class Hardware {
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
-                INDEX_FEEDER_SENSOR = 5;
+                INDEX_FEEDER_SENSOR = 5, INGEST_PROXIMITY = 0, FEEDER_PROXIMITY = 1, INGEST_BLUE = 2,
+                INGEST_RED = 3, FEEDER_BLUE = 4, FEEDER_RED = 5;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
@@ -119,8 +123,12 @@ public class Hardware {
 
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
-    DigitalInput ingestProximity;
-    DigitalInput feederProximity;
+    public DigitalInput ingestProximity;
+    public DigitalInput feederProximity;
+    public DigitalInput ingestBlueColor;
+    public DigitalInput ingestRedColor;
+    public DigitalInput feederBlueColor;
+    public DigitalInput feederRedColor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -139,18 +147,24 @@ public class Hardware {
         if (INTAKE_ENABLED) {
             intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
             intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP, INTAKE_SOLENOID_DOWN);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+                    INTAKE_SOLENOID_DOWN);
             if (I2C_MUX_ENABLED) {
                 this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
                 this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
-                this.centerIntakeColorSensor = new MultiplexedColorSensor(CENTER_INTAKE_COLORSENSOR_PORT);
+                this.centerIntakeColorSensor = new MultiplexedColorSensor(
+                        CENTER_INTAKE_COLORSENSOR_PORT);
             }
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            ingestProximity = new DigitalInput(0);
-            feederProximity = new DigitalInput(1);
+            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
+            feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+            ingestBlueColor = new DigitalInput(INGEST_BLUE);
+            ingestRedColor = new DigitalInput(INGEST_RED);
+            feederBlueColor = new DigitalInput(FEEDER_BLUE);
+            feederRedColor = new DigitalInput(FEEDER_RED);
 
         }
         if (SHOOTER_ENABLED) {

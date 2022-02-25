@@ -1,10 +1,21 @@
 package frc.team2412.robot;
 
-import frc.team2412.robot.subsystem.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
+
+import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
+import frc.team2412.robot.subsystem.ClimbSubsystem;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.IndexSubsystem;
+import frc.team2412.robot.subsystem.IntakeSubsystem;
+import frc.team2412.robot.subsystem.ShooterSubsystem;
+import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
-
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
@@ -46,9 +57,6 @@ public class Subsystems implements Loggable {
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (SHOOTER_VISION_ENABLED)
             shooterVisionSubsystem = new ShooterVisionSubsystem();
-        if (INDEX_ENABLED)
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
                     hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,
@@ -56,5 +64,12 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
+        if (INDEX_ENABLED) {
+            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
+                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
+                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
+            indexSubsystem.setDefaultCommand(
+                    new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem));
+        }
     }
 }

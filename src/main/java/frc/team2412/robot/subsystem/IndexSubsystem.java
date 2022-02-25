@@ -15,7 +15,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IndexSubsystem extends SubsystemBase implements Loggable {
@@ -23,6 +28,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     // Constants
 
     public static class IndexConstants {
+
+        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
@@ -54,6 +61,11 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
 
+    private final DigitalInput ingestBlueColor;
+    private final DigitalInput ingestRedColor;
+    private final DigitalInput feederBlueColor;
+    private final DigitalInput feederRedColor;
+
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
     @Log.MotorController
@@ -68,7 +80,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity) {
+            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
+            DigitalInput feederBlueColor, DigitalInput feederRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -81,6 +94,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
+        this.ingestBlueColor = ingestBlueColor;
+        this.ingestRedColor = ingestRedColor;
+        this.feederBlueColor = feederBlueColor;
+        this.feederRedColor = feederRedColor;
 
         this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
@@ -102,6 +119,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     // Methods
+
+    public void setSpeed(double ingestSpeed, double feederSpeed) {
+        System.out.println(ingestSpeed);
+        ingestMotor.set(ingestSpeed);
+        feederMotor.set(feederSpeed);
+    }
 
     /**
      * Spins first motor inward and updates first motor state
@@ -148,25 +171,81 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the first sensor
      */
+    @Log(tabName = "indexSubsystem")
+    boolean ingestCargoColor = false;
+
+    @Config
+    public void setIngestCC(boolean a) {
+        ingestCargoColor = a;
+    }
+
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get();
+        return ingestCargoColor;
+        // return ingestProximity.get();
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Log(name = "Feeder Proximity")
-    public boolean feederSensorHasBallIn() { // might rename methods later?
-        return feederProximity.get();
+    @Config
+    boolean feederCargoColor = false;
+
+    @Config
+    public void setIngestFC(boolean a) {
+        feederCargoColor = a;
     }
 
+    @Log(name = "Feeder Proximity")
+    public boolean feederSensorHasBallIn() { // might rename methods later?
+        return feederCargoColor;
+        // return feederProximity.get();
+    }
+
+    /**
+     * Checks if ingest motor is on
+     */
     public boolean isIngestMotorOn() {
         return ingestMotor.get() != 0;
     }
 
+    /**
+     * Checks if feeder motor is on
+     */
     public boolean isFeederMotorOn() {
         return feederMotor.get() != 0;
+    }
+
+    /**
+     * Checks if ingest has the correct cargo
+     */
+    @Config(tabName = "indexSubsystem")
+    boolean ingestCargo = false;
+
+    @Config
+    public void setIngestC(boolean a) {
+        ingestCargo = a;
+    }
+
+    public boolean ingestHasCorrectCargo() {
+        return ingestCargo;
+        // return ((teamColor == Alliance.Blue && ingestBlueColor.get())
+        // || teamColor == Alliance.Red && ingestRedColor.get());
+    }
+
+    /**
+     * Checks if feeder has the correct cargo
+     */
+    @Config(tabName = "indexSubsystem")
+    boolean feederCargo = false;
+
+    @Config
+    public void setIngestF(boolean a) {
+        feederCargo = a;
+    }
+
+    public boolean feederHasCorrectCargo() {
+        return feederCargo;
     }
 
     private double ingestOverCurrentStart = 0;

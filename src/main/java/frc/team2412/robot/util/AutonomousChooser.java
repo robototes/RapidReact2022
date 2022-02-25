@@ -11,7 +11,7 @@ import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
@@ -85,7 +85,7 @@ public class AutonomousChooser {
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path"),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path"),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test"),
-        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test"),
+        INDEX((subsystems, trajectories) -> new IndexShootCommand(subsystems.indexSubsystem), "Index test"),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test"),
         SHOOTER((subsystems, trajectories) -> new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem), "Shooter test"),
         INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), "Intake and shoot");

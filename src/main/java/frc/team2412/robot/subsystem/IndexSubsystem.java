@@ -247,7 +247,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     public boolean feederHasCorrectCargo() {
         return feederCargo;
     }
-    
+
     private double ingestOverCurrentStart = 0;
     private double feederOverCurrentStart = 0;
 

@@ -3,7 +3,7 @@ package frc.team2412.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.team2412.robot.commands.index.IndexCommand;
+import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
@@ -15,7 +15,7 @@ public class IntakeInCommand extends SequentialCommandGroup {
                 new WaitCommand(0.2),
                 new ParallelCommandGroup(
                         new IntakeMotorInCommand(intakeSubsystem),
-                        new IndexCommand(indexSubsystem)));
+                        new IndexShootCommand(indexSubsystem)));
 
     }
 }

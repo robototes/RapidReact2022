@@ -24,6 +24,7 @@ public class IndexShootCommand extends CommandBase {
         subsystem.feederMotorStop();
     }
 
+    @Override
     public boolean isFinished() {
         return false;
     }

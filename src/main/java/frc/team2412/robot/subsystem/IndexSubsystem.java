@@ -54,11 +54,11 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
-  
+
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
-  
-    @Log.MotorController    
+
+    @Log.MotorController
     private final WPI_TalonFX feederMotor;
 
     private boolean ingestBallState;

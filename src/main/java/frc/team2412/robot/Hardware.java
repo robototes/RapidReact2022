@@ -11,7 +11,6 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 
 import org.frcteam2910.common.robot.drivers.Pigeon;
-import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;

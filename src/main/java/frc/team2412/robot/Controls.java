@@ -19,7 +19,6 @@ import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorOutCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
-import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodSetConstantAngleCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;

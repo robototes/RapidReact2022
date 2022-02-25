@@ -139,6 +139,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    public void setSpeed(double speed) {
+        motorInnerAxle.set(speed);
+        motorOuterAxle.set(speed);
+    }
+
     /**
      * Spins motors outwards and updates motor state.
      * Runs if Intake is extended which is when the solenoid is retracted.

@@ -26,13 +26,16 @@ public class AutonomousChooser {
         this.subsystems = subsystems;
         this.trajectories = trajectories;
 
-        if (AutonomousMode.SQUARE_PATH.enabled)
-            autonomousModeChooser.setDefaultOption(AutonomousMode.SQUARE_PATH.uiName, AutonomousMode.SQUARE_PATH);
-
+        boolean setDefault = false;
         for (var mode : AutonomousMode.values()) {
             if (mode != AutonomousMode.SQUARE_PATH) {
-                if (mode.enabled)
-                    autonomousModeChooser.addOption(mode.uiName, mode);
+                if (mode.enabled) {
+                    if (!setDefault) {
+                        autonomousModeChooser.setDefaultOption(mode.uiName, mode);
+                        setDefault = true;
+                    } else
+                        autonomousModeChooser.addOption(mode.uiName, mode);
+                }
             }
         }
 

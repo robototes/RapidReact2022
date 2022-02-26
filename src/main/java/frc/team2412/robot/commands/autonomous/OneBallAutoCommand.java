@@ -21,7 +21,9 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
     public OneBallAutoCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
             ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem) {
         Trajectory robotPath = new Trajectory(
-                new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO).lineTo(new Vector2(-24, 0)).build(),
+                new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
+                        .lineTo(new Vector2(24, 0))
+                        .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         addCommands(

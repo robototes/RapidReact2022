@@ -7,7 +7,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
 
-import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -68,8 +67,9 @@ public class Subsystems implements Loggable {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
                     hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
-            indexSubsystem.setDefaultCommand(
-                    new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem));
+            // indexSubsystem.setDefaultCommand(
+            // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
+            // shooterVisionSubsystem));
         }
     }
 }

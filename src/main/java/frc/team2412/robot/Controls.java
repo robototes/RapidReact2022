@@ -137,17 +137,18 @@ public class Controls {
 
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
-            shootButton.whileHeld(new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            shootButton.whileHeld(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             // subsystems.shooterSubsystem.setDefaultCommand(
-            //         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
                     subsystems.shooterSubsystem.getHoodAngle() + 1));
             hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
                     subsystems.shooterSubsystem.getHoodAngle() - 1));
             turretLeftButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-                    subsystems.shooterSubsystem.getTurretAngle() - 1));
+                    subsystems.shooterSubsystem.getTurretAngle() - 5));
             turretRightButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-                    subsystems.shooterSubsystem.getTurretAngle() + 1));
+                    subsystems.shooterSubsystem.getTurretAngle() + 5));
         }
 
     }

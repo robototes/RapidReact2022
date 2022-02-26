@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -175,35 +174,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the first sensor
      */
-    @Log(tabName = "indexSubsystem")
-    boolean ingestCargoColor = false;
-
-    @Config
-    public void setIngestCC(boolean a) {
-        ingestCargoColor = a;
-    }
-
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestCargoColor;
-        // return ingestProximity.get();
+        return ingestProximity.get();
     }
 
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Config
-    boolean feederCargoColor = false;
-
-    @Config
-    public void setIngestFC(boolean a) {
-        feederCargoColor = a;
-    }
-
     @Log(name = "Feeder Proximity")
     public boolean feederSensorHasBallIn() { // might rename methods later?
-        return feederCargoColor;
-        // return feederProximity.get();
+        return feederProximity.get();
     }
 
     /**
@@ -223,33 +204,19 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ingest has the correct cargo
      */
-    @Config(tabName = "indexSubsystem")
-    boolean ingestCargo = false;
-
-    @Config
-    public void setIngestC(boolean a) {
-        ingestCargo = a;
-    }
-
+    @Log(name = "Ingest Cargo")
     public boolean ingestHasCorrectCargo() {
-        return ingestCargo;
-        // return ((teamColor == Alliance.Blue && ingestBlueColor.get())
-        // || teamColor == Alliance.Red && ingestRedColor.get());
+        return ((teamColor == Alliance.Blue && ingestBlueColor.get())
+                || teamColor == Alliance.Red && ingestRedColor.get());
     }
 
     /**
      * Checks if feeder has the correct cargo
      */
-    @Config(tabName = "indexSubsystem")
-    boolean feederCargo = false;
-
-    @Config
-    public void setIngestF(boolean a) {
-        feederCargo = a;
-    }
-
+    @Log(name = "Feeder Cargo")
     public boolean feederHasCorrectCargo() {
-        return feederCargo;
+        return ((teamColor == Alliance.Blue && feederBlueColor.get())
+                || teamColor == Alliance.Red && feederRedColor.get());
     }
 
     private double ingestOverCurrentStart = 0;

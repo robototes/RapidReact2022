@@ -168,11 +168,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         speedModifier = tab.add("Speed Modifier", 1.0f)
-            .withPosition(2, 1)
-            .withSize(2, 1)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.0, "max", 1.0))
-            .getEntry();
+                .withPosition(2, 1)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0.0, "max", 1.0))
+                .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
@@ -214,17 +214,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             // if (isFieldOriented) {
-            //     synchronized (sensorLock) {
-            //         double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
-            //                 yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
-            //         driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
-            //                 .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
-            //                 rotationalVelocity, true);
-            //     }
-            // } else {
-            //     driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
+            // synchronized (sensorLock) {
+            // double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
+            // yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
+            // driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
+            // .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
+            // rotationalVelocity, true);
             // }
-            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)), rotationalVelocity * speedModifier.getDouble(1.0), true);
+            // } else {
+            // driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
+            // }
+            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
+                    rotationalVelocity * speedModifier.getDouble(1.0), true);
         }
     }
 

@@ -19,6 +19,11 @@ public class ShooterTurretSetAngleCommand extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        System.out.println("ShooterTurretSetAngleCommand finished");
+    }
+
+    @Override
     public boolean isFinished() {
         return shooter.isTurretAtAngle(angle);
     }

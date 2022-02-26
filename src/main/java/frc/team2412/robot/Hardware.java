@@ -180,8 +180,8 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
-            if (navX == null) {
-                navX = new NavX(GYRO_PORT);
+            if (pigeon == null) {
+                pigeon = new Pigeon(GYRO_PORT);
             }
         }
     }

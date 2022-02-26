@@ -1,10 +1,20 @@
 package frc.team2412.robot;
 
-import frc.team2412.robot.subsystem.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
+
+import frc.team2412.robot.subsystem.ClimbSubsystem;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.IndexSubsystem;
+import frc.team2412.robot.subsystem.IntakeSubsystem;
+import frc.team2412.robot.subsystem.ShooterSubsystem;
+import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
-
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
@@ -12,11 +22,11 @@ public class Subsystems implements Loggable {
         public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = false;
         public static final boolean SHOOTER_VISION_ENABLED = true;
-        public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean INDEX_ENABLED = true;
+        public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
         public static final boolean I2C_MUX_ENABLED = false;
-        public static final boolean SHOOTER_TESTING = true;
+        public static final boolean SHOOTER_TESTING = false;
     }
 
     public final Hardware hardware;
@@ -39,14 +49,11 @@ public class Subsystems implements Loggable {
 
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle, CLIMB_ENABLED);
+                    hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.navX,
+                    hardware.backLeftModule, hardware.backRightModule, hardware.pigeon,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (INDEX_ENABLED)
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
                     hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,
@@ -57,5 +64,13 @@ public class Subsystems implements Loggable {
         if (SHOOTER_VISION_ENABLED)
             shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.navX,
                     SHOOTER_ENABLED ? shooterSubsystem::getTurretAngle : () -> 0);
+        if (INDEX_ENABLED) {
+            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
+                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
+                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
+            // indexSubsystem.setDefaultCommand(
+            // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
+            // shooterVisionSubsystem));
+        }
     }
 }

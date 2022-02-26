@@ -13,7 +13,7 @@ public class IntakeStopCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         subsystem.intakeStop();
     }
 

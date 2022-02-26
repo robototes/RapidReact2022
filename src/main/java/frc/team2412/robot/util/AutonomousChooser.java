@@ -11,7 +11,7 @@ import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;

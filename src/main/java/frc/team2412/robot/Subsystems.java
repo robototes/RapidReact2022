@@ -7,7 +7,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
 
-import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -27,7 +26,7 @@ public class Subsystems implements Loggable {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
         public static final boolean I2C_MUX_ENABLED = false;
-        public static final boolean SHOOTER_TESTING = true;
+        public static final boolean SHOOTER_TESTING = false;
     }
 
     public final Hardware hardware;
@@ -53,7 +52,7 @@ public class Subsystems implements Loggable {
                     hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.navX,
+                    hardware.backLeftModule, hardware.backRightModule, hardware.pigeon,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (SHOOTER_VISION_ENABLED)
             shooterVisionSubsystem = new ShooterVisionSubsystem();
@@ -68,8 +67,9 @@ public class Subsystems implements Loggable {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
                     hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
-            indexSubsystem.setDefaultCommand(
-                    new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem));
+            // indexSubsystem.setDefaultCommand(
+            // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
+            // shooterVisionSubsystem));
         }
     }
 }

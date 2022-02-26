@@ -9,7 +9,8 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
-import org.frcteam2910.common.robot.drivers.NavX;
+
+import org.frcteam2910.common.robot.drivers.Pigeon;
 
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
@@ -32,9 +33,12 @@ public class Hardware {
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 8, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 11;
-        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1,
-                DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
-                DRIVETRAIN_BACK_LEFT_ENCODER_PORT = -1, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = -1;
+        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = 3, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = 6,
+                DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 9, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 12;
+        public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(67.852);
+        public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(221.924);
+        public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
+        public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
         // TODO set encoder offset values
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
@@ -42,25 +46,25 @@ public class Hardware {
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
                 Mk4SwerveModuleHelper.GearRatio.L1,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
-                -Math.toRadians(0));
+                DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET);
 
         public static final double MODULE_MAX_RPM = 6000.0;
         public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio()
@@ -69,7 +73,7 @@ public class Hardware {
                 FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM
                 / 60.0;
 
-        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+        public static final int GYRO_PORT = 62;
 
         // cameras
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
@@ -82,9 +86,8 @@ public class Hardware {
                 INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49
-        public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INDEX_INGEST_SENSOR = 4,
-                INDEX_FEEDER_SENSOR = 5, INGEST_PROXIMITY = 0, FEEDER_PROXIMITY = 1, INGEST_BLUE = 2,
-                INGEST_RED = 3, FEEDER_BLUE = 4, FEEDER_RED = 5;
+        public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
+                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
@@ -100,7 +103,7 @@ public class Hardware {
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
-    public NavX navX;
+    public Pigeon pigeon;
 
     // cameras
     public UsbCamera frontCamera;
@@ -136,7 +139,7 @@ public class Hardware {
             frontRightModule = FRONT_RIGHT_CONFIG.falcons();
             backLeftModule = BACK_LEFT_CONFIG.falcons();
             backRightModule = BACK_RIGHT_CONFIG.falcons();
-            navX = new NavX(GYRO_PORT);
+            pigeon = new Pigeon(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);

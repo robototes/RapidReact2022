@@ -160,8 +160,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motors and updates motor state
      */
     public void intakeStop() {
-        motorOuterAxle.set(0);
-        motorInnerAxle.set(0);
+        motorOuterAxle.stopMotor();
+        motorInnerAxle.stopMotor();
         intakeMotorState = STOPPED;
     }
 

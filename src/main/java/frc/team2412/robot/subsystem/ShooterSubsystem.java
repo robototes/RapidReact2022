@@ -95,24 +95,24 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     // Instance variables
-    @Log.MotorController(name = "Flywheel motor 1")
+    @Log.MotorController(name = "Flywheel motor 1", rowIndex = 0, columnIndex = 3)
     private final WPI_TalonFX flywheelMotor1;
-    @Log.MotorController(name = "Flywheel motor 2")
+    @Log.MotorController(name = "Flywheel motor 2", rowIndex = 1, columnIndex = 3)
     private final WPI_TalonFX flywheelMotor2;
-    @Log.MotorController(name = "Turret motor")
+    @Log.MotorController(name = "Turret motor", rowIndex = 2, columnIndex = 3)
     private final WPI_TalonFX turretMotor;
     private final CANSparkMax hoodMotor;
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    @Log(name = "Hood motor speed")
+    @Log(name = "Hood speed", rowIndex = 2, columnIndex = 8)
     private double getHoodMotorSpeed() {
         return hoodMotor.get();
     }
 
     private double flywheelTestRPM;
 
-    @Config.NumberSlider(name = "Flywheel test RPM", min = 0, max = 6000)
+    @Config.NumberSlider(name = "Flywheel test RPM", min = 0, max = 6000, rowIndex = 0, columnIndex = 5)
     private void setFlywheelTestRPM(double newRPM) {
         flywheelTestRPM = newRPM;
     }
@@ -123,7 +123,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     private double hoodTestAngle;
 
-    @Config.NumberSlider(name = "Hood test angle", min = 0, max = MAX_HOOD_ANGLE)
+    @Config.NumberSlider(name = "Hood test angle", min = 0, max = MAX_HOOD_ANGLE, rowIndex = 1, columnIndex = 5)
     private void setHoodTestAngle(double newAngle) {
         hoodTestAngle = newAngle;
     }
@@ -134,7 +134,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     private double turretAngleBias;
 
-    @Config(name = "Turret angle bias")
+    @Config(name = "Turret angle bias", rowIndex = 2, columnIndex = 5)
     private void setTurretAngleBias(double newBias) {
         turretAngleBias = newBias;
     }
@@ -145,7 +145,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     private double distanceBias;
 
-    @Config(name = "Distance bias")
+    @Config(name = "Distance bias", rowIndex = 2, columnIndex = 6)
     private void setDistanceBias(double newBias) {
         distanceBias = newBias;
     }
@@ -154,7 +154,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return distanceBias;
     }
 
-    @Config(name = "Flywheel PID")
+    @Config(name = "Flywheel PID", width = 1, height = 3)
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
@@ -165,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.config_kF(FLYWHEEL_SLOT_ID, f);
     }
 
-    @Config(name = "Hood PID")
+    @Config(name = "Hood PID", rowIndex = 0, columnIndex = 1, width = 1, height = 3)
     private void setHoodPID(@Config(name = "hoodP", defaultValueNumeric = HOOD_DEFAULT_P) double p,
             @Config(name = "hoodI", defaultValueNumeric = HOOD_DEFAULT_I) double i,
             @Config(name = "hoodD", defaultValueNumeric = HOOD_DEFAULT_D) double d,
@@ -176,7 +176,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodPID.setFF(f);
     }
 
-    @Config(name = "Turret PID")
+    @Config(name = "Turret PID", rowIndex = 0, columnIndex = 2, width = 1, height = 3)
     private void setTurretPID(@Config(name = "turretP", defaultValueNumeric = TURRET_DEFAULT_P) double p,
             @Config(name = "turretI", defaultValueNumeric = TURRET_DEFAULT_I) double i,
             @Config(name = "turretD", defaultValueNumeric = TURRET_DEFAULT_D) double turretD) {
@@ -228,7 +228,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.set(0);
     }
 
-    @Log(name = "Flywheel target RPM")
+    @Log(name = "Target RPM", rowIndex = 0, columnIndex = 8)
     private double setRPM;
 
     /**
@@ -247,12 +247,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The current RPM of the flywheel motors.
      */
-    @Log(name = "Flywheel RPM")
+    @Log(name = "Flywheel RPM", rowIndex = 0, columnIndex = 7)
     public double getFlywheelRPM() {
         return flywheelMotor1.getSelectedSensorVelocity() / FLYWHEEL_RPM_TO_VELOCITY;
     }
 
-    @Log(name = "Flywheel target velocity")
+    @Log(name = "Target velocity", rowIndex = 1, columnIndex = 8)
     private double setVelocity;
 
     /**
@@ -270,7 +270,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The velocity of the flywheel motors.
      */
-    @Log(name = "Flywheel velocity")
+    @Log(name = "Flywheel velocity", rowIndex = 1, columnIndex = 7)
     public double getFlywheelVelocity() {
         return flywheelMotor1.getSelectedSensorVelocity();
     }
@@ -280,7 +280,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The closed loop error in RPM.
      */
-    @Log(name = "Flywheel RPM error")
+    @Log(name = "RPM error", rowIndex = 0, columnIndex = 9)
     public double getFlywheelRPMError() {
         return flywheelMotor1.getClosedLoopError() / FLYWHEEL_RPM_TO_VELOCITY;
     }
@@ -302,7 +302,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Resets the hood motor's integrated encoder to 0.
      */
-    @Config(name = "Reset hood encoder")
+    @Config(name = "Reset hood", rowIndex = 1, columnIndex = 9)
     public void resetHoodEncoder(boolean reset) {
         if (reset) {
             hoodEncoder.setPosition(0);
@@ -314,7 +314,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The current angle of the hood.
      */
-    @Log(name = "Hood angle")
+    @Log(name = "Hood angle", rowIndex = 2, columnIndex = 7)
     public double getHoodAngle() {
         return hoodEncoder.getPosition() * HOOD_REVS_TO_DEGREES;
     }
@@ -352,7 +352,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Resets the turret motor's integrated encoder to 0.
      */
-    @Config(name = "Reset turret encoder")
+    @Config(name = "Reset turret", rowIndex = 2, columnIndex = 9)
     public void resetTurretEncoder(boolean reset) {
         if (reset) {
             turretMotor.setSelectedSensorPosition(0);

@@ -15,7 +15,14 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.index.IndexShootCommand;
+<<<<<<< Updated upstream
 import frc.team2412.robot.commands.intake.IntakeInCommand;
+=======
+import frc.team2412.robot.commands.index.IndexSpitCommand;
+import frc.team2412.robot.commands.intake.IntakeExtendCommand;
+import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
+import frc.team2412.robot.commands.intake.IntakeMotorOutCommand;
+>>>>>>> Stashed changes
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
@@ -32,6 +39,13 @@ public class Controls {
     public XboxController driveController;
     public XboxController codriverController;
 
+<<<<<<< Updated upstream
+=======
+    // index
+    public final Button indexShootButton;
+    public final Button indexSpitButton;
+
+>>>>>>> Stashed changes
     // shooter
     public final Button shootButton;
     public final Button hoodUpButton;
@@ -86,7 +100,12 @@ public class Controls {
         intakeSpitButton = driveController.getAButton();
         intakeRetractButton = driveController.getBButton();
 
-        shootButton = driveController.getLeftBumperButton();
+        indexShootButton = driveController.getLeftTriggerAxis().getButton(0.5);
+        indexSpitButton = driveController.getLeftBumperButton();
+        codriverIndexShootButton = codriverController.getXButton();
+        codriverIndexSpitButton = codriverController.getAButton();
+
+        shootButton = driveController.getRightTriggerAxis().getButton(0.5);
         hoodUpButton = driveController.getDPadButton(Direction.UP);
         hoodDownButton = driveController.getDPadButton(Direction.DOWN);
         turretLeftButton = driveController.getDPadButton(Direction.LEFT);
@@ -122,15 +141,30 @@ public class Controls {
     }
 
     public void bindIndexControls() {
+<<<<<<< Updated upstream
         if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED) {
             shootButton.whenPressed(new IndexShootCommand(subsystems.indexSubsystem));
+=======
+        if (INDEX_ENABLED) {
+            indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+            indexSpitButton.whileHeld(new IndexSpitCommand(subsystems.indexSubsystem));
+>>>>>>> Stashed changes
         }
     }
 
     public void bindIntakeControls() {
+<<<<<<< Updated upstream
         intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeSpitButton.whenPressed(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+=======
+        if (INTAKE_ENABLED) {
+            intakeInButton.whileHeld(new IntakeMotorInCommand(subsystems.intakeSubsystem));
+            intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+            intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
+            intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        }
+>>>>>>> Stashed changes
     }
 
     public void bindShooterControls() {

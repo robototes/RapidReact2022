@@ -147,7 +147,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops first motor and updates first motor state
      */
     public void ingestMotorStop() {
-        ingestMotor.set(0);
+        ingestMotor.stopMotor();
     }
 
     /**
@@ -168,7 +168,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops second motor and updates second motor state
      */
     public void feederMotorStop() {
-        feederMotor.set(0);
+        feederMotor.stopMotor();
     }
 
     /**

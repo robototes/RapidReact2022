@@ -1,6 +1,5 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Controls.ControlConstants.CODRIVER_CONTROLLER_PORT;
 import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
@@ -9,7 +8,11 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
 
+import frc.team2412.robot.util.controller.CompoundController;
+import frc.team2412.robot.util.controller.MultiController;
+import frc.team2412.robot.util.controller.MultiController.Controllers;
 import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
@@ -17,18 +20,20 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class Controls {
     public static class ControlConstants {
         public static final int CONTROLLER_PORT = 0;
-        public static final int CODRIVER_CONTROLLER_PORT = 1;
     }
 
-    public XboxController driveController;
-    public XboxController codriverController;
+    public CompoundController<Controllers, XboxController> driverController;
+
+    public Controller primaryController;
+    public Controller secondaryController;
+    public Controller combinedController;
+
 
     // shooter
     public final Button shootButton;
@@ -63,32 +68,35 @@ public class Controls {
     public Controls(Subsystems s) {
         subsystems = s;
 
-        driveController = new XboxController(CONTROLLER_PORT);
-        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
+        driverController = CompoundController.of(CONTROLLER_PORT, Controllers.PRIMARY, Controllers.SECONDARY, Controllers.UNIVERSAL);
 
-        fixedArmUpManualButton = codriverController.getDPadButton(Direction.UP);
-        fixedArmDownManualButton = codriverController.getDPadButton(Direction.DOWN);
-        dynamicArmUpManualButton = codriverController.getDPadButton(Direction.LEFT);
-        dynamicArmDownManualButton = codriverController.getDPadButton(Direction.RIGHT);
+        primaryController = driverController.getPreset(Controllers.PRIMARY);
+        secondaryController = driverController.getPreset(Controllers.SECONDARY);
+        combinedController = driverController.getPreset(Controllers.UNIVERSAL);
 
-        fixedArmUpButton = codriverController.getXButton();
-        fixedArmDownButton = codriverController.getYButton();
-        dynamicArmUpButton = codriverController.getAButton();
-        dynamicArmDownButton = codriverController.getBButton();
+        fixedArmUpManualButton = secondaryController.getDPadButton(Direction.UP);
+        fixedArmDownManualButton = secondaryController.getDPadButton(Direction.DOWN);
+        dynamicArmUpManualButton = secondaryController.getDPadButton(Direction.LEFT);
+        dynamicArmDownManualButton = secondaryController.getDPadButton(Direction.RIGHT);
 
-        rungClimbButton = codriverController.getRightBumperButton();
+        fixedArmUpButton = secondaryController.getXButton();
+        fixedArmDownButton = secondaryController.getYButton();
+        dynamicArmUpButton = secondaryController.getAButton();
+        dynamicArmDownButton = secondaryController.getBButton();
 
-        resetDriveGyroButton = driveController.getRightJoystickButton();
+        rungClimbButton = secondaryController.getRightBumperButton();
 
-        intakeInButton = driveController.getRightBumperButton();
-        intakeSpitButton = driveController.getAButton();
-        intakeRetractButton = driveController.getBButton();
+        resetDriveGyroButton = primaryController.getRightJoystickButton();
 
-        shootButton = driveController.getLeftBumperButton();
-        hoodUpButton = driveController.getDPadButton(Direction.UP);
-        hoodDownButton = driveController.getDPadButton(Direction.DOWN);
-        turretLeftButton = driveController.getDPadButton(Direction.LEFT);
-        turretRightButton = driveController.getDPadButton(Direction.RIGHT);
+        intakeInButton = primaryController.getRightBumperButton();
+        intakeSpitButton = primaryController.getAButton();
+        intakeRetractButton = primaryController.getBButton();
+
+        shootButton = primaryController.getLeftBumperButton();
+        hoodUpButton = primaryController.getDPadButton(Direction.UP);
+        hoodDownButton = primaryController.getDPadButton(Direction.DOWN);
+        turretLeftButton = primaryController.getDPadButton(Direction.LEFT);
+        turretRightButton = primaryController.getDPadButton(Direction.RIGHT);
 
         if (CLIMB_ENABLED) {
             bindClimbControls();

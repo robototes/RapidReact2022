@@ -196,7 +196,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
                         ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH));
             if (gyroscope instanceof NavX)
-                return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL), ((NavX) gyroscope).getAxis(NavX.Axis.PITCH));
+                return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
+                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH));
         }
         return Vector2.ZERO;
     }

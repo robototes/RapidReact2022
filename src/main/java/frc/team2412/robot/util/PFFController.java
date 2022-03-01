@@ -11,6 +11,7 @@ import org.frcteam2910.common.math.Vector3;
  * @param <T>
  *            type of input/output
  */
+@SuppressWarnings("unused")
 public class PFFController<T> {
     private final double p, f;
     private final Timer timer;

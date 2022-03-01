@@ -52,7 +52,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     public static class ShooterConstants {
-        public static final double STOP_MOTOR = 0;
         // Placeholder PID constants
         // TODO non-scuffed constants
         public static final double FLYWHEEL_DEFAULT_P = 1.3;
@@ -292,7 +291,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Stops the hood motor.
      */
     public void stopHoodMotor() {
-        hoodMotor.set(STOP_MOTOR);
+        hoodMotor.stopMotor();
     }
 
     @Config.NumberSlider(name = "Hood test angle", min = 0, max = MAX_HOOD_ANGLE, rowIndex = 1, columnIndex = 5)
@@ -403,6 +402,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return turretAngleBias;
     }
 
+    @Config(name = "Turret test angle")
+    private void setTurretTestAngle(double newAngle) {
+        turretTestAngle = newAngle;
+    }
+
+    public double getTurretTestAngle() {
+        return turretTestAngle;
+    }
+
     /**
      * Gets angle of the turret motor (horizontal swivel).
      *
@@ -423,15 +431,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public boolean isTurretAtAngle(double angle) {
         return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
-    }
-
-    @Config(name = "Turret test angle")
-    private void setTurretTestAngle(double newAngle) {
-        turretTestAngle = newAngle;
-    }
-
-    public double getTurretTestAngle() {
-        return turretTestAngle;
     }
 
     /**

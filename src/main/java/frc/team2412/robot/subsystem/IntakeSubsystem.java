@@ -53,10 +53,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Define Hardware
 
     @Log
-    private final WPI_TalonFX motorOuterAxle;
-
-    @Log
-    private final WPI_TalonFX motorInnerAxle;
+    private final WPI_TalonFX motor;
 
     @Log
     private final DoubleSolenoid solenoid;
@@ -70,17 +67,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motorOuterAxle,
-            WPI_TalonFX motorInnerAxle,
-            DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(WPI_TalonFX motor, DoubleSolenoid intakeSolenoid) {
 
-        this.motorOuterAxle = motorOuterAxle;
-        this.motorOuterAxle.setInverted(true);
-        this.motorInnerAxle = motorInnerAxle;
-        this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
-        this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
-        this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.motorInnerAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor = motor;
+        this.motor.setNeutralMode(NeutralMode.Coast);
+        this.motor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
         this.solenoid = intakeSolenoid;
 
@@ -96,45 +87,41 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Methods
 
     /**
-     * Manually sets the speed of the inner and outer axle motors.
+     * Manually sets the speed of the motor
      *
      * @param speed
      */
     public void setSpeed(double speed) {
-        motorInnerAxle.set(speed);
-        motorOuterAxle.set(speed);
+        motor.set(speed);
     }
 
     /**
-     * Spins motors inwards and updates motor state.
+     * Spins motor inwards and updates motor state.
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
         if (intakeSolenoidState == RETRACT) {
-            motorOuterAxle.set(INTAKE_IN_SPEED);
-            motorInnerAxle.set(INTAKE_IN_SPEED);
+            motor.set(INTAKE_IN_SPEED);
             intakeMotorState = IN;
         }
     }
 
     /**
-     * Spins motors outwards and updates motor state.
+     * Spins motor outwards and updates motor state.
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
         if (intakeSolenoidState == RETRACT) {
-            motorOuterAxle.set(INTAKE_OUT_SPEED);
-            motorInnerAxle.set(INTAKE_OUT_SPEED);
+            motor.set(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
         }
     }
 
     /**
-     * Stops motors and updates motor state
+     * Stops motor and updates motor state
      */
     public void intakeStop() {
-        motorOuterAxle.stopMotor();
-        motorInnerAxle.stopMotor();
+        motor.stopMotor();
         intakeMotorState = STOPPED;
     }
 

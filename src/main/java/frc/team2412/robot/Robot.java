@@ -20,8 +20,8 @@ import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
-import frc.team2412.robot.util.AutonomousTrajectories;
-import frc.team2412.robot.util.AutonomousChooser;
+import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
+import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
@@ -182,8 +182,8 @@ public class Robot extends TimedRobot implements Loggable {
     public void teleopInit() {
         if (SubsystemConstants.DRIVE_ENABLED) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.primaryController.getLeftXAxis(), controls.primaryController.getLeftYAxis(),
-                    controls.primaryController.getRightXAxis(), true));
+                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getRightXAxis(), true));
         }
     }
 

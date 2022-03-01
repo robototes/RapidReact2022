@@ -5,20 +5,29 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import java.util.*;
 
-/** Compound controller class
+/**
+ * Compound controller class
+ *
  * @author Alex Stedman
- * @param <T> preset map type
- * @param <U> controller type
+ * @param <T>
+ *            preset map type
+ * @param <U>
+ *            controller type
  */
 @SuppressWarnings("unused")
-public class CompoundController<T, U extends Controller> extends OptionalController<U> implements MultiController<T, U> {
+public class CompoundController<T, U extends Controller> extends OptionalController<U>
+        implements MultiController<T, U> {
     private final SwitchableController<T, U> switchableController;
 
-    /** create compound controller
+    /**
+     * create compound controller
      *
-     * @param one if for the presets onlyOne mode is enabled
-     * @param c controller
-     * @param presets preset keys
+     * @param one
+     *            if for the presets onlyOne mode is enabled
+     * @param c
+     *            controller
+     * @param presets
+     *            preset keys
      */
     @SafeVarargs
     public CompoundController(boolean one, U c, T... presets) {
@@ -26,10 +35,13 @@ public class CompoundController<T, U extends Controller> extends OptionalControl
         switchableController = new SwitchableController<>(one, c, presets);
     }
 
-    /** create compound controller
+    /**
+     * create compound controller
      *
-     * @param c controller
-     * @param presets preset keys
+     * @param c
+     *            controller
+     * @param presets
+     *            preset keys
      */
     @SafeVarargs
     public CompoundController(U c, T... presets) {
@@ -56,23 +68,33 @@ public class CompoundController<T, U extends Controller> extends OptionalControl
         return switchableController.getActiveController();
     }
 
-    /** Staticly create compound controller on port
+    /**
+     * Staticly create compound controller on port
      *
-     * @param port port for xbox controller
-     * @param args array for preset map
-     * @param <T> type of preset key
+     * @param port
+     *            port for xbox controller
+     * @param args
+     *            array for preset map
+     * @param <T>
+     *            type of preset key
      * @return the new compound controller
      */
     @SafeVarargs
     public static <T> CompoundController<T, XboxController> of(int port, T... args) {
         return of(true, port, args);
     }
-    /** Staticly create compound controller on port
+
+    /**
+     * Staticly create compound controller on port
      *
-     * @param one if only one preset mode is enabled
-     * @param port port for xbox controller
-     * @param args array for preset map
-     * @param <T> type of preset key
+     * @param one
+     *            if only one preset mode is enabled
+     * @param port
+     *            port for xbox controller
+     * @param args
+     *            array for preset map
+     * @param <T>
+     *            type of preset key
      * @return the new compound controller
      */
     @SafeVarargs

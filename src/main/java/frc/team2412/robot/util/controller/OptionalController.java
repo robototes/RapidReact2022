@@ -5,9 +5,12 @@ import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
 
-/** optional controller class that means a controller can be enabled and disabled
+/**
+ * optional controller class that means a controller can be enabled and disabled
+ *
  * @author Alex Stedman
- * @param <T> the type of controller
+ * @param <T>
+ *            the type of controller
  */
 public class OptionalController<T extends Controller> extends Controller {
 
@@ -15,51 +18,62 @@ public class OptionalController<T extends Controller> extends Controller {
 
     private boolean active;
 
-
-    /** Create basic optional controller that is disabled
+    /**
+     * Create basic optional controller that is disabled
      *
-     * @param c wrapped controller
+     * @param c
+     *            wrapped controller
      */
     public OptionalController(T c) {
         this(c, false);
     }
 
-    /** Creates optional controller but allows you to specify if the controller should be enabled
+    /**
+     * Creates optional controller but allows you to specify if the controller should be enabled
      *
-     * @param c wrapped controller
-     * @param enabled is this controller active?
+     * @param c
+     *            wrapped controller
+     * @param enabled
+     *            is this controller active?
      */
     public OptionalController(T c, boolean enabled) {
         controller = c;
         active = enabled;
     }
 
-    public T getController(){
+    public T getController() {
         return controller;
     }
 
-    /** is the controller active
+    /**
+     * is the controller active
      *
      * @return if controller is active
      */
     public boolean isActive() {
         return active;
     }
-    /** deactivate this controller
+
+    /**
+     * deactivate this controller
      *
      * @return if there was a state change
      */
     public boolean deactivate() {
         return set(false);
     }
-    /** activate this controller
+
+    /**
+     * activate this controller
      *
      * @return if there was a state change
      */
     public boolean activate() {
         return set(true);
     }
-    /** set the state of this controller
+
+    /**
+     * set the state of this controller
      *
      * @return if there was a state change
      */
@@ -83,7 +97,7 @@ public class OptionalController<T extends Controller> extends Controller {
         return new Button(() -> active && a.getAsBoolean());
     }
 
-    //controller stuff
+    // controller stuff
 
     @Override
     public Axis getLeftTriggerAxis() {

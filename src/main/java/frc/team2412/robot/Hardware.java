@@ -6,14 +6,11 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.*;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.photonvision.PhotonCamera;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
 import frc.team2412.robot.util.MultiplexedColorSensor;
@@ -68,7 +65,9 @@ public class Hardware {
                 .getWheelDiameter() * Math.PI *
                 FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM / 60.0;
 
-        public static final SPI.Port GYRO_PORT = SPI.Port.kMXP;
+        public static final SerialPort.Port GYRO_PORT = SerialPort.Port.kUSB;
+
+
 
         // cameras
         public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";

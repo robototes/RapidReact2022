@@ -96,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
-        if (intakeSolenoidState == RETRACT) {
+        if (isIntakeExtended()) {
             motor.set(INTAKE_IN_SPEED);
             intakeMotorState = IN;
         }
@@ -107,7 +107,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
-        if (intakeSolenoidState == RETRACT) {
+        if (isIntakeExtended()) {
             motor.set(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
         }
@@ -118,7 +118,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeStop() {
         motor.set(0);
-        motor.stopMotor();
         intakeMotorState = STOPPED;
     }
 

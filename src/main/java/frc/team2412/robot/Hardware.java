@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.*;
 
 import org.frcteam2910.common.robot.drivers.Pigeon;
 
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
 

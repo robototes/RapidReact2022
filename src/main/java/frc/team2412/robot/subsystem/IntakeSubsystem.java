@@ -3,12 +3,10 @@ package frc.team2412.robot.subsystem;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
-import static frc.team2412.robot.Hardware.HardwareConstants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,7 +14,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
-import frc.team2412.robot.util.MultiplexedColorSensor;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -52,25 +49,16 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    private ColorMatch allyColorMatcher = new ColorMatch();
-    private ColorMatch enemyColorMatcher = new ColorMatch();
-
-    ///// IMPORTANT: Need ball amount variable and make method to stop taking in
-    ///// balls when at limit.
-
     // Define Hardware
 
-    @Log.MotorController(tabName = "IntakeSubsystem")
+    @Log
     private final WPI_TalonFX motorOuterAxle;
-    @Log.MotorController(tabName = "IntakeSubsystem")
+
+    @Log
     private final WPI_TalonFX motorInnerAxle;
 
     @Log
     private final DoubleSolenoid solenoid;
-
-    private final MultiplexedColorSensor leftColorSensor;
-    private final MultiplexedColorSensor rightColorSensor;
-    private final MultiplexedColorSensor centerColorSensor;
 
     // States
 
@@ -83,10 +71,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     public IntakeSubsystem(WPI_TalonFX motorOuterAxle,
             WPI_TalonFX motorInnerAxle,
-            DoubleSolenoid intakeSolenoid,
-            MultiplexedColorSensor leftColorSensor,
-            MultiplexedColorSensor rightColorSensor,
-            MultiplexedColorSensor centerColorSensor) {
+            DoubleSolenoid intakeSolenoid) {
 
         this.motorOuterAxle = motorOuterAxle;
         this.motorOuterAxle.setInverted(true);
@@ -98,23 +83,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
         this.solenoid = intakeSolenoid;
 
-        this.leftColorSensor = leftColorSensor;
-        this.rightColorSensor = rightColorSensor;
-        this.centerColorSensor = centerColorSensor;
-
-        allyColorMatcher.setConfidenceThreshold(confidenceThreshold);
-        enemyColorMatcher.setConfidenceThreshold(confidenceThreshold);
-
-        // Creates two different color matchers to differentiate between enemy and ally cargo
-        if (teamColor == Alliance.Blue) {
-            allyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
-            enemyColorMatcher.addColorMatch(RED_CARGO_COLOR);
-
-        } else if (teamColor == Alliance.Red) {
-            allyColorMatcher.addColorMatch(RED_CARGO_COLOR);
-            enemyColorMatcher.addColorMatch(BLUE_CARGO_COLOR);
-        }
-
         intakeSolenoidState = EXTEND;
         intakeMotorState = STOPPED;
 
@@ -125,6 +93,16 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     // Methods
+
+    /**
+     * Manually sets the speed of the inner and outer axle motors.
+     *
+     * @param speed
+     */
+    public void setSpeed(double speed) {
+        motorInnerAxle.set(speed);
+        motorOuterAxle.set(speed);
+    }
 
     /**
      * Spins motors inwards and updates motor state.
@@ -154,8 +132,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motors and updates motor state
      */
     public void intakeStop() {
-        motorOuterAxle.set(0);
-        motorInnerAxle.set(0);
+        motorOuterAxle.stopMotor();
+        motorInnerAxle.stopMotor();
         intakeMotorState = STOPPED;
     }
 
@@ -176,38 +154,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         intakeStop();
         solenoid.set(EXTEND.value);
         state = RETRACT.toString();
-    }
-
-    /**
-     * Returns true if color sensor detects an enemy cargo
-     */
-
-    private boolean individualHasOpposingColorCargo(MultiplexedColorSensor colorSensor) {
-        return enemyColorMatcher.matchColor(colorSensor.getColor()) != null;
-    }
-
-    /**
-     * Returns true if any of the color sensors detect an enemy cargo
-     */
-    // @Log (hates javaSim without actual color sensor)
-    public boolean hasOpposingColorCargo() {
-        return (individualHasOpposingColorCargo(leftColorSensor)
-                || individualHasOpposingColorCargo(rightColorSensor)
-                || individualHasOpposingColorCargo(centerColorSensor));
-    }
-
-    /**
-     * Returns current color value detected if matched
-     */
-    private boolean individualHasMatchingColorCargo(MultiplexedColorSensor colorSensor) {
-        return allyColorMatcher.matchColor(colorSensor.getColor()) != null;
-    }
-
-    // @Log (hates javaSim without actual color sensor)
-    public boolean hasMatchingColorCargo() {
-        return (individualHasMatchingColorCargo(leftColorSensor)
-                || individualHasMatchingColorCargo(rightColorSensor)
-                || individualHasMatchingColorCargo(centerColorSensor));
     }
 
     @Override

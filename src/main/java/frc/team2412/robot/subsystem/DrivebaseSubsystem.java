@@ -191,11 +191,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public Vector2 getGyroscopeXY() {
-        if (gyroscope instanceof Pigeon)
-            return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
-                    ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH));
-        if (gyroscope instanceof NavX)
-            return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL), ((NavX) gyroscope).getAxis(NavX.Axis.PITCH));
+        synchronized (sensorLock) {
+            if (gyroscope instanceof Pigeon)
+                return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH));
+            if (gyroscope instanceof NavX)
+                return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL), ((NavX) gyroscope).getAxis(NavX.Axis.PITCH));
+        }
         return Vector2.ZERO;
     }
 

@@ -9,8 +9,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
@@ -22,8 +20,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Constants
 
     public static class IntakeConstants {
-
-        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
@@ -52,15 +48,15 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    @Log
+    @Log(name = "Intake Motor")
     private final WPI_TalonFX motor;
 
-    @Log
+    @Log(name = "Intake Solenoid")
     private final DoubleSolenoid solenoid;
 
     // States
 
-    @Log
+    @Log(name = "Solenoid State")
     public static String state = "";
     private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
@@ -121,6 +117,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motor and updates motor state
      */
     public void intakeStop() {
+        motor.set(0);
         motor.stopMotor();
         intakeMotorState = STOPPED;
     }
@@ -142,6 +139,14 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         intakeStop();
         solenoid.set(EXTEND.value);
         state = RETRACT.toString();
+    }
+
+    /**
+     * Checks if motor is on
+     */
+    @Log(name = "Motor moving")
+    public boolean isMotorOn() {
+        return motor.get() != 0;
     }
 
     @Override

@@ -80,7 +80,7 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_INNER_MOTOR = 30, INTAKE_OUTER_MOTOR = 31, INTAKE_SOLENOID_UP = 14,
+        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 14,
                 INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49
@@ -104,7 +104,7 @@ public class Hardware {
     public CANSparkMax hoodMotor;
 
     // intake
-    public WPI_TalonFX intakeMotor1, intakeMotor2;
+    public WPI_TalonFX intakeMotor;
     public DoubleSolenoid intakeSolenoid;
 
     // climb
@@ -136,8 +136,7 @@ public class Hardware {
                     CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
-            intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
+            intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }

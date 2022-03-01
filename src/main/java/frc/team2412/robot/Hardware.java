@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.*;
 
 import org.frcteam2910.common.robot.drivers.Pigeon;
 
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
-import frc.team2412.robot.util.MultiplexedColorSensor;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
@@ -92,13 +90,6 @@ public class Hardware {
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
-
-        // default address of TCA9548A
-        public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
-        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kMXP;
-        // which port the I2C device plugged in on the multiplexer
-        public static final int LEFT_INTAKE_COLORSENSOR_PORT = 1, RIGHT_INTAKE_COLORSENSOR_PORT = 2,
-                CENTER_INTAKE_COLORSENSOR_PORT = 3;
     }
 
     // drive
@@ -115,9 +106,6 @@ public class Hardware {
     // intake
     public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
-    public MultiplexedColorSensor leftIntakeColorSensor;
-    public MultiplexedColorSensor rightIntakeColorSensor;
-    public MultiplexedColorSensor centerIntakeColorSensor;
 
     // climb
     public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
@@ -152,12 +140,6 @@ public class Hardware {
             intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
-            if (I2C_MUX_ENABLED) {
-                this.leftIntakeColorSensor = new MultiplexedColorSensor(LEFT_INTAKE_COLORSENSOR_PORT);
-                this.rightIntakeColorSensor = new MultiplexedColorSensor(RIGHT_INTAKE_COLORSENSOR_PORT);
-                this.centerIntakeColorSensor = new MultiplexedColorSensor(
-                        CENTER_INTAKE_COLORSENSOR_PORT);
-            }
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);

@@ -25,7 +25,6 @@ public class Subsystems implements Loggable {
         public static final boolean INDEX_ENABLED = true;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
-        public static final boolean I2C_MUX_ENABLED = false;
         public static final boolean SHOOTER_TESTING = false;
     }
 
@@ -58,8 +57,7 @@ public class Subsystems implements Loggable {
             shooterVisionSubsystem = new ShooterVisionSubsystem();
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor1, hardware.intakeMotor2,
-                    hardware.intakeSolenoid, hardware.leftIntakeColorSensor, hardware.rightIntakeColorSensor,
-                    hardware.centerIntakeColorSensor);
+                    hardware.intakeSolenoid);
         if (SHOOTER_ENABLED)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);

@@ -116,8 +116,8 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation "com.github.robototes.2910Common:common:e2f0f81"
-    implementation "com.github.robototes.2910Common:robot:e2f0f81"
+    implementation "com.github.robototes.2910Common:common:a12317b4845"
+    implementation "com.github.robototes.2910Common:robot:a12317b4845"
 
     implementation "com.github.robototes:swerve-lib:4c8cf8a7d0"
 

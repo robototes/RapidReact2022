@@ -23,4 +23,9 @@ public class IndexSpitCommand extends CommandBase {
         subsystem.ingestMotorStop();
         subsystem.feederMotorStop();
     }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

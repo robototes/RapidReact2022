@@ -91,10 +91,6 @@ public class Hardware {
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
-
-        // default address of TCA9548A
-        public static final int I2C_MULTIPLEXER_ADDRESS = 0x70;
-        public static final Port I2C_MULTIPLEXER_PORT = I2C.Port.kMXP;
     }
 
     // drive

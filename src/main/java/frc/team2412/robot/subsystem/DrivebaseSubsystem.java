@@ -64,7 +64,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean ANTI_TIP_ENABLED = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0.1;
+        public static final double TIP_P = 0.1, TIP_F = 0.1, TIP_TOLERANCE = 1;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -186,7 +186,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
 
-        tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY());
+        tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
+                .setTargetPositionTolerance(TIP_TOLERANCE);
 
     }
 

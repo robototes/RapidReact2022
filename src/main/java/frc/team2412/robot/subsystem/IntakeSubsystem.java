@@ -48,10 +48,10 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    @Log(name = "Intake Motor")
+    @Log
     private final WPI_TalonFX motor;
 
-    @Log(name = "Intake Solenoid")
+    @Log
     private final DoubleSolenoid solenoid;
 
     // States
@@ -141,18 +141,36 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         state = RETRACT.toString();
     }
 
-    /**
-     * Checks if motor is on
-     */
-    @Log(name = "Motor moving")
-    public boolean isMotorOn() {
-        return motor.get() != 0;
-    }
-
     @Override
     public void periodic() {
         if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
             intakeStop();
         }
+    }
+
+    // Logging Methods
+
+    /**
+     * Gets the motor speed
+     */
+    @Log(name = "Motor Speed")
+    public double getMotorSpeed() {
+        return motor.get();
+    }
+
+    /**
+     * Checks if motor is on
+     */
+    @Log(name = "Motor Moving")
+    public boolean isMotorOn() {
+        return motor.get() != 0;
+    }
+
+    /**
+     * Checks if Intake is extended
+     */
+    @Log(name = "Intake Extended")
+    public boolean isIntakeExtended() {
+        return (intakeSolenoidState == RETRACT);
     }
 }

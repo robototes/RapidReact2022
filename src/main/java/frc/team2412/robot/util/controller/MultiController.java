@@ -94,7 +94,7 @@ public interface MultiController<T, U extends Controller> {
      *
      */
     enum Controllers {
-        PRIMARY, SECONDARY, TERTIARY, BACKUP, DRIVER, CODRIVER, DEBUG, TEST, UNIVERSAL;
+        PRIMARY, SECONDARY, TERTIARY, BACKUP, DRIVER, CODRIVER, DEBUG, TEST;
 
     }
 

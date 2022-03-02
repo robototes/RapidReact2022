@@ -64,6 +64,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean ANTI_TIP_ENABLED = true;
 
+        public static final boolean FIELD_CENTRIC_ENABLED = true;
+
         public static final double TIP_P = 0.1, TIP_F = 0.1, TIP_TOLERANCE = 1;
     }
 

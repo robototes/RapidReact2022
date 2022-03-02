@@ -9,11 +9,6 @@ public final class AutomatedTestMain {
     }
 
     public static void main(String... args) {
-        RobotBase.startRobot(new Supplier<RobotBase>() {
-            @Override
-            public RobotBase get() {
-                return Robot.getInstance(Robot.RobotType.AUTOMATED_TEST);
-            }
-        });
+        RobotBase.startRobot((Supplier<RobotBase>) () -> Robot.getInstance(Robot.RobotType.AUTOMATED_TEST));
     }
 }

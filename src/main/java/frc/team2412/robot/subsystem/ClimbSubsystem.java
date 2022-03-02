@@ -21,8 +21,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
-        public static final double TEST_SPEED_EXTEND = 0.7;
-        public static final double TEST_SPEED_RETRACT = -0.5;
+        public static final double TEST_SPEED_EXTEND = 0.1;
+        public static final double TEST_SPEED_RETRACT = -0.1;
         public static final double STOP_SPEED = 0;
         public static final double MAX_ENCODER_TICKS = 1000;
         public static final double MIN_ENCODER_TICKS = 0.8;

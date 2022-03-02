@@ -113,7 +113,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
-    // private final NetworkTableEntry isFieldOrientedEntry;
     private final NetworkTableEntry speedModifier;
 
     private final Field2d field = new Field2d();
@@ -184,11 +183,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-        // isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
-
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
-
     }
 
     public Vector2 getGyroscopeXY() {
@@ -232,16 +228,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private double defaultX, defaultY;
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
-        // isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
                     rotationalVelocity * speedModifier.getDouble(1.0), isFieldOriented);
         }
     }
-
-    // public void setFieldOriented(boolean fieldOriented) {
-    // isFieldOrientedEntry.setBoolean(fieldOriented);
-    // }
 
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {

@@ -141,9 +141,9 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        intakeInButton.whileHeld(new IntakeMotorInCommand(subsystems.intakeSubsystem));
+        intakeInButton.whenPressed(new IntakeMotorInCommand(subsystems.intakeSubsystem));
         intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
-        intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
+        intakeSpitButton.whenPressed(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 

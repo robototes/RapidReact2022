@@ -37,27 +37,32 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
-        // TODO set encoder offset values
+        // Changes swerve modules & disables subsystems missing from the swerve test bot
+        public static final boolean COMPETITION_CONFIG = true;
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = COMPETITION_CONFIG
+                ? Mk4SwerveModuleHelper.GearRatio.L2
+                : Mk4SwerveModuleHelper.GearRatio.L1;
+
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
@@ -79,7 +84,7 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_INNER_MOTOR = 30, INTAKE_OUTER_MOTOR = 31, INTAKE_SOLENOID_UP = 14,
+        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 14,
                 INTAKE_SOLENOID_DOWN = 15;
 
         // index can ids are range 40-49
@@ -103,7 +108,7 @@ public class Hardware {
     public CANSparkMax hoodMotor;
 
     // intake
-    public WPI_TalonFX intakeMotor1, intakeMotor2;
+    public WPI_TalonFX intakeMotor;
     public DoubleSolenoid intakeSolenoid;
 
     // climb
@@ -135,8 +140,7 @@ public class Hardware {
                     CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor1 = new WPI_TalonFX(INTAKE_INNER_MOTOR);
-            intakeMotor2 = new WPI_TalonFX(INTAKE_OUTER_MOTOR);
+            intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }

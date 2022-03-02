@@ -38,27 +38,32 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
-        // TODO set encoder offset values
+        // Changes swerve modules & disables subsystems missing from the swerve test bot
+        public static final boolean COMPETITION_CONFIG = true;
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = COMPETITION_CONFIG
+                ? Mk4SwerveModuleHelper.GearRatio.L2
+                : Mk4SwerveModuleHelper.GearRatio.L1;
+
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,

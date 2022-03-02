@@ -97,7 +97,7 @@ public class Hardware {
          * By default the CAN ID is 1 for Rev
          * But can be change to any value in Rev Hardware Client
          */
-        public static final int PDP_CAN_ID = 61;
+        public static final int PDP_CAN_ID = 1;
         public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
     }
 

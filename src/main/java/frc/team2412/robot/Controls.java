@@ -28,8 +28,6 @@ public class Controls {
         public static final int CODRIVER_CONTROLLER_PORT = 1;
     }
 
-
-
     public CompoundController<MultiController.Controllers, XboxController> driveController;
 
     public Controller shootPreset, climbPreset;
@@ -104,9 +102,9 @@ public class Controls {
         turretLeftButton = shootPreset.getDPadButton(Direction.LEFT);
         turretRightButton = shootPreset.getDPadButton(Direction.RIGHT);
 
-        driveController.getStartButton().whenPressed(()->driveController.activate(PRIMARY));
+        driveController.getStartButton().whenPressed(() -> driveController.activate(PRIMARY));
 
-        driveController.getBackButton().whenPressed(()->driveController.activate(SECONDARY));
+        driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
         if (CLIMB_ENABLED) {
             bindClimbControls();
@@ -127,7 +125,7 @@ public class Controls {
 
     // TODO these yay
     public void bindClimbControls() {
-        //bruh
+        // bruh
     }
 
     public void bindDriveControls() {

@@ -21,9 +21,9 @@ public class Hardware {
     public static class HardwareConstants {
 
         // Color Sensor V3 Constants
-//        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
-//        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
-//        public static final double CONFIDENCE_THRESHOLD = 0.7;
+        // public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
+        // public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
+        // public static final double CONFIDENCE_THRESHOLD = 0.7;
 
         // drive can ids are range 1-19 (1 is taken by power distribution module)
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,

@@ -185,7 +185,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
     }

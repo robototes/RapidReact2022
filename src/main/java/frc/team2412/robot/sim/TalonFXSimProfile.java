@@ -6,13 +6,20 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class TalonFXSimProfile extends SimProfile {
+    public static class TalonFXConstants {
+        // Some info is from https://store.ctr-electronics.com/falcon-500-powered-by-talon-fx/
+        public static final double ENCODER_TICKS_PER_REVOLUTION = 2048;
+        // Velocity is in ticks per 100ms, divide by 600 to convert from minutes to 100ms
+        public static final double RPM_TO_VELOCITY = ENCODER_TICKS_PER_REVOLUTION / 600;
+        public static final double FREE_SPEED_RPM = 6380;
+        public static final double STALL_CURRENT = 257;
+    }
+
     private final TalonFXSimCollection falconSimCollection;
     private final double accelToFullTime;
     private final double fullVel;
     private final boolean sensorPhase;
 
-    // TODO Log pos????
-    private double pos = 0;
     private double vel = 0;
 
     /**
@@ -55,8 +62,6 @@ public class TalonFXSimProfile extends SimProfile {
             vel += 0.9 * (theoreticalVel - vel);
         }
         double positionChange = vel * period / 100;
-        // Update position
-        pos += positionChange;
 
         // Set sim physics inputs
         // Position and velocity

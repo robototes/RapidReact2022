@@ -1,8 +1,9 @@
 package frc.team2412.robot.sim;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public abstract class SimProfile {
-    private long lastTime;
-    private boolean running = false;
+    private Timer timer = null;
 
     /**
      * Runs the simulation profile. Overrided by device specific profiles.
@@ -15,14 +16,12 @@ public abstract class SimProfile {
      * @return Time since last call, in milliseconds.
      */
     protected double getPeriod() {
-        if (!running) {
-            lastTime = System.nanoTime();
-            running = true;
+        if (timer == null) {
+            timer = new Timer();
         }
 
-        long now = System.nanoTime();
-        double period = (now - lastTime) / 1_000_000.;
-        lastTime = now;
+        double period = timer.get() * 1000;
+        timer.reset();
 
         return period;
     }

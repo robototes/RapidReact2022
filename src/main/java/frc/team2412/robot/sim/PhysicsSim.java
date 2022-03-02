@@ -52,7 +52,8 @@ public class PhysicsSim {
 
     private final ArrayList<SimProfile> simProfiles = new ArrayList<>();
 
-    private final REVPhysicsSim revPhysicsSim = REVPhysicsSim.getInstance();
+    // See SparkMaxSimProfile for details
+    private final REVPhysicsSim revPhysicsSim = new REVPhysicsSim();
 
     /**
      * Adds a TalonFX controller to the simulator.

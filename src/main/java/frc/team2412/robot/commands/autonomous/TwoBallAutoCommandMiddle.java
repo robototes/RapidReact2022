@@ -20,13 +20,13 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
-public class TwoBallAutoCommand extends SequentialCommandGroup {
-    public TwoBallAutoCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
+public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
+    public TwoBallAutoCommandMiddle(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
             ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
             IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
-                new SimplePathBuilder(new Vector2(358, 252), Rotation2.fromDegrees(69.6))
-                        .lineTo(new Vector2(353, 308), Rotation2.fromDegrees(62))
+                new SimplePathBuilder(new Vector2(359, 209), Rotation2.fromDegrees(68.2))
+                        .lineTo(new Vector2(445, 247.7), Rotation2.fromDegrees(15.4))
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 

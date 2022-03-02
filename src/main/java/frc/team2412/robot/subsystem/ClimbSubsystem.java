@@ -25,6 +25,7 @@ import frc.team2412.robot.Robot;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
@@ -223,4 +224,17 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed / timeElapsed));
         lastUpdatedTime = timeNow;
     }
+
+    @Log
+    public double encoderPOsition(){
+      return  climbFixedMotor.getSelectedSensorPosition();    
+    }
+    
+    @Config
+    public void resetEncoder(boolean hfh){
+        if(hfh){
+            climbFixedMotor.setSelectedSensorPosition(0);
+        }
+    }
+
 }

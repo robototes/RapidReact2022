@@ -2,7 +2,6 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ENCODER_TICKS_PER_REVOLUTION;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.GEARBOX_REDUCTION;
-import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MAX_ENCODER_TICKS;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MIN_ENCODER_TICKS;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MOTOR_CURRENT_LIMIT;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.RUNG_DISTANCE;
@@ -226,13 +225,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log
-    public double encoderPOsition(){
-      return  climbFixedMotor.getSelectedSensorPosition();    
+    public double encoderPOsition() {
+        return climbFixedMotor.getSelectedSensorPosition();
     }
-    
+
     @Config
-    public void resetEncoder(boolean hfh){
-        if(hfh){
+    public void resetEncoder(boolean hfh) {
+        if (hfh) {
             climbFixedMotor.setSelectedSensorPosition(0);
         }
     }

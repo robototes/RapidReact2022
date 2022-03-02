@@ -19,7 +19,7 @@ public class ExtendFixedHookCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

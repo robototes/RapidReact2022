@@ -103,8 +103,8 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmUp.whileHeld(new ExtendFixedHookCommand(subsystems.climbSubsystem));
-        climbFixedArmDown.whileHeld(new RetractFixedHookCommand(subsystems.climbSubsystem));
+        climbFixedArmUp.whenPressed(new ExtendFixedHookCommand(subsystems.climbSubsystem));
+        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }

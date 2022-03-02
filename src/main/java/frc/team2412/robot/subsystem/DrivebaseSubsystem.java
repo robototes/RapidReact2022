@@ -113,7 +113,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
-    private final NetworkTableEntry isFieldOrientedEntry;
+    // private final NetworkTableEntry isFieldOrientedEntry;
     private final NetworkTableEntry speedModifier;
 
     private final Field2d field = new Field2d();
@@ -184,7 +184,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-        isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
+        // isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
 
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
@@ -232,16 +232,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private double defaultX, defaultY;
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
-        isFieldOrientedEntry.setBoolean(isFieldOriented);
+        // isFieldOrientedEntry.setBoolean(isFieldOriented);
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
-                    rotationalVelocity * speedModifier.getDouble(1.0), true);
+                    rotationalVelocity * speedModifier.getDouble(1.0), isFieldOriented);
         }
     }
 
-    public void setFieldOriented(boolean fieldOriented) {
-        isFieldOrientedEntry.setBoolean(fieldOriented);
-    }
+    // public void setFieldOriented(boolean fieldOriented) {
+    // isFieldOrientedEntry.setBoolean(fieldOriented);
+    // }
 
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
@@ -351,7 +351,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void update(double time, double dt) {
         updateOdometry(time, dt);
 
-        HolonomicDriveSignal driveSignal;
+        HolonomicDriveSignal signal;
         Optional<HolonomicDriveSignal> trajectorySignal = follower.update(
                 getPose(),
                 getVelocity(),
@@ -359,26 +359,24 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 time,
                 dt);
         if (trajectorySignal.isPresent()) {
-            driveSignal = trajectorySignal.get();
-            driveSignal = new HolonomicDriveSignal(
-                    driveSignal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
-                    driveSignal.getRotation() / RobotController.getBatteryVoltage(),
-                    driveSignal.isFieldOriented());
+            signal = trajectorySignal.get();
+            signal = new HolonomicDriveSignal(
+                    signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
+                    signal.getRotation() / RobotController.getBatteryVoltage(),
+                    signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
                 if (ANTI_TIP_ENABLED)
-                    driveSignal = new HolonomicDriveSignal( // create updated drive signal
-                            this.driveSignal.getTranslation().rotateBy(this.driveSignal.isFieldOriented() ? // flatten
-                                                                                                            // field
-                                                                                                            // centric
+                    signal = new HolonomicDriveSignal( // create updated drive signal
+                            driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
                                     getPose().rotation.inverse() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
-                            this.driveSignal.getRotation(), false); // retain rotation
+                            driveSignal.getRotation(), false); // retain rotation
                 else
-                    driveSignal = this.driveSignal;
+                    signal = driveSignal;
             }
         }
-        updateModules(driveSignal);
+        updateModules(signal);
     }
 
     @Override

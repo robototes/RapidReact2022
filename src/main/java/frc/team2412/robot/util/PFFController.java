@@ -88,10 +88,10 @@ public class PFFController<T> {
             pastValue = measuredValue;
         if (targetPosition == null)
             return null;
-        T velocity = op.operate(measuredValue, pastValue, f, targetPositionTolerance);
+        T velocity = op.operate(measuredValue, pastValue, f * timer.get(), targetPositionTolerance);
+        timer.reset();
         pastValue = measuredValue;
         T pControl = op.operate(targetPosition, measuredValue, p, targetPositionTolerance);
-        timer.reset();
         return op.add(pControl, velocity);
     }
 
@@ -193,4 +193,5 @@ public class PFFController<T> {
             }
         });
     }
+
 }

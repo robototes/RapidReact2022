@@ -4,6 +4,7 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_I
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
+import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.MIN_HOOD_ANGLE;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -21,19 +22,21 @@ public class IntakeBitmapCommand extends CommandBase {
     public enum Bitmap {
         // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed, ingestspeed,
         // feederspeed, misfire
-        A(false, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "no balls in system"), //
-        B(true, false, true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "Correct ball in ingest"), //
-        C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in ingest"), //
-        D(false, true, false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, false, "Correct ball in feeder"), //
-        E(false, true, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in feeder"), //
-        F(true, true, true, true, 0, 0, 0, false, "Correct ball in both"), //
-        G(true, true, false, true, INTAKE_OUT_SPEED, INDEX_OUT_SPEED, 0, false, "Wrong ingest, correct feeder"), //
-        H(true, true, true, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Correct ingest, wrong feeder"), //
-        I(true, true, false, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong in both");//
+        // spotless:off
+        A(false, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "no balls in system"), 
+        B(true, false, true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "Correct ball in ingest"), 
+        C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in ingest"), 
+        D(false, true, false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, false, "Correct ball in feeder"), 
+        E(false, true, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in feeder"), 
+        F(true, true, true, true, 0, 0, 0, false, "Correct ball in both"), 
+        G(true, true, false, true, INTAKE_OUT_SPEED, INDEX_OUT_SPEED, 0, false, "Wrong ingest, correct feeder"), 
+        H(true, true, true, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Correct ingest, wrong feeder"), 
+        I(true, true, false, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong in both");
+        // spotless:on
 
-        boolean ingestSensor, feederSensor, ingestColor, feederColor, shooterMisfire;
-        double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;
-        String state;
+        private boolean ingestSensor, feederSensor, ingestColor, feederColor, shooterMisfire;
+        private double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;
+        private String state;
 
         // enum initializer
         private Bitmap(boolean ingestSensor, boolean feederSensor, boolean ingestColor, boolean feederColor,
@@ -68,7 +71,7 @@ public class IntakeBitmapCommand extends CommandBase {
     private ShooterSubsystem shooterSubsystem;
     private ShooterVisionSubsystem shooterVisionSubsystem;
 
-    String currentState;
+    private Bitmap currentState;
 
     // constructor
     public IntakeBitmapCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem,
@@ -84,35 +87,33 @@ public class IntakeBitmapCommand extends CommandBase {
     @Override
     public void execute() {
 
-        // System.out.println("I AM RUNNING");
-
         boolean ingestSensor = indexSubsystem.ingestSensorHasBallIn();
         boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
         boolean ingestColor = indexSubsystem.ingestHasCorrectCargo() && ingestSensor;
         boolean feederColor = indexSubsystem.feederHasCorrectCargo() && feederSensor;
 
         for (Bitmap value : Bitmap.values()) {
-
             if (value.equals(ingestSensor, feederSensor, ingestColor, feederColor)) {
-                indexSubsystem.setBitmapState(value);
-
-                intakeSubsystem.setSpeed(value.intakeMotorSpeed);
-                indexSubsystem.setSpeed(value.ingestMotorSpeed, value.feederMotorSpeed);
-
-                double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
-                shooterSubsystem.updateTurretAngle(yaw);
-
-                if (value.shooterMisfire) {
-                    shooterSubsystem.setHoodAngle(0);
-                    shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
-
-                } else {
-                    double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-                    ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
-                    shooterSubsystem.setHoodAngle(shooterData.getAngle());
-                    shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-                }
+                currentState = value;
+                break;
             }
+        }
+
+        indexSubsystem.setBitmapState(currentState);
+        intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
+        indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
+
+        double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
+        shooterSubsystem.updateTurretAngle(yaw);
+
+        if (currentState.shooterMisfire) {
+            shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
+            shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
+        } else {
+            double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
+            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
+            shooterSubsystem.setHoodAngle(shooterData.getAngle());
+            shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
         }
     }
 

@@ -8,6 +8,7 @@ import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MOTOR_C
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.RUNG_DISTANCE;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_EXTEND;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_RETRACT;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ARM_REACH_DISTANCE;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -91,7 +92,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
         motorConfig.reverseSoftLimitEnable = false;
-        motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
+        motorConfig.forwardSoftLimitThreshold = ARM_REACH_DISTANCE;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
@@ -100,7 +101,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
-        maxEncoderTicks = tab.add("Max encoder ticks", MAX_ENCODER_TICKS)
+        maxEncoderTicks = tab.add("Max encoder ticks", ARM_REACH_DISTANCE)
                 .withPosition(0, 0)
                 .withSize(2, 1)
                 .getEntry();

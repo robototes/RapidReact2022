@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "com.diffplug.spotless" version "6.2.1"
-    id "edu.wpi.first.GradleRIO" version "2022.3.1"
+    id "edu.wpi.first.GradleRIO" version "2022.4.1"
     id "net.ltgt.errorprone"
     id "org.jetbrains.kotlin.jvm" version "1.6.10"
 }
@@ -119,7 +119,7 @@ dependencies {
     implementation "com.github.robototes.2910Common:common:a12317b4845"
     implementation "com.github.robototes.2910Common:robot:a12317b4845"
 
-    implementation "com.github.robototes:swerve-lib:4c8cf8a7d0"
+    implementation "com.github.robototes:swerve-lib:72a08a256b"
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
     testImplementation "junit:junit:4.12"

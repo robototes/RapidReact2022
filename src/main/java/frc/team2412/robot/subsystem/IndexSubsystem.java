@@ -1,24 +1,29 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.IndexMotorState.*;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
 
-public class IndexSubsystem extends SubsystemBase {
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
+
+public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
 
     public static class IndexConstants {
+
+        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
@@ -41,7 +46,7 @@ public class IndexSubsystem extends SubsystemBase {
 
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS * 1000);
 
     }
 
@@ -50,14 +55,16 @@ public class IndexSubsystem extends SubsystemBase {
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
 
-    private final WPI_TalonFX ingestMotor;
-    private final WPI_TalonFX feederMotor;
+    private final DigitalInput ingestBlueColor;
+    private final DigitalInput ingestRedColor;
+    private final DigitalInput feederBlueColor;
+    private final DigitalInput feederRedColor;
 
-    // States
-    double ingestOverCurrentStart = 0;
-    double feederOverCurrentStart = 0;
-    private IndexMotorState ingestMotorState;
-    private IndexMotorState feederMotorState;
+    @Log.MotorController
+    private final WPI_TalonFX ingestMotor;
+
+    @Log.MotorController
+    private final WPI_TalonFX feederMotor;
 
     private boolean ingestBallState;
     private boolean feederBallState;
@@ -68,34 +75,26 @@ public class IndexSubsystem extends SubsystemBase {
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity) {
+            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
+            DigitalInput feederBlueColor, DigitalInput feederRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
-
-        /*
-
-        */
 
         proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
                 .withPosition(0, 0)
                 .withSize(2, 1)
                 .getEntry();
 
-        tab.addBoolean("ingest sensor proximity", this::getIngestProximity);
-        tab.addBoolean("feeder sensor proximity", this::getFeederProximity);
-        tab.addNumber("ingest motor speed", this::getIngestMotorSpeed);
-        tab.addNumber("feeder motor speed", this::getFeederMotorSpeed);
-
-        tab.addBoolean("ingest sensor has ball", this::ingestSensorHasBallIn);
-        tab.addBoolean("feeder sensor has ball", this::feederSensorHasBallIn);
-        tab.addBoolean("feeder is moving", this::isFeederMoving);
-        tab.addBoolean("feeder is not moving", this::isFeederStopped);
-
         this.ingestMotor = firstMotor;
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
+        this.ingestBlueColor = ingestBlueColor;
+        this.ingestRedColor = ingestRedColor;
+        this.feederBlueColor = feederBlueColor;
+        this.feederRedColor = feederRedColor;
 
+        this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
         this.feederMotor.configFactoryDefault();
 
@@ -104,6 +103,8 @@ public class IndexSubsystem extends SubsystemBase {
 
         this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+
+        this.feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();
@@ -116,12 +117,17 @@ public class IndexSubsystem extends SubsystemBase {
 
     // Methods
 
+    public void setSpeed(double ingestSpeed, double feederSpeed) {
+        System.out.println(ingestSpeed);
+        ingestMotor.set(ingestSpeed);
+        feederMotor.set(feederSpeed);
+    }
+
     /**
      * Spins first motor inward and updates first motor state
      */
     public void ingestMotorIn() {
         ingestMotor.set(INDEX_IN_SPEED);
-        ingestMotorState = IN;
     }
 
     /**
@@ -129,15 +135,13 @@ public class IndexSubsystem extends SubsystemBase {
      */
     public void ingestMotorOut() {
         ingestMotor.set(INDEX_OUT_SPEED);
-        ingestMotorState = OUT;
     }
 
     /**
      * Stops first motor and updates first motor state
      */
     public void ingestMotorStop() {
-        ingestMotor.set(0);
-        ingestMotorState = STOPPED;
+        ingestMotor.stopMotor();
     }
 
     /**
@@ -145,7 +149,6 @@ public class IndexSubsystem extends SubsystemBase {
      */
     public void feederMotorIn() {
         feederMotor.set(INDEX_IN_SPEED);
-        feederMotorState = IN;
     }
 
     /**
@@ -153,20 +156,19 @@ public class IndexSubsystem extends SubsystemBase {
      */
     public void feederMotorOut() {
         feederMotor.set(INDEX_OUT_SPEED);
-        feederMotorState = OUT;
     }
 
     /**
      * Stops second motor and updates second motor state
      */
     public void feederMotorStop() {
-        feederMotor.set(0);
-        feederMotorState = STOPPED;
+        feederMotor.stopMotor();
     }
 
     /**
      * Checks if ball is positioned at the first sensor
      */
+    @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
         return ingestProximity.get();
     }
@@ -174,17 +176,45 @@ public class IndexSubsystem extends SubsystemBase {
     /**
      * Checks if ball is positioned at the second sensor
      */
+    @Log(name = "Feeder Proximity")
     public boolean feederSensorHasBallIn() { // might rename methods later?
         return feederProximity.get();
     }
 
+    /**
+     * Checks if ingest motor is on
+     */
     public boolean isIngestMotorOn() {
-        return !(ingestMotorState == STOPPED);
+        return ingestMotor.get() != 0;
     }
 
+    /**
+     * Checks if feeder motor is on
+     */
     public boolean isFeederMotorOn() {
-        return !(feederMotorState == STOPPED);
+        return feederMotor.get() != 0;
     }
+
+    /**
+     * Checks if ingest has the correct cargo
+     */
+    @Log(name = "Ingest Cargo")
+    public boolean ingestHasCorrectCargo() {
+        return ((teamColor == Alliance.Blue && ingestBlueColor.get())
+                || teamColor == Alliance.Red && ingestRedColor.get());
+    }
+
+    /**
+     * Checks if feeder has the correct cargo
+     */
+    @Log(name = "Feeder Cargo")
+    public boolean feederHasCorrectCargo() {
+        return ((teamColor == Alliance.Blue && feederBlueColor.get())
+                || teamColor == Alliance.Red && feederRedColor.get());
+    }
+
+    private double ingestOverCurrentStart = 0;
+    private double feederOverCurrentStart = 0;
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
@@ -192,6 +222,7 @@ public class IndexSubsystem extends SubsystemBase {
         ingestBallState = ingestSensorHasBallIn();
         feederBallState = feederSensorHasBallIn();
 
+        // Checking for jamming
         double ingestCurrent = ingestMotor.getSupplyCurrent();
         if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
             if (ingestOverCurrentStart == 0) {
@@ -230,31 +261,24 @@ public class IndexSubsystem extends SubsystemBase {
 
     // for logging
 
-    public boolean getIngestProximity() {
-        return ingestProximity.get();
-    }
-
-    public boolean getFeederProximity() {
-        return feederProximity.get();
-    }
-
+    @Log(name = "Ingest Motor Speed")
     public double getIngestMotorSpeed() {
         return ingestMotor.get();
     }
 
+    @Log(name = "Feeder Motor Speed")
     public double getFeederMotorSpeed() {
         return feederMotor.get();
     }
 
+    @Log(name = "Feeder motor moving")
     public boolean isFeederMoving() {
-        return feederMotorState != STOPPED;
+        return isFeederMotorOn();
     }
 
+    @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
-        return ingestMotorState != STOPPED;
+        return isIngestMotorOn();
     }
 
-    public boolean isFeederStopped() {
-        return feederMotorState == STOPPED;
-    }
 }

@@ -31,16 +31,14 @@ public class Controls {
     public XboxController driveController;
     public XboxController codriverController;
 
-<<<<<<< HEAD
     // climb
     public final Button climbFixedArmUp;
     public final Button climbFixedArmFullUp;
     public final Button climbFixedArmDown;
     public final Button climbFixedArmFullDown;
-=======
+
     // index
     public final Button indexShootButton;
->>>>>>> 79528a5783924bccaeee639883e4749da4ed55a3
 
     // shooter
     public final Button shootButton;

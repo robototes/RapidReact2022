@@ -22,7 +22,7 @@ public class FullExtendFixedHookCommand extends CommandBase {
         return subsystem.isFixedFullyExtended();
     }
 
-    @Override 
+    @Override
     public void end(boolean interrupted) {
         subsystem.stopFixedArm();
     }

@@ -22,7 +22,7 @@ public class ExtendFixedHookCommand extends CommandBase {
         return true;
     }
 
-    @Override 
+    @Override
     public void end(boolean interrupted) {
         subsystem.stopFixedArm();
     }

@@ -62,8 +62,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_ENABLED = true;
-
         public static final double TIP_P = 0.1, TIP_F = 0.1, TIP_TOLERANCE = 1;
     }
 
@@ -114,6 +112,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry speedModifier;
+    private final NetworkTableEntry antiTipEntry;
 
     private final Field2d field = new Field2d();
 
@@ -182,6 +181,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
+
+        antiTipEntry = tab.add("Anti-tip Enabled", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
@@ -357,7 +358,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
-                if (ANTI_TIP_ENABLED)
+                if (antiTipEntry.getBoolean(true))
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
                                     getPose().rotation.inverse() : Rotation2.ZERO) // same code as other block

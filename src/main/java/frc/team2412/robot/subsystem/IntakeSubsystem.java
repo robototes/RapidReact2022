@@ -9,8 +9,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
@@ -21,8 +19,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
     public static class IntakeConstants {
-
-        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
@@ -52,34 +48,25 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Define Hardware
 
     @Log
-    private final WPI_TalonFX motorOuterAxle;
-
-    @Log
-    private final WPI_TalonFX motorInnerAxle;
+    private final WPI_TalonFX motor;
 
     @Log
     private final DoubleSolenoid solenoid;
 
     // States
 
-    @Log
+    @Log(name = "Solenoid State")
     public static String state = "";
     private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motorOuterAxle,
-            WPI_TalonFX motorInnerAxle,
-            DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(WPI_TalonFX motor, DoubleSolenoid intakeSolenoid) {
 
-        this.motorOuterAxle = motorOuterAxle;
-        this.motorOuterAxle.setInverted(true);
-        this.motorInnerAxle = motorInnerAxle;
-        this.motorInnerAxle.setNeutralMode(NeutralMode.Coast);
-        this.motorOuterAxle.setNeutralMode(NeutralMode.Coast);
-        this.motorOuterAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.motorInnerAxle.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor = motor;
+        this.motor.setNeutralMode(NeutralMode.Coast);
+        this.motor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
         this.solenoid = intakeSolenoid;
 
@@ -95,45 +82,41 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Methods
 
     /**
-     * Manually sets the speed of the inner and outer axle motors.
+     * Manually sets the speed of the motor
      *
      * @param speed
      */
     public void setSpeed(double speed) {
-        motorInnerAxle.set(speed);
-        motorOuterAxle.set(speed);
+        motor.set(speed);
     }
 
     /**
-     * Spins motors inwards and updates motor state.
+     * Spins motor inwards and updates motor state.
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
-        if (intakeSolenoidState == RETRACT) {
-            motorOuterAxle.set(INTAKE_IN_SPEED);
-            motorInnerAxle.set(INTAKE_IN_SPEED);
+        if (isIntakeExtended()) {
+            motor.set(INTAKE_IN_SPEED);
             intakeMotorState = IN;
         }
     }
 
     /**
-     * Spins motors outwards and updates motor state.
+     * Spins motor outwards and updates motor state.
      * Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
-        if (intakeSolenoidState == RETRACT) {
-            motorOuterAxle.set(INTAKE_OUT_SPEED);
-            motorInnerAxle.set(INTAKE_OUT_SPEED);
+        if (isIntakeExtended()) {
+            motor.set(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
         }
     }
 
     /**
-     * Stops motors and updates motor state
+     * Stops motor and updates motor state
      */
     public void intakeStop() {
-        motorOuterAxle.stopMotor();
-        motorInnerAxle.stopMotor();
+        motor.set(0);
         intakeMotorState = STOPPED;
     }
 
@@ -161,5 +144,31 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
             intakeStop();
         }
+    }
+
+    // Logging Methods
+
+    /**
+     * Gets the motor speed
+     */
+    @Log(name = "Motor Speed")
+    public double getMotorSpeed() {
+        return motor.get();
+    }
+
+    /**
+     * Checks if motor is on
+     */
+    @Log(name = "Motor Moving")
+    public boolean isMotorOn() {
+        return motor.get() != 0;
+    }
+
+    /**
+     * Checks if Intake is extended
+     */
+    @Log(name = "Intake Extended")
+    public boolean isIntakeExtended() {
+        return (intakeSolenoidState == RETRACT);
     }
 }

@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
-public class ShooterHardwareTestCommand extends SequentialCommandGroup {
-    public ShooterHardwareTestCommand(ShooterSubsystem shooter) {
+public class ShooterDiagnosticCommand extends SequentialCommandGroup {
+    public ShooterDiagnosticCommand(ShooterSubsystem shooter) {
         addCommands(new ShooterTurretSetAngleCommand(shooter, ShooterConstants.MIN_TURRET_ANGLE),
                 new ShooterTurretSetAngleCommand(shooter, ShooterConstants.MAX_TURRET_ANGLE),
                 new ShooterTurretSetAngleCommand(shooter,

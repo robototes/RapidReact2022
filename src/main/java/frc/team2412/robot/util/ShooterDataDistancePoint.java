@@ -1,12 +1,12 @@
 package frc.team2412.robot.util;
 
 public class ShooterDataDistancePoint {
-    private final double distance, angle, power;
+    private final double distance, angle, RPM;
 
-    public ShooterDataDistancePoint(double distance, double angle, double power) {
+    public ShooterDataDistancePoint(double distance, double angle, double RPM) {
         this.distance = distance;
         this.angle = angle;
-        this.power = power;
+        this.RPM = RPM;
     }
 
     public double getDistance() {
@@ -17,7 +17,7 @@ public class ShooterDataDistancePoint {
         return angle;
     }
 
-    public double getPower() {
-        return power;
+    public double getRPM() {
+        return RPM;
     }
 }

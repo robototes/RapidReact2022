@@ -8,6 +8,7 @@ import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MOTOR_C
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.RUNG_DISTANCE;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_EXTEND;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_RETRACT;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ARM_REACH_DISTANCE;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.Robot;
+import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -29,8 +31,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
-        public static final double TEST_SPEED_EXTEND = 0.7;
-        public static final double TEST_SPEED_RETRACT = -0.5;
+        public static final double TEST_SPEED_EXTEND = 0.1;
+        public static final double TEST_SPEED_RETRACT = -0.1;
         public static final double STOP_SPEED = 0;
         public static final double MAX_ENCODER_TICKS = 1000;
         public static final double MIN_ENCODER_TICKS = 0.8;
@@ -51,6 +53,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
             ENABLED, DISABLED
         }
 
+        public enum AutoClimbState {
+            GROUND_MID, MID_HIGH, HIGH_TRAV
+        }
+
         enum SolenoidState {
             BACK, MID, FRONT
         }
@@ -65,6 +71,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     private boolean enabled;
     private static SolenoidState solenoidState = SolenoidState.MID;
+    private static AutoClimbState autoClimbState = AutoClimbState.GROUND_MID;
 
     private final NetworkTableEntry testSpeedExtend;
     private final NetworkTableEntry testSpeedRetract;
@@ -85,7 +92,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
         motorConfig.reverseSoftLimitEnable = false;
-        motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
+        motorConfig.forwardSoftLimitThreshold = ARM_REACH_DISTANCE;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
@@ -94,7 +101,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
-        maxEncoderTicks = tab.add("Max encoder ticks", MAX_ENCODER_TICKS)
+        maxEncoderTicks = tab.add("Max encoder ticks", ARM_REACH_DISTANCE)
                 .withPosition(0, 0)
                 .withSize(2, 1)
                 .getEntry();
@@ -131,6 +138,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public void setEnabled() {
         enabled = true;
+    }
+
+    public void setAutoClimbState(AutoClimbState newState) {
+        autoClimbState = newState;
+    }
+
+    public AutoClimbState getAutoClimbState() {
+        return autoClimbState;
     }
 
     public void setDisabled() {

@@ -202,12 +202,13 @@ public class Robot extends TimedRobot implements Loggable {
         PhysicsSim physicsSim = PhysicsSim.getInstance();
         // TODO Find more accurate values
         if (CLIMB_ENABLED) {
+            // Motor, acceleration time from 0 to full in seconds, max velocity
             physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
             physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor1, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.intakeMotor2, 1, 5000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.intakeMotor2, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INDEX_ENABLED) {
             physicsSim.addTalonFX(hardware.ingestIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
@@ -217,6 +218,7 @@ public class Robot extends TimedRobot implements Loggable {
             physicsSim.addTalonFX(hardware.flywheelMotor1, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
             physicsSim.addTalonFX(hardware.flywheelMotor2, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
             physicsSim.addTalonFX(hardware.turretMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // Motor, stall torque, maximum free RPM
             physicsSim.addSparkMax(hardware.hoodMotor, SparkMaxConstants.STALL_TORQUE,
                     SparkMaxConstants.FREE_SPEED_RPM);
         }

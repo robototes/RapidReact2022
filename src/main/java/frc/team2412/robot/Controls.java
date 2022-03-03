@@ -2,7 +2,12 @@ package frc.team2412.robot;
 
 import static frc.team2412.robot.Controls.ControlConstants.CODRIVER_CONTROLLER_PORT;
 import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
 
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
@@ -103,8 +108,8 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmUp.whenPressed(new ExtendFixedHookCommand(subsystems.climbSubsystem));
-        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
+    //    climbFixedArmUp.whenPressed(new ExtendFixedHookCommand(subsystems.climbSubsystem));
+     //   climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }

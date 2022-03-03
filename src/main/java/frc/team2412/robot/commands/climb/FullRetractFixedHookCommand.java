@@ -22,9 +22,9 @@ public class FullRetractFixedHookCommand extends CommandBase {
         return subsystem.isFixedFullyExtended();
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        subsystem.stopFixedArm();
-    }
+    //@Override
+    //public void end(boolean interrupted) {
+     //   subsystem.stopFixedArm();
+   // }
 
 }

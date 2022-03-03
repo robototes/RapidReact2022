@@ -1,15 +1,20 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ARM_REACH_DISTANCE;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.D;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ENCODER_TICKS_PER_INCH;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ENCODER_TICKS_PER_REVOLUTION;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.GEARBOX_REDUCTION;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.I;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MIN_ENCODER_TICKS;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.MOTOR_CURRENT_LIMIT;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.P;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.RUNG_DISTANCE;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_EXTEND;
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.TEST_SPEED_RETRACT;
-import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.ARM_REACH_DISTANCE;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -42,6 +47,12 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double ARM_REACH_DISTANCE = Math.PI * RUNG_DISTANCE * GEARBOX_REDUCTION
                 * ENCODER_TICKS_PER_REVOLUTION;
 
+        public static final double ENCODER_TICKS_PER_INCH = 276234 / 25.5;
+
+        public static final double P = 0.01;
+        public static final double I = 0;
+        public static final double D = 0;
+
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
 
@@ -64,10 +75,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     @Log.MotorController
     private final WPI_TalonFX climbFixedMotor;
+
     @Log.MotorController
     private final WPI_TalonFX climbDynamicMotor;
 
-    private final DoubleSolenoid solenoid;
+    private DoubleSolenoid solenoid;
 
     private boolean enabled;
     private static SolenoidState solenoidState = SolenoidState.MID;
@@ -87,7 +99,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         setName("ClimbSubsystem");
         this.climbFixedMotor = climbFixedMotor;
         this.climbDynamicMotor = climbDynamicMotor;
-        solenoid = climbAngle;
+        // solenoid = climbAngle;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -97,6 +109,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
         climbFixedMotor.configAllSettings(motorConfig);
+        climbFixedMotor.setNeutralMode(NeutralMode.Brake);
+
+        climbFixedMotor.config_kP(0, P);
+
         climbDynamicMotor.configAllSettings(motorConfig);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
@@ -161,11 +177,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void extendFixedArm() {
-        setMotor(testSpeedExtend.getValue().getDouble(), climbFixedMotor);
+        setMotor(30 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void retractFixedArm() {
-        setMotor(testSpeedRetract.getValue().getDouble(), climbFixedMotor);
+        setMotor(2 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void stopFixedArm() {
@@ -185,15 +201,15 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void setMotor(double value, WPI_TalonFX motor) {
-        if (enabled) {
-            System.out.println("motor set: " + value);
-            if (Robot.isSimulation()) {
-                motor.getSimCollection().setIntegratedSensorVelocity((int) value);
-            } else {
-                motor.set(ControlMode.Position, value);
-            }
-            // motor.set(ControlMode.PercentOutput, 1); simulator only
-        }
+        // if (enabled) {
+        // System.out.println("motor set: " + value);
+        // if (Robot.isSimulation()) {
+        // motor.getSimCollection().setIntegratedSensorVelocity((int) value);
+        // } else {
+        motor.set(ControlMode.Position, value);
+        // }
+        // motor.set(ControlMode.PercentOutput, 1); simulator only
+        // }
     }
 
     public boolean isFixedFullyExtended() {
@@ -236,4 +252,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    @Config(name = "PID")
+    private void setPID(@Config(name = "P", defaultValueNumeric = P) double p,
+            @Config(name = "I", defaultValueNumeric = I) double i,
+            @Config(name = "D", defaultValueNumeric = D) double d) {
+        climbFixedMotor.config_kP(0, p);
+        climbFixedMotor.config_kI(0, i);
+        climbFixedMotor.config_kD(0, d);
+    }
+
+    // spotless:on
 }

@@ -94,7 +94,7 @@ public class OptionalController<T extends Controller> extends Controller {
     }
 
     protected Button get(Button a) {
-        return new Button(() -> active && a.getAsBoolean());
+        return new Button(() -> isActive() && a.get());
     }
 
     // controller stuff

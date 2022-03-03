@@ -31,7 +31,7 @@ public class CompoundController<T, U extends Controller> extends OptionalControl
      */
     @SafeVarargs
     public CompoundController(boolean one, U c, T... presets) {
-        super(c);
+        super(c, true);
         switchableController = new SwitchableController<>(one, c, presets);
     }
 
@@ -46,6 +46,21 @@ public class CompoundController<T, U extends Controller> extends OptionalControl
     @SafeVarargs
     public CompoundController(U c, T... presets) {
         this(true, c, presets);
+    }
+
+    @Override
+    public boolean activate(T... preset) {
+        return switchableController.activate(preset);
+    }
+
+    @Override
+    public boolean deactivate(Object... preset) {
+        return switchableController.deactivate(preset);
+    }
+
+    @Override
+    public U getRawController(Object key) {
+        return switchableController.getRawController(key);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean FIELD_CENTRIC_ENABLED = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0.1, TIP_TOLERANCE = 1;
+        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 10;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -116,6 +116,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry speedModifier;
+    private final NetworkTableEntry antiTip;
+    private final NetworkTableEntry fieldCentric;
 
     private final Field2d field = new Field2d();
 
@@ -185,6 +187,18 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
+        antiTip = tab.add("Anti Tip", ANTI_TIP_ENABLED)
+                .withPosition(2, 2)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .getEntry();
+
+        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_ENABLED)
+                .withPosition(2, 3)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .getEntry();
+
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
     }
@@ -193,10 +207,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             if (gyroscope instanceof Pigeon)
                 return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
-                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH));
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180/Math.PI);
             if (gyroscope instanceof NavX)
                 return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
-                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH));
+                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180/Math.PI);
         }
         return Vector2.ZERO;
     }
@@ -225,9 +239,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public static final double P = 0.01, THRESHOLD = 3;
+    public Rotation2 getAngle() {
+        synchronized (sensorLock) {
+            return gyroscope.getAngle().inverse();
+        }
+    }
 
-    private double defaultX, defaultY;
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
         synchronized (stateLock) {
@@ -359,13 +376,14 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
-                if (ANTI_TIP_ENABLED)
+
+                if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                    getPose().rotation.inverse() : Rotation2.ZERO) // same code as other block
+                                    getPose().rotation : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
-                else
+                } else
                     signal = driveSignal;
             }
         }
@@ -394,4 +412,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         follower.follow(new Trajectory(p, TRAJECTORY_CONSTRAINTS, 12.0));
     }
 
+    public boolean getFieldCentric() {
+        return fieldCentric.getBoolean(false);
+    }
+
+    public boolean getAntiTip() {
+        return antiTip.getBoolean(false);
+    }
 }

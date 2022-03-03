@@ -72,7 +72,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void startCompetition() {
-        if (!ROBOT_TYPE.equals(RobotType.AUTOMATED_TEST)) {
+        if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
             super.startCompetition();
         } else {
             try {
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot implements Loggable {
                 .onCommandFinish(
                         command -> System.out.println("Command finished: " + command.getName()));
 
-        if (ROBOT_TYPE.equals(RobotType.AUTOMATED_TEST)) {
+        if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
                 @Override
                 public void run() {

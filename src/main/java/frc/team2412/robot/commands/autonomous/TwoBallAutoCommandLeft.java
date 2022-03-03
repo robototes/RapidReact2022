@@ -24,12 +24,16 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
     public TwoBallAutoCommandLeft(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
             ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
             IntakeSubsystem intakeSubsystem) {
+        // Robot should be pressed up on the left side of the lower exit closest to the drivers, facing
+        // directly away from the hub with the turret facing towards it
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(new Vector2(337, 133), Rotation2.fromDegrees(-26.4))
                         .lineTo(new Vector2(449, 84), Rotation2.fromDegrees(26.7))
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
+        // This shoots, drives back to where the ball is with the intake extended, picks it up and
+        // immediately shoots it
         addCommands(
                 new ParallelCommandGroup(
                         new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),

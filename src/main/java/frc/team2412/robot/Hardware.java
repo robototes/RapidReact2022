@@ -32,12 +32,12 @@ public class Hardware {
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 7, DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 10;
         public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 2, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 8, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 11;
-        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = -1, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = -1,
-                DRIVETRAIN_BACK_LEFT_ENCODER_PORT = -1, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = -1;
-        public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = 0;// -Math.toRadians(67.852);
-        public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = 0;// -Math.toRadians(221.924);
-        public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = 0;// -Math.toRadians(214.980);
-        public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = 0;// -Math.toRadians(168.398);
+        public static final int DRIVETRAIN_FRONT_LEFT_ENCODER_PORT = 3, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT = 6,
+                DRIVETRAIN_BACK_LEFT_ENCODER_PORT = 9, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT = 12;
+        public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(67.852);
+        public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(221.924);
+        public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
+        public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
         // Changes swerve modules & disables subsystems missing from the swerve test bot
         public static final boolean COMPETITION_CONFIG = true;
@@ -133,7 +133,7 @@ public class Hardware {
             frontRightModule = FRONT_RIGHT_CONFIG.falcons();
             backLeftModule = BACK_LEFT_CONFIG.falcons();
             backRightModule = BACK_RIGHT_CONFIG.falcons();
-            gyro = new NavX(SPI.Port.kMXP);//new Pigeon(GYRO_PORT);
+            gyro = new Pigeon(GYRO_PORT);
         }
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);

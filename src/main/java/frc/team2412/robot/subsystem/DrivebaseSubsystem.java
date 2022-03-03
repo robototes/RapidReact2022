@@ -66,7 +66,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean FIELD_CENTRIC_ENABLED = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 10;
+        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 5;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(

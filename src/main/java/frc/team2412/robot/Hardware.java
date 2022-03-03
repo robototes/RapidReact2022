@@ -11,7 +11,6 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 
 import org.frcteam2910.common.drivers.Gyroscope;
-import org.frcteam2910.common.robot.drivers.NavX;
 
 import frc.team2412.robot.util.Mk4Configuration;
 import org.frcteam2910.common.robot.drivers.Pigeon;

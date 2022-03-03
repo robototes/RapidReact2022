@@ -127,7 +127,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             double moduleMaxVelocityMetersPerSec) {
         synchronized (sensorLock) {
             gyroscope = g;
-            gyroscope.setInverted(false);
+            if (g instanceof Pigeon)
+                gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
@@ -207,10 +208,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             if (gyroscope instanceof Pigeon)
                 return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
-                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180/Math.PI);
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180 / Math.PI);
             if (gyroscope instanceof NavX)
                 return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
-                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180/Math.PI);
+                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180 / Math.PI);
         }
         return Vector2.ZERO;
     }
@@ -244,7 +245,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return gyroscope.getAngle().inverse();
         }
     }
-
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
         synchronized (stateLock) {
@@ -380,7 +380,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                    getPose().rotation : Rotation2.ZERO) // same code as other block
+                                    getPose().rotation.inverse() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

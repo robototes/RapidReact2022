@@ -49,7 +49,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         public static final double ENCODER_TICKS_PER_INCH = 276234 / 25.5;
 
-        public static final double P = 0.01;
+        public static final double P = 0.5;
         public static final double I = 0;
         public static final double D = 0;
 

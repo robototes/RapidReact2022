@@ -95,8 +95,8 @@ public class Controls {
         intakeSpitButton = shootPreset.getAButton();
         intakeRetractButton = shootPreset.getBButton();
 
-        indexShootButton = driveController.getLeftBumperButton();
-        shootButton = driveController.getLeftTriggerAxis().getButton(0.5);
+        indexShootButton = shootPreset.getLeftBumperButton();
+        shootButton = shootPreset.getLeftTriggerAxis().getButton(0.5);
         hoodUpButton = shootPreset.getDPadButton(Direction.UP);
         hoodDownButton = shootPreset.getDPadButton(Direction.DOWN);
         turretLeftButton = shootPreset.getDPadButton(Direction.LEFT);

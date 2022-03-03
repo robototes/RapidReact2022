@@ -9,6 +9,6 @@ public final class AutomatedTestMain {
     }
 
     public static void main(String... args) {
-        RobotBase.startRobot((Supplier<RobotBase>) () -> Robot.getInstance(Robot.RobotType.AUTOMATED_TEST));
+        RobotBase.startRobot((Supplier<RobotBase>) () -> new Robot(Robot.RobotType.AUTOMATED_TEST));
     }
 }

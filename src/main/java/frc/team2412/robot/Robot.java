@@ -34,15 +34,17 @@ public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
+    public static final RobotType ROBOT_TYPE = RobotType.COMPETITION;
+
     private static Robot instance = null;
 
     enum RobotType {
-        COMPETITION, AUTOMATED_TEST
+        COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
-    public static Robot getInstance(RobotType type) {
+    public static Robot getInstance() {
         if (instance == null)
-            instance = new Robot(type);
+            instance = new Robot(ROBOT_TYPE);
         return instance;
     }
 
@@ -58,7 +60,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     public TestingSubsystem testingSubsystem;
 
-    Robot(RobotType type) {
+    protected Robot(RobotType type) {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
@@ -70,7 +72,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void startCompetition() {
-        if (!robotType.equals(RobotType.AUTOMATED_TEST)) {
+        if (!ROBOT_TYPE.equals(RobotType.AUTOMATED_TEST)) {
             super.startCompetition();
         } else {
             try {
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot implements Loggable {
                 .onCommandFinish(
                         command -> System.out.println("Command finished: " + command.getName()));
 
-        if (robotType.equals(RobotType.AUTOMATED_TEST)) {
+        if (ROBOT_TYPE.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -226,5 +228,13 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void simulationPeriodic() {
         PhysicsSim.getInstance().run();
+    }
+
+    public RobotType getRobotType() {
+        return robotType;
+    }
+
+    public boolean isCompetition() {
+        return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
     }
 }

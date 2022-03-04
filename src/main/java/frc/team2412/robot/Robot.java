@@ -41,8 +41,6 @@ public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
-    public static final RobotType ROBOT_TYPE = RobotType.DRIVEBASE;
-
     private static Robot instance = null;
 
     enum RobotType {
@@ -78,7 +76,7 @@ public class Robot extends TimedRobot implements Loggable {
     }
 
     private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d, (byte) 0xe7
     };
     private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] {
             0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82

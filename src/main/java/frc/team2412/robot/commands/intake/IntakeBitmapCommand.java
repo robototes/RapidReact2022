@@ -103,18 +103,18 @@ public class IntakeBitmapCommand extends CommandBase {
         intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
         indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
 
-        // double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
-        // shooterSubsystem.updateTurretAngle(yaw);
+        double yaw = shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
+        shooterSubsystem.updateTurretAngle(yaw);
 
-        // if (currentState.shooterMisfire) {
-        //     shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
-        //     shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
-        // } else {
-        //     double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-        //     ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
-        //     shooterSubsystem.setHoodAngle(shooterData.getAngle());
-        //     shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-        // }
+        if (currentState.shooterMisfire) {
+            shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
+            shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
+        } else {
+            double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
+            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget() ? ShooterConstants.dataPoints.getInterpolated(distance) : ShooterConstants.dataPoints.getInterpolated(0.0);
+            shooterSubsystem.setHoodAngle(shooterData.getAngle());
+            shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
+        }
     }
 
     public boolean isFinished() {

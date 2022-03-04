@@ -18,7 +18,6 @@ import io.github.oblarg.oblog.annotations.Log;
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Constants
-
     public static class IntakeConstants {
 
         public static final double INTAKE_IN_SPEED = 0.5;

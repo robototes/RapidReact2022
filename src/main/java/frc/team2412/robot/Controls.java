@@ -5,7 +5,6 @@ import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static frc.team2412.robot.util.controller.MultiController.Controllers.*;
 
-
 import frc.team2412.robot.util.controller.CompoundController;
 import frc.team2412.robot.util.controller.MultiController;
 import org.frcteam2910.common.math.Rotation2;
@@ -34,13 +33,11 @@ public class Controls {
 
     public CompoundController<MultiController.Controllers, XboxController> driveController;
 
-
     // climb
     public final Button climbFixedArmUp;
     public final Button climbFixedArmFullUp;
     public final Button climbFixedArmDown;
     public final Button climbFixedArmFullDown;
-
 
     public Controller shootPreset, climbPreset;
 
@@ -71,7 +68,6 @@ public class Controls {
 
         driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
 
-
         climbFixedArmUp = codriverController.getLeftBumperButton();
         climbFixedArmFullUp = codriverController.getBButton();
         climbFixedArmDown = codriverController.getRightBumperButton();
@@ -94,7 +90,6 @@ public class Controls {
         dynamicArmDownButton = climbPreset.getBButton();
 
         rungClimbButton = climbPreset.getRightBumperButton();
-
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
 

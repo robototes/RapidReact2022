@@ -18,14 +18,15 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
-        public static final boolean CLIMB_ENABLED = false;
-        public static final boolean DRIVE_ENABLED = true;
-        public static final boolean DRIVER_VIS_ENABLED = false;
-        public static final boolean SHOOTER_VISION_ENABLED = false;
-        public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
-        public static final boolean SHOOTER_ENABLED = false;
-        public static final boolean SHOOTER_TESTING = false;
+        public static boolean CLIMB_ENABLED = false;
+        public static boolean DRIVE_ENABLED = true;
+        public static boolean DRIVER_VIS_ENABLED = false;
+        public static boolean SHOOTER_VISION_ENABLED = true;
+        public static boolean INDEX_ENABLED = true;
+        public static boolean INTAKE_ENABLED = true;
+        public static boolean SHOOTER_ENABLED = true;
+        public static boolean SHOOTER_TESTING = false;
+
     }
 
     public final Hardware hardware;
@@ -44,29 +45,28 @@ public class Subsystems implements Loggable {
     public ShooterSubsystem shooterSubsystem;
 
     public Subsystems(Hardware h) {
+        boolean comp = Robot.getInstance().isCompetition();
+
         hardware = h;
 
-        if (CLIMB_ENABLED)
+        if (CLIMB_ENABLED && comp)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
                     hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (SHOOTER_VISION_ENABLED)
+        if (SHOOTER_VISION_ENABLED && comp)
             shooterVisionSubsystem = new ShooterVisionSubsystem();
-        if (INTAKE_ENABLED)
+        if (INTAKE_ENABLED && comp)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeSolenoid);
-        if (SHOOTER_ENABLED)
+        if (SHOOTER_ENABLED && comp)
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
-        if (INDEX_ENABLED) {
+        if (INDEX_ENABLED && comp) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
                     hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
-            // indexSubsystem.setDefaultCommand(
-            // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
-            // shooterVisionSubsystem));
         }
     }
 }

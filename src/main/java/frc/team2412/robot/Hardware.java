@@ -35,8 +35,7 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
         // Changes swerve modules & disables subsystems missing from the swerve test bot
-        public static final boolean COMPETITION_CONFIG = true;
-        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = COMPETITION_CONFIG
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = Robot.getInstance().isCompetition()
                 ? Mk4SwerveModuleHelper.GearRatio.L2
                 : Mk4SwerveModuleHelper.GearRatio.L1;
 
@@ -131,18 +130,18 @@ public class Hardware {
             backRightModule = BACK_RIGHT_CONFIG.create(comp);
             gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
-        if (CLIMB_ENABLED) {
+        if (CLIMB_ENABLED && comp) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
                     CLIMB_ANGLE_DOWN_SOLENOID);
         }
-        if (INTAKE_ENABLED) {
+        if (INTAKE_ENABLED && comp) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }
-        if (INDEX_ENABLED) {
+        if (INDEX_ENABLED && comp) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             ingestProximity = new DigitalInput(INGEST_PROXIMITY);
@@ -153,17 +152,15 @@ public class Hardware {
             feederRedColor = new DigitalInput(FEEDER_RED);
 
         }
-        if (SHOOTER_ENABLED) {
+        if (SHOOTER_ENABLED && comp) {
             flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
             flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
             turretMotor = new WPI_TalonFX(TURRET);
             hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         }
-        if (DRIVER_VIS_ENABLED) {
+        if (DRIVER_VIS_ENABLED && comp) {
             CameraServer.addCamera(frontCamera);
             CameraServer.startAutomaticCapture();
-        }
-        if (SHOOTER_VISION_ENABLED) {
         }
     }
 }

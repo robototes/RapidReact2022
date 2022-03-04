@@ -34,7 +34,7 @@ public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
      */
-    public static final RobotType ROBOT_TYPE = RobotType.COMPETITION;
+    public static final RobotType ROBOT_TYPE = RobotType.DRIVEBASE;
 
     private static Robot instance = null;
 
@@ -178,7 +178,7 @@ public class Robot extends TimedRobot implements Loggable {
             subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
         }
 
-        if (SubsystemConstants.SHOOTER_ENABLED) {
+        if (SubsystemConstants.SHOOTER_ENABLED && isCompetition()) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 

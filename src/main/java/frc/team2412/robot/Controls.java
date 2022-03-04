@@ -106,19 +106,20 @@ public class Controls {
 
         driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
-        if (CLIMB_ENABLED) {
+        boolean comp = Robot.getInstance().isCompetition();
+        if (CLIMB_ENABLED && comp) {
             bindClimbControls();
         }
         if (DRIVE_ENABLED) {
             bindDriveControls();
         }
-        if (INDEX_ENABLED)
+        if (INDEX_ENABLED && comp)
             bindIndexControls();
 
-        if (INTAKE_ENABLED) {
+        if (INTAKE_ENABLED && comp) {
             bindIntakeControls();
         }
-        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED) {
+        if (SHOOTER_ENABLED && comp) {
             bindShooterControls();
         }
     }

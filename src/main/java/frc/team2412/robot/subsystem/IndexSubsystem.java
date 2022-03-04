@@ -54,14 +54,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
-    private final DigitalInput topProximity;
+    private final DigitalInput ingestTopProximity;
 
     private final DigitalInput ingestBlueColor;
     private final DigitalInput ingestRedColor;
     private final DigitalInput feederBlueColor;
     private final DigitalInput feederRedColor;
-    private final DigitalInput topBlueColor;
-    private final DigitalInput topRedColor;
+    private final DigitalInput ingestTopBlueColor;
+    private final DigitalInput ingestTopRedColor;
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -79,8 +79,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
             DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput topProximity,
-            DigitalInput topBlueColor, DigitalInput topRedColor) {
+            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
+            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -93,13 +93,13 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
-        this.topProximity = topProximity;
+        this.ingestTopProximity = ingestTopProximity;
         this.ingestBlueColor = ingestBlueColor;
         this.ingestRedColor = ingestRedColor;
         this.feederBlueColor = feederBlueColor;
         this.feederRedColor = feederRedColor;
-        this.topBlueColor = topBlueColor;
-        this.topRedColor = topRedColor;
+        this.ingestTopBlueColor = ingestTopBlueColor;
+        this.ingestTopRedColor = ingestTopRedColor;
 
         this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
@@ -177,7 +177,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get() || topProximity.get();
+        return ingestProximity.get() || ingestTopProximity.get();
     }
 
     /**
@@ -207,10 +207,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Cargo")
     public boolean ingestHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && ingestBlueColor.get())
-                || teamColor == Alliance.Red && ingestRedColor.get()
-                || teamColor == Alliance.Blue && topBlueColor.get()
-                || teamColor == Alliance.Red && topRedColor.get());
+        return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
+                || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
     }
 
     /**

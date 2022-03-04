@@ -59,6 +59,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+
     final private RobotType robotType;
 
     private Thread controlAuto;

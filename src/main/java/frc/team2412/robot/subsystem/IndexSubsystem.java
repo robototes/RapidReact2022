@@ -54,11 +54,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
+    private final DigitalInput topProximity;
 
     private final DigitalInput ingestBlueColor;
     private final DigitalInput ingestRedColor;
     private final DigitalInput feederBlueColor;
     private final DigitalInput feederRedColor;
+    private final DigitalInput topBlueColor;
+    private final DigitalInput topRedColor;
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -76,7 +79,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
             DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor) {
+            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput topProximity,
+            DigitalInput topBlueColor, DigitalInput topRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -89,10 +93,13 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         this.feederMotor = secondMotor;
         this.ingestProximity = ingestProximity;
         this.feederProximity = feederProximity;
+        this.topProximity = topProximity;
         this.ingestBlueColor = ingestBlueColor;
         this.ingestRedColor = ingestRedColor;
         this.feederBlueColor = feederBlueColor;
         this.feederRedColor = feederRedColor;
+        this.topBlueColor = topBlueColor;
+        this.topRedColor = topRedColor;
 
         this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
@@ -170,7 +177,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get();
+        return ingestProximity.get() || topProximity.get();
     }
 
     /**
@@ -196,12 +203,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Checks if ingest has the correct cargo
+     * Checks if ingest has the correct cargo (also includes the top sensor)
      */
     @Log(name = "Ingest Cargo")
     public boolean ingestHasCorrectCargo() {
         return ((teamColor == Alliance.Blue && ingestBlueColor.get())
-                || teamColor == Alliance.Red && ingestRedColor.get());
+                || teamColor == Alliance.Red && ingestRedColor.get()
+                || teamColor == Alliance.Blue && topBlueColor.get()
+                || teamColor == Alliance.Red && topRedColor.get());
     }
 
     /**

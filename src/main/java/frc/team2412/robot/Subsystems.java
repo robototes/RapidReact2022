@@ -62,8 +62,9 @@ public class Subsystems implements Loggable {
                     hardware.turretMotor, hardware.hoodMotor);
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
+                    hardware.ingestProximity, hardware.feederProximity, hardware.topProximity, hardware.ingestBlueColor,
+                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor, hardware.topBlueColor,
+                    hardware.topRedColor);
             // indexSubsystem.setDefaultCommand(
             // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
             // shooterVisionSubsystem));

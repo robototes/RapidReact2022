@@ -90,7 +90,8 @@ public class Hardware {
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
-                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5;
+                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, TOP_RED = 6, TOP_BLUE = 7,
+                TOP_PROXIMITY = 8;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
@@ -121,10 +122,13 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
+    public DigitalInput topProximity;
     public DigitalInput ingestBlueColor;
     public DigitalInput ingestRedColor;
     public DigitalInput feederBlueColor;
     public DigitalInput feederRedColor;
+    public DigitalInput topBlueColor;
+    public DigitalInput topRedColor;
 
     public Hardware() {
         if (DRIVE_ENABLED) {
@@ -150,10 +154,13 @@ public class Hardware {
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+            topProximity = new DigitalInput(TOP_PROXIMITY);
             ingestBlueColor = new DigitalInput(INGEST_BLUE);
             ingestRedColor = new DigitalInput(INGEST_RED);
             feederBlueColor = new DigitalInput(FEEDER_BLUE);
             feederRedColor = new DigitalInput(FEEDER_RED);
+            topBlueColor = new DigitalInput(TOP_BLUE);
+            topRedColor = new DigitalInput(TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

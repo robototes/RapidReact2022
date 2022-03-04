@@ -108,29 +108,30 @@ public class Controls {
 
         boolean comp = Robot.getInstance().isCompetition();
 
-        if (DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             bindDriveControls();
         }
-        if (!comp)
-            return;
-        if (CLIMB_ENABLED) {
+
+        if (subsystems.climbSubsystem != null) {
             bindClimbControls();
         }
 
-        if (INDEX_ENABLED)
+        if (subsystems.indexSubsystem != null) {
             bindIndexControls();
+        }
 
-        if (INTAKE_ENABLED) {
+        if (subsystems.intakeSubsystem != null) {
             bindIntakeControls();
         }
-        if (SHOOTER_ENABLED) {
+
+        if (subsystems.shooterSubsystem != null) {
             bindShooterControls();
         }
     }
 
     // TODO these yay
     public void bindClimbControls() {
-        // bruh
+
     }
 
     public void bindDriveControls() {
@@ -138,9 +139,7 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        if (SHOOTER_VISION_ENABLED && INDEX_ENABLED) {
-            indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-        }
+        indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {

@@ -233,11 +233,11 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
         }
 
-        if (SubsystemConstants.SHOOTER_ENABLED && isCompetition()) {
+        if (subsystems.shooterSubsystem != null) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 

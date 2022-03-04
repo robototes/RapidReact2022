@@ -35,9 +35,13 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
         // Changes swerve modules & disables subsystems missing from the swerve test bot
-        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = Robot.getInstance().isCompetition()
-                ? Mk4SwerveModuleHelper.GearRatio.L2
-                : Mk4SwerveModuleHelper.GearRatio.L1;
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
+
+        static{
+            GEAR_RATIO = Robot.getInstance().isCompetition()
+                    ? Mk4SwerveModuleHelper.GearRatio.L2
+                    : Mk4SwerveModuleHelper.GearRatio.L1;
+        }
 
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
                 GEAR_RATIO,

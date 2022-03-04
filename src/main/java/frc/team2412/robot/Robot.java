@@ -30,6 +30,13 @@ import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
 
+import java.io.IOException;
+import java.net.NetworkInterface;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+
 public class Robot extends TimedRobot implements Loggable {
     /**
      * Singleton Stuff
@@ -44,7 +51,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     public static Robot getInstance() {
         if (instance == null)
-            instance = new Robot(ROBOT_TYPE);
+            instance = new Robot();
         return instance;
     }
 
@@ -64,6 +71,58 @@ public class Robot extends TimedRobot implements Loggable {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
+    }
+    protected Robot(){
+        this(getTypeFromAddress());
+    }
+
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[]{
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[]{
+            0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
+    };
+    private static RobotType getTypeFromAddress(){
+        List<byte[]> macAddresses;
+        try {
+            macAddresses = getMacAddresses();
+        } catch (IOException ignored) {
+            macAddresses = List.of();
+        }
+
+        for (byte[] macAddress : macAddresses) {
+            // First check if we are the competition bot
+            if (Arrays.compare(COMPETITION_BOT_MAC_ADDRESS, macAddress) == 0) {
+                return RobotType.COMPETITION;
+            }
+
+            // Next check if we are the practice bot
+            if (Arrays.compare(PRACTICE_BOT_MAC_ADDRESS, macAddress) == 0) {
+                return RobotType.DRIVEBASE;
+            }
+        }
+        //lol fallback
+        return RobotType.COMPETITION;
+    }
+
+    private static List<byte[]> getMacAddresses() throws IOException {
+        List<byte[]> macAddresses = new ArrayList<>();
+
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+        NetworkInterface networkInterface;
+        while (networkInterfaces.hasMoreElements()) {
+            networkInterface = networkInterfaces.nextElement();
+
+            byte[] address = networkInterface.getHardwareAddress();
+            if (address == null) {
+                continue;
+            }
+
+            macAddresses.add(address);
+        }
+
+        return macAddresses;
     }
 
     // TODO add other override methods

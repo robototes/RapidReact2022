@@ -24,11 +24,6 @@ public final class Main {
      * If you change your main robot class, change the parameter type.
      */
     public static void main(String... args) {
-        RobotBase.startRobot(new Supplier<RobotBase>() {
-            @Override
-            public RobotBase get() {
-                return Robot.getInstance(Robot.RobotType.COMPETITION);
-            }
-        });
+        RobotBase.startRobot((Supplier<RobotBase>) Robot::getInstance);
     }
 }

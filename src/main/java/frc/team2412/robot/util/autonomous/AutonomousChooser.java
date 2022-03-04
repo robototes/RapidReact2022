@@ -1,4 +1,4 @@
-package frc.team2412.robot.util;
+package frc.team2412.robot.util.autonomous;
 
 import com.google.errorprone.annotations.Immutable;
 

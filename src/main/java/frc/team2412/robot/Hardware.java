@@ -10,21 +10,17 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 
-import org.frcteam2910.common.robot.drivers.Pigeon;
+import org.frcteam2910.common.drivers.Gyroscope;
 
-import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.frcteam2910.common.robot.drivers.Pigeon;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
-
-        // Color Sensor V3 Constants
-        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
-        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
-        public static final double confidenceThreshold = 0.7;
 
         // drive can ids are range 1-19 (1 is taken by power distribution module)
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
@@ -39,10 +35,13 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
         // Changes swerve modules & disables subsystems missing from the swerve test bot
-        public static final boolean COMPETITION_CONFIG = true;
-        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO = COMPETITION_CONFIG
-                ? Mk4SwerveModuleHelper.GearRatio.L2
-                : Mk4SwerveModuleHelper.GearRatio.L1;
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
+
+        static {
+            GEAR_RATIO = Robot.getInstance().isCompetition()
+                    ? Mk4SwerveModuleHelper.GearRatio.L2
+                    : Mk4SwerveModuleHelper.GearRatio.L1;
+        }
 
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
                 GEAR_RATIO,
@@ -101,7 +100,7 @@ public class Hardware {
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
-    public Pigeon pigeon;
+    public Gyroscope gyro;
 
     // cameras
     public UsbCamera frontCamera;
@@ -132,13 +131,16 @@ public class Hardware {
     public DigitalInput ingestTopRedColor;
 
     public Hardware() {
+        boolean comp = Robot.getInstance().isCompetition();
         if (DRIVE_ENABLED) {
-            frontLeftModule = FRONT_LEFT_CONFIG.falcons();
-            frontRightModule = FRONT_RIGHT_CONFIG.falcons();
-            backLeftModule = BACK_LEFT_CONFIG.falcons();
-            backRightModule = BACK_RIGHT_CONFIG.falcons();
-            pigeon = new Pigeon(GYRO_PORT);
+            frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
+            frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
+            backLeftModule = BACK_LEFT_CONFIG.create(comp);
+            backRightModule = BACK_RIGHT_CONFIG.create(comp);
+            gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
+        if (!comp)
+            return;
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
@@ -173,8 +175,6 @@ public class Hardware {
         if (DRIVER_VIS_ENABLED) {
             CameraServer.addCamera(frontCamera);
             CameraServer.startAutomaticCapture();
-        }
-        if (SHOOTER_VISION_ENABLED) {
         }
     }
 }

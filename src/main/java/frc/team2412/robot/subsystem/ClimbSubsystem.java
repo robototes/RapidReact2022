@@ -55,7 +55,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final int PID_SLOT_0 = 0;
 
         public static final double MID_RUNG_HEIGHT_INCH = 31;
-        public static final double RETRACT_HEIGHT_INCH = 20;
+        public static final double RETRACT_HEIGHT_INCH = 15;
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
@@ -182,12 +182,24 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         solenoid.set(value);
     }
 
+    @Config(name = "Stop Fixed Motor")
+    public void stopFixedPID(boolean stop) {
+        if (stop) {
+            climbFixedMotor.stopMotor();
+        }
+        ;
+    }
+
     public void extendFixedArm() {
         setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void retractFixedArm() {
         setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+    }
+
+    public void retractFixedArmFully() {
+        setMotor(0 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void stopFixedArm() {

@@ -1,6 +1,6 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
+import static frc.team2412.robot.Controls.ControlConstants.*;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static frc.team2412.robot.util.controller.MultiController.Controllers.*;
@@ -15,6 +15,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.FullRetractFixedHookCommand;
+import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
@@ -40,6 +41,7 @@ public class Controls {
     public final Button climbFixedArmFullDown;
 
     public Controller shootPreset, climbPreset;
+    public XboxController codriverController;
 
     // index
     public final Button indexShootButton;
@@ -68,9 +70,11 @@ public class Controls {
 
         driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
 
+        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
+
         climbFixedArmUp = codriverController.getLeftBumperButton();
         climbFixedArmFullUp = codriverController.getBButton();
-        climbFixedArmDown = codriverController.getRightBumperButton();
+        climbFixedArmDown = codriverController.getAButton();
         climbFixedArmFullDown = codriverController.getXButton();
 
         driveController.activate(PRIMARY);
@@ -79,17 +83,17 @@ public class Controls {
 
         climbPreset = driveController.getPreset(SECONDARY);
 
-        fixedArmUpManualButton = climbPreset.getDPadButton(Direction.UP);
-        fixedArmDownManualButton = climbPreset.getDPadButton(Direction.DOWN);
-        dynamicArmUpManualButton = climbPreset.getDPadButton(Direction.LEFT);
-        dynamicArmDownManualButton = climbPreset.getDPadButton(Direction.RIGHT);
+        // fixedArmUpManualButton = climbPreset.getDPadButton(Direction.UP);
+        // fixedArmDownManualButton = climbPreset.getDPadButton(Direction.DOWN);
+        // dynamicArmUpManualButton = climbPreset.getDPadButton(Direction.LEFT);
+        // dynamicArmDownManualButton = climbPreset.getDPadButton(Direction.RIGHT);
 
-        fixedArmUpButton = climbPreset.getXButton();
-        fixedArmDownButton = climbPreset.getYButton();
-        dynamicArmUpButton = climbPreset.getAButton();
-        dynamicArmDownButton = climbPreset.getBButton();
+        // fixedArmUpButton = climbPreset.getXButton();
+        // fixedArmDownButton = climbPreset.getYButton();
+        // dynamicArmUpButton = climbPreset.getAButton();
+        // dynamicArmDownButton = climbPreset.getBButton();
 
-        rungClimbButton = climbPreset.getRightBumperButton();
+        // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
 
@@ -133,8 +137,7 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        // climbFixedArmUp.whenPressed(new ExtendFixedHookCommand(subsystems.climbSubsystem));
-        // climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
+        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }

@@ -22,9 +22,4 @@ public class RetractFixedHookCommand extends CommandBase {
         return true;
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        subsystem.stopFixedArm();
-    }
-
 }

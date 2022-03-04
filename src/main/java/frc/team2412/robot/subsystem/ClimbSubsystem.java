@@ -272,7 +272,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     @Config(name = "Climb to Height")
     public void fixedClimbToHeight(double heightInches){
-        climbFixedMotor.set(ControlMode.Position, heightInches * ENCODER_TICKS_PER_INCH);
+        climbFixedMotor.set(ControlMode.Position, (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
     }
 
 }

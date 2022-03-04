@@ -102,7 +102,7 @@ public class Controls {
         turretLeftButton = shootPreset.getDPadButton(Direction.LEFT);
         turretRightButton = shootPreset.getDPadButton(Direction.RIGHT);
 
-         driveController.getStartButton().whenPressed(() -> driveController.activate(PRIMARY));
+        driveController.getStartButton().whenPressed(() -> driveController.activate(PRIMARY));
 
         driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
@@ -111,7 +111,8 @@ public class Controls {
         if (DRIVE_ENABLED) {
             bindDriveControls();
         }
-        if(!comp) return;
+        if (!comp)
+            return;
         if (CLIMB_ENABLED) {
             bindClimbControls();
         }

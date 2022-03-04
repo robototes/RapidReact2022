@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -62,9 +63,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_ENABLED = true;
+        public static final boolean ANTI_TIP_DEFAULT = true;
 
-        public static final boolean FIELD_CENTRIC_ENABLED = true;
+        public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
         public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 5;
     }
@@ -188,13 +189,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-        antiTip = tab.add("Anti Tip", ANTI_TIP_ENABLED)
+        antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
                 .withPosition(2, 2)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
 
-        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_ENABLED)
+        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
                 .withPosition(2, 3)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
@@ -241,8 +242,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public Rotation2 getAngle() {
-        synchronized (sensorLock) {
-            return gyroscope.getAngle().inverse();
+        synchronized (kinematicsLock) {
+            return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 
@@ -380,7 +381,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                    getPose().rotation.inverse() : Rotation2.ZERO) // same code as other block
+                                    getAngle() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

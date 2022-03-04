@@ -37,7 +37,7 @@ public class Hardware {
         // Changes swerve modules & disables subsystems missing from the swerve test bot
         private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
 
-        static{
+        static {
             GEAR_RATIO = Robot.getInstance().isCompetition()
                     ? Mk4SwerveModuleHelper.GearRatio.L2
                     : Mk4SwerveModuleHelper.GearRatio.L1;
@@ -134,7 +134,8 @@ public class Hardware {
             backRightModule = BACK_RIGHT_CONFIG.create(comp);
             gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
-        if(!comp) return;
+        if (!comp)
+            return;
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);

@@ -72,17 +72,19 @@ public class Robot extends TimedRobot implements Loggable {
         instance = this;
         robotType = type;
     }
-    protected Robot(){
+
+    protected Robot() {
         this(getTypeFromAddress());
     }
 
-    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[]{
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
-    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[]{
+    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] {
             0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
     };
-    private static RobotType getTypeFromAddress(){
+
+    private static RobotType getTypeFromAddress() {
         List<byte[]> macAddresses;
         try {
             macAddresses = getMacAddresses();
@@ -101,7 +103,7 @@ public class Robot extends TimedRobot implements Loggable {
                 return RobotType.DRIVEBASE;
             }
         }
-        //lol fallback
+        // lol fallback
         return RobotType.COMPETITION;
     }
 

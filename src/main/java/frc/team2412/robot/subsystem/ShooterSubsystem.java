@@ -69,7 +69,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_DEFAULT_D = 0;
 
         // Placeholder gearing constant of 1
-        public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 1 * 2048;
+        public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 2048;
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
         public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
@@ -83,7 +83,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double HOOD_ANGLE_TOLERANCE = 1;
 
         // Estimated gearing constant of 41
-        public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
+        public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360.0; // 233
         public static final double MIN_TURRET_ANGLE = -90; // Can barely reach 139 degrees physically
         public static final double MAX_TURRET_ANGLE = 90; // Can barely reach 210 degrees physically
         public static final double STARTING_TURRET_ANGLE = 0;
@@ -97,6 +97,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap dataPoints = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
+
+        public static final double TURRET_FF = 0;
+        public static final double TURRET_ANGLE_OFFSET = 0;
     }
 
     /* INSTANCE VARIABLES */

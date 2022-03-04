@@ -8,6 +8,7 @@ import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
 import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
@@ -251,6 +252,12 @@ public class Robot extends TimedRobot implements Loggable {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
                     controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
                     controls.driveController.getRightXAxis()));
+        }
+        if (!isCompetition())
+            return;
+        if (SHOOTER_ENABLED) {
+            // subsystems.shooterSubsystem.setDefaultCommand(new
+            // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
     }
 

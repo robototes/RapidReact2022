@@ -11,6 +11,7 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
 
+//UHHHHHHHHH
 public class IntakeBitmapCommand extends CommandBase {
 
     public final double MISFIRE_VELOCITY = 400;

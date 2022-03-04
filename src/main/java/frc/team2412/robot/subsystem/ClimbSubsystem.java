@@ -224,7 +224,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         // if (Robot.isSimulation()) {
         // motor.getSimCollection().setIntegratedSensorVelocity((int) value);
         // } else {
-        motor.set(ControlMode.Position, value);
+            if(value / ENCODER_TICKS_PER_INCH < 70){
+                motor.set(ControlMode.Position, value);
+            }
     }
 
     public boolean isFixedFullyExtended() {

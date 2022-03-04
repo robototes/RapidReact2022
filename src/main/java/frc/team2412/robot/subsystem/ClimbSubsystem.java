@@ -46,7 +46,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double ARM_REACH_DISTANCE = Math.PI * RUNG_DISTANCE * GEARBOX_REDUCTION
                 * ENCODER_TICKS_PER_REVOLUTION;
 
-        public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5;
+        public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
 
         public static final double P = 0.5;
         public static final double I = 0;
@@ -54,13 +54,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         public static final int PID_SLOT_0 = 0;
 
-        public static final double MID_RUNG_HEIGHT_INCH = 30;
-        public static final double RETRACT_HEIGHT_INCH = 2;
+        public static final double MID_RUNG_HEIGHT_INCH = 31;
+        public static final double RETRACT_HEIGHT_INCH = 20;
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, 60, 60, 1000);
 
         enum HookArmState {
             ANGLED, UPRIGHT
@@ -249,8 +249,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log
-    public double climbHeightInches(){
-        return encoderPosition() / ENCODER_TICKS_PER_INCH  + CLIMB_OFFSET_INCHES;
+    public double climbHeightInches() {
+        return encoderPosition() / ENCODER_TICKS_PER_INCH + CLIMB_OFFSET_INCHES;
     }
 
     @Config
@@ -270,8 +270,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Config(name = "Climb to Height")
-    public void fixedClimbToHeight(double heightInches){
-        if(heightInches < 28.5) heightInches = 28.5;
+    public void fixedClimbToHeight(double heightInches) {
+        if (heightInches < 28.5)
+            heightInches = 28.5;
         climbFixedMotor.set(ControlMode.Position, (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
     }
 

@@ -111,7 +111,9 @@ public class IntakeBitmapCommand extends CommandBase {
             shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
         } else {
             double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget() ? ShooterConstants.dataPoints.getInterpolated(distance) : ShooterConstants.dataPoints.getInterpolated(0.0);
+            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget()
+                    ? ShooterConstants.dataPoints.getInterpolated(distance)
+                    : ShooterConstants.dataPoints.getInterpolated(0.0);
             shooterSubsystem.setHoodAngle(shooterData.getAngle());
             shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
         }

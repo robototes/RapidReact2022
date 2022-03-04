@@ -16,6 +16,5 @@ public class IntakeInCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new IntakeMotorInCommand(intakeSubsystem),
                         new IndexShootCommand(indexSubsystem)));
-
     }
 }

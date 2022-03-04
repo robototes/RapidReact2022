@@ -14,8 +14,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
+import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
+import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
 import org.frcteam2910.common.kinematics.SwerveKinematics;
 import org.frcteam2910.common.kinematics.SwerveOdometry;
@@ -23,6 +26,7 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
+import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.frcteam2910.common.util.*;
 
@@ -59,6 +63,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
+        public static final boolean ANTI_TIP_DEFAULT = true;
+
+        public static final boolean FIELD_CENTRIC_DEFAULT = true;
+
+        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 5;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -85,7 +94,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private final Pigeon gyroscope;
+    private final Gyroscope gyroscope;
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")
@@ -107,16 +116,20 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryXEntry;
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
-    private final NetworkTableEntry isFieldOrientedEntry;
     private final NetworkTableEntry speedModifier;
+    private final NetworkTableEntry antiTip;
+    private final NetworkTableEntry fieldCentric;
 
     private final Field2d field = new Field2d();
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Pigeon g,
+    private final PFFController<Vector2> tipController;
+
+    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g,
             double moduleMaxVelocityMetersPerSec) {
         synchronized (sensorLock) {
             gyroscope = g;
-            gyroscope.setInverted(false);
+            if (g instanceof Pigeon)
+                gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
@@ -176,10 +189,32 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-        isFieldOrientedEntry = tab.add("Field Oriented", true).getEntry();
+        antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
+                .withPosition(2, 2)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .getEntry();
 
-        defaultX = gyroscope.getAxis(Pigeon.Axis.ROLL);
-        defaultY = gyroscope.getAxis(Pigeon.Axis.PITCH);
+        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
+                .withPosition(2, 3)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .getEntry();
+
+        tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
+                .setTargetPositionTolerance(TIP_TOLERANCE);
+    }
+
+    public Vector2 getGyroscopeXY() {
+        synchronized (sensorLock) {
+            if (gyroscope instanceof Pigeon)
+                return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180 / Math.PI);
+            if (gyroscope instanceof NavX)
+                return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
+                        ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180 / Math.PI);
+        }
+        return Vector2.ZERO;
     }
 
     public RigidTransform2 getPose() {
@@ -206,31 +241,17 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    public static final double P = 0.01, THRESHOLD = 3;
-
-    private double defaultX, defaultY;
-
-    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
-        isFieldOrientedEntry.setBoolean(isFieldOriented);
-        synchronized (stateLock) {
-            // if (isFieldOriented) {
-            // synchronized (sensorLock) {
-            // double xAdj = gyroscope.getAxis(Pigeon.Axis.ROLL) - defaultX,
-            // yAdj = gyroscope.getAxis(Pigeon.Axis.PITCH) - defaultY;
-            // driveSignal = new HolonomicDriveSignal(translationalVelocity.rotateBy(gyroscope.getAngle())
-            // .add(Math.abs(xAdj) > THRESHOLD ? xAdj * P : 0, Math.abs(yAdj) > THRESHOLD ? yAdj * P : 0),
-            // rotationalVelocity, true);
-            // }
-            // } else {
-            // driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, false);
-            // }
-            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
-                    rotationalVelocity * speedModifier.getDouble(1.0), true);
+    public Rotation2 getAngle() {
+        synchronized (kinematicsLock) {
+            return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 
-    public void setFieldOriented(boolean fieldOriented) {
-        isFieldOrientedEntry.setBoolean(fieldOriented);
+    public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean isFieldOriented) {
+        synchronized (stateLock) {
+            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
+                    rotationalVelocity * speedModifier.getDouble(1.0), isFieldOriented);
+        }
     }
 
     public void resetPose(Pose2d pose) {
@@ -298,7 +319,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (isFieldOrientedEntry.getBoolean(true)) {
+        } else if (driveSignal.isFieldOriented()) {
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
                     driveSignal.getRotation());
@@ -341,7 +362,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void update(double time, double dt) {
         updateOdometry(time, dt);
 
-        HolonomicDriveSignal driveSignal;
+        HolonomicDriveSignal signal;
         Optional<HolonomicDriveSignal> trajectorySignal = follower.update(
                 getPose(),
                 getVelocity(),
@@ -349,17 +370,25 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 time,
                 dt);
         if (trajectorySignal.isPresent()) {
-            driveSignal = trajectorySignal.get();
-            driveSignal = new HolonomicDriveSignal(
-                    driveSignal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
-                    driveSignal.getRotation() / RobotController.getBatteryVoltage(),
-                    driveSignal.isFieldOriented());
+            signal = trajectorySignal.get();
+            signal = new HolonomicDriveSignal(
+                    signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
+                    signal.getRotation() / RobotController.getBatteryVoltage(),
+                    signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
-                driveSignal = this.driveSignal;
+
+                if (getAntiTip() && driveSignal != null) {
+                    signal = new HolonomicDriveSignal( // create updated drive signal
+                            driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
+                                    getAngle() : Rotation2.ZERO) // same code as other block
+                                    .add(tipController.update(getGyroscopeXY())), // anti tip stuff
+                            driveSignal.getRotation(), false); // retain rotation
+                } else
+                    signal = driveSignal;
             }
         }
-        updateModules(driveSignal);
+        updateModules(signal);
     }
 
     @Override
@@ -384,4 +413,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         follower.follow(new Trajectory(p, TRAJECTORY_CONSTRAINTS, 12.0));
     }
 
+    public boolean getFieldCentric() {
+        return fieldCentric.getBoolean(false);
+    }
+
+    public boolean getAntiTip() {
+        return antiTip.getBoolean(false);
+    }
 }

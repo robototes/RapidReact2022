@@ -12,6 +12,7 @@ import org.frcteam2910.common.robot.drivers.Pigeon;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -40,7 +41,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     private final DoubleSupplier turretAngleSupplier;
 
     public ShooterVisionSubsystem(Pigeon gyro, DoubleSupplier turretAngleSupplier) {
-        this.limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        this.limelight = NetworkTableInstance.getDefault().getTable(Hardware.HardwareConstants.LIMELIGHT);
         this.gyro = gyro;
         this.gyroAdjustmentAngle = STARTING_ROBOT_ROTATION.rotateBy(gyro.getUnadjustedAngle().inverse());
         this.turretAngleSupplier = turretAngleSupplier;

@@ -63,7 +63,7 @@ public class Subsystems implements Loggable {
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
         if (SHOOTER_VISION_ENABLED)
-            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.pigeon,
+            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.gyro,
                     SHOOTER_ENABLED ? shooterSubsystem::getTurretAngle : () -> 0);
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,

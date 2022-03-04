@@ -176,8 +176,9 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
         if (SHOOTER_VISION_ENABLED) {
-            if (pigeon == null) {
-                pigeon = new Pigeon(GYRO_PORT);
+            if (gyro == null) {
+                // If comp is false, the constructor returns early, so we can assume comp is true
+                gyro = new Pigeon(GYRO_PORT);
             }
         }
     }

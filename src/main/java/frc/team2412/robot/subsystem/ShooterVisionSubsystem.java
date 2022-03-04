@@ -4,10 +4,10 @@ import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionC
 
 import java.util.function.DoubleSupplier;
 
+import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
-import org.frcteam2910.common.robot.drivers.Pigeon;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -34,13 +34,13 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
 
     public NetworkTable limelight;
 
-    private final Pigeon gyro;
+    private final Gyroscope gyro;
 
     private final Rotation2 gyroAdjustmentAngle;
 
     private final DoubleSupplier turretAngleSupplier;
 
-    public ShooterVisionSubsystem(Pigeon gyro, DoubleSupplier turretAngleSupplier) {
+    public ShooterVisionSubsystem(Gyroscope gyro, DoubleSupplier turretAngleSupplier) {
         this.limelight = NetworkTableInstance.getDefault().getTable(Hardware.HardwareConstants.LIMELIGHT);
         this.gyro = gyro;
         this.gyroAdjustmentAngle = STARTING_ROBOT_ROTATION.rotateBy(gyro.getUnadjustedAngle().inverse());

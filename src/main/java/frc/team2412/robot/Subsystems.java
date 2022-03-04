@@ -44,15 +44,19 @@ public class Subsystems implements Loggable {
     public ShooterSubsystem shooterSubsystem;
 
     public Subsystems(Hardware h) {
+        boolean comp = Robot.getInstance().isCompetition();
+
         hardware = h;
 
+        if (DRIVE_ENABLED)
+            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
+                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
+                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
+        if (!comp)
+            return;
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);
-        if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.pigeon,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (SHOOTER_VISION_ENABLED)
             shooterVisionSubsystem = new ShooterVisionSubsystem();
         if (INTAKE_ENABLED)
@@ -62,11 +66,11 @@ public class Subsystems implements Loggable {
                     hardware.turretMotor, hardware.hoodMotor);
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor);
-            // indexSubsystem.setDefaultCommand(
-            // new IntakeBitmapCommand(intakeSubsystem, indexSubsystem, shooterSubsystem,
-            // shooterVisionSubsystem));
+                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestTopProximity,
+                    hardware.ingestBlueColor,
+                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
+                    hardware.ingestTopBlueColor,
+                    hardware.ingestTopRedColor);
         }
     }
 }

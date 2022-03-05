@@ -18,6 +18,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +31,7 @@ import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
 
 import java.io.IOException;
 import java.net.NetworkInterface;
@@ -43,6 +45,13 @@ public class Robot extends TimedRobot implements Loggable {
      * Singleton Stuff
      */
     private static Robot instance = null;
+
+    // copied from the PR
+    public static final int PDP_CAN_ID = 1;
+    public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
+
+    @Log.PowerDistribution
+    private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
     enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;

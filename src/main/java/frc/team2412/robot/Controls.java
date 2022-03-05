@@ -136,10 +136,10 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
-        climbFixedArmUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
+//        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
+//        climbFixedArmUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         // climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
-        climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
+//        climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }
 
     public void bindDriveControls() {
@@ -149,14 +149,14 @@ public class Controls {
     public void bindIndexControls() {
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
         // subsystems.indexSubsystem));
-        // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+//         indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
         shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
             b.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem))
-                    .whenReleased(new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+                   ;// .whenReleased(new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));

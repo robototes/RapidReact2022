@@ -149,6 +149,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
+//        turretMotor.configClosedloopRamp(10, 0);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 50);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
@@ -363,9 +365,23 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     boolean loopToMin = false;
     boolean loopToMax = false;
+//
+//    @Log.BooleanBox(name="yeet turret", columnIndex = 9, rowIndex = 4)
+//    public void yeetTurret(boolean reset) {
+//        if(reset){
+//            turretWorking = false;
+//        }
+//    }
+//    @Log.BooleanBox(name="add turret", columnIndex = 8, rowIndex = 4)
+//    public void addTurret(boolean reset) {
+//        if(reset){
+//            turretWorking = true;
+//        }
+//    }
+    public boolean turretWorking = false;
 
     public void setTurretAngle(double angle) {
-        if (isTurretAtAngle(angle)) {
+        if (isTurretAtAngle(angle) || !turretWorking) {
             return;
         }
 

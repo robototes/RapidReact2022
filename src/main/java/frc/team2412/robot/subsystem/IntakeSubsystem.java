@@ -50,7 +50,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log
     private final WPI_TalonFX motor;
 
-    @Log
     private final DoubleSolenoid solenoid;
 
     // States

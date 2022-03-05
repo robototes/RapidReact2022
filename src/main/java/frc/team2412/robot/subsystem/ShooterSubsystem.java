@@ -84,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90; // Can barely reach 139 degrees physically
-        public static final double MAX_TURRET_ANGLE = 90; // Can barely reach 210 degrees physically
+        public static final double MIN_TURRET_ANGLE = -115; // Can barely reach -139 degrees physically 115 tested
+        public static final double MAX_TURRET_ANGLE = 245; // Can barely reach 210 degrees physically 245 tested
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -160,7 +160,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 (float) (MAX_HOOD_ANGLE / HOOD_REVS_TO_DEGREES));
         hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0); // Current hood setup plan starts hood at 0,
                                                                             // below MIN_HOOD_ANGLE
-        hoodMotor.setSmartCurrentLimit(40);
+        hoodMotor.setSmartCurrentLimit(20);
         hoodMotor.setClosedLoopRampRate(1);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);

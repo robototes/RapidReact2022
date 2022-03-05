@@ -1,19 +1,27 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_RESET_AMPS;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_AMPS;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_SECONDS;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.PROXIMITY_THRESHOLD;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.teamColor;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -31,8 +39,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.5; // will change values later
-        public static double INDEX_OUT_SPEED = -0.5; // will also change later
+        public static double INDEX_IN_SPEED = 0.1; // will change values later
+        public static double INDEX_OUT_SPEED = -0.1; // will also change later
 
         // Proximity Threshold
         public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual
@@ -74,6 +82,9 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // For logging
     private final NetworkTableEntry proximityThreshold;
+
+    @Log.ToString
+    private Bitmap currentStateBitmap;
 
     // Constructor
 
@@ -286,6 +297,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
         return isIngestMotorOn();
+    }
+
+    public void setBitmapState(Bitmap bitmap) {
+        this.currentStateBitmap = bitmap;
     }
 
 }

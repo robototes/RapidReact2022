@@ -14,7 +14,6 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Log;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
@@ -38,7 +37,6 @@ public class Subsystems implements Loggable {
 
     public IndexSubsystem indexSubsystem;
 
-    @Log(tabName = "IntakeSubsystem")
     public IntakeSubsystem intakeSubsystem;
 
     public ShooterSubsystem shooterSubsystem;

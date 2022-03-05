@@ -11,7 +11,9 @@ import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.FullRetractFixedHookCommand;
 import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
@@ -48,7 +50,7 @@ public class Controls {
     public final Button intakeInButton;
     // public final Button intakeExtendButton;
     public final Button intakeSpitButton;
-    // public final Button intakeRetractButton;
+    public final Button intakeRetractButton;
 
     // drive
     public final Button resetDriveGyroButton;
@@ -84,6 +86,7 @@ public class Controls {
         shootButton = driveController.getRightTriggerAxis().getButton(0.1);
         intakeInButton = driveController.getLeftTriggerAxis().getButton(0.1);
         intakeSpitButton = driveController.getLeftBumperButton();
+        intakeRetractButton = driveController.getYButton();
         climbFixedArmUp = driveController.getBButton();
         climbFixedArmDown = driveController.getXButton();
         climbFixedArmFullDown = driveController.getAButton();
@@ -139,15 +142,18 @@ public class Controls {
     }
 
     public void bindIndexControls() {
+        // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
+        // subsystems.indexSubsystem));
         // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
         shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
-        intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
+        intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem))
+                .whenReleased(new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         intakeSpitButton.whenPressed(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
-        // intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 
     public void bindShooterControls() {

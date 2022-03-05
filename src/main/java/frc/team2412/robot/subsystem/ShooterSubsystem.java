@@ -388,7 +388,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 loopToMin = false;
             }
         }
-        turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
+        // turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }
 
     /**

@@ -188,7 +188,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get() || ingestTopProximity.get();
+        return ingestTopProximity.get();
     }
 
     /**

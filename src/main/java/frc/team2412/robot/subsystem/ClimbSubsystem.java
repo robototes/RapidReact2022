@@ -198,7 +198,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void retractFixedArmFully() {
-        setMotor(0 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(2 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void stopFixedArm() {

@@ -149,7 +149,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedloopRamp(10, 0);
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.5);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
@@ -379,24 +378,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
 
         if (angle < MIN_TURRET_ANGLE) {
-            loopToMax = true;
+            angle = MIN_TURRET_ANGLE;
         } else if (angle > MAX_TURRET_ANGLE) {
-            loopToMin = true;
+            angle = MAX_TURRET_ANGLE;
         }
 
-        if (loopToMax) {
-            if (getTurretAngle() < MAX_TURRET_ANGLE - 10) {
-                angle = MAX_TURRET_ANGLE;
-            } else {
-                loopToMax = false;
-            }
-        } else if (loopToMin) {
-            if (getTurretAngle() > MIN_TURRET_ANGLE + 10) {
-                angle = MIN_TURRET_ANGLE;
-            } else {
-                loopToMin = false;
-            }
-        }
         turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }
 

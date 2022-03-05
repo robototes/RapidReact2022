@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -67,7 +66,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 5;
+        public static final double TIP_P = 0.1, TIP_F = 0, TIP_TOLERANCE = 5;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -180,7 +179,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
-        speedModifier = tab.add("Speed Modifier", 1.0f)
+        speedModifier = tab.add("Speed Modifier", 0.5f)
                 .withPosition(2, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
@@ -208,8 +207,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public Vector2 getGyroscopeXY() {
         synchronized (sensorLock) {
             if (gyroscope instanceof Pigeon)
-                return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
-                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180 / Math.PI);
+                return new Vector2(-((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH),
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL)).scale(180 / Math.PI);
             if (gyroscope instanceof NavX)
                 return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
                         ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180 / Math.PI);
@@ -243,7 +242,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
+            return getPose().rotation;
         }
     }
 
@@ -273,6 +272,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             gyroscope.setAdjustmentAngle(
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
+            tipController.setTargetPosition(getGyroscopeXY());
         }
     }
 

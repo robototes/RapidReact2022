@@ -257,7 +257,7 @@ public class Robot extends TimedRobot implements Loggable {
     public void teleopInit() {
         if (SubsystemConstants.DRIVE_ENABLED) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
                     controls.driveController.getRightXAxis()));
         }
     }

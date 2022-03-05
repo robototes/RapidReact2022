@@ -54,10 +54,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 1.3;
+        public static final double FLYWHEEL_DEFAULT_P = 0.3;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0;
+        public static final double FLYWHEEL_DEFAULT_F = 0.057;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.06;
         public static final double HOOD_DEFAULT_I = 0;
@@ -69,7 +69,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_DEFAULT_D = 0;
 
         // Placeholder gearing constant of 1
-        public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 1 * 2048;
+        public static final double FLYWHEEL_REVS_TO_ENCODER_TICKS = 2048;
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
         public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
@@ -84,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -115; // Can barely reach -139 degrees physically 115 tested
-        public static final double MAX_TURRET_ANGLE = 245; // Can barely reach 210 degrees physically 245 tested
+        public static final double MIN_TURRET_ANGLE = -200; // Can barely reach -139 degrees physically 115 tested
+        public static final double MAX_TURRET_ANGLE = 115; // Can barely reach 210 degrees physically 245 tested
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -361,25 +361,33 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
+    boolean loopToMin = false;
+    boolean loopToMax = false;
+
     public void setTurretAngle(double angle) {
+        if (isTurretAtAngle(angle)) {
+            return;
+        }
+
         if (angle < MIN_TURRET_ANGLE) {
-            System.out.println("LOG: Desired turret angle is below min angle!");
-            if (angle + 360 < MAX_TURRET_ANGLE) {
-                System.out.println("LOG: Targeting desired turret angle in other direction...");
-                angle += 360;
-            } else {
-                System.out.println("LOG: Couldn't wrap around turret angle!");
-            }
+            loopToMax = true;
         } else if (angle > MAX_TURRET_ANGLE) {
-            System.out.println("LOG: Desired turret angle is above max angle!");
-            if (angle - 360 > MIN_TURRET_ANGLE) {
-                System.out.println("LOG: Targeting desired turret angle in other direction...");
-                angle -= 360;
+            loopToMin = true;
+        }
+
+        if (loopToMax) {
+            if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
+                angle = MAX_TURRET_ANGLE;
             } else {
-                System.out.println("LOG: Couldn't wrap around turret angle!");
+                loopToMax = false;
+            }
+        } else if (loopToMin) {
+            if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
+                angle = MIN_TURRET_ANGLE;
+            } else {
+                loopToMin = false;
             }
         }
-        System.out.println("LOG: Setting turret to target angle " + angle);
         turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }
 

@@ -250,9 +250,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         double timeNow = Timer.getFPGATimestamp();
         double timeElapsed = timeNow - lastUpdatedTime;
         double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
-        double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
+        // double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
         climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
-        climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed / timeElapsed));
+        // climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed /
+        // timeElapsed));
         lastUpdatedTime = timeNow;
     }
 

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
+import frc.team2412.robot.commands.autonomous.FourBallAutoCommandRight;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
@@ -102,6 +103,13 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        FOUR_BALL((subsystems, trajectories) -> new FourBallAutoCommandRight(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            "Four ball auto right",
+            Subsystems.SubsystemConstants.INDEX_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+            Subsystems.SubsystemConstants.INTAKE_ENABLED),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),

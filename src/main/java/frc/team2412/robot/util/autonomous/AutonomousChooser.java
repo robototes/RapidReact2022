@@ -16,6 +16,7 @@ import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
 
 public class AutonomousChooser {
 
@@ -101,6 +102,13 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED),
+            TWO_BALL((subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            "TWo ball auto",
+            Subsystems.SubsystemConstants.INDEX_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+            Subsystems.SubsystemConstants.INTAKE_ENABLED),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),

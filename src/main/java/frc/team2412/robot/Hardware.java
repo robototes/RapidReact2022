@@ -84,14 +84,14 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 14,
-                INTAKE_SOLENOID_DOWN = 15;
+        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 0,
+                INTAKE_SOLENOID_DOWN = 1;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
-                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
+                INGEST_PROXIMITY = 8, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
                 INGEST_TOP_BLUE = 7,
-                INGEST_TOP_PROXIMITY = 8;
+                INGEST_TOP_PROXIMITY = 2;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,

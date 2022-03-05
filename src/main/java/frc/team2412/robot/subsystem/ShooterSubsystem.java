@@ -15,7 +15,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.InterpolatingTreeMap;
 import io.github.oblarg.oblog.Loggable;
@@ -85,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -200; // Can barely reach -240 degrees physically 200 tested
-        public static final double MAX_TURRET_ANGLE = 115; // Can barely reach 120 degrees physically 115 tested
+        public static final double MIN_TURRET_ANGLE = -200; // Can barely reach -139 degrees physically 115 tested
+        public static final double MAX_TURRET_ANGLE = 115; // Can barely reach 210 degrees physically 245 tested
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -98,9 +97,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap dataPoints = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
-
-        public static final double TURRET_FF = 0;
-        public static final double TURRET_ANGLE_OFFSET = 0;
     }
 
     /* INSTANCE VARIABLES */
@@ -117,11 +113,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final CANSparkMax hoodMotor;
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
-
-    @Log.BooleanBox(name = "Loop to max", columnIndex = 0, rowIndex = 3)
-    private boolean loopToMax = false;
-    @Log.BooleanBox(name = "Loop to min", columnIndex = 1, rowIndex = 3)
-    private boolean loopToMin = false;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -360,8 +351,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    Timer t = new Timer();
-
     // Turret
     /**
      * Sets the turret's target angle to the given angle.
@@ -372,65 +361,34 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
+    boolean loopToMin = false;
+    boolean loopToMax = false;
+
     public void setTurretAngle(double angle) {
         if (isTurretAtAngle(angle)) {
             return;
         }
+
         if (angle < MIN_TURRET_ANGLE) {
-            System.out.println("LOG: Desired turret angle is below min angle, going to highest reachable angle");
-            // angle = Math.min(angle + 360, MAX_TURRET_ANGLE);
-            // angle = MAX_TURRET_ANGLE;
             loopToMax = true;
-            t.start();
-            // if (angle + 360 < MAX_TURRET_ANGLE) {
-            // System.out.println("LOG: Targeting desired turret angle in other direction...");
-            // angle += 360;
-            // } else {
-            // System.out.println("LOG: Couldn't wrap around turret angle!");
-            // angle = MAX_TURRET_ANGLE;
-            // }
         } else if (angle > MAX_TURRET_ANGLE) {
-            System.out.println("LOG: Desired turret angle is above max angle, going to lowest reachable angle");
-            // angle = Math.max(angle - 360, MIN_TURRET_ANGLE);
-            // angle = MIN_TURRET_ANGLE;
             loopToMin = true;
-            t.start();
-            // if (angle - 360 > MIN_TURRET_ANGLE) {
-            // System.out.println("LOG: Targeting desired turret angle in other direction...");
-            // angle -= 360;
-            // } else {
-            // System.out.println("LOG: Couldn't wrap around turret angle!");
-            // angle = MIN_TURRET_ANGLE;
-            // }
         }
 
         if (loopToMax) {
-            angle = MAX_TURRET_ANGLE;
-            if (t.get() > 1 && isTurretAtAngle(MAX_TURRET_ANGLE)) {
+            if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
+                angle = MAX_TURRET_ANGLE;
+            } else {
                 loopToMax = false;
-                t.reset();
-                t.stop();
             }
-
         } else if (loopToMin) {
-            angle = MIN_TURRET_ANGLE;
-            if (t.get() > 1 && isTurretAtAngle(MIN_TURRET_ANGLE)) {
+            if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
+                angle = MIN_TURRET_ANGLE;
+            } else {
                 loopToMin = false;
-                t.reset();
-                t.stop();
             }
         }
-
-        // if(t.get()>1) {
-        // if (loopToMax) {
-        // angle = MAX_TURRET_ANGLE;
-        // } else if (loopToMin) {
-        // angle = MIN_TURRET_ANGLE;
-        // }
-        // t.reset();
-        // }
-        System.out.println("LOG: Setting turret to target angle " + angle);
-        turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
+        // turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }
 
     /**

@@ -19,6 +19,7 @@ public class Subsystems implements Loggable {
         public static final boolean CLIMB_ENABLED = true;
         public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = false;
+        public static final boolean SHOOTER_VISION_ENABLED = true;
         public static final boolean INDEX_ENABLED = true;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
@@ -63,9 +64,9 @@ public class Subsystems implements Loggable {
 
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestTopProximity,
-                    hardware.ingestBlueColor, hardware.ingestRedColor, hardware.feederBlueColor,
-                    hardware.feederRedColor,
+                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
+                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
+                    hardware.ingestTopProximity,
                     hardware.ingestTopBlueColor,
                     hardware.ingestTopRedColor);
         }

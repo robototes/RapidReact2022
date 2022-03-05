@@ -17,7 +17,6 @@ import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.FullRetractFixedHookCommand;
 import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
@@ -152,9 +151,9 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED) 
+        if (SHOOTER_ENABLED && SHOOTER_VISION_ENABLED && INDEX_ENABLED)
             shootButton.whenPressed(new IndexShootCommand(subsystems.indexSubsystem));
-        if (INDEX_ENABLED) 
+        if (INDEX_ENABLED)
             indexSpitButton.whileHeld(new IndexSpitCommand(subsystems.indexSubsystem));
     }
 

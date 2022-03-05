@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
@@ -169,5 +170,14 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
         return (intakeSolenoidState == RETRACT);
+    }
+
+    @Config
+    public void setSolenoid(boolean extend) {
+        if (extend) {
+            solenoid.set(DoubleSolenoid.Value.kReverse);
+        }
+        solenoid.set(DoubleSolenoid.Value.kForward);
+
     }
 }

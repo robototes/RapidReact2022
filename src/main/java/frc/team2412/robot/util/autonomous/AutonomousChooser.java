@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
+import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
-import frc.team2412.robot.commands.intake.IntakeTestCommand;
+import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
+import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
-import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 
 public class AutonomousChooser {
 
@@ -107,8 +107,8 @@ public class AutonomousChooser {
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
+        INDEX((subsystems, trajectories) -> new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
+        INTAKE((subsystems, trajectories) -> new IntakeExtendCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), 
             "Intake and shoot", 

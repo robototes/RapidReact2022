@@ -1,18 +1,13 @@
 package frc.team2412.robot.commands.intake;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_OUT_SPEED;
-import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.MIN_HOOD_ANGLE;
+import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
-import frc.team2412.robot.util.ShooterDataDistancePoint;
 
 public class IntakeBitmapCommand extends CommandBase {
 
@@ -84,6 +79,8 @@ public class IntakeBitmapCommand extends CommandBase {
 
     }
 
+    Bitmap actualValue = Bitmap.A;
+
     @Override
     public void execute() {
 
@@ -94,29 +91,30 @@ public class IntakeBitmapCommand extends CommandBase {
 
         for (Bitmap value : Bitmap.values()) {
             if (value.equals(ingestSensor, feederSensor, ingestColor, feederColor)) {
-                currentState = value;
+                actualValue = value;
                 break;
+
+                // double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
+                // shooterSubsystem.updateTurretAngle(yaw);
+
+                // if (value.shooterMisfire) {
+                // shooterSubsystem.setHoodAngle(0);
+                // shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
+
+                // } else {
+                // double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
+                // ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
+                // shooterSubsystem.setHoodAngle(shooterData.getAngle());
+                // shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
+                // }
             }
         }
 
-        indexSubsystem.setBitmapState(currentState);
-        intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
-        indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
+        intakeSubsystem.setSpeed(actualValue.intakeMotorSpeed);
+        indexSubsystem.setSpeed(actualValue.ingestMotorSpeed, actualValue.feederMotorSpeed);
 
-        double yaw = shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
-        shooterSubsystem.updateTurretAngle(yaw);
+        System.out.println(actualValue.shooterMisfire);
 
-        if (currentState.shooterMisfire) {
-            shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
-            shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
-        } else {
-            double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget()
-                    ? ShooterConstants.dataPoints.getInterpolated(distance)
-                    : ShooterConstants.dataPoints.getInterpolated(0.0);
-            shooterSubsystem.setHoodAngle(shooterData.getAngle());
-            shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-        }
     }
 
     public boolean isFinished() {

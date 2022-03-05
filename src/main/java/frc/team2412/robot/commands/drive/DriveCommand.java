@@ -13,13 +13,13 @@ public class DriveCommand extends CommandBase {
     private final Axis rotation;
     private final boolean fieldOriented;
 
-    public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation,
-            boolean fieldOriented) {
+    public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation) {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
-        this.fieldOriented = fieldOriented;
+
+        this.fieldOriented = drivebaseSubsystem.getFieldCentric();
 
         addRequirements(drivebaseSubsystem);
     }
@@ -32,6 +32,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        //drivebaseSubsystem.drive(Vector2.ZERO, 0.0, fieldOriented);
+        //drivebaseSubsystem.drive(Vector2.ZERO, 0.0, false);
     }
 }

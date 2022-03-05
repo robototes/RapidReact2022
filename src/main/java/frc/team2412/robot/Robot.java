@@ -7,11 +7,17 @@ package frc.team2412.robot;
 import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import frc.team2412.robot.sim.PhysicsSim;
+import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
+import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
+
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,10 +26,18 @@ import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
-import frc.team2412.robot.util.AutonomousTrajectories;
-import frc.team2412.robot.util.AutonomousChooser;
+import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
+import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
+
+import java.io.IOException;
+import java.net.NetworkInterface;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 
 public class Robot extends TimedRobot implements Loggable {
     /**
@@ -31,13 +45,20 @@ public class Robot extends TimedRobot implements Loggable {
      */
     private static Robot instance = null;
 
+    // copied from the PR
+    public static final int PDP_CAN_ID = 1;
+    public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
+
+    @Log.PowerDistribution
+    private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
+
     enum RobotType {
-        COMPETITION, AUTOMATED_TEST
+        COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
-    public static Robot getInstance(RobotType type) {
+    public static Robot getInstance() {
         if (instance == null)
-            instance = new Robot(type);
+            instance = new Robot();
         return instance;
     }
 
@@ -53,10 +74,64 @@ public class Robot extends TimedRobot implements Loggable {
 
     public TestingSubsystem testingSubsystem;
 
-    Robot(RobotType type) {
+    protected Robot(RobotType type) {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
+    }
+
+    protected Robot() {
+        this(getTypeFromAddress());
+    }
+
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] {
+            0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d, (byte) 0xe7
+    };
+    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] {
+            0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
+    };
+
+    private static RobotType getTypeFromAddress() {
+        List<byte[]> macAddresses;
+        try {
+            macAddresses = getMacAddresses();
+        } catch (IOException ignored) {
+            macAddresses = List.of();
+        }
+
+        for (byte[] macAddress : macAddresses) {
+            // First check if we are the competition bot
+            if (Arrays.compare(COMPETITION_BOT_MAC_ADDRESS, macAddress) == 0) {
+                return RobotType.COMPETITION;
+            }
+
+            // Next check if we are the practice bot
+            if (Arrays.compare(PRACTICE_BOT_MAC_ADDRESS, macAddress) == 0) {
+                return RobotType.DRIVEBASE;
+            }
+        }
+        // lol fallback
+        return RobotType.COMPETITION;
+    }
+
+    private static List<byte[]> getMacAddresses() throws IOException {
+        List<byte[]> macAddresses = new ArrayList<>();
+
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+        NetworkInterface networkInterface;
+        while (networkInterfaces.hasMoreElements()) {
+            networkInterface = networkInterfaces.nextElement();
+
+            byte[] address = networkInterface.getHardwareAddress();
+            if (address == null) {
+                continue;
+            }
+
+            macAddresses.add(address);
+        }
+
+        return macAddresses;
     }
 
     // TODO add other override methods
@@ -167,11 +242,11 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
         }
 
-        if (SubsystemConstants.SHOOTER_ENABLED) {
+        if (subsystems.shooterSubsystem != null) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 
@@ -183,12 +258,51 @@ public class Robot extends TimedRobot implements Loggable {
         if (SubsystemConstants.DRIVE_ENABLED) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
                     controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
-                    controls.driveController.getRightXAxis(), true));
+                    controls.driveController.getRightXAxis()));
         }
     }
 
     @Override
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void simulationInit() {
+        PhysicsSim physicsSim = PhysicsSim.getInstance();
+        // TODO Find more accurate values
+        if (CLIMB_ENABLED) {
+            // Motor, acceleration time from 0 to full in seconds, max velocity
+            physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+        }
+        if (INTAKE_ENABLED) {
+            physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+        }
+        if (INDEX_ENABLED) {
+            physicsSim.addTalonFX(hardware.ingestIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.feederIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+        }
+        if (SHOOTER_ENABLED) {
+            physicsSim.addTalonFX(hardware.flywheelMotor1, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.flywheelMotor2, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.turretMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // Motor, stall torque, maximum free RPM
+            physicsSim.addSparkMax(hardware.hoodMotor, SparkMaxConstants.STALL_TORQUE,
+                    SparkMaxConstants.FREE_SPEED_RPM);
+        }
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        PhysicsSim.getInstance().run();
+    }
+
+    public RobotType getRobotType() {
+        return robotType;
+    }
+
+    public boolean isCompetition() {
+        return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
     }
 }

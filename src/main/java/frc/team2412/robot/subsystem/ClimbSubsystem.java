@@ -60,7 +60,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 60, 60, 1000);
+                true, 50, 60, 10);
 
         enum HookArmState {
             ANGLED, UPRIGHT
@@ -187,7 +187,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         if (stop) {
             climbFixedMotor.stopMotor();
         }
-        ;
     }
 
     public void extendFixedArm() {

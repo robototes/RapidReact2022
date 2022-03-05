@@ -149,21 +149,21 @@ public class Hardware {
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
-                    INTAKE_SOLENOID_DOWN);
+//            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+//                    INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
+//            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
-            ingestTopProximity = new DigitalInput(INGEST_TOP_PROXIMITY);
-            ingestBlueColor = new DigitalInput(INGEST_BLUE);
-            ingestRedColor = new DigitalInput(INGEST_RED);
-            feederBlueColor = new DigitalInput(FEEDER_BLUE);
-            feederRedColor = new DigitalInput(FEEDER_RED);
-            ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
-            ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
+            ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);
+//            ingestBlueColor = new DigitalInput(INGEST_BLUE);
+//            ingestRedColor = new DigitalInput(INGEST_RED);
+//            feederBlueColor = new DigitalInput(FEEDER_BLUE);
+//            feederRedColor = new DigitalInput(FEEDER_RED);
+//            ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
+//            ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

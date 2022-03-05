@@ -4,6 +4,8 @@ import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static frc.team2412.robot.util.controller.MultiController.Controllers.*;
 
+import frc.team2412.robot.commands.index.IndexCommand;
+import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.util.controller.CompoundController;
 import frc.team2412.robot.util.controller.MultiController;
 import org.frcteam2910.common.math.Rotation2;
@@ -140,13 +142,15 @@ public class Controls {
 
     public void bindIndexControls() {
         indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        intakeSpitButton.whileHeld(new IndexSpitCommand(subsystems.indexSubsystem));
+        intakeInButton.whenPressed(new IndexCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
         intakeInButton.whenPressed(new IntakeMotorInCommand(subsystems.intakeSubsystem));
-        intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
-        intakeSpitButton.whenPressed(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
-        intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+//        intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
+//        intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 
     public void bindShooterControls() {

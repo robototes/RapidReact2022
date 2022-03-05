@@ -34,11 +34,14 @@ public class ShooterTargetCommand extends CommandBase {
         double ff = feedforward.get()
                 .rotateBy(Rotation2.fromDegrees(shooter.getTurretAngle() + ShooterConstants.TURRET_ANGLE_OFFSET)).x
                 * ShooterConstants.TURRET_FF;
-        ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
-        shooter.setHoodAngle(shooterData.getAngle());
-        shooter.setFlywheelRPM(shooterData.getRPM());
+        if (ShooterConstants.dataPoints != null) {
+            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
+            shooter.setHoodAngle(shooterData.getAngle());
+            shooter.setFlywheelRPM(shooterData.getRPM());
 
-        shooter.updateTurretAngle(yaw + ff);
+        }
+
+//        shooter.updateTurretAngle(yaw + ff);
     }
 
     @Override

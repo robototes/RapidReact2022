@@ -1,5 +1,6 @@
 package frc.team2412.robot.commands.drive;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.input.Axis;
 
@@ -27,7 +28,7 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         drivebaseSubsystem.drive(new Vector2(-forward.get(false), -strafe.get(false)), -rotation.get(false),
-                fieldOriented);
+                drivebaseSubsystem.getFieldCentric());
     }
 
     @Override

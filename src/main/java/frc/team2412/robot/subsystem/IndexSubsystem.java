@@ -31,7 +31,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.5; // will change values later
+        public static double INDEX_IN_SPEED = 0.3; // will change values later
         public static double INDEX_OUT_SPEED = -0.5; // will also change later
 
         // Proximity Threshold
@@ -78,8 +78,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     // Constructor
 
     public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
+            DigitalInput feederProximity, DigitalInput ingestTopProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
+            DigitalInput feederBlueColor, DigitalInput feederRedColor,
             DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
@@ -157,6 +157,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     public void feederMotorIn() {
         feederMotor.set(INDEX_IN_SPEED);
     }
+    public void feederMotorInSlow() {
+        feederMotor.set(INDEX_IN_SPEED/3);
+    }
+
 
     /**
      * Spins second motor outward and updates second motor state
@@ -177,7 +181,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get() || ingestTopProximity.get();
+        return ingestTopProximity.get();// || ingestTopProximity.get();
     }
 
     /**
@@ -205,7 +209,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ingest has the correct cargo (also includes the top sensor)
      */
-    @Log(name = "Ingest Cargo")
+//    @Log(name = "Ingest Cargo")
     public boolean ingestHasCorrectCargo() {
         return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
                 || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
@@ -214,7 +218,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if feeder has the correct cargo
      */
-    @Log(name = "Feeder Cargo")
+//    @Log(name = "Feeder Cargo")
     public boolean feederHasCorrectCargo() {
         return ((teamColor == Alliance.Blue && feederBlueColor.get())
                 || teamColor == Alliance.Red && feederRedColor.get());
@@ -226,66 +230,66 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
     public void periodic() {
-        ingestBallState = ingestSensorHasBallIn();
-        feederBallState = feederSensorHasBallIn();
-
-        // Checking for jamming
-        double ingestCurrent = ingestMotor.getSupplyCurrent();
-        if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
-            if (ingestOverCurrentStart == 0) {
-                ingestOverCurrentStart = Timer.getFPGATimestamp();
-            }
-        }
-        if (ingestCurrent > CURRENT_LIMIT_RESET_AMPS) {
-            if (ingestOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
-                    ingestMotorStop();
-                }
-
-            }
-        } else {
-            ingestOverCurrentStart = 0;
-        }
-
-        double feederCurrent = feederMotor.getSupplyCurrent();
-        if (feederCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
-            if (feederOverCurrentStart == 0) {
-                feederOverCurrentStart = Timer.getFPGATimestamp();
-            }
-        }
-        if (feederCurrent > CURRENT_LIMIT_RESET_AMPS) {
-            if (feederOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - feederOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
-                    feederMotorStop();
-                }
-
-            }
-        } else {
-            feederOverCurrentStart = 0;
-        }
+//        ingestBallState = ingestSensorHasBallIn();
+//        feederBallState = feederSensorHasBallIn();
+//
+//        // Checking for jamming
+//        double ingestCurrent = ingestMotor.getSupplyCurrent();
+//        if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
+//            if (ingestOverCurrentStart == 0) {
+//                ingestOverCurrentStart = Timer.getFPGATimestamp();
+//            }
+//        }
+//        if (ingestCurrent > CURRENT_LIMIT_RESET_AMPS) {
+//            if (ingestOverCurrentStart > 0) {
+//                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+//                    ingestMotorStop();
+//                }
+//
+//            }
+//        } else {
+//            ingestOverCurrentStart = 0;
+//        }
+//
+//        double feederCurrent = feederMotor.getSupplyCurrent();
+//        if (feederCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
+//            if (feederOverCurrentStart == 0) {
+//                feederOverCurrentStart = Timer.getFPGATimestamp();
+//            }
+//        }
+//        if (feederCurrent > CURRENT_LIMIT_RESET_AMPS) {
+//            if (feederOverCurrentStart > 0) {
+//                if (Timer.getFPGATimestamp() - feederOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+//                    feederMotorStop();
+//                }
+//
+//            }
+//        } else {
+//            feederOverCurrentStart = 0;
+//        }
 
     }
 
     // for logging
 
-    @Log(name = "Ingest Motor Speed")
-    public double getIngestMotorSpeed() {
-        return ingestMotor.get();
-    }
-
-    @Log(name = "Feeder Motor Speed")
-    public double getFeederMotorSpeed() {
-        return feederMotor.get();
-    }
-
-    @Log(name = "Feeder motor moving")
-    public boolean isFeederMoving() {
-        return isFeederMotorOn();
-    }
-
-    @Log(name = "Ingest motor moving")
-    public boolean isIngestMoving() {
-        return isIngestMotorOn();
-    }
+//    @Log(name = "Ingest Motor Speed")
+//    public double getIngestMotorSpeed() {
+//        return ingestMotor.get();
+//    }
+//
+//    @Log(name = "Feeder Motor Speed")
+//    public double getFeederMotorSpeed() {
+//        return feederMotor.get();
+//    }
+//
+//    @Log(name = "Feeder motor moving")
+//    public boolean isFeederMoving() {
+//        return isFeederMotorOn();
+//    }
+//
+//    @Log(name = "Ingest motor moving")
+//    public boolean isIngestMoving() {
+//        return isIngestMotorOn();
+//    }
 
 }

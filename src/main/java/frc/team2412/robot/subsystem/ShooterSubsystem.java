@@ -54,10 +54,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 1.3;
+        public static final double FLYWHEEL_DEFAULT_P = 0.3;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0;
+        public static final double FLYWHEEL_DEFAULT_F = 0.057;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.06;
         public static final double HOOD_DEFAULT_I = 0;
@@ -84,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360.0; // 233
-        public static final double MIN_TURRET_ANGLE = -90; // Can barely reach 139 degrees physically
-        public static final double MAX_TURRET_ANGLE = 90; // Can barely reach 210 degrees physically
+        public static final double MIN_TURRET_ANGLE = -115; // Can barely reach 139 degrees physically
+        public static final double MAX_TURRET_ANGLE = 245; // Can barely reach 210 degrees physically
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;

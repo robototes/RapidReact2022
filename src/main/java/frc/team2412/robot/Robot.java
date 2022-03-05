@@ -285,7 +285,7 @@ public class Robot extends TimedRobot implements Loggable {
         if (CLIMB_ENABLED) {
             // Motor, acceleration time from 0 to full in seconds, max velocity
             physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-//            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);

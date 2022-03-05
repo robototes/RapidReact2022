@@ -4,6 +4,7 @@ import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
+import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -47,9 +48,9 @@ public class Controls {
     // public final Button turretRightButton;
 
     // intake
-    public final Button intakeInButton;
+    public final Button[] intakeInButton;
     // public final Button intakeExtendButton;
-    public final Button intakeSpitButton;
+    public final Button[] intakeSpitButton;
     public final Button intakeRetractButton;
 
     // drive
@@ -84,12 +85,16 @@ public class Controls {
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         shootButton = driveController.getRightTriggerAxis().getButton(0.1);
-        intakeInButton = driveController.getLeftTriggerAxis().getButton(0.1);
-        intakeSpitButton = driveController.getLeftBumperButton();
+        intakeInButton = new Button[] { driveController.getAButton(),
+                driveController.getLeftTriggerAxis().getButton(0.1),
+                driveController.getRightTriggerAxis().getButton(0.1),
+
+        };
+        intakeSpitButton = new Button[] { driveController.getBButton(), driveController.getXButton() };
         intakeRetractButton = driveController.getYButton();
-        climbFixedArmUp = driveController.getBButton();
-        climbFixedArmDown = driveController.getXButton();
-        climbFixedArmFullDown = driveController.getAButton();
+        climbFixedArmUp = driveController.getStartButton();
+        climbFixedArmDown = driveController.getBackButton();
+        climbFixedArmFullDown = driveController.getDPadButton(DPadButton.Direction.DOWN);
 
         // intakeInButton = shootPreset.getRightBumperButton();
         // intakeExtendButton = shootPreset.getXButton();
@@ -149,10 +154,12 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        intakeInButton.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem))
-                .whenReleased(new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+        for (Button b : intakeInButton)
+            b.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem))
+                    .whenReleased(new IntakeBitmapCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
-        intakeSpitButton.whenPressed(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
+        for (Button b : intakeSpitButton)
+            b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 

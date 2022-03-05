@@ -14,7 +14,7 @@ public class IndexCommand extends CommandBase {
     @Override
     public void execute() {
         subsystem.ingestMotorIn();
-        subsystem.feederMotorInSlow();
+        // subsystem.feederMotorInSlow();
     }
 
     @Override

@@ -84,12 +84,12 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 0,
-                INTAKE_SOLENOID_DOWN = 1;
+        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 1,
+                INTAKE_SOLENOID_DOWN = 0;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
-                INGEST_PROXIMITY = 8, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
+                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
                 INGEST_TOP_BLUE = 7,
                 INGEST_TOP_PROXIMITY = 2;
 
@@ -149,7 +149,7 @@ public class Hardware {
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+            intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {

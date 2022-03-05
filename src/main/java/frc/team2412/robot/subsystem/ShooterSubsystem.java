@@ -369,26 +369,27 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             return;
         }
 
-        if (angle < MIN_TURRET_ANGLE) {
-            loopToMax = true;
-        } else if (angle > MAX_TURRET_ANGLE) {
-            loopToMin = true;
-        }
-
-        if (loopToMax) {
-            if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
-                angle = MAX_TURRET_ANGLE;
-            } else {
-                loopToMax = false;
-            }
-        } else if (loopToMin) {
-            if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
-                angle = MIN_TURRET_ANGLE;
-            } else {
-                loopToMin = false;
-            }
-        }
-        // turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
+        // if (angle < MIN_TURRET_ANGLE) {
+        // loopToMax = true;
+        // } else if (angle > MAX_TURRET_ANGLE) {
+        // loopToMin = true;
+        // }
+        //
+        // if (loopToMax) {
+        // if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
+        // angle = MAX_TURRET_ANGLE;
+        // } else {
+        // loopToMax = false;
+        // }
+        // } else if (loopToMin) {
+        // if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
+        // angle = MIN_TURRET_ANGLE;
+        // } else {
+        // loopToMin = false;
+        // }
+        // }
+        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE)
+            turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }
 
     /**

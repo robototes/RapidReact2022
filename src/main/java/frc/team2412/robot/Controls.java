@@ -19,10 +19,8 @@ import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.FullRetractFixedHookCommand;
 import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorOutCommand;
-import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodSetConstantAngleCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
@@ -156,9 +154,9 @@ public class Controls {
 
     public void bindIntakeControls() {
         intakeInButton.whenPressed(new IntakeMotorInCommand(subsystems.intakeSubsystem));
-//        intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
-//        intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        // intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 
     public void bindShooterControls() {

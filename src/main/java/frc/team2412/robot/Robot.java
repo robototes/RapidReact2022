@@ -264,7 +264,7 @@ public class Robot extends TimedRobot implements Loggable {
         }
         if (!isCompetition())
             return;
-        if(INTAKE_ENABLED){
+        if (INTAKE_ENABLED) {
             subsystems.intakeSubsystem.intakeExtend();
         }
         if (SHOOTER_ENABLED) {

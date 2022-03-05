@@ -142,10 +142,10 @@ public class Hardware {
         if (!comp)
             return;
         if (CLIMB_ENABLED) {
-            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
+//            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-                    CLIMB_ANGLE_DOWN_SOLENOID);
+//            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
+//                    CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);

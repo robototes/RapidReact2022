@@ -82,7 +82,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX climbFixedMotor;
 
-    @Log.MotorController
+//    @Log.MotorController
     private final WPI_TalonFX climbDynamicMotor;
 
     private DoubleSolenoid solenoid;
@@ -119,7 +119,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         climbFixedMotor.config_kP(PID_SLOT_0, P);
 
-        climbDynamicMotor.configAllSettings(motorConfig);
+//        climbDynamicMotor.configAllSettings(motorConfig);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 

@@ -179,7 +179,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the first sensor
      */
-    @Log(name = "Ingest Proximity")
+     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
         return ingestTopProximity.get();// || ingestTopProximity.get();
     }
@@ -187,7 +187,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Log(name = "Feeder Proximity")
+     @Log(name = "Feeder Proximity")
     public boolean feederSensorHasBallIn() { // might rename methods later?
         return feederProximity.get();
     }

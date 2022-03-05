@@ -14,7 +14,6 @@ import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
 
-//UHHHHHHHHH
 public class IntakeBitmapCommand extends CommandBase {
 
     public final double MISFIRE_VELOCITY = 400;
@@ -81,43 +80,43 @@ public class IntakeBitmapCommand extends CommandBase {
         this.indexSubsystem = indexSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = shooterVisionSubsystem;
-        addRequirements(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem);
+        addRequirements(intakeSubsystem, indexSubsystem, shooterSubsystem);
 
     }
 
     @Override
     public void execute() {
-
-        boolean ingestSensor = indexSubsystem.ingestSensorHasBallIn();
-        boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
-        boolean ingestColor = indexSubsystem.ingestHasCorrectCargo() && ingestSensor;
-        boolean feederColor = indexSubsystem.feederHasCorrectCargo() && feederSensor;
-
-        for (Bitmap value : Bitmap.values()) {
-            if (value.equals(ingestSensor, feederSensor, ingestColor, feederColor)) {
-                currentState = value;
-                break;
-            }
-        }
-
-        indexSubsystem.setBitmapState(currentState);
-        intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
-        indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
+//
+//        boolean ingestSensor = indexSubsystem.ingestSensorHasBallIn();
+//        boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
+//        boolean ingestColor = indexSubsystem.ingestHasCorrectCargo() && ingestSensor;
+//        boolean feederColor = indexSubsystem.feederHasCorrectCargo() && feederSensor;
+//
+//        for (Bitmap value : Bitmap.values()) {
+//            if (value.equals(ingestSensor, feederSensor, ingestColor, feederColor)) {
+//                currentState = value;
+//                break;
+//            }
+//        }
+//
+//        // indexSubsystem.setBitmapState(currentState);
+//        intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
+//        indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
 
         double yaw = shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
         shooterSubsystem.updateTurretAngle(yaw);
-
-        if (currentState.shooterMisfire) {
-            shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
-            shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
-        } else {
-            double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget()
-                    ? ShooterConstants.dataPoints.getInterpolated(distance)
-                    : ShooterConstants.dataPoints.getInterpolated(0.0);
-            shooterSubsystem.setHoodAngle(shooterData.getAngle());
-            shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-        }
+//
+//        if (currentState.shooterMisfire) {
+//            shooterSubsystem.setHoodAngle(MIN_HOOD_ANGLE);
+//            shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
+//        } else if (ShooterConstants.dataPoints != null) {
+//            double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
+//            ShooterDataDistancePoint shooterData = shooterVisionSubsystem.hasTarget()
+//                    ? ShooterConstants.dataPoints.getInterpolated(distance)
+//                    : ShooterConstants.dataPoints.getInterpolated(0.0);
+//            shooterSubsystem.setHoodAngle(shooterData.getAngle());
+//            shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
+//        }
     }
 
     public boolean isFinished() {

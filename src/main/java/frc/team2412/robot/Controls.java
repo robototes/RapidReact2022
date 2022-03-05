@@ -8,7 +8,6 @@ import static frc.team2412.robot.util.controller.MultiController.Controllers.*;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
-import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorInCommand;
 import frc.team2412.robot.commands.intake.IntakeMotorOutCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodSetConstantAngleCommand;
@@ -71,7 +70,7 @@ public class Controls {
 
         driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
 
-//        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
+        // codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
         driveController.activate(PRIMARY);
 
@@ -83,8 +82,6 @@ public class Controls {
         climbFixedArmFullUp = climbPreset.getBButton();
         climbFixedArmDown = climbPreset.getAButton();
         climbFixedArmFullDown = climbPreset.getXButton();
-
-
 
         // fixedArmUpManualButton = climbPreset.getDPadButton(Direction.UP);
         // fixedArmDownManualButton = climbPreset.getDPadButton(Direction.DOWN);
@@ -150,38 +147,38 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-//        if (!SHOOTER_ENABLED || !INTAKE_ENABLED)
-//            return;
-//
-//        subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
-//                subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-         indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-         intakeSpitButton.whileHeld(new IndexSpitCommand(subsystems.indexSubsystem));
-         intakeInButton.whenPressed(new IndexCommand(subsystems.indexSubsystem));
+        // if (!SHOOTER_ENABLED || !INTAKE_ENABLED)
+        // return;
+        //
+        // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
+        // subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+        indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        intakeSpitButton.whileHeld(new IndexSpitCommand(subsystems.indexSubsystem));
+        intakeInButton.whenPressed(new IndexCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
-         intakeInButton.whenPressed(new IntakeMotorInCommand(subsystems.intakeSubsystem));
-//         intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
-         intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
-//         intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        intakeInButton.whenPressed(new IntakeMotorInCommand(subsystems.intakeSubsystem));
+        // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        intakeSpitButton.whileHeld(new IntakeMotorOutCommand(subsystems.intakeSubsystem));
+        // intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
     }
 
     public void bindShooterControls() {
-         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
-         shootButton.whileHeld(
-         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-         // subsystems.shooterSubsystem.setDefaultCommand(
-         // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-         hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
-         subsystems.shooterSubsystem.getHoodAngle() + 1));
-         hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
-         subsystems.shooterSubsystem.getHoodAngle() - 1));
-         turretLeftButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-         subsystems.shooterSubsystem.getTurretAngle() - 5));
-         turretRightButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-         subsystems.shooterSubsystem.getTurretAngle() + 5));
-         }
+        if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
+            shootButton.whileHeld(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            // subsystems.shooterSubsystem.setDefaultCommand(
+            // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getHoodAngle() + 1));
+            hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getHoodAngle() - 1));
+            turretLeftButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getTurretAngle() - 5));
+            turretRightButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+                    subsystems.shooterSubsystem.getTurretAngle() + 5));
+        }
 
     }
 }

@@ -378,35 +378,35 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
         if (angle < MIN_TURRET_ANGLE) {
             System.out.println("LOG: Desired turret angle is below min angle, going to highest reachable angle");
-//            angle = Math.min(angle + 360, MAX_TURRET_ANGLE);
-//            angle = MAX_TURRET_ANGLE;
+            // angle = Math.min(angle + 360, MAX_TURRET_ANGLE);
+            // angle = MAX_TURRET_ANGLE;
             loopToMax = true;
             t.start();
-//            if (angle + 360 < MAX_TURRET_ANGLE) {
-//                System.out.println("LOG: Targeting desired turret angle in other direction...");
-//                angle += 360;
-//            } else {
-//                System.out.println("LOG: Couldn't wrap around turret angle!");
-//                angle = MAX_TURRET_ANGLE;
-//            }
+            // if (angle + 360 < MAX_TURRET_ANGLE) {
+            // System.out.println("LOG: Targeting desired turret angle in other direction...");
+            // angle += 360;
+            // } else {
+            // System.out.println("LOG: Couldn't wrap around turret angle!");
+            // angle = MAX_TURRET_ANGLE;
+            // }
         } else if (angle > MAX_TURRET_ANGLE) {
             System.out.println("LOG: Desired turret angle is above max angle, going to lowest reachable angle");
-//            angle = Math.max(angle - 360, MIN_TURRET_ANGLE);
-//            angle = MIN_TURRET_ANGLE;
+            // angle = Math.max(angle - 360, MIN_TURRET_ANGLE);
+            // angle = MIN_TURRET_ANGLE;
             loopToMin = true;
             t.start();
-//            if (angle - 360 > MIN_TURRET_ANGLE) {
-//                System.out.println("LOG: Targeting desired turret angle in other direction...");
-//                angle -= 360;
-//            } else {
-//                System.out.println("LOG: Couldn't wrap around turret angle!");
-//                angle = MIN_TURRET_ANGLE;
-//            }
+            // if (angle - 360 > MIN_TURRET_ANGLE) {
+            // System.out.println("LOG: Targeting desired turret angle in other direction...");
+            // angle -= 360;
+            // } else {
+            // System.out.println("LOG: Couldn't wrap around turret angle!");
+            // angle = MIN_TURRET_ANGLE;
+            // }
         }
 
         if (loopToMax) {
             angle = MAX_TURRET_ANGLE;
-            if (t.get() > 1 && isTurretAtAngle(MAX_TURRET_ANGLE)){
+            if (t.get() > 1 && isTurretAtAngle(MAX_TURRET_ANGLE)) {
                 loopToMax = false;
                 t.reset();
                 t.stop();
@@ -414,21 +414,21 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         } else if (loopToMin) {
             angle = MIN_TURRET_ANGLE;
-            if (t.get() > 1 && isTurretAtAngle(MIN_TURRET_ANGLE)){
+            if (t.get() > 1 && isTurretAtAngle(MIN_TURRET_ANGLE)) {
                 loopToMin = false;
                 t.reset();
                 t.stop();
             }
         }
 
-//        if(t.get()>1) {
-//            if (loopToMax) {
-//                angle = MAX_TURRET_ANGLE;
-//            } else if (loopToMin) {
-//                angle = MIN_TURRET_ANGLE;
-//            }
-//            t.reset();
-//        }
+        // if(t.get()>1) {
+        // if (loopToMax) {
+        // angle = MAX_TURRET_ANGLE;
+        // } else if (loopToMin) {
+        // angle = MIN_TURRET_ANGLE;
+        // }
+        // t.reset();
+        // }
         System.out.println("LOG: Setting turret to target angle " + angle);
         turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
     }

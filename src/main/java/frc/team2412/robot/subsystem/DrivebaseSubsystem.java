@@ -242,8 +242,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return getPose().rotation; // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() :
-                                        // getPose().rotation;
+            return getPose().rotation;
         }
     }
 

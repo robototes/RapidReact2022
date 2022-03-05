@@ -50,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log
     private final WPI_TalonFX motor;
 
-    // @Log
+    @Log
     private final DoubleSolenoid solenoid;
 
     // States
@@ -73,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         intakeSolenoidState = EXTEND;
         intakeMotorState = STOPPED;
 
-        // intakeRetract();
+        intakeRetract();
         intakeStop();
 
         setName("IntakeSubsystem");
@@ -125,7 +125,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeExtend() {
         intakeSolenoidState = RETRACT;
-        // solenoid.set(RETRACT.value);
+        if (solenoid != null)
+            solenoid.set(RETRACT.value);
         state = EXTEND.toString();
     }
 
@@ -135,7 +136,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public void intakeRetract() {
         intakeSolenoidState = EXTEND;
         intakeStop();
-        // solenoid.set(EXTEND.value);
+        if (solenoid != null)
+            solenoid.set(EXTEND.value);
         state = RETRACT.toString();
     }
 

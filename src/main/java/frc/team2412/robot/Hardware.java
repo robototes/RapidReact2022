@@ -149,8 +149,8 @@ public class Hardware {
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
-            // intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
-            // INTAKE_SOLENOID_DOWN);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+                    INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);

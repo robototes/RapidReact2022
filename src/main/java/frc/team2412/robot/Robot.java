@@ -257,17 +257,15 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void teleopInit() {
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
                     controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
                     controls.driveController.getRightXAxis()));
         }
-        if (!isCompetition())
-            return;
-        if (INTAKE_ENABLED) {
+        if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
-        if (SHOOTER_ENABLED) {
+        if (subsystems.shooterSubsystem != null) {
             // subsystems.shooterSubsystem.setDefaultCommand(new
             // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }

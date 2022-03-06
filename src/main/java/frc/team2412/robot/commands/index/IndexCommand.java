@@ -14,12 +14,7 @@ public class IndexCommand extends CommandBase {
     @Override
     public void execute() {
         subsystem.ingestMotorIn();
-        // subsystem.feederMotorInSlow();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return subsystem.feederSensorHasBallIn();
+        subsystem.feederMotorIn();
     }
 
     @Override

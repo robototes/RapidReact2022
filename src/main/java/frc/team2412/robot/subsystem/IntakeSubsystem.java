@@ -20,11 +20,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Constants
     public static class IntakeConstants {
 
-        public static final double INTAKE_IN_SPEED = 0.5;
-        public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
+        public static final double INTAKE_IN_SPEED = 0.7;
+        public static final double INTAKE_OUT_SPEED = -0.7; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, 20, 20, 500);
 
         // Enums
 
@@ -48,9 +48,10 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Define Hardware
 
     @Log
-    private final WPI_TalonFX motor;
+    private final WPI_TalonFX motor1;
+    private final WPI_TalonFX motor2;
 
-    @Log
+    // @Log
     private final DoubleSolenoid solenoid;
 
     // States
@@ -62,11 +63,17 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motor, DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(WPI_TalonFX motor, WPI_TalonFX motor2, DoubleSolenoid intakeSolenoid) {
 
-        this.motor = motor;
-        this.motor.setNeutralMode(NeutralMode.Coast);
-        this.motor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor1 = motor;
+        this.motor1.setNeutralMode(NeutralMode.Coast);
+        this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor2 = motor2;
+
+        if(this.motor2 != null){
+            this.motor2.setNeutralMode(NeutralMode.Coast);
+            this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        }
 
         this.solenoid = intakeSolenoid;
 
@@ -87,7 +94,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * @param speed
      */
     public void setSpeed(double speed) {
-        motor.set(speed);
+        motor1.set(speed);
+        if(motor2 != null) motor2.set(-speed);
     }
 
     /**
@@ -96,7 +104,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeIn() {
         if (isIntakeExtended()) {
-            motor.set(INTAKE_IN_SPEED);
+            setSpeed(INTAKE_IN_SPEED);
             intakeMotorState = IN;
         }
     }
@@ -107,7 +115,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeOut() {
         if (isIntakeExtended()) {
-            motor.set(INTAKE_OUT_SPEED);
+            setSpeed(INTAKE_OUT_SPEED);
             intakeMotorState = OUT;
         }
     }
@@ -116,7 +124,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motor and updates motor state
      */
     public void intakeStop() {
-        motor.set(0);
+        setSpeed(0);
         intakeMotorState = STOPPED;
     }
 
@@ -155,15 +163,15 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Motor Speed")
     public double getMotorSpeed() {
-        return motor.get();
+        return motor1.get();
     }
 
     /**
-     * Checks if motor is on
+     * Checks if motor is on    
      */
     @Log(name = "Motor Moving")
     public boolean isMotorOn() {
-        return motor.get() != 0;
+        return motor1.get() != 0;
     }
 
     /**

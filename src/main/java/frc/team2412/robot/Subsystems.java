@@ -55,7 +55,7 @@ public class Subsystems implements Loggable {
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);
         if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeSolenoid);
+            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid);
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);

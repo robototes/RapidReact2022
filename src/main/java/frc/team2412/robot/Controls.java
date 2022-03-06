@@ -84,7 +84,7 @@ public class Controls {
         // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
-        shootButton = driveController.getRightTriggerAxis().getButton(0.1);
+        shootButton = driveController.getLeftBumperButton();
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),

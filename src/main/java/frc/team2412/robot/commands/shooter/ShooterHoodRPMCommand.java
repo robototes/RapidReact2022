@@ -26,11 +26,4 @@ public class ShooterHoodRPMCommand extends CommandBase {
         shooter.setFlywheelRPM(rpm);
         shooter.setHoodAngle(hood);
     }
-
-    @Override
-    public void end(boolean cancel){
-        System.out.println("eee");
-    }
-    
-
 }

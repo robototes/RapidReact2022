@@ -38,7 +38,6 @@ public class ShooterTargetCommand extends CommandBase {
         }
         if(turret.getAsBoolean()){
             shooter.updateTurretAngle(yaw);
-            System.out.println("eekg");
         }
         else shooter.setTurretAngle(0);
         

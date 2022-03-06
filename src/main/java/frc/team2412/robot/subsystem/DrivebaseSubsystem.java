@@ -63,11 +63,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_DEFAULT = true;
+        public static final boolean ANTI_TIP_DEFAULT = false;
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0, TIP_TOLERANCE = 5;
+        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -244,7 +244,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
             return getPose().rotation;
-//            return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
+        //    return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 
@@ -323,7 +323,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (driveSignal.isFieldOriented()) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getPose().rotation.inverse()),
+                    driveSignal.getTranslation().rotateBy(getAngle()),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(

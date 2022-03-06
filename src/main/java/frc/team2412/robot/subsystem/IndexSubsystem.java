@@ -32,14 +32,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
+        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
         public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.3; // will change values later
-        public static double INDEX_OUT_SPEED = -0.5; // will also change later
+        public static double INDEX_IN_SPEED = 0.2; // will change values later
+        public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
         // Proximity Threshold
         public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual

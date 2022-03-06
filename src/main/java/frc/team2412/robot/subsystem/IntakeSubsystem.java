@@ -151,9 +151,9 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
-            intakeStop();
-        }
+        // if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
+        //     intakeStop();
+        // }
     }
 
     // Logging Methods

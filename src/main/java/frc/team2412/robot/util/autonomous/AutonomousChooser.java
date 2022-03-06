@@ -17,6 +17,7 @@ import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
+import frc.team2412.robot.commands.autonomous.TwoBallScuffedAutoCommand;
 
 public class AutonomousChooser {
 
@@ -97,6 +98,9 @@ public class AutonomousChooser {
     public enum AutonomousMode {
         // Replace with individual testing commands
         // spotless:off
+
+        TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem), "TWO SCUFFED", true),
+
         ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
             "One ball auto",
             Subsystems.SubsystemConstants.INDEX_ENABLED &&

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.FullRetractFixedHookCommand;
 import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
+import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
@@ -90,7 +91,7 @@ public class Controls {
                 driveController.getRightTriggerAxis().getButton(0.1),
 
         };
-        intakeSpitButton = new Button[] { driveController.getBButton(), driveController.getXButton() };
+        intakeSpitButton = new Button[] { driveController.getBButton()};
         intakeRetractButton = driveController.getYButton();
         climbFixedArmUp = driveController.getStartButton();
         climbFixedArmDown = driveController.getBackButton();
@@ -136,8 +137,8 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-//        climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
-//        climbFixedArmUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
+       climbFixedArmDown.whenPressed(new RetractFixedHookCommand(subsystems.climbSubsystem));
+       climbFixedArmUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         // climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
 //        climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }
@@ -147,6 +148,7 @@ public class Controls {
     }
 
     public void bindIndexControls() {
+        driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
         // subsystems.indexSubsystem));
 //         indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
@@ -168,7 +170,7 @@ public class Controls {
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, driveController.getXButton()));
             // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));
             // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,

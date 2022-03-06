@@ -26,6 +26,7 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if(!shooter.turretWorking) return;
 
         double distance = vision.hasTarget() ? vision.getDistance() + shooter.getDistanceBias() : 0;
 
@@ -35,7 +36,10 @@ public class ShooterTargetCommand extends CommandBase {
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
-        if(turret.getAsBoolean()) shooter.updateTurretAngle(yaw);
+        if(turret.getAsBoolean()){
+            shooter.updateTurretAngle(yaw);
+            System.out.println("eekg");
+        }
         else shooter.setTurretAngle(0);
         
     }

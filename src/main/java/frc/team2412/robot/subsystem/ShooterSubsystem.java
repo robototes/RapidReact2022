@@ -107,12 +107,18 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     // @Log.MotorController(name = "Flywheel motor 2", columnIndex = 3, rowIndex = 1)
     private final WPI_TalonFX flywheelMotor2;
 
-    @Log.MotorController(name = "Turret motor", columnIndex = 3, rowIndex = 2)
+    // @Log.MotorController(name = "Turret motor", columnIndex = 3, rowIndex = 2)
     private final WPI_TalonFX turretMotor;
 
     private final CANSparkMax hoodMotor;
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
+
+    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2,  width = 1, height = 1, defaultValue = true)
+    public void setWorkingCommand(boolean working) {
+        workingCommand = working;
+    }
+    public boolean workingCommand = true;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -243,7 +249,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param RPM
      *            The target RPM for the flywheel motors.
      */
-    @Config.NumberSlider(name = "Set flywheel", columnIndex = 3, rowIndex = 0)
+    @Config.NumberSlider(name = "Set flywheel", columnIndex = 3, rowIndex = 0, min = 0, max = 6000)
     public void setFlywheelRPM(double RPM) {
         targetRPM = RPM;
         setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
@@ -312,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param degrees
      *            Target angle for the hood motor in degrees.
      */
-    @Config.NumberSlider(name = "Set hood", columnIndex = 3, rowIndex = 1)
+    @Config.NumberSlider(name = "Set hood", columnIndex = 3, rowIndex = 1, min = MIN_HOOD_ANGLE, max = MAX_HOOD_ANGLE)
     public void setHoodAngle(double degrees) {
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
         hoodPID.setReference(degrees / HOOD_REVS_TO_DEGREES, CANSparkMax.ControlType.kPosition);
@@ -380,7 +386,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 //            turretWorking = true;
 //        }
 //    }
-    public boolean turretWorking = false;
+    public boolean turretWorking = true;
 
     public void setTurretAngle(double angle) {
         if (isTurretAtAngle(angle) || !turretWorking) {

@@ -2,10 +2,13 @@ package frc.team2412.robot;
 
 import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 
+import java.util.function.BooleanSupplier;
+
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.XboxController;
+import org.frcteam2910.common.robot.input.DPadButton.Direction;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
@@ -17,6 +20,9 @@ import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
+import frc.team2412.robot.commands.shooter.ShooterFlywheelSetVelocityCommand;
+import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
+import frc.team2412.robot.commands.shooter.ShooterHoodSetAngleCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 @SuppressWarnings("unused")
@@ -152,7 +158,7 @@ public class Controls {
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
         // subsystems.indexSubsystem));
 //         indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        // shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
@@ -167,10 +173,16 @@ public class Controls {
 
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
+
+            BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
+            driveController.getDPadButton(Direction.DOWN).whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 500, 35).withInterrupt(interrupt));
+            driveController.getDPadButton(Direction.LEFT).whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+
+            
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, driveController.getXButton()));
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, driveController.getLeftBumperButton()::get));
             // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));
             // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,

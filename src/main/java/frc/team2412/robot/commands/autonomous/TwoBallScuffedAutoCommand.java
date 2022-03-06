@@ -25,15 +25,15 @@ public class TwoBallScuffedAutoCommand extends SequentialCommandGroup {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
                         .lineTo(new Vector2(0, 70), Rotation2.fromDegrees(90))
-                        .lineTo(Vector2.ZERO, Rotation2.ZERO)
+                        .lineTo(new Vector2(0, 60), Rotation2.ZERO)
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
 
         addCommands(
                 new ParallelCommandGroup(
-                        new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem),
-                        //new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
+                        // new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem),
+                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
                         new WaitCommand(1)),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath).alongWith(new IntakeInCommand(indexSubsystem, intakeSubsystem)),

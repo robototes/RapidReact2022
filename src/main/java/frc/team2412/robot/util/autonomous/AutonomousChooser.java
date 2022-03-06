@@ -99,7 +99,6 @@ public class AutonomousChooser {
         // Replace with individual testing commands
         // spotless:off
 
-        TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem), "TWO SCUFFED", true),
 
         ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
             "One ball auto",
@@ -113,6 +112,8 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED &&
             Subsystems.SubsystemConstants.INTAKE_ENABLED),
+         TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem), "TWO SCUFFED", true),
+
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),

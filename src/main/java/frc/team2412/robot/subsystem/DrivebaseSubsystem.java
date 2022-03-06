@@ -190,13 +190,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(2, 2)
+                .withPosition(3, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
 
         fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
-                .withPosition(2, 3)
+                .withPosition(3, 2)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();

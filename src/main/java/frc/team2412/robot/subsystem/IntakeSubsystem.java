@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         public static final double INTAKE_OUT_SPEED = -0.7; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 20, 20, 500);
+                true, 20, 20, 1);
 
         // Enums
 

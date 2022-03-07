@@ -133,7 +133,6 @@ spotless {
         trimTrailingWhitespace()
     }
 
-
     groovyGradle {
         targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
         greclipse().configFile("eclipse-formatter.xml")

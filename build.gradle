@@ -5,38 +5,6 @@ plugins {
     id "net.ltgt.errorprone"
 }
 
-// Enforce formatting
-spotless {
-    format "misc", {
-        target "*"
-        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
-
-        endWithNewline()
-        indentWithSpaces()
-        trimTrailingWhitespace()
-    }
-
-    java {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
-        eclipse().configFile("eclipse-formatter.xml")
-        toggleOffOn()
-        removeUnusedImports()
-        endWithNewline()
-        indentWithSpaces()
-        trimTrailingWhitespace()
-    }
-
-
-    groovyGradle {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
-        greclipse().configFile("eclipse-formatter.xml")
-
-        indentWithSpaces()
-        trimTrailingWhitespace()
-        endWithNewline()
-    }
-}
-
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
@@ -143,3 +111,35 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+
+// Enforce formatting
+spotless {
+    format "misc", {
+        target "*"
+        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
+
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+    java {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
+        eclipse().configFile("eclipse-formatter.xml")
+        toggleOffOn()
+        removeUnusedImports()
+        endWithNewline()
+        indentWithSpaces()
+        trimTrailingWhitespace()
+    }
+
+
+    groovyGradle {
+        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
+        greclipse().configFile("eclipse-formatter.xml")
+
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

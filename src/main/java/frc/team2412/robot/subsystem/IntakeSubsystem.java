@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
@@ -61,13 +62,14 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motor, DoubleSolenoid intakeSolenoid) {
+    private IntakeSubsystem() {
+        var hardware = Hardware.instance;
 
-        this.motor = motor;
+        this.motor = hardware.intakeMotor;
         this.motor.setNeutralMode(NeutralMode.Coast);
         this.motor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
-        this.solenoid = intakeSolenoid;
+        this.solenoid = hardware.intakeSolenoid;
 
         intakeSolenoidState = EXTEND;
         intakeMotorState = STOPPED;
@@ -170,4 +172,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public boolean isIntakeExtended() {
         return (intakeSolenoidState == RETRACT);
     }
+
+    // Singleton
+    public static final IntakeSubsystem instance = new IntakeSubsystem();
 }

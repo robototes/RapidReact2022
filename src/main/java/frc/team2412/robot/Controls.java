@@ -64,8 +64,7 @@ public class Controls {
 
     public Subsystems subsystems;
 
-    public Controls(Subsystems s) {
-
+    private Controls(Subsystems s) {
         subsystems = s;
 
         driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
@@ -113,7 +112,7 @@ public class Controls {
 
         driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
-        boolean comp = Robot.getInstance().isCompetition();
+        boolean comp = Robot.instance.isCompetition();
 
         if (subsystems.drivebaseSubsystem != null) {
             bindDriveControls();
@@ -174,4 +173,7 @@ public class Controls {
         }
 
     }
+
+    // Singleton
+    public static final Controls instance = new Controls(Subsystems.instance);
 }

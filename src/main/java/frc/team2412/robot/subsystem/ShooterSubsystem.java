@@ -16,41 +16,14 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
+import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.util.InterpolatingTreeMap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
-    /**
-     * Constructor for shooter subsystem.
-     *
-     * @param flywheelMotor1
-     *            The first motor connected to the flywheel
-     *
-     * @param flywheelMotor2
-     *            The second motor connected to the flywheel
-     *
-     * @param turretMotor
-     *            The motor that controls the horizontal rotation of the
-     *            turret
-     *
-     * @param hoodMotor
-     *            The motor that controls the angle of the hood above the
-     *            turret
-     *
-     */
-    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
-            CANSparkMax hoodMotor) {
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
-        this.hoodEncoder = hoodMotor.getEncoder();
-        this.hoodPID = hoodMotor.getPIDController();
-        configMotors();
-    }
-
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
@@ -100,7 +73,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     /* INSTANCE VARIABLES */
-
     @Log.MotorController(name = "Flywheel motor 1", columnIndex = 3, rowIndex = 0)
     private final WPI_TalonFX flywheelMotor1;
 
@@ -124,6 +96,36 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double turretAngleBias;
     private double turretTestAngle;
     private double distanceBias;
+
+    /**
+     * Constructor for shooter subsystem.
+     *
+     * @param flywheelMotor1
+     *            The first motor connected to the flywheel
+     *
+     * @param flywheelMotor2
+     *            The second motor connected to the flywheel
+     *
+     * @param turretMotor
+     *            The motor that controls the horizontal rotation of the
+     *            turret
+     *
+     * @param hoodMotor
+     *            The motor that controls the angle of the hood above the
+     *            turret
+     *
+     */
+    private ShooterSubsystem() {
+        var hardware = Hardware.instance;
+
+        this.flywheelMotor1 = hardware.flywheelMotor1;
+        this.flywheelMotor2 = hardware.flywheelMotor2;
+        this.turretMotor = hardware.turretMotor;
+        this.hoodMotor = hardware.hoodMotor;
+        this.hoodEncoder = hoodMotor.getEncoder();
+        this.hoodPID = hoodMotor.getPIDController();
+        configMotors();
+    }
 
     /* FUNCTIONS */
 
@@ -442,4 +444,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE);
         }
     }
+
+    // Singleton
+    public static final ShooterSubsystem instance = new ShooterSubsystem();
 }

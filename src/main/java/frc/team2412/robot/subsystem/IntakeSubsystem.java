@@ -64,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem() {
+    private IntakeSubsystem() {
         var hardware = Hardware.instance;
 
         this.motor1 = hardware.intakeMotor;

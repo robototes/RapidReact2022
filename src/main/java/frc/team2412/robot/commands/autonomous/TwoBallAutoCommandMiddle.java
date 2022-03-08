@@ -19,11 +19,11 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
-/**
- * Subsystems: {@link DrivebaseSubsystem}, {@link IndexSubsystem}, {@link ShooterSubsystem},
- * {@link ShooterVisionSubsystem}
- */
 public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
+    /**
+     * Subsystems: {@link DrivebaseSubsystem}, {@link IndexSubsystem}, {@link ShooterSubsystem},
+     * {@link ShooterVisionSubsystem}
+     */
     public TwoBallAutoCommandMiddle() {
         // Robot should be pressed up on the right side of the lower exit closest to the drivers, facing
         // directly away from the hub with the turret facing towards it

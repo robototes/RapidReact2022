@@ -7,11 +7,10 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
-/**
- * Subsystems: {@link IndexSubsystem}, {@link ShooterSubsystem}, {@link ShooterVisionSubsystem}
- */
 public class ShootCommand extends ParallelCommandGroup {
-
+    /**
+     * Subsystems: {@link IndexSubsystem}, {@link ShooterSubsystem}, {@link ShooterVisionSubsystem}
+     */
     public ShootCommand() {
         addCommands(new IndexShootCommand(), new ShooterTargetCommand());
     }

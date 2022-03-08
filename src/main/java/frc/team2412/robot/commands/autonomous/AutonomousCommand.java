@@ -16,9 +16,6 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 
 import java.util.List;
 
-/**
- * Subsystems: {@link DrivebaseSubsystem}
- */
 public class AutonomousCommand extends SequentialCommandGroup {
     public static class AutoConstants {
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
@@ -46,6 +43,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     DrivebaseSubsystem drivebaseSubsystem;
 
+    /**
+     * Subsystems: {@link DrivebaseSubsystem}
+     */
     public AutonomousCommand() {
         drivebaseSubsystem = DrivebaseSubsystem.instance;
     }

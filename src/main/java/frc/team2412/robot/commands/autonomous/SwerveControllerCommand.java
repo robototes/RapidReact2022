@@ -18,9 +18,6 @@ import java.util.function.Supplier;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-/**
- * Subsystems: {@link DrivebaseSubsystem}
- */
 public class SwerveControllerCommand extends CommandBase {
     private final Timer timer = new Timer();
     private final Trajectory trajectory;
@@ -32,17 +29,14 @@ public class SwerveControllerCommand extends CommandBase {
     private final DrivebaseSubsystem drivebase;
 
     /**
-     * Constructs a new SwerveControllerCommand that when executed will follow the
-     * provided
-     * trajectory. This command will not return output voltages but rather raw
-     * module states from the
-     * position controllers which need to be put into a velocity PID.
+     * Subsystems: {@link DrivebaseSubsystem}
+     * Constructs a new SwerveControllerCommand that when executed will follow the provided trajectory.
+     * This command will not return output voltages but rather raw module states from the position
+     * controllers which need to be put into a velocity PID.
      *
      * <p>
-     * Note: The controllers will *not* set the outputVolts to zero upon completion
-     * of the path-
-     * this is left to the user, since it is not appropriate for paths with
-     * nonstationary endstates.
+     * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is
+     * left to the user, since it is not appropriate for paths with nonstationary endstates.
      *
      * @param trajectory
      *            The trajectory to follow.

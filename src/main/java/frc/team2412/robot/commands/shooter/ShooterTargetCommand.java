@@ -9,14 +9,14 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
 
-/**
- * Subsystems: {@link ShooterSubsystem}, {@link ShooterVisionSubsystem}
- */
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final ShooterVisionSubsystem vision;
     private final BooleanSupplier turret;
 
+    /**
+     * Subsystems: {@link ShooterSubsystem}, {@link ShooterVisionSubsystem}
+     */
     public ShooterTargetCommand() {
         this(() -> false);
     }

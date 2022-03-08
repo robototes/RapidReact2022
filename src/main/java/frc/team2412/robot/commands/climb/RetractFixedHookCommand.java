@@ -1,15 +1,15 @@
 package frc.team2412.robot.commands.climb;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * Subsystems: {@link ClimbSubsystem}
- */
-public class RetractFixedHookCommand extends CommandBase {
+import frc.team2412.robot.subsystem.ClimbSubsystem;
 
+public class RetractFixedHookCommand extends CommandBase {
     private final ClimbSubsystem subsystem;
 
+    /**
+     * Subsystems: {@link ClimbSubsystem}
+     */
     public RetractFixedHookCommand() {
         this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
@@ -24,5 +24,4 @@ public class RetractFixedHookCommand extends CommandBase {
     public boolean isFinished() {
         return true;
     }
-
 }

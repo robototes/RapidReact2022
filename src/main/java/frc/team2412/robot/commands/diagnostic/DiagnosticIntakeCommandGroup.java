@@ -10,10 +10,10 @@ import frc.team2412.robot.commands.intake.IntakeRetractCommand;
 import frc.team2412.robot.commands.intake.IntakeStopCommand;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
-/**
- * Subsystems: {@link IntakeSubsystem}
- */
 public class DiagnosticIntakeCommandGroup extends SequentialCommandGroup {
+    /**
+     * Subsystems: {@link IntakeSubsystem}
+     */
     public DiagnosticIntakeCommandGroup() {
         super(new IntakeExtendCommand(), new WaitCommand(0.5),
                 new IntakeMotorInCommand(), new WaitCommand(0.5),

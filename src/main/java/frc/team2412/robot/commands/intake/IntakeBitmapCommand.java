@@ -4,14 +4,11 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_I
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
-/**
- * Subsystems: {@link IndexSubsystem}, {@link IntakeSubsystem}
- */
 public class IntakeBitmapCommand extends CommandBase {
-
     public final double MISFIRE_VELOCITY = 400;
 
     // bitmap
@@ -56,7 +53,10 @@ public class IntakeBitmapCommand extends CommandBase {
 
     private Bitmap currentState;
 
-    // constructor
+    // Constructor
+    /**
+     * Subsystems: {@link IndexSubsystem}, {@link IntakeSubsystem}
+     */
     public IntakeBitmapCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         this.indexSubsystem = indexSubsystem;

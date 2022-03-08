@@ -5,13 +5,13 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-/**
- * Subsystems: {@link ShooterSubsystem}
- */
 public class ShooterTurretUpdateAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final DoubleSupplier angleSupplier;
 
+    /**
+     * Subsystems: {@link ShooterSubsystem}
+     */
     public ShooterTurretUpdateAngleCommand(DoubleSupplier angleSupplier) {
         this.shooter = ShooterSubsystem.instance;
         this.angleSupplier = angleSupplier;

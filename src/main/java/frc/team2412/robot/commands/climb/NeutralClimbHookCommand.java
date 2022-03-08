@@ -1,17 +1,17 @@
 package frc.team2412.robot.commands.climb;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.team2412.robot.subsystem.ClimbSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * Subsystems: {@link ClimbSubsystem}
- */
-// Set the climb angled hook to neutral position
-public class NeutralClimbHookCommand extends CommandBase {
+import frc.team2412.robot.subsystem.ClimbSubsystem;
 
+public class NeutralClimbHookCommand extends CommandBase {
     private final ClimbSubsystem subsystem;
 
+    /**
+     * Subsystems: {@link ClimbSubsystem}
+     * Sets the climb angled hook to the neutral position.
+     */
     public NeutralClimbHookCommand() {
         this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
@@ -26,5 +26,4 @@ public class NeutralClimbHookCommand extends CommandBase {
     public boolean isFinished() {
         return true;
     }
-
 }

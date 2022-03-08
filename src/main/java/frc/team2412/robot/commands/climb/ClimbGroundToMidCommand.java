@@ -1,13 +1,14 @@
 package frc.team2412.robot.commands.climb;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
-import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-/**
- * Subsystems: {@link ClimbSubsystem}
- */
+import frc.team2412.robot.subsystem.ClimbSubsystem;
+import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
+
 public class ClimbGroundToMidCommand extends SequentialCommandGroup {
+    /**
+     * Subsystems: {@link ClimbSubsystem}
+     */
     public ClimbGroundToMidCommand() {
         var subsystem = ClimbSubsystem.instance;
 

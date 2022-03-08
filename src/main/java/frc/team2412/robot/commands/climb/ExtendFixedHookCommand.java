@@ -1,15 +1,15 @@
 package frc.team2412.robot.commands.climb;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/**
- * Subsystems: {@link ClimbSubsystem}
- */
-public class ExtendFixedHookCommand extends CommandBase {
+import frc.team2412.robot.subsystem.ClimbSubsystem;
 
+public class ExtendFixedHookCommand extends CommandBase {
     private final ClimbSubsystem subsystem;
 
+    /**
+     * Subsystems: {@link ClimbSubsystem}
+     */
     public ExtendFixedHookCommand() {
         this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
@@ -29,5 +29,4 @@ public class ExtendFixedHookCommand extends CommandBase {
     public void end(boolean interrupted) {
         subsystem.stopFixedArm();
     }
-
 }

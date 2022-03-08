@@ -6,19 +6,20 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-/**
- * Subsystems: {@link ClimbSubsystem}, {@link IndexSubsystem}, {@link IntakeSubsystem},
- * {@link ShooterSubsystem}
- */
 public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
     ShuffleboardTab tab = Shuffleboard.getTab("Self Diagnostic");
     NetworkTableEntry intakeStatus, shooterStatus, indexStatus, climbStatus;
 
+    /**
+     * Subsystems: {@link ClimbSubsystem}, {@link IndexSubsystem}, {@link IntakeSubsystem},
+     * {@link ShooterSubsystem}
+     */
     public DiagnosticRobotCommandGroup() {
         /*
          * The Shuffleboard having issue of

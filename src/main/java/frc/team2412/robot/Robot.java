@@ -8,6 +8,8 @@ import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import org.frcteam2910.common.math.RigidTransform2;
+import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
@@ -168,7 +170,7 @@ public class Robot extends TimedRobot implements Loggable {
     public void autonomousInit() {
 
         if (SubsystemConstants.DRIVE_ENABLED) {
-            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+            subsystems.drivebaseSubsystem.resetPose(new RigidTransform2(new Vector2(5.513, 5.264), new Rotation2(-0.18, 0.264, true)));
         }
 
         if (SubsystemConstants.SHOOTER_ENABLED) {

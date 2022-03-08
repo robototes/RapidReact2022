@@ -373,6 +373,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
     public void setTurretAngle(double angle) {
+        // TODO reimplement turret wrapping
         if (isTurretAtAngle(angle) || !enableTurret) {
             return;
         }

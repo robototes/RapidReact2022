@@ -1,4 +1,4 @@
-package frc.team2412.robot.util;
+package frc.team2412.robot.util.autonomous;
 
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.math.Rotation2;

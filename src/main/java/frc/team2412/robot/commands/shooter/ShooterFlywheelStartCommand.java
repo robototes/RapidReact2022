@@ -5,6 +5,6 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class ShooterFlywheelStartCommand extends InstantCommand {
     public ShooterFlywheelStartCommand(ShooterSubsystem shooter) {
-        super(() -> shooter.startFlywheel(), shooter);
+        super(shooter::startFlywheel, shooter);
     }
 }

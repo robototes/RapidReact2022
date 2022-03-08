@@ -51,7 +51,7 @@ public class Robot extends TimedRobot implements Loggable {
     public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
 
     @Log.PowerDistribution
-    private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
+    public final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
     enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;

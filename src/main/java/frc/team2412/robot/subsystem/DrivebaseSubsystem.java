@@ -62,7 +62,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_DEFAULT = false;
+        public static final boolean ANTI_TIP_DEFAULT = true;
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
@@ -299,7 +299,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             angle = gyroscope.getAngle();
             // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
-            angularVelocity = gyroscope.getRate();
         }
 
         ChassisVelocity velocity = swerveKinematics.toChassisVelocity(moduleVelocities);
@@ -312,7 +311,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             }
             latencyCompensationMap.put(new InterpolatingDouble(time), pose);
             this.velocity = velocity.getTranslationalVelocity();
-            this.angularVelocity = angularVelocity;
+            this.angularVelocity = velocity.getAngularVelocity();
         }
     }
 

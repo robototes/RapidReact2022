@@ -1,5 +1,6 @@
 package frc.team2412.robot.subsystem;
 
+import frc.team2412.robot.Robot;
 import org.frcteam2910.common.math.Rotation2;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -7,7 +8,8 @@ import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0;
+        // TODO tune these more
+        public static final double TURRET_LATERAL_FF = 4.8, TURRET_ANGULAR_FF = 4.8, TURRET_DEPTH_FF = 4.8;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -24,6 +26,14 @@ public class TargetLocalizer {
         return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 0;
     }
 
+    public double getAdjustedDistance() {
+        return getDistance() + distanceAdjustment();
+    }
+
+    public double distanceAdjustment() {
+        return (getDepthVelocity() * TURRET_DEPTH_FF) / getVoltage();
+    }
+
     public double getPitch() {
         return shooterVisionSubsystem.getAdjustedPitch();
     }
@@ -33,6 +43,7 @@ public class TargetLocalizer {
     }
 
     public double getYaw() {
+        // return 0;
         return shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
     }
 
@@ -41,11 +52,21 @@ public class TargetLocalizer {
                 .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x;
     }
 
+    public double getDepthVelocity() {
+        return drivebaseSubsystem.getVelocity()
+                .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).y;
+    }
+
     public double getAngularVelocity() {
+        System.out.println(drivebaseSubsystem.getAngularVelocity());
         return drivebaseSubsystem.getAngularVelocity();
     }
 
-    public double getAdjustedYaw() {
-        return getYaw() + getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF;
+    public double yawAdjustment() {
+        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage();
+    }
+
+    public double getVoltage() {
+        return Robot.getInstance().PDP.getVoltage();
     }
 }

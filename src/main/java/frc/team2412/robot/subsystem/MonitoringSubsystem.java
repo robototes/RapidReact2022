@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class MonitoringSubsystem extends SubsystemBase {
     private final ShuffleboardTab tab = Shuffleboard.getTab("Power Monitoring");
-    private final NetworkTableEntry totalPower, totalCurrent, currentTemperature, 
-            channel0current, channel1current, channel2current, channel3current, channel4current, channel5current, channel6current, channel7current,
-            channel8current, channel9current, channel10current, channel11current, channel12current, channel13current, channel14current, channel15current;
+    private final NetworkTableEntry totalPower, totalCurrent, currentTemperature,
+            channel0current, channel1current, channel2current, channel3current, channel4current, channel5current,
+            channel6current, channel7current,
+            channel8current, channel9current, channel10current, channel11current, channel12current, channel13current,
+            channel14current, channel15current;
     private final PowerDistribution powerDistributionPanel;
 
     public MonitoringSubsystem(PowerDistribution powerDistributionPanel) {

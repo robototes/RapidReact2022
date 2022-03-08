@@ -7,8 +7,8 @@ public class IntakeRetractCommand extends CommandBase {
 
     private final IntakeSubsystem subsystem;
 
-    public IntakeRetractCommand(IntakeSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IntakeRetractCommand() {
+        this.subsystem = IntakeSubsystem.instance;
         addRequirements(subsystem);
     }
 

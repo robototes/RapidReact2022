@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 public class IndexSpitCommand extends CommandBase {
     private final IndexSubsystem subsystem;
 
-    public IndexSpitCommand(IndexSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IndexSpitCommand() {
+        this.subsystem = IndexSubsystem.instance;
         addRequirements(subsystem);
     }
 

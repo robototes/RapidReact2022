@@ -11,9 +11,9 @@ public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final ShooterVisionSubsystem vision;
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        this.shooter = shooter;
-        this.vision = vision;
+    public ShooterTargetCommand() {
+        this.shooter = ShooterSubsystem.instance;
+        this.vision = ShooterVisionSubsystem.instance;
         addRequirements(shooter);
     }
 

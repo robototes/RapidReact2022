@@ -40,11 +40,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class Robot extends TimedRobot implements Loggable {
-    /**
-     * Singleton Stuff
-     */
-    private static Robot instance = null;
-
     // copied from the PR
     public static final int PDP_CAN_ID = 1;
     public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
@@ -54,12 +49,6 @@ public class Robot extends TimedRobot implements Loggable {
 
     enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
-    }
-
-    public static Robot getInstance() {
-        if (instance == null)
-            instance = new Robot();
-        return instance;
     }
 
     public Controls controls;
@@ -166,9 +155,9 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void robotInit() {
-        hardware = new Hardware();
-        subsystems = new Subsystems(hardware);
-        controls = new Controls(subsystems);
+        hardware = Hardware.instance;
+        subsystems = Subsystems.instance;
+        controls = Controls.instance;
         if (SubsystemConstants.DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
@@ -247,7 +236,7 @@ public class Robot extends TimedRobot implements Loggable {
         }
 
         if (subsystems.shooterSubsystem != null) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+            new ShooterResetEncodersCommand().schedule();
         }
 
         autonomousChooser.getCommand().schedule();
@@ -256,9 +245,8 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void teleopInit() {
         if (SubsystemConstants.DRIVE_ENABLED) {
-            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
-                    controls.driveController.getRightXAxis()));
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(controls.driveController.getLeftXAxis(),
+                    controls.driveController.getLeftYAxis(), controls.driveController.getRightXAxis()));
         }
     }
 
@@ -273,15 +261,15 @@ public class Robot extends TimedRobot implements Loggable {
         // TODO Find more accurate values
         if (CLIMB_ENABLED) {
             // Motor, acceleration time from 0 to full in seconds, max velocity
-            physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.climbFixedMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.climbDynamicMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INDEX_ENABLED) {
-            physicsSim.addTalonFX(hardware.ingestIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.feederIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.ingestMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            physicsSim.addTalonFX(hardware.indexFeederMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (SHOOTER_ENABLED) {
             physicsSim.addTalonFX(hardware.flywheelMotor1, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
@@ -305,4 +293,7 @@ public class Robot extends TimedRobot implements Loggable {
     public boolean isCompetition() {
         return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
     }
+
+    // Singleton
+    public static Robot instance = new Robot();
 }

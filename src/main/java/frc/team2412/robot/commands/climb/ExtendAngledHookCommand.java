@@ -7,8 +7,8 @@ public class ExtendAngledHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public ExtendAngledHookCommand(ClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public ExtendAngledHookCommand() {
+        this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
     }
 

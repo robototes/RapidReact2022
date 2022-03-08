@@ -1,11 +1,6 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
@@ -43,34 +38,28 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public Subsystems(Hardware h) {
-        boolean comp = Robot.getInstance().isCompetition();
+    private Subsystems(Hardware hardware) {
+        boolean comp = Robot.instance.isCompetition();
 
-        hardware = h;
+        this.hardware = hardware;
 
         if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
+            drivebaseSubsystem = DrivebaseSubsystem.instance;
         if (!comp)
             return;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle);
+            climbSubsystem = ClimbSubsystem.instance;
         if (SHOOTER_VISION_ENABLED)
-            shooterVisionSubsystem = new ShooterVisionSubsystem();
+            shooterVisionSubsystem = ShooterVisionSubsystem.instance;
         if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeSolenoid);
+            intakeSubsystem = IntakeSubsystem.instance;
         if (SHOOTER_ENABLED)
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
-                    hardware.turretMotor, hardware.hoodMotor);
+            shooterSubsystem = ShooterSubsystem.instance;
         if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+            indexSubsystem = IndexSubsystem.instance;
         }
     }
+
+    // Singleton
+    public static final Subsystems instance = new Subsystems(Hardware.instance);
 }

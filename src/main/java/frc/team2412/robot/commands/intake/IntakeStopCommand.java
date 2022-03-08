@@ -7,8 +7,8 @@ public class IntakeStopCommand extends CommandBase {
 
     private final IntakeSubsystem subsystem;
 
-    public IntakeStopCommand(IntakeSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IntakeStopCommand() {
+        this.subsystem = IntakeSubsystem.instance;
         addRequirements(subsystem);
     }
 

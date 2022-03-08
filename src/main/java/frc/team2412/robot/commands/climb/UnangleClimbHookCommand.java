@@ -8,8 +8,8 @@ public class UnangleClimbHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public UnangleClimbHookCommand(ClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public UnangleClimbHookCommand() {
+        this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
     }
 

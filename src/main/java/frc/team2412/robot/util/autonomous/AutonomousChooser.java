@@ -56,7 +56,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
+                new Follow2910TrajectoryCommand(trajectories.getSquarePathAuto()));
 
         return command;
     }
@@ -66,7 +66,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
+                new Follow2910TrajectoryCommand(trajectories.getStarPathAuto()));
 
         return command;
     }
@@ -83,7 +83,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getLinePathAuto()));
+                new Follow2910TrajectoryCommand(trajectories.getLinePathAuto()));
         return command;
     }
 
@@ -96,7 +96,7 @@ public class AutonomousChooser {
     public enum AutonomousMode {
         // Replace with individual testing commands
         // spotless:off
-        ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
+        ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(),
             "One ball auto",
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
@@ -106,13 +106,13 @@ public class AutonomousChooser {
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
-        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
-        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), 
-            "Intake and shoot", 
-            Subsystems.SubsystemConstants.INTAKE_ENABLED && 
+        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(), "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
+        INDEX((subsystems, trajectories) -> new IntakeInCommand(), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
+        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
+        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(),
+            "Intake and shoot",
+            Subsystems.SubsystemConstants.INTAKE_ENABLED &&
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED);

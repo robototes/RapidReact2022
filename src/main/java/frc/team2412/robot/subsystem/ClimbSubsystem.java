@@ -82,7 +82,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX climbFixedMotor;
 
-    @Log.MotorController
+    // @Log.MotorController
     private final WPI_TalonFX climbDynamicMotor;
 
     private DoubleSolenoid solenoid;
@@ -105,7 +105,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         setName("ClimbSubsystem");
         this.climbFixedMotor = climbFixedMotor;
         this.climbDynamicMotor = climbDynamicMotor;
-        // solenoid = climbAngle;
+        solenoid = climbAngle;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -119,7 +119,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         climbFixedMotor.config_kP(PID_SLOT_0, P);
 
-        climbDynamicMotor.configAllSettings(motorConfig);
+        if (climbDynamicMotor != null)
+            climbDynamicMotor.configAllSettings(motorConfig);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
@@ -198,7 +199,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void retractFixedArmFully() {
-        setMotor(0 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(2 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void stopFixedArm() {
@@ -250,9 +251,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         double timeNow = Timer.getFPGATimestamp();
         double timeElapsed = timeNow - lastUpdatedTime;
         double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
-        double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
         climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
-        climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed / timeElapsed));
+        if (climbDynamicMotor != null) {
+            double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
+            climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed /
+                    timeElapsed));
+        }
+
         lastUpdatedTime = timeNow;
     }
 

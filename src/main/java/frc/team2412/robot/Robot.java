@@ -8,6 +8,7 @@ import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
 import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
@@ -68,6 +69,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -255,10 +257,17 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void teleopInit() {
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
                     controls.driveController.getRightXAxis()));
+        }
+        if (subsystems.intakeSubsystem != null) {
+            subsystems.intakeSubsystem.intakeExtend();
+        }
+        if (subsystems.shooterSubsystem != null) {
+            // subsystems.shooterSubsystem.setDefaultCommand(new
+            // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
     }
 
@@ -274,7 +283,7 @@ public class Robot extends TimedRobot implements Loggable {
         if (CLIMB_ENABLED) {
             // Motor, acceleration time from 0 to full in seconds, max velocity
             physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);

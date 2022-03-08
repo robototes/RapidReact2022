@@ -7,7 +7,6 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_I
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.PROXIMITY_THRESHOLD;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.teamColor;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -33,14 +32,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
+        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
         public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.1; // will change values later
-        public static double INDEX_OUT_SPEED = -0.1; // will also change later
+        public static double INDEX_IN_SPEED = 0.2; // will change values later
+        public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
         // Proximity Threshold
         public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual
@@ -188,7 +187,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get() || ingestTopProximity.get();
+        return ingestTopProximity.get();
     }
 
     /**
@@ -216,20 +215,20 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ingest has the correct cargo (also includes the top sensor)
      */
-    @Log(name = "Ingest Cargo")
-    public boolean ingestHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
-                || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
-    }
+    // @Log(name = "Ingest Cargo")
+    // public boolean ingestHasCorrectCargo() {
+    // return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
+    // || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
+    // }
 
     /**
      * Checks if feeder has the correct cargo
      */
-    @Log(name = "Feeder Cargo")
-    public boolean feederHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && feederBlueColor.get())
-                || teamColor == Alliance.Red && feederRedColor.get());
-    }
+    // @Log(name = "Feeder Cargo")
+    // public boolean feederHasCorrectCargo() {
+    // return ((teamColor == Alliance.Blue && feederBlueColor.get())
+    // || teamColor == Alliance.Red && feederRedColor.get());
+    // }
 
     private double ingestOverCurrentStart = 0;
     private double feederOverCurrentStart = 0;

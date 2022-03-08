@@ -15,7 +15,7 @@ import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;
 import frc.team2412.robot.commands.climb.RetractFixedHookCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
-import frc.team2412.robot.commands.intake.IntakeRetractCommand;
+import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
@@ -150,6 +150,7 @@ public class Controls {
 
     public void bindIndexControls() {
         driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
+
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
         // subsystems.indexSubsystem));
         // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
@@ -164,7 +165,7 @@ public class Controls {
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
-        intakeRetractButton.whenPressed(new IntakeRetractCommand(subsystems.intakeSubsystem));
+        intakeRetractButton.whenPressed(new IntakeSetRetractCommand(subsystems.intakeSubsystem));
     }
 
     public void bindShooterControls() {

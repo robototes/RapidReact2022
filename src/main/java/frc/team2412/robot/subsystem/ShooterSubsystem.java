@@ -113,12 +113,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
-    public void setWorkingCommand(boolean working) {
-        workingCommand = working;
-    }
-
     public boolean workingCommand = true;
+
+    public boolean enableTurret = true;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -175,6 +172,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+    }
+
+    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
+    public void setWorkingCommand(boolean working) {
+        workingCommand = working;
     }
 
     // PID
@@ -370,37 +372,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
-    // TODO Finalize location of declarations
-    boolean loopToMin = false;
-    boolean loopToMax = false;
-    public boolean turretEnable = true;
-
     public void setTurretAngle(double angle) {
-        if (isTurretAtAngle(angle) || !turretEnable) {
+        if (isTurretAtAngle(angle) || !enableTurret) {
             return;
         }
 
-        // if (angle < MIN_TURRET_ANGLE) {
-        // loopToMax = true;
-        // } else if (angle > MAX_TURRET_ANGLE) {
-        // loopToMin = true;
-        // }
-        //
-        // if (loopToMax) {
-        // if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
-        // angle = MAX_TURRET_ANGLE;
-        // } else {
-        // loopToMax = false;
-        // }
-        // } else if (loopToMin) {
-        // if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
-        // angle = MIN_TURRET_ANGLE;
-        // } else {
-        // loopToMin = false;
-        // }
-        // }
-        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE)
+        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE) {
             turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
+        }
     }
 
     /**

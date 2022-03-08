@@ -27,7 +27,7 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!shooter.turretEnable) {
+        if (!shooter.enableTurret) {
             return;
         }
 

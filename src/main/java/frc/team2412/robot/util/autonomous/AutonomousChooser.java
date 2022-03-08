@@ -97,7 +97,7 @@ public class AutonomousChooser {
     public enum AutonomousMode {
         // Replace with individual testing commands
         // spotless:off
-
+        // @formatter:off
 
         ONE_BALL((trajectories) -> new OneBallAutoCommand(),
             "One ball auto",
@@ -126,7 +126,9 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.INTAKE_ENABLED &&
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED);
+
         // spotless:on
+        // @formatter:on
 
         public final CommandSupplier commandSupplier;
         public final String uiName;

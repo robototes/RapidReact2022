@@ -89,10 +89,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
-            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
+    private IndexSubsystem() {
         var hardware = Hardware.instance;
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");

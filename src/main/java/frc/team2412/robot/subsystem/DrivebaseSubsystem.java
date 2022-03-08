@@ -427,8 +427,4 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     // Singleton
     public static final DrivebaseSubsystem instance = new DrivebaseSubsystem();
-
-    public static DrivebaseSubsystem get() {
-        return instance;
-    }
 }

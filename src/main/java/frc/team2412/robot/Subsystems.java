@@ -56,12 +56,7 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED)
             shooterSubsystem = ShooterSubsystem.instance;
         if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestMotor, hardware.indexFeederMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+            indexSubsystem = IndexSubsystem.instance;
         }
     }
 

@@ -236,7 +236,7 @@ public class Robot extends TimedRobot implements Loggable {
         }
 
         if (subsystems.shooterSubsystem != null) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+            new ShooterResetEncodersCommand().schedule();
         }
 
         autonomousChooser.getCommand().schedule();
@@ -245,9 +245,8 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void teleopInit() {
         if (SubsystemConstants.DRIVE_ENABLED) {
-            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
-                    controls.driveController.getRightXAxis()));
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(controls.driveController.getLeftXAxis(),
+                    controls.driveController.getLeftYAxis(), controls.driveController.getRightXAxis()));
         }
     }
 

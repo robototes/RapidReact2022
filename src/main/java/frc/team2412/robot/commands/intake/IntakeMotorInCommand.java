@@ -7,8 +7,8 @@ public class IntakeMotorInCommand extends CommandBase {
 
     private final IntakeSubsystem subsystem;
 
-    public IntakeMotorInCommand(IntakeSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IntakeMotorInCommand() {
+        this.subsystem = IntakeSubsystem.instance;
         addRequirements(subsystem);
     }
 

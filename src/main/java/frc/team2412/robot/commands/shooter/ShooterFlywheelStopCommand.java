@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class ShooterFlywheelStopCommand extends InstantCommand {
-    public ShooterFlywheelStopCommand(ShooterSubsystem shooter) {
-        super(() -> shooter.stopFlywheel(), shooter);
+    public ShooterFlywheelStopCommand() {
+        super(() -> ShooterSubsystem.instance.stopFlywheel());
     }
 }

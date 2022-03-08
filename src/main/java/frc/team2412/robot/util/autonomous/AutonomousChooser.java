@@ -17,7 +17,6 @@ import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
-import frc.team2412.robot.commands.autonomous.TwoBallScuffedAutoCommand;
 
 public class AutonomousChooser {
 
@@ -100,19 +99,18 @@ public class AutonomousChooser {
         // spotless:off
 
 
-        ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
+        ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem),
             "One ball auto",
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED),
-            TWO_BALL((subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            TWO_BALL((subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
             "TWo ball auto",
             Subsystems.SubsystemConstants.INDEX_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED &&
             Subsystems.SubsystemConstants.INTAKE_ENABLED),
-         TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem), "TWO SCUFFED", true),
 
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
@@ -122,7 +120,7 @@ public class AutonomousChooser {
         INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
-        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), 
+        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.intakeSubsystem, subsystems.indexSubsystem),
             "Intake and shoot", 
             Subsystems.SubsystemConstants.INTAKE_ENABLED && 
             Subsystems.SubsystemConstants.INDEX_ENABLED &&

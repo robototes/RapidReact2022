@@ -19,7 +19,7 @@ public class RetractFixedHookCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return subsystem.isFixedFullyRetracted();
+        return true;
     }
 
 }

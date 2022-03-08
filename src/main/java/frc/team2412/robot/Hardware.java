@@ -10,21 +10,17 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
 
-import org.frcteam2910.common.robot.drivers.Pigeon;
+import org.frcteam2910.common.drivers.Gyroscope;
 
-import edu.wpi.first.wpilibj.util.Color;
 import frc.team2412.robot.util.Mk4Configuration;
+import org.frcteam2910.common.robot.drivers.NavX;
+import org.frcteam2910.common.robot.drivers.Pigeon;
 
 import static frc.team2412.robot.Hardware.HardwareConstants.*;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class Hardware {
     public static class HardwareConstants {
-
-        // Color Sensor V3 Constants
-        public static final Color BLUE_CARGO_COLOR = new Color(0.0, 0.4, 0.7019607844);
-        public static final Color RED_CARGO_COLOR = new Color(0.9294117648, 0.1098039216, 0.1411764706);
-        public static final double confidenceThreshold = 0.7;
 
         // drive can ids are range 1-19 (1 is taken by power distribution module)
         public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 1, DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 4,
@@ -38,27 +34,35 @@ public class Hardware {
         public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
         public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
 
-        // TODO set encoder offset values
+        // Changes swerve modules & disables subsystems missing from the swerve test bot
+        private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
+
+        static {
+            GEAR_RATIO = Robot.getInstance().isCompetition()
+                    ? Mk4SwerveModuleHelper.GearRatio.L2
+                    : Mk4SwerveModuleHelper.GearRatio.L1;
+        }
+
         public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
                 DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
         public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                Mk4SwerveModuleHelper.GearRatio.L1,
+                GEAR_RATIO,
                 DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
                 DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
@@ -85,7 +89,9 @@ public class Hardware {
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
-                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5;
+                INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
+                INGEST_TOP_BLUE = 7,
+                INGEST_TOP_PROXIMITY = 8;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
@@ -103,7 +109,7 @@ public class Hardware {
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
-    public Pigeon pigeon;
+    public Gyroscope gyro;
 
     // cameras
     public UsbCamera frontCamera;
@@ -125,22 +131,28 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
+    public DigitalInput ingestTopProximity;
     public DigitalInput ingestBlueColor;
     public DigitalInput ingestRedColor;
     public DigitalInput feederBlueColor;
     public DigitalInput feederRedColor;
+    public DigitalInput ingestTopBlueColor;
+    public DigitalInput ingestTopRedColor;
 
     // monitoring
     public PowerDistribution powerDistributionPanel;
 
     public Hardware() {
+        boolean comp = Robot.getInstance().isCompetition();
         if (DRIVE_ENABLED) {
-            frontLeftModule = FRONT_LEFT_CONFIG.falcons();
-            frontRightModule = FRONT_RIGHT_CONFIG.falcons();
-            backLeftModule = BACK_LEFT_CONFIG.falcons();
-            backRightModule = BACK_RIGHT_CONFIG.falcons();
-            pigeon = new Pigeon(GYRO_PORT);
+            frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
+            frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
+            backLeftModule = BACK_LEFT_CONFIG.create(comp);
+            backRightModule = BACK_RIGHT_CONFIG.create(comp);
+            gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
+        if (!comp)
+            return;
         if (CLIMB_ENABLED) {
             climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
@@ -157,10 +169,13 @@ public class Hardware {
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+            ingestTopProximity = new DigitalInput(INGEST_TOP_PROXIMITY);
             ingestBlueColor = new DigitalInput(INGEST_BLUE);
             ingestRedColor = new DigitalInput(INGEST_RED);
             feederBlueColor = new DigitalInput(FEEDER_BLUE);
             feederRedColor = new DigitalInput(FEEDER_RED);
+            ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
+            ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

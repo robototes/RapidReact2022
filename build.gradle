@@ -1,9 +1,8 @@
 plugins {
     id "java"
     id "com.diffplug.spotless" version "6.2.1"
-    id "edu.wpi.first.GradleRIO" version "2022.3.1"
+    id "edu.wpi.first.GradleRIO" version "2022.4.1"
     id "net.ltgt.errorprone"
-    id "org.jetbrains.kotlin.jvm" version "1.6.10"
 }
 
 // Enforce formatting
@@ -27,14 +26,6 @@ spotless {
         trimTrailingWhitespace()
     }
 
-    kotlin {
-        targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
-        ktfmt()
-
-        endWithNewline()
-        indentWithSpaces()
-        trimTrailingWhitespace()
-    }
 
     groovyGradle {
         targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
@@ -97,6 +88,7 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
+    implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly group: "com.google.errorprone", name: "error_prone_annotations", version: "2.10.0"
 
     implementation wpi.java.deps.wpilib()
@@ -119,7 +111,7 @@ dependencies {
     implementation "com.github.robototes.2910Common:common:a12317b4845"
     implementation "com.github.robototes.2910Common:robot:a12317b4845"
 
-    implementation "com.github.robototes:swerve-lib:4c8cf8a7d0"
+    implementation "com.github.robototes:swerve-lib:72a08a256b"
 
     implementation "com.github.Oblarg:Oblog:4.0.9"
     testImplementation "junit:junit:4.12"
@@ -151,13 +143,3 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-}

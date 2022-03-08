@@ -5,18 +5,19 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class ShooterHoodRPMCommand extends CommandBase {
     private final ShooterSubsystem shooter;
-    private double rpm, hood;
+    private final double rpm;
+    private final double hoodAngle;
 
     public ShooterHoodRPMCommand(ShooterSubsystem shooter, double targetRPM, double targetHood) {
         this.shooter = shooter;
-        rpm = targetRPM;
-        hood = targetHood;
+        this.rpm = targetRPM;
+        this.hoodAngle = targetHood;
         addRequirements(shooter);
     }
 
     @Override
     public void execute() {
         shooter.setFlywheelRPM(rpm);
-        shooter.setHoodAngle(hood);
+        shooter.setHoodAngle(hoodAngle);
     }
 }

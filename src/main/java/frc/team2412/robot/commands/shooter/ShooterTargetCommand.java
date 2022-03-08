@@ -15,8 +15,9 @@ public class ShooterTargetCommand extends CommandBase {
     private final BooleanSupplier turret;
 
     public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        this(shooter, vision, ()->false);
+        this(shooter, vision, () -> false);
     }
+
     public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision, BooleanSupplier turretButton) {
         this.shooter = shooter;
         this.vision = vision;
@@ -26,7 +27,8 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(!shooter.turretWorking) return;
+        if (!shooter.turretWorking)
+            return;
 
         double distance = vision.hasTarget() ? vision.getDistance() + shooter.getDistanceBias() : 0;
 
@@ -36,11 +38,11 @@ public class ShooterTargetCommand extends CommandBase {
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
-        if(turret.getAsBoolean()){
+        if (turret.getAsBoolean()) {
             shooter.updateTurretAngle(yaw);
-        }
-        else shooter.setTurretAngle(0);
-        
+        } else
+            shooter.setTurretAngle(0);
+
     }
 
     @Override

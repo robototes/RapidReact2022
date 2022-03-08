@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -244,7 +243,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
             return getPose().rotation;
-        //    return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
+            // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 

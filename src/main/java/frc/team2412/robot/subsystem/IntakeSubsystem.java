@@ -70,7 +70,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         this.motor2 = motor2;
 
-        if(this.motor2 != null){
+        if (this.motor2 != null) {
             this.motor2.setNeutralMode(NeutralMode.Coast);
             this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         }
@@ -95,7 +95,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void setSpeed(double speed) {
         motor1.set(speed);
-        if(motor2 != null) motor2.set(-speed);
+        if (motor2 != null)
+            motor2.set(-speed);
     }
 
     /**
@@ -152,7 +153,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Override
     public void periodic() {
         // if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
-        //     intakeStop();
+        // intakeStop();
         // }
     }
 
@@ -167,7 +168,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Checks if motor is on    
+     * Checks if motor is on
      */
     @Log(name = "Motor Moving")
     public boolean isMotorOn() {

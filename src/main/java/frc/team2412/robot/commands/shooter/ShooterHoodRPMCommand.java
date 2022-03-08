@@ -1,13 +1,7 @@
 package frc.team2412.robot.commands.shooter;
 
-import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
-
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
-import frc.team2412.robot.util.ShooterDataDistancePoint;
 
 public class ShooterHoodRPMCommand extends CommandBase {
     private final ShooterSubsystem shooter;
@@ -19,7 +13,6 @@ public class ShooterHoodRPMCommand extends CommandBase {
         hood = targetHood;
         addRequirements(shooter);
     }
-
 
     @Override
     public void execute() {

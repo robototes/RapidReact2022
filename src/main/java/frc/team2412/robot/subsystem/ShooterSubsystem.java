@@ -22,35 +22,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
-    /**
-     * Constructor for shooter subsystem.
-     *
-     * @param flywheelMotor1
-     *            The first motor connected to the flywheel
-     *
-     * @param flywheelMotor2
-     *            The second motor connected to the flywheel
-     *
-     * @param turretMotor
-     *            The motor that controls the horizontal rotation of the
-     *            turret
-     *
-     * @param hoodMotor
-     *            The motor that controls the angle of the hood above the
-     *            turret
-     *
-     */
-    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
-            CANSparkMax hoodMotor) {
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
-        this.hoodEncoder = hoodMotor.getEncoder();
-        this.hoodPID = hoodMotor.getPIDController();
-        configMotors();
-    }
-
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
@@ -127,6 +98,35 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double turretAngleBias;
     private double turretTestAngle;
     private double distanceBias;
+
+    /**
+     * Constructor for shooter subsystem.
+     *
+     * @param flywheelMotor1
+     *            The first motor connected to the flywheel
+     *
+     * @param flywheelMotor2
+     *            The second motor connected to the flywheel
+     *
+     * @param turretMotor
+     *            The motor that controls the horizontal rotation of the
+     *            turret
+     *
+     * @param hoodMotor
+     *            The motor that controls the angle of the hood above the
+     *            turret
+     *
+     */
+    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
+            CANSparkMax hoodMotor) {
+        this.flywheelMotor1 = flywheelMotor1;
+        this.flywheelMotor2 = flywheelMotor2;
+        this.turretMotor = turretMotor;
+        this.hoodMotor = hoodMotor;
+        this.hoodEncoder = hoodMotor.getEncoder();
+        this.hoodPID = hoodMotor.getPIDController();
+        configMotors();
+    }
 
     /* FUNCTIONS */
 

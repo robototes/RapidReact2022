@@ -7,8 +7,8 @@ public class ShooterHoodSetConstantAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final double angle;
 
-    public ShooterHoodSetConstantAngleCommand(ShooterSubsystem shooter, double angle) {
-        this.shooter = shooter;
+    public ShooterHoodSetConstantAngleCommand(double angle) {
+        this.shooter = ShooterSubsystem.instance;
         this.angle = angle;
         addRequirements(shooter);
     }

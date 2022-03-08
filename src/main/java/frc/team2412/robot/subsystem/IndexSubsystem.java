@@ -7,7 +7,6 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_I
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.PROXIMITY_THRESHOLD;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.teamColor;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -21,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -33,14 +33,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         public static Alliance teamColor = DriverStation.getAlliance();
 
-        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 5;
+        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
         public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.1; // will change values later
-        public static double INDEX_OUT_SPEED = -0.1; // will also change later
+        public static double INDEX_IN_SPEED = 0.2; // will change values later
+        public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
         // Proximity Threshold
         public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual
@@ -88,10 +88,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
-            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
+    private IndexSubsystem() {
+        var hardware = Hardware.instance;
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -100,17 +98,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
                 .withSize(2, 1)
                 .getEntry();
 
-        this.ingestMotor = firstMotor;
-        this.feederMotor = secondMotor;
-        this.ingestProximity = ingestProximity;
-        this.feederProximity = feederProximity;
-        this.ingestTopProximity = ingestTopProximity;
-        this.ingestBlueColor = ingestBlueColor;
-        this.ingestRedColor = ingestRedColor;
-        this.feederBlueColor = feederBlueColor;
-        this.feederRedColor = feederRedColor;
-        this.ingestTopBlueColor = ingestTopBlueColor;
-        this.ingestTopRedColor = ingestTopRedColor;
+        this.ingestMotor = hardware.ingestMotor;
+        this.feederMotor = hardware.indexFeederMotor;
+        this.ingestProximity = hardware.ingestProximity;
+        this.feederProximity = hardware.feederProximity;
+        this.ingestTopProximity = hardware.ingestTopProximity;
+        this.ingestBlueColor = hardware.ingestBlueColor;
+        this.ingestRedColor = hardware.ingestRedColor;
+        this.feederBlueColor = hardware.feederBlueColor;
+        this.feederRedColor = hardware.feederRedColor;
+        this.ingestTopBlueColor = hardware.ingestTopBlueColor;
+        this.ingestTopRedColor = hardware.ingestTopRedColor;
 
         this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
@@ -188,7 +186,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Ingest Proximity")
     public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestProximity.get() || ingestTopProximity.get();
+        return ingestTopProximity.get();
     }
 
     /**
@@ -216,20 +214,20 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ingest has the correct cargo (also includes the top sensor)
      */
-    @Log(name = "Ingest Cargo")
-    public boolean ingestHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
-                || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
-    }
+    // @Log(name = "Ingest Cargo")
+    // public boolean ingestHasCorrectCargo() {
+    // return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
+    // || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
+    // }
 
     /**
      * Checks if feeder has the correct cargo
      */
-    @Log(name = "Feeder Cargo")
-    public boolean feederHasCorrectCargo() {
-        return ((teamColor == Alliance.Blue && feederBlueColor.get())
-                || teamColor == Alliance.Red && feederRedColor.get());
-    }
+    // @Log(name = "Feeder Cargo")
+    // public boolean feederHasCorrectCargo() {
+    // return ((teamColor == Alliance.Blue && feederBlueColor.get())
+    // || teamColor == Alliance.Red && feederRedColor.get());
+    // }
 
     private double ingestOverCurrentStart = 0;
     private double feederOverCurrentStart = 0;
@@ -303,4 +301,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         this.currentStateBitmap = bitmap;
     }
 
+    // Singleton
+    public static final IndexSubsystem instance = new IndexSubsystem();
 }

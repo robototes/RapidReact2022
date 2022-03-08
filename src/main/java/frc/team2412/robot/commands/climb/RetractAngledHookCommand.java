@@ -7,8 +7,8 @@ public class RetractAngledHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public RetractAngledHookCommand(ClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public RetractAngledHookCommand() {
+        this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
     }
 

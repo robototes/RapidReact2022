@@ -15,15 +15,9 @@ import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
 public class TwoBallAutoCommandRight extends SequentialCommandGroup {
-    public TwoBallAutoCommandRight(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
-            IntakeSubsystem intakeSubsystem) {
+    public TwoBallAutoCommandRight() {
         // Robot should be pressed up on the left side of the lower exit further from the drivers on their
         // right, facing directly away from the hub with the turret facing towards it
         Trajectory robotPath = new Trajectory(
@@ -36,13 +30,13 @@ public class TwoBallAutoCommandRight extends SequentialCommandGroup {
         // immediately shoots it
         addCommands(
                 new ParallelCommandGroup(
-                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
+                        new ScheduleCommand(
+                                new ShooterTargetCommand()),
                         new WaitCommand(1)),
-                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-                new IntakeExtendCommand(intakeSubsystem),
+                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand()),
+                new IntakeExtendCommand(),
                 new ParallelCommandGroup(
-                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                        new IntakeInCommand(indexSubsystem, intakeSubsystem)));
-
+                        new Follow2910TrajectoryCommand(robotPath),
+                        new IntakeInCommand()));
     }
 }

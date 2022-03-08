@@ -8,8 +8,8 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 public class IndexTestCommand extends SequentialCommandGroup {
     private final IndexSubsystem subsystem;
 
-    public IndexTestCommand(IndexSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IndexTestCommand() {
+        this.subsystem = IndexSubsystem.instance;
         addRequirements(subsystem);
 
         addCommands(

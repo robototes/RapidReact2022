@@ -9,8 +9,8 @@ public class ShooterHoodSetAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final DoubleSupplier angleSupplier;
 
-    public ShooterHoodSetAngleCommand(ShooterSubsystem shooter, DoubleSupplier angleSupplier) {
-        this.shooter = shooter;
+    public ShooterHoodSetAngleCommand(DoubleSupplier angleSupplier) {
+        this.shooter = ShooterSubsystem.instance;
         this.angleSupplier = angleSupplier;
         addRequirements(shooter);
     }

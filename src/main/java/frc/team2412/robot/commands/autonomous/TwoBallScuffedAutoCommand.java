@@ -13,15 +13,9 @@ import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
 public class TwoBallScuffedAutoCommand extends SequentialCommandGroup {
-    public TwoBallScuffedAutoCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
-            IntakeSubsystem intakeSubsystem) {
+    public TwoBallScuffedAutoCommand() {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
                         .lineTo(new Vector2(0, 70), Rotation2.fromDegrees(90))
@@ -32,12 +26,12 @@ public class TwoBallScuffedAutoCommand extends SequentialCommandGroup {
         addCommands(
                 new ParallelCommandGroup(
                         // new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem),
-                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
+                        new ScheduleCommand(new ShooterTargetCommand()),
                         new WaitCommand(1)),
-                new IndexShootCommand(indexSubsystem).withTimeout(1),
-                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath)
-                        .alongWith(new IntakeInCommand(indexSubsystem, intakeSubsystem)),
-                new IndexShootCommand(indexSubsystem).withTimeout(1));
+                new IndexShootCommand().withTimeout(1),
+                new Follow2910TrajectoryCommand(robotPath)
+                        .alongWith(new IntakeInCommand()),
+                new IndexShootCommand().withTimeout(1));
 
     }
 }

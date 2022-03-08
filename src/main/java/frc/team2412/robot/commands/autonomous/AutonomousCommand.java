@@ -43,8 +43,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     DrivebaseSubsystem drivebaseSubsystem;
 
-    public AutonomousCommand(DrivebaseSubsystem d) {
-        drivebaseSubsystem = d;
+    public AutonomousCommand() {
+        drivebaseSubsystem = DrivebaseSubsystem.instance;
     }
 
     public Command getAutonomousCommand() {

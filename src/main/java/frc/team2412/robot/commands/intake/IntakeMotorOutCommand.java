@@ -7,8 +7,8 @@ public class IntakeMotorOutCommand extends CommandBase {
 
     private final IntakeSubsystem subsystem;
 
-    public IntakeMotorOutCommand(IntakeSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IntakeMotorOutCommand() {
+        this.subsystem = IntakeSubsystem.instance;
         addRequirements(subsystem);
     }
 
@@ -20,5 +20,10 @@ public class IntakeMotorOutCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        subsystem.intakeStop();
     }
 }

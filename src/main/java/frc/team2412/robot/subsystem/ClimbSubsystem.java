@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
 import io.github.oblarg.oblog.Loggable;
@@ -82,7 +83,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX climbFixedMotor;
 
-    @Log.MotorController
+    // @Log.MotorController
     private final WPI_TalonFX climbDynamicMotor;
 
     private DoubleSolenoid solenoid;
@@ -101,11 +102,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle) {
+    private ClimbSubsystem() {
+        var hardware = Hardware.instance;
+
         setName("ClimbSubsystem");
-        this.climbFixedMotor = climbFixedMotor;
-        this.climbDynamicMotor = climbDynamicMotor;
-        // solenoid = climbAngle;
+        this.climbFixedMotor = hardware.climbFixedMotor;
+        this.climbDynamicMotor = hardware.climbDynamicMotor;
+        solenoid = hardware.climbAngle;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -119,7 +122,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         climbFixedMotor.config_kP(PID_SLOT_0, P);
 
-        climbDynamicMotor.configAllSettings(motorConfig);
+        if (climbDynamicMotor != null)
+            climbDynamicMotor.configAllSettings(motorConfig);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
@@ -198,7 +202,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void retractFixedArmFully() {
-        setMotor(0 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(2 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
     }
 
     public void stopFixedArm() {
@@ -250,9 +254,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         double timeNow = Timer.getFPGATimestamp();
         double timeElapsed = timeNow - lastUpdatedTime;
         double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
-        double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
         climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
-        climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed / timeElapsed));
+        if (climbDynamicMotor != null) {
+            double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
+            climbDynamicMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorDynamicSpeed /
+                    timeElapsed));
+        }
+
         lastUpdatedTime = timeNow;
     }
 
@@ -289,4 +297,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         climbFixedMotor.set(ControlMode.Position, (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
     }
 
+    // Singleton
+    public static final ClimbSubsystem instance = new ClimbSubsystem();
 }

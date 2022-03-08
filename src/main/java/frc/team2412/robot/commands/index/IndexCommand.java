@@ -6,22 +6,20 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 public class IndexCommand extends CommandBase {
     private IndexSubsystem subsystem;
 
-    public IndexCommand(IndexSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public IndexCommand() {
+        this.subsystem = IndexSubsystem.instance;
         addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
-        if (!subsystem.feederSensorHasBallIn() || !subsystem.ingestSensorHasBallIn()) {
-            subsystem.ingestMotorIn();
-        } else {
-            subsystem.ingestMotorStop();
-        }
+        subsystem.ingestMotorIn();
+        subsystem.feederMotorIn();
     }
 
     @Override
     public void end(boolean cancel) {
         subsystem.ingestMotorStop();
+        subsystem.feederMotorStop();
     }
 }

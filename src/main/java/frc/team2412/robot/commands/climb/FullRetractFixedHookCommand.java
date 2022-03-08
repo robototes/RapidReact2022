@@ -7,8 +7,8 @@ public class FullRetractFixedHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public FullRetractFixedHookCommand(ClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
+    public FullRetractFixedHookCommand() {
+        this.subsystem = ClimbSubsystem.instance;
         addRequirements(subsystem);
     }
 

@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 
+/**
+ * Subsystems: {@link ClimbSubsystem}
+ */
 public class ClimbHighToTravCommand extends SequentialCommandGroup {
     public ClimbHighToTravCommand() {
         var subsystem = ClimbSubsystem.instance;

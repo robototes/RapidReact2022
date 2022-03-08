@@ -11,6 +11,10 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
+/**
+ * Subsystems: {@link ClimbSubsystem}, {@link IndexSubsystem}, {@link IntakeSubsystem},
+ * {@link ShooterSubsystem}
+ */
 public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
     ShuffleboardTab tab = Shuffleboard.getTab("Self Diagnostic");
     NetworkTableEntry intakeStatus, shooterStatus, indexStatus, climbStatus;

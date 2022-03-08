@@ -18,6 +18,9 @@ import java.util.function.Supplier;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
+/**
+ * Subsystems: {@link DrivebaseSubsystem}
+ */
 public class SwerveControllerCommand extends CommandBase {
     private final Timer timer = new Timer();
     private final Trajectory trajectory;

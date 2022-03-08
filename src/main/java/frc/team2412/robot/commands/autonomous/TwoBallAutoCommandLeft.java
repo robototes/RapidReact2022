@@ -15,7 +15,14 @@ import frc.team2412.robot.commands.intake.IntakeExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.IndexSubsystem;
+import frc.team2412.robot.subsystem.ShooterSubsystem;
+import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
+/**
+ * Subsystems: {@link DrivebaseSubsystem}, {@link IndexSubsystem}, {@link ShooterSubsystem},
+ * {@link ShooterVisionSubsystem}
+ */
 public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
     public TwoBallAutoCommandLeft() {
         // Robot should be pressed up on the left side of the lower exit closest to the drivers, facing

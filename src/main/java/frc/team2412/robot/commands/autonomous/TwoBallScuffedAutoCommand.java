@@ -13,7 +13,14 @@ import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.IndexSubsystem;
+import frc.team2412.robot.subsystem.ShooterSubsystem;
+import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
+/**
+ * Subsystems: {@link DrivebaseSubsystem}, {@link IndexSubsystem}, {@link ShooterSubsystem},
+ * {@link ShooterVisionSubsystem}
+ */
 public class TwoBallScuffedAutoCommand extends SequentialCommandGroup {
     public TwoBallScuffedAutoCommand() {
         Trajectory robotPath = new Trajectory(

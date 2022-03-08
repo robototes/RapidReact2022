@@ -158,8 +158,8 @@ public class Controls {
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
             b.whenPressed(new IntakeInCommand());// .whenReleased(new
-                                                 // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                 // subsystems.indexSubsystem));
+                                                    // IntakeBitmapCommand(subsystems.intakeSubsystem,
+                                                    // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand());

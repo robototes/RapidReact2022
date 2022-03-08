@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 public class ShooterAimTestCommand extends CommandBase {
     private ShooterSubsystem shooter;
 
-    public ShooterAimTestCommand() {
-        this.shooter = ShooterSubsystem.instance;
+    public ShooterAimTestCommand(ShooterSubsystem shooter) {
+        this.shooter = shooter;
         addRequirements(shooter);
     }
 

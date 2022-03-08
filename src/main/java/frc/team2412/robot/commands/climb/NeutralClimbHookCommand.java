@@ -9,8 +9,8 @@ public class NeutralClimbHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public NeutralClimbHookCommand() {
-        this.subsystem = ClimbSubsystem.instance;
+    public NeutralClimbHookCommand(ClimbSubsystem subsystem) {
+        this.subsystem = subsystem;
         addRequirements(subsystem);
     }
 

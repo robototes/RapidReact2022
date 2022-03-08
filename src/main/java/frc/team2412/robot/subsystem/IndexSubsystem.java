@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Hardware;
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -89,8 +88,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constructor
 
-    private IndexSubsystem() {
-        var hardware = Hardware.instance;
+    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
+            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
+            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
+            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -99,17 +100,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
                 .withSize(2, 1)
                 .getEntry();
 
-        this.ingestMotor = hardware.ingestMotor;
-        this.feederMotor = hardware.indexFeederMotor;
-        this.ingestProximity = hardware.ingestProximity;
-        this.feederProximity = hardware.feederProximity;
-        this.ingestTopProximity = hardware.ingestTopProximity;
-        this.ingestBlueColor = hardware.ingestBlueColor;
-        this.ingestRedColor = hardware.ingestRedColor;
-        this.feederBlueColor = hardware.feederBlueColor;
-        this.feederRedColor = hardware.feederRedColor;
-        this.ingestTopBlueColor = hardware.ingestTopBlueColor;
-        this.ingestTopRedColor = hardware.ingestTopRedColor;
+        this.ingestMotor = firstMotor;
+        this.feederMotor = secondMotor;
+        this.ingestProximity = ingestProximity;
+        this.feederProximity = feederProximity;
+        this.ingestTopProximity = ingestTopProximity;
+        this.ingestBlueColor = ingestBlueColor;
+        this.ingestRedColor = ingestRedColor;
+        this.feederBlueColor = feederBlueColor;
+        this.feederRedColor = feederRedColor;
+        this.ingestTopBlueColor = ingestTopBlueColor;
+        this.ingestTopRedColor = ingestTopRedColor;
 
         this.feederMotor.setInverted(true);
         this.ingestMotor.configFactoryDefault();
@@ -302,6 +303,4 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         this.currentStateBitmap = bitmap;
     }
 
-    // Singleton
-    public static final IndexSubsystem instance = new IndexSubsystem();
 }

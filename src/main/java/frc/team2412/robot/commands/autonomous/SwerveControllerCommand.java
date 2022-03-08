@@ -61,18 +61,25 @@ public class SwerveControllerCommand extends CommandBase {
      *            time step.
      * @param outputModuleStates
      *            The raw output module states from the position controllers.
+     * @param drivebase
      * @param requirements
      *            The subsystems to require.
      */
     @SuppressWarnings("ParameterName")
-    public SwerveControllerCommand(Trajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
-            PIDController xController, PIDController yController, ProfiledPIDController thetaController,
-            Supplier<Rotation2d> desiredRotation, Consumer<ChassisSpeeds> outputModuleStates,
-            Subsystem... requirements) {
+    public SwerveControllerCommand(
+            Trajectory trajectory,
+            Supplier<Pose2d> pose,
+            SwerveDriveKinematics kinematics,
+            PIDController xController,
+            PIDController yController,
+            ProfiledPIDController thetaController,
+            Supplier<Rotation2d> desiredRotation,
+            Consumer<ChassisSpeeds> outputModuleStates,
+            DrivebaseSubsystem drivebase, Subsystem... requirements) {
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         this.pose = requireNonNullParam(pose, "pose", "SwerveControllerCommand");
         this.kinematics = requireNonNullParam(kinematics, "kinematics", "SwerveControllerCommand");
-        this.drivebase = DrivebaseSubsystem.instance;
+        this.drivebase = drivebase;
 
         controller = new HolonomicDriveController(
                 requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
@@ -147,7 +154,7 @@ public class SwerveControllerCommand extends CommandBase {
                 thetaController,
                 () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
                 outputModuleStates,
-                requirements);
+                drivebase, requirements);
     }
 
     @Override

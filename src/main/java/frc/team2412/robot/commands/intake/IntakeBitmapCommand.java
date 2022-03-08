@@ -23,19 +23,15 @@ public class IntakeBitmapCommand extends CommandBase {
         // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed, ingestspeed,
         // feederspeed, misfire
         // spotless:off
-        A(false, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "no balls in system"), B(
-                true, false, true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false,
-                "Correct ball in ingest"), C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED,
-                        true, "Wrong ball in ingest"), D(false, true, false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0,
-                                false, "Correct ball in feeder"), E(false, true, false, false, INTAKE_IN_SPEED,
-                                        INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in feeder"), F(true, true,
-                                                true, true, 0, 0, 0, false, "Correct ball in both"), G(true, true,
-                                                        false, true, INTAKE_OUT_SPEED, INDEX_OUT_SPEED, 0, false,
-                                                        "Wrong ingest, correct feeder"), H(true, true, true, false, 0,
-                                                                INDEX_IN_SPEED, INDEX_IN_SPEED, true,
-                                                                "Correct ingest, wrong feeder"), I(true, true, false,
-                                                                        false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true,
-                                                                        "Wrong in both");
+        A(false, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "no balls in system"), 
+        B(true, false, true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, false, "Correct ball in ingest"), 
+        C(true, false, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in ingest"), 
+        D(false, true, false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, false, "Correct ball in feeder"), 
+        E(false, true, false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong ball in feeder"), 
+        F(true, true, true, true, 0, 0, 0, false, "Correct ball in both"), 
+        G(true, true, false, true, INTAKE_OUT_SPEED, INDEX_OUT_SPEED, 0, false, "Wrong ingest, correct feeder"), 
+        H(true, true, true, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Correct ingest, wrong feeder"), 
+        I(true, true, false, false, 0, INDEX_IN_SPEED, INDEX_IN_SPEED, true, "Wrong in both");
         // spotless:on
 
         private boolean ingestSensor, feederSensor, ingestColor, feederColor, shooterMisfire;
@@ -78,11 +74,12 @@ public class IntakeBitmapCommand extends CommandBase {
     private Bitmap currentState;
 
     // constructor
-    public IntakeBitmapCommand() {
-        this.intakeSubsystem = IntakeSubsystem.instance;
-        this.indexSubsystem = IndexSubsystem.instance;
-        this.shooterSubsystem = ShooterSubsystem.instance;
-        this.shooterVisionSubsystem = ShooterVisionSubsystem.instance;
+    public IntakeBitmapCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem, ShooterVisionSubsystem shooterVisionSubsystem) {
+        this.intakeSubsystem = intakeSubsystem;
+        this.indexSubsystem = indexSubsystem;
+        this.shooterSubsystem = shooterSubsystem;
+        this.shooterVisionSubsystem = shooterVisionSubsystem;
         addRequirements(intakeSubsystem, indexSubsystem, shooterSubsystem, shooterVisionSubsystem);
 
     }

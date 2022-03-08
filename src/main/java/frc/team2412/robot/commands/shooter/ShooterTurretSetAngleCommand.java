@@ -7,8 +7,8 @@ public class ShooterTurretSetAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final double angle;
 
-    public ShooterTurretSetAngleCommand(double angle) {
-        this.shooter = ShooterSubsystem.instance;
+    public ShooterTurretSetAngleCommand(ShooterSubsystem shooter, double angle) {
+        this.shooter = shooter;
         this.angle = angle;
         addRequirements(shooter);
     }

@@ -4,23 +4,24 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 
 public class ClimbStageChooserCommand extends CommandBase {
+
     private ClimbSubsystem subsystem;
 
-    public ClimbStageChooserCommand() {
-        this.subsystem = ClimbSubsystem.instance;
+    public ClimbStageChooserCommand(ClimbSubsystem subsystem) {
+        this.subsystem = subsystem;
     }
 
     @Override
     public void initialize() {
         switch (subsystem.getAutoClimbState()) {
             case GROUND_MID:
-                new ClimbGroundToMidCommand().schedule();
+                new ClimbGroundToMidCommand(subsystem).schedule();
                 break;
             case MID_HIGH:
-                new ClimbMidToHighCommand().schedule();
+                new ClimbMidToHighCommand(subsystem).schedule();
                 break;
             case HIGH_TRAV:
-                new ClimbHighToTravCommand().schedule();
+                new ClimbHighToTravCommand(subsystem).schedule();
                 break;
         }
     }
@@ -29,4 +30,5 @@ public class ClimbStageChooserCommand extends CommandBase {
     public boolean isFinished() {
         return true;
     }
+
 }

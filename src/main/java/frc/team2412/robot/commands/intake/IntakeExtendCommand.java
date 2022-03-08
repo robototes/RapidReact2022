@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 public class IntakeExtendCommand extends CommandBase {
     private final IntakeSubsystem subsystem;
 
-    public IntakeExtendCommand() {
-        this.subsystem = IntakeSubsystem.instance;
+    public IntakeExtendCommand(IntakeSubsystem subsystem) {
+        this.subsystem = subsystem;
         addRequirements(subsystem);
     }
 

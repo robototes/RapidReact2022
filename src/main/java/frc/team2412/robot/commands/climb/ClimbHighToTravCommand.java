@@ -5,12 +5,12 @@ import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 
 public class ClimbHighToTravCommand extends SequentialCommandGroup {
-    public ClimbHighToTravCommand() {
-        var subsystem = ClimbSubsystem.instance;
 
+    public ClimbHighToTravCommand(ClimbSubsystem subsystem) {
         subsystem.setAutoClimbState(AutoClimbState.HIGH_TRAV);
-        addCommands(new AngleClimbHookCommand(),
-                new ExtendAngledHookCommand(),
-                new RetractAngledHookCommand());
+        addCommands(new AngleClimbHookCommand(subsystem),
+                new ExtendAngledHookCommand(subsystem),
+                new RetractAngledHookCommand(subsystem));
     }
+
 }

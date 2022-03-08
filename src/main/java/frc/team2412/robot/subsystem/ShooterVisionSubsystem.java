@@ -19,7 +19,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
 
     public NetworkTable limelight;
 
-    private ShooterVisionSubsystem() {
+    public ShooterVisionSubsystem() {
         limelight = NetworkTableInstance.getDefault().getTable(Hardware.HardwareConstants.LIMELIGHT);
     }
 
@@ -64,6 +64,4 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         limelight.getEntry("ledMode").setValue("0");
     }
 
-    // Singleton
-    public static final ShooterVisionSubsystem instance = new ShooterVisionSubsystem();
 }

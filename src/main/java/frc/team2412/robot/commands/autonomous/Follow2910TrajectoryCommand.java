@@ -11,8 +11,8 @@ public class Follow2910TrajectoryCommand extends CommandBase {
     private final DrivebaseSubsystem drivebase;
     private final Trajectory trajectory;
 
-    public Follow2910TrajectoryCommand(Trajectory trajectory) {
-        this.drivebase = DrivebaseSubsystem.instance;
+    public Follow2910TrajectoryCommand(DrivebaseSubsystem drivebase, Trajectory trajectory) {
+        this.drivebase = drivebase;
         this.trajectory = trajectory;
 
         addRequirements(drivebase);

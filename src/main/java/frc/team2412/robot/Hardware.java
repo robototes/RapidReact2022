@@ -38,7 +38,7 @@ public class Hardware {
         private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
 
         static {
-            GEAR_RATIO = Robot.instance.isCompetition()
+            GEAR_RATIO = Robot.getInstance().isCompetition()
                     ? Mk4SwerveModuleHelper.GearRatio.L2
                     : Mk4SwerveModuleHelper.GearRatio.L1;
         }
@@ -114,12 +114,12 @@ public class Hardware {
     public DoubleSolenoid intakeSolenoid;
 
     // climb
-    public WPI_TalonFX climbFixedMotor, climbDynamicMotor;
+    public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
 
     public DoubleSolenoid climbAngle;
 
     // index
-    public WPI_TalonFX ingestMotor, indexFeederMotor;
+    public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
     public DigitalInput ingestTopProximity;
@@ -130,8 +130,8 @@ public class Hardware {
     public DigitalInput ingestTopBlueColor;
     public DigitalInput ingestTopRedColor;
 
-    private Hardware() {
-        boolean comp = Robot.instance.isCompetition();
+    public Hardware() {
+        boolean comp = Robot.getInstance().isCompetition();
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
             frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
@@ -142,8 +142,8 @@ public class Hardware {
         if (!comp)
             return;
         if (CLIMB_ENABLED) {
-            climbDynamicMotor = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
-            climbFixedMotor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
+            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
             climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
                     CLIMB_ANGLE_DOWN_SOLENOID);
         }
@@ -153,8 +153,8 @@ public class Hardware {
                     INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {
-            ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
-            indexFeederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+            ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+            feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
             ingestTopProximity = new DigitalInput(INGEST_TOP_PROXIMITY);
@@ -177,7 +177,4 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
     }
-
-    // Singleton
-    public static final Hardware instance = new Hardware();
 }

@@ -5,11 +5,11 @@ import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 
 public class ClimbMidToHighCommand extends SequentialCommandGroup {
-    public ClimbMidToHighCommand() {
-        var subsystem = ClimbSubsystem.instance;
 
+    public ClimbMidToHighCommand(ClimbSubsystem subsystem) {
         subsystem.setAutoClimbState(AutoClimbState.MID_HIGH);
-        addCommands(new ExtendFixedHookCommand(),
-                new RetractFixedHookCommand());
+        addCommands(new ExtendFixedHookCommand(subsystem),
+                new RetractFixedHookCommand(subsystem));
     }
+
 }

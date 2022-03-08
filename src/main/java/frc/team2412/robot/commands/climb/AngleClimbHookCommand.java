@@ -8,8 +8,8 @@ public class AngleClimbHookCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public AngleClimbHookCommand() {
-        this.subsystem = ClimbSubsystem.instance;
+    public AngleClimbHookCommand(ClimbSubsystem subsystem) {
+        this.subsystem = subsystem;
         addRequirements(subsystem);
     }
 

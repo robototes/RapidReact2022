@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Hardware;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.AutoClimbState;
 import frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.SolenoidState;
 import io.github.oblarg.oblog.Loggable;
@@ -102,12 +101,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    private ClimbSubsystem() {
-        var hardware = Hardware.instance;
-
+    public ClimbSubsystem(WPI_TalonFX climbFixedMotor, WPI_TalonFX climbDynamicMotor, DoubleSolenoid climbAngle) {
         setName("ClimbSubsystem");
-        this.climbFixedMotor = hardware.climbFixedMotor;
-        this.climbDynamicMotor = hardware.climbDynamicMotor;
+        this.climbFixedMotor = climbFixedMotor;
+        this.climbDynamicMotor = climbDynamicMotor;
         // solenoid = climbAngle;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
@@ -292,6 +289,4 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         climbFixedMotor.set(ControlMode.Position, (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
     }
 
-    // Singleton
-    public static final ClimbSubsystem instance = new ClimbSubsystem();
 }

@@ -16,13 +16,13 @@ public class IntakeBitmapCommand extends CommandBase {
         // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed, ingestspeed,
         // feederspeed, misfire
         // spotless:off
+        // @formatter:off
         A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "no balls in system"),
         B(true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"),
         C(false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, "Ball in Feeder"),
         D(true, true, 0, 0, 0, "Ball in both");
-
-
         // spotless:on
+        // @formatter:on
 
         private boolean ingestSensor, feederSensor;
         private double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;

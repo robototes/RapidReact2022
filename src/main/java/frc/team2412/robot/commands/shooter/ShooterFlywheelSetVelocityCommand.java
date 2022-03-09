@@ -7,7 +7,7 @@ public class ShooterFlywheelSetVelocityCommand extends InstantCommand {
     /**
      * Subsystems: {@link ShooterSubsystem}
      */
-    public ShooterFlywheelSetVelocityCommand(ShooterSubsystem shooter, double velocity) {
-        super(() -> shooter.setFlywheelRPM(velocity), shooter);
+    public ShooterFlywheelSetVelocityCommand(double velocity) {
+        super(() -> ShooterSubsystem.instance.setFlywheelRPM(velocity), ShooterSubsystem.instance);
     }
 }

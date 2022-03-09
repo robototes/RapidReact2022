@@ -17,8 +17,6 @@ public class ShooterDiagnosticCommand extends SequentialCommandGroup {
                         (ShooterConstants.MIN_TURRET_ANGLE + ShooterConstants.MAX_TURRET_ANGLE) / 2),
                 new ShooterHoodSetConstantAngleCommand(ShooterConstants.MAX_HOOD_ANGLE),
                 new ShooterHoodSetConstantAngleCommand(ShooterConstants.MIN_HOOD_ANGLE),
-                new ShooterFlywheelStartCommand(),
-                new WaitCommand(1),
-                new ShooterFlywheelStopCommand());
+                new ShooterFlywheelStartCommand(), new WaitCommand(1), new ShooterFlywheelStopCommand());
     }
 }

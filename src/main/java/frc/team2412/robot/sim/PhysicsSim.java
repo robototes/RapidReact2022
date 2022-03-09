@@ -10,8 +10,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 
 public class PhysicsSim {
     /**
-     * Returns a random number between min and max with values near min and max having a higher
-     * probability.
+     * Returns a random number between min and max with values near min and max having a higher probability.
      *
      * @param min
      *            The minimum value produced.
@@ -23,7 +22,8 @@ public class PhysicsSim {
         return (max + min) / 2 + (max - min) / 2 * Math.sin(Math.random() * 2 * Math.PI);
         // CTRE example:
         // "scales a random domain of [0, 2pi] to [min, max] while prioritizing the peaks"
-        // return (max - min) / 2 * Math.sin(Math.IEEEremainder(Math.random(), 2 * Math.PI)) + (max + min) /
+        // return (max - min) / 2 * Math.sin(Math.IEEEremainder(Math.random(), 2 * Math.PI)) + (max
+        // + min) /
         // 2;
     }
 

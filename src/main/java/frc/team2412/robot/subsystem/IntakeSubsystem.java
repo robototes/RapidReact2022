@@ -102,8 +102,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor inwards and updates motor state.
-     * Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor inwards and updates motor state. Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeIn() {
         if (isIntakeExtended()) {
@@ -113,8 +112,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor outwards and updates motor state.
-     * Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor outwards and updates motor state. Runs if Intake is extended which is when the solenoid is retracted.
      */
     public void intakeOut() {
         if (isIntakeExtended()) {

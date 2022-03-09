@@ -16,8 +16,7 @@ public class IntakeTestCommand extends SequentialCommandGroup {
                 new DiagnosticIntakeCommandGroup(), new WaitCommand(2),
 
                 // test if motors run despite solenoid not being extended
-                new IntakeMotorInCommand(), new WaitCommand(0.5),
-                new IntakeMotorOutCommand(), new WaitCommand(0.5),
+                new IntakeMotorInCommand(), new WaitCommand(0.5), new IntakeMotorOutCommand(), new WaitCommand(0.5),
                 new IntakeStopCommand(), new WaitCommand(0.5));
     }
 }

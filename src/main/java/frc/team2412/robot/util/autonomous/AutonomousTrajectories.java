@@ -14,33 +14,20 @@ public class AutonomousTrajectories {
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
         squarePathAuto = new Trajectory(
-                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-                        .lineTo(new Vector2(-24, 0))
-                        .lineTo(new Vector2(-24, 24))
-                        .lineTo(new Vector2(0, 24))
-                        .lineTo(new Vector2(0, 0))
-                        .build(),
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO).lineTo(new Vector2(-24, 0))
+                        .lineTo(new Vector2(-24, 24)).lineTo(new Vector2(0, 24)).lineTo(new Vector2(0, 0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
 
         linePathAuto = new Trajectory(
-                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-                        .lineTo(new Vector2(24, 0))
-                        .build(),
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO).lineTo(new Vector2(24, 0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
 
         starPathAuto = new Trajectory(
-                new SimplePathBuilder(new Vector2(12, 0), Rotation2.ZERO)
-                        .lineTo(new Vector2(24, 12))
-                        .lineTo(new Vector2(36, 0))
-                        .lineTo(new Vector2(30, 18))
-                        .lineTo(new Vector2(42, 30))
-                        .lineTo(new Vector2(30, 30))
-                        .lineTo(new Vector2(24, 42), Rotation2.fromDegrees(90))
-                        .lineTo(new Vector2(18, 30), Rotation2.fromDegrees(0))
-                        .lineTo(new Vector2(6, 30))
-                        .lineTo(new Vector2(18, 18))
-                        .lineTo(new Vector2(12, 0))
-                        .build(),
+                new SimplePathBuilder(new Vector2(12, 0), Rotation2.ZERO).lineTo(new Vector2(24, 12))
+                        .lineTo(new Vector2(36, 0)).lineTo(new Vector2(30, 18)).lineTo(new Vector2(42, 30))
+                        .lineTo(new Vector2(30, 30)).lineTo(new Vector2(24, 42), Rotation2.fromDegrees(90))
+                        .lineTo(new Vector2(18, 30), Rotation2.fromDegrees(0)).lineTo(new Vector2(6, 30))
+                        .lineTo(new Vector2(18, 18)).lineTo(new Vector2(12, 0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
     }
 

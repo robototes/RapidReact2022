@@ -38,42 +38,27 @@ public class Hardware {
         private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
 
         static {
-            GEAR_RATIO = Robot.instance.isCompetition()
-                    ? Mk4SwerveModuleHelper.GearRatio.L2
+            GEAR_RATIO = Robot.instance.isCompetition() ? Mk4SwerveModuleHelper.GearRatio.L2
                     : Mk4SwerveModuleHelper.GearRatio.L1;
         }
 
-        public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(
-                GEAR_RATIO,
-                DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
-                DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
-                DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
-                DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
-        public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
-                GEAR_RATIO,
-                DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
-                DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
-                DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
-                DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
-        public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
-                GEAR_RATIO,
-                DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
-                DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
-                DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
+        public static final Mk4Configuration FRONT_LEFT_CONFIG = new Mk4Configuration(GEAR_RATIO,
+                DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
+                DRIVETRAIN_FRONT_LEFT_ENCODER_PORT, DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
+        public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(GEAR_RATIO,
+                DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR, DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
+                DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT, DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
+        public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(GEAR_RATIO,
+                DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR, DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
                 DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
-        public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
-                GEAR_RATIO,
-                DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
-                DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
-                DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
-                DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET);
+        public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(GEAR_RATIO,
+                DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR, DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
+                DRIVETRAIN_BACK_RIGHT_ENCODER_PORT, DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET);
 
         public static final double MODULE_MAX_RPM = 6000.0;
-        public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio()
-                .getConfiguration()
-                .getWheelDiameter() * Math.PI *
-                FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction() * MODULE_MAX_RPM
-                / 60.0;
+        public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio().getConfiguration()
+                .getWheelDiameter() * Math.PI * FRONT_LEFT_CONFIG.getRatio().getConfiguration().getDriveReduction()
+                * MODULE_MAX_RPM / 60.0;
 
         public static final int GYRO_PORT = 62;
 
@@ -90,8 +75,7 @@ public class Hardware {
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
                 INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
-                INGEST_TOP_BLUE = 7,
-                INGEST_TOP_PROXIMITY = 2;
+                INGEST_TOP_BLUE = 7, INGEST_TOP_PROXIMITY = 2;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,

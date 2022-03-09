@@ -29,21 +29,18 @@ public class SwerveControllerCommand extends CommandBase {
     private final DrivebaseSubsystem drivebase;
 
     /**
-     * Subsystems: {@link DrivebaseSubsystem}
-     * Constructs a new SwerveControllerCommand that when executed will follow the provided trajectory.
-     * This command will not return output voltages but rather raw module states from the position
-     * controllers which need to be put into a velocity PID.
+     * Subsystems: {@link DrivebaseSubsystem} Constructs a new SwerveControllerCommand that when executed will follow
+     * the provided trajectory. This command will not return output voltages but rather raw module states from the
+     * position controllers which need to be put into a velocity PID.
      *
      * <p>
-     * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is
-     * left to the user, since it is not appropriate for paths with nonstationary endstates.
+     * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is left to the
+     * user, since it is not appropriate for paths with nonstationary endstates.
      *
      * @param trajectory
      *            The trajectory to follow.
      * @param pose
-     *            A function that supplies the robot pose - use one of the odometry
-     *            classes to
-     *            provide this.
+     *            A function that supplies the robot pose - use one of the odometry classes to provide this.
      * @param kinematics
      *            The kinematics for the robot drivetrain.
      * @param xController
@@ -53,9 +50,7 @@ public class SwerveControllerCommand extends CommandBase {
      * @param thetaController
      *            The Trajectory Tracker PID controller for angle for the robot.
      * @param desiredRotation
-     *            The angle that the drivetrain should be facing. This is sampled at
-     *            each
-     *            time step.
+     *            The angle that the drivetrain should be facing. This is sampled at each time step.
      * @param outputModuleStates
      *            The raw output module states from the position controllers.
      * @param requirements
@@ -85,33 +80,23 @@ public class SwerveControllerCommand extends CommandBase {
     }
 
     /**
-     * Constructs a new SwerveControllerCommand that when executed will follow the
-     * provided
-     * trajectory. This command will not return output voltages but rather raw
-     * module states from the
-     * position controllers which need to be put into a velocity PID.
+     * Constructs a new SwerveControllerCommand that when executed will follow the provided trajectory. This command
+     * will not return output voltages but rather raw module states from the position controllers which need to be put
+     * into a velocity PID.
      *
      * <p>
-     * Note: The controllers will *not* set the outputVolts to zero upon completion
-     * of the path-
-     * this is left to the user, since it is not appropriate for paths with
-     * nonstationary endstates.
+     * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is left to the
+     * user, since it is not appropriate for paths with nonstationary endstates.
      *
      * <p>
-     * Note 2: The final rotation of the robot will be set to the rotation of the
-     * final pose in the
-     * trajectory. The robot will not follow the rotations from the poses at each
-     * timestep. If
-     * alternate rotation behavior is desired, the other constructor with a supplier
-     * for rotation
-     * should be used.
+     * Note 2: The final rotation of the robot will be set to the rotation of the final pose in the trajectory. The
+     * robot will not follow the rotations from the poses at each timestep. If alternate rotation behavior is desired,
+     * the other constructor with a supplier for rotation should be used.
      *
      * @param trajectory
      *            The trajectory to follow.
      * @param pose
-     *            A function that supplies the robot pose - use one of the odometry
-     *            classes to
-     *            provide this.
+     *            A function that supplies the robot pose - use one of the odometry classes to provide this.
      * @param kinematics
      *            The kinematics for the robot drivetrain.
      * @param xController
@@ -126,25 +111,12 @@ public class SwerveControllerCommand extends CommandBase {
      *            The subsystems to require.
      */
     @SuppressWarnings("ParameterName")
-    public SwerveControllerCommand(
-            Trajectory trajectory,
-            Supplier<Pose2d> pose,
-            SwerveDriveKinematics kinematics,
-            PIDController xController,
-            PIDController yController,
-            ProfiledPIDController thetaController,
-            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase,
-            Subsystem... requirements) {
-        this(
-                trajectory,
-                pose,
-                kinematics,
-                xController,
-                yController,
-                thetaController,
+    public SwerveControllerCommand(Trajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
+            PIDController xController, PIDController yController, ProfiledPIDController thetaController,
+            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase, Subsystem... requirements) {
+        this(trajectory, pose, kinematics, xController, yController, thetaController,
                 () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
-                outputModuleStates,
-                requirements);
+                outputModuleStates, requirements);
     }
 
     @Override

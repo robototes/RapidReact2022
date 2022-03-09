@@ -17,13 +17,11 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
     NetworkTableEntry intakeStatus, shooterStatus, indexStatus, climbStatus;
 
     /**
-     * Subsystems: {@link ClimbSubsystem}, {@link IndexSubsystem}, {@link IntakeSubsystem},
-     * {@link ShooterSubsystem}
+     * Subsystems: {@link ClimbSubsystem}, {@link IndexSubsystem}, {@link IntakeSubsystem}, {@link ShooterSubsystem}
      */
     public DiagnosticRobotCommandGroup() {
         /*
-         * The Shuffleboard having issue of
-         * cannot properly display more than 3 rows of entry in one column
+         * The Shuffleboard having issue of cannot properly display more than 3 rows of entry in one column
          */
         indexStatus = tab.add("Index Status", "Waiting").withPosition(0, 0).withSize(1, 1).getEntry();
         shooterStatus = tab.add("Shooter Status", "Waiting").withPosition(1, 0).withSize(1, 1).getEntry();
@@ -31,21 +29,13 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
         climbStatus = tab.add("Climb Status", "Waiting").withPosition(3, 0).withSize(1, 1).getEntry();
         addRequirements(IntakeSubsystem.instance, ShooterSubsystem.instance, IndexSubsystem.instance,
                 ClimbSubsystem.instance);
-        addCommands(
-                new InstantCommand(() -> intakeStatus.setString("In Progress")),
-                new DiagnosticIntakeCommandGroup(),
-                new InstantCommand(() -> intakeStatus.setString("Finished")),
-                new WaitCommand(5),
-                new InstantCommand(() -> shooterStatus.setString("In Progress")),
-                new DiagnosticShooterCommandGroup(),
-                new InstantCommand(() -> shooterStatus.setString("Finished")),
-                new WaitCommand(5),
-                new InstantCommand(() -> indexStatus.setString("In Progress")),
-                new DiagnosticIndexCommandGroup(),
-                new InstantCommand(() -> indexStatus.setString("Finished")),
-                new WaitCommand(5),
-                new InstantCommand(() -> climbStatus.setString("In Progress")),
-                new DiagnosticClimbCommandGroup(),
+        addCommands(new InstantCommand(() -> intakeStatus.setString("In Progress")), new DiagnosticIntakeCommandGroup(),
+                new InstantCommand(() -> intakeStatus.setString("Finished")), new WaitCommand(5),
+                new InstantCommand(() -> shooterStatus.setString("In Progress")), new DiagnosticShooterCommandGroup(),
+                new InstantCommand(() -> shooterStatus.setString("Finished")), new WaitCommand(5),
+                new InstantCommand(() -> indexStatus.setString("In Progress")), new DiagnosticIndexCommandGroup(),
+                new InstantCommand(() -> indexStatus.setString("Finished")), new WaitCommand(5),
+                new InstantCommand(() -> climbStatus.setString("In Progress")), new DiagnosticClimbCommandGroup(),
                 new InstantCommand(() -> climbStatus.setString("Finished")));
     }
 }

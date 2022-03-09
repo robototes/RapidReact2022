@@ -93,9 +93,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
-        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
-                .withPosition(0, 0)
-                .withSize(2, 1)
+        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD).withPosition(0, 0).withSize(2, 1)
                 .getEntry();
 
         this.ingestMotor = hardware.ingestMotor;

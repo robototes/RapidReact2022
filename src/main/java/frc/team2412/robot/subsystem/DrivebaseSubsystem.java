@@ -45,22 +45,19 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.072746,
-                0.0032181,
-                0.30764);
+                0.072746, 0.0032181, 0.30764);
 
         // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
+                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was
+                                                                                    // 11.0
                 new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
                 new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
                 // in inches
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-                new MaxAccelerationConstraint(3),
-                new CentripetalAccelerationConstraint(15 * 12.0)
-        };
+                new MaxAccelerationConstraint(3), new CentripetalAccelerationConstraint(15 * 12.0) };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
@@ -72,8 +69,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.1, 0.0, 0.0),
-            new PidConstants(0, 0.0, 0.0),
+            new PidConstants(0.1, 0.0, 0.0), new PidConstants(0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -141,34 +137,21 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 hardware.backRightModule };
         this.moduleMaxVelocityMetersPerSec = HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
-        odometryXEntry = tab.add("X", 0.0)
-                .withPosition(0, 0)
-                .withSize(1, 1)
-                .getEntry();
-        odometryYEntry = tab.add("Y", 0.0)
-                .withPosition(0, 1)
-                .withSize(1, 1)
-                .getEntry();
-        odometryAngleEntry = tab.add("Angle", 0.0)
-                .withPosition(0, 2)
-                .withSize(1, 1)
-                .getEntry();
+        odometryXEntry = tab.add("X", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
+        odometryYEntry = tab.add("Y", 0.0).withPosition(0, 1).withSize(1, 1).getEntry();
+        odometryAngleEntry = tab.add("Angle", 0.0).withPosition(0, 2).withSize(1, 1).getEntry();
         tab.addNumber("Trajectory X", () -> {
             if (follower.getLastState() == null) {
                 return 0.0;
             }
             return follower.getLastState().getPathState().getPosition().x;
-        })
-                .withPosition(1, 0)
-                .withSize(1, 1);
+        }).withPosition(1, 0).withSize(1, 1);
         tab.addNumber("Trajectory Y", () -> {
             if (follower.getLastState() == null) {
                 return 0.0;
             }
             return follower.getLastState().getPathState().getPosition().y;
-        })
-                .withPosition(1, 1)
-                .withSize(1, 1);
+        }).withPosition(1, 1).withSize(1, 1);
 
         tab.addNumber("Rotation Voltage", () -> {
             HolonomicDriveSignal signal;
@@ -183,26 +166,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
-        speedModifier = tab.add("Speed Modifier", 0.5f)
-                .withPosition(2, 1)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0))
-                .getEntry();
+        speedModifier = tab.add("Speed Modifier", 0.5f).withPosition(2, 1).withSize(2, 1)
+                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0.0, "max", 1.0)).getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
-        antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(3, 1)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
-                .getEntry();
+        antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT).withPosition(3, 1).withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
-        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
-                .withPosition(3, 2)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
-                .getEntry();
+        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT).withPosition(3, 2).withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
@@ -247,7 +220,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
             return getPose().rotation;
-            // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
+            // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() :
+            // getPose().rotation;
         }
     }
 
@@ -275,8 +249,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void resetGyroAngle(Rotation2 angle) {
         synchronized (sensorLock) {
-            gyroscope.setAdjustmentAngle(
-                    gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
+            gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
             tipController.setTargetPosition(getGyroscopeXY());
         }
     }
@@ -302,7 +275,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         double angularVelocity;
         synchronized (sensorLock) {
             angle = gyroscope.getAngle();
-            // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
+            // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) :
+            // angle;
             angularVelocity = gyroscope.getRate();
         }
 
@@ -325,13 +299,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (driveSignal.isFieldOriented()) {
-            chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getAngle()),
+            chassisVelocity = new ChassisVelocity(driveSignal.getTranslation().rotateBy(getAngle()),
                     driveSignal.getRotation());
         } else {
-            chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation(),
-                    driveSignal.getRotation());
+            chassisVelocity = new ChassisVelocity(driveSignal.getTranslation(), driveSignal.getRotation());
         }
 
         Vector2[] moduleOutputs = swerveKinematics.toModuleVelocities(chassisVelocity);
@@ -344,8 +315,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {
         HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
-                new Vector2(
-                        (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
+                new Vector2((chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
                         (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
                 chassisSpeeds.omegaRadiansPerSecond, true);
 
@@ -368,18 +338,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         updateOdometry(time, dt);
 
         HolonomicDriveSignal signal;
-        Optional<HolonomicDriveSignal> trajectorySignal = follower.update(
-                getPose(),
-                getVelocity(),
-                getAngularVelocity(),
-                time,
-                dt);
+        Optional<HolonomicDriveSignal> trajectorySignal = follower.update(getPose(), getVelocity(),
+                getAngularVelocity(), time, dt);
         if (trajectorySignal.isPresent()) {
             signal = trajectorySignal.get();
-            signal = new HolonomicDriveSignal(
-                    signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
-                    signal.getRotation() / RobotController.getBatteryVoltage(),
-                    signal.isFieldOriented());
+            signal = new HolonomicDriveSignal(signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
+                    signal.getRotation() / RobotController.getBatteryVoltage(), signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
 

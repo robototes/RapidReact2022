@@ -13,7 +13,6 @@ public class ClimbMidToHighCommand extends SequentialCommandGroup {
         var subsystem = ClimbSubsystem.instance;
 
         subsystem.setAutoClimbState(AutoClimbState.MID_HIGH);
-        addCommands(new ExtendFixedHookCommand(),
-                new RetractFixedHookCommand());
+        addCommands(new ExtendFixedHookCommand(), new RetractFixedHookCommand());
     }
 }

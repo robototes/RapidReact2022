@@ -9,8 +9,8 @@ public class ShooterIdleCommand extends CommandBase {
     /**
      * Subsystems: {@link ShooterSubsystem}
      */
-    public ShooterIdleCommand(ShooterSubsystem subsystem) {
-        shooterSubsystem = subsystem;
+    public ShooterIdleCommand() {
+        shooterSubsystem = ShooterSubsystem.instance;
         addRequirements(shooterSubsystem);
     }
 }

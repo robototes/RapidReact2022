@@ -4,7 +4,6 @@ import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_I
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
@@ -13,14 +12,12 @@ public class IntakeBitmapCommand extends CommandBase {
 
     // bitmap
     public enum Bitmap {
-        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed, ingestspeed,
+        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed,
+        // ingestspeed,
         // feederspeed, misfire
-        // spotless:off
-        A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "no balls in system"), B(true, false,
-                INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"), C(false, true, INTAKE_IN_SPEED,
-                        INDEX_IN_SPEED, 0, "Ball in Feeder"), D(true, true, 0, 0, 0, "Ball in both");
-
-        // spotless:on
+        A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "no balls in system"),
+        B(true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"),
+        C(false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, "Ball in Feeder"), D(true, true, 0, 0, 0, "Ball in both");
 
         private boolean ingestSensor, feederSensor;
         private double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;
@@ -38,8 +35,7 @@ public class IntakeBitmapCommand extends CommandBase {
         }
 
         public boolean equals(boolean ingestSensor, boolean feederSensor) {
-            return this.ingestSensor == ingestSensor &&
-                    this.feederSensor == feederSensor;
+            return this.ingestSensor == ingestSensor && this.feederSensor == feederSensor;
         }
 
         public String toString() {

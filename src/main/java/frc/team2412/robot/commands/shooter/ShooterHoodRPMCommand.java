@@ -10,8 +10,8 @@ public class ShooterHoodRPMCommand extends CommandBase {
     /**
      * Subsystems: {@link ShooterSubsystem}
      */
-    public ShooterHoodRPMCommand(ShooterSubsystem shooter, double targetRPM, double targetHood) {
-        this.shooter = shooter;
+    public ShooterHoodRPMCommand(double targetRPM, double targetHood) {
+        this.shooter = ShooterSubsystem.instance;
         rpm = targetRPM;
         hood = targetHood;
         addRequirements(shooter);

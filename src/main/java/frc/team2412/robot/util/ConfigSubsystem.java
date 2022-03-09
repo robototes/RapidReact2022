@@ -28,10 +28,8 @@ public abstract class ConfigSubsystem extends SubsystemBase implements Loggable 
     }
 
     public void generateConstants(Class<?> root) {
-        Arrays.stream(root.getDeclaredClasses()).filter(
-                c -> c.isAnnotationPresent(Constants.class) &&
-                        c.getDeclaredAnnotation(Constants.class).value().isAssignableFrom(root))
-                .forEach(c -> {
+        Arrays.stream(root.getDeclaredClasses()).filter(c -> c.isAnnotationPresent(Constants.class)
+                && c.getDeclaredAnnotation(Constants.class).value().isAssignableFrom(root)).forEach(c -> {
                     try {
                         constantRoot = (Loggable) c.newInstance();
                     } catch (InstantiationException | IllegalAccessException e) {

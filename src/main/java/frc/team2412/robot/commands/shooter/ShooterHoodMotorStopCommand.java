@@ -7,7 +7,7 @@ public class ShooterHoodMotorStopCommand extends InstantCommand {
     /**
      * Subsystems: {@link ShooterSubsystem}
      */
-    public ShooterHoodMotorStopCommand(ShooterSubsystem shooter) {
-        super(shooter::stopHoodMotor, shooter);
+    public ShooterHoodMotorStopCommand() {
+        super(ShooterSubsystem.instance::stopHoodMotor, ShooterSubsystem.instance);
     }
 }

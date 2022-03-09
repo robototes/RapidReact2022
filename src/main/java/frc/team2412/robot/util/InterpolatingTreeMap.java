@@ -45,8 +45,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     System.out.println("Line " + line + " has less than 3 items, skipping line");
                     continue;
                 } else if (items.length > 3) {
-                    System.out.println(
-                            "Line " + line + " has more than 3 items, ignoring extra items");
+                    System.out.println("Line " + line + " has more than 3 items, ignoring extra items");
                 }
 
                 double distance, angle, RPM;
@@ -116,13 +115,11 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     }
 
     /**
-     * Gets an value at a specified distance from the origin, interpolating it if there isn't an exact
-     * match.
+     * Gets an value at a specified distance from the origin, interpolating it if there isn't an exact match.
      *
      * @param key
      *            The distance to get the value from.
-     * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact
-     *         match.
+     * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact match.
      */
     public ShooterDataDistancePoint getInterpolated(Double key) {
         ShooterDataDistancePoint value = get(key);
@@ -173,8 +170,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
      * @return {@link ShooterDataDistancePoint} an interpolated value at the specified distance.
      */
     private static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor,
-            ShooterDataDistancePoint ceiling,
-            Double key) {
+            ShooterDataDistancePoint ceiling, Double key) {
         double slopeDistanceDifference = ceiling.getDistance() - floor.getDistance();
         if (slopeDistanceDifference == 0 || Double.isNaN(slopeDistanceDifference)
                 || Double.isInfinite(slopeDistanceDifference)) {
@@ -186,8 +182,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         double distanceOffset = key - floor.getDistance();
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
         double interpolateRPM = rpmSlope * distanceOffset + floor.getRPM();
-        ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle,
-                interpolateRPM);
+        ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle, interpolateRPM);
 
         return interpolatePoint;
     }

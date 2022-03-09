@@ -75,12 +75,10 @@ public class Robot extends TimedRobot implements Loggable {
         this(getTypeFromAddress());
     }
 
-    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] {
-            0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d, (byte) 0xe7
-    };
-    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] {
-            0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
-    };
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] { 0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d,
+            (byte) 0xe7 };
+    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] { 0x00, (byte) 0x80, 0x2f, 0x28, 0x40,
+            (byte) 0x82 };
 
     private static RobotType getTypeFromAddress() {
         List<byte[]> macAddresses;
@@ -143,8 +141,7 @@ public class Robot extends TimedRobot implements Loggable {
                     // noinspection AssignmentToCatchBlockParameter
                     throwable = cause;
                 }
-                DriverStation.reportError(
-                        "Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+                DriverStation.reportError("Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
 
                 try {
                     sleep(2000);
@@ -161,8 +158,7 @@ public class Robot extends TimedRobot implements Loggable {
         subsystems = Subsystems.instance;
         controls = Controls.instance;
         if (SubsystemConstants.DRIVE_ENABLED) {
-            updateManager = new UpdateManager(
-                    subsystems.drivebaseSubsystem);
+            updateManager = new UpdateManager(subsystems.drivebaseSubsystem);
             updateManager.startLoop(5.0e-3);
         }
 
@@ -174,14 +170,11 @@ public class Robot extends TimedRobot implements Loggable {
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
-                .onCommandInitialize(
-                        command -> System.out.println("Command initialized: " + command.getName()));
+                .onCommandInitialize(command -> System.out.println("Command initialized: " + command.getName()));
         CommandScheduler.getInstance()
-                .onCommandInterrupt(
-                        command -> System.out.println("Command interrupted: " + command.getName()));
+                .onCommandInterrupt(command -> System.out.println("Command interrupted: " + command.getName()));
         CommandScheduler.getInstance()
-                .onCommandFinish(
-                        command -> System.out.println("Command finished: " + command.getName()));
+                .onCommandFinish(command -> System.out.println("Command finished: " + command.getName()));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
             controlAuto = new Thread(new Runnable() {
@@ -247,16 +240,16 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void teleopInit() {
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.setDefaultCommand(
-                    new DriveCommand(controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
-                            controls.driveController.getRightXAxis()));
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(controls.driveController.getLeftYAxis(),
+                    controls.driveController.getLeftXAxis(), controls.driveController.getRightXAxis()));
         }
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
         if (subsystems.shooterSubsystem != null) {
             // subsystems.shooterSubsystem.setDefaultCommand(new
-            // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
+            // ShooterTargetCommand(subsystems.shooterSubsystem,
+            // subsystems.shooterVisionSubsystem));
         }
     }
 
@@ -272,7 +265,8 @@ public class Robot extends TimedRobot implements Loggable {
         if (CLIMB_ENABLED) {
             // Motor, acceleration time from 0 to full in seconds, max velocity
             physicsSim.addTalonFX(hardware.climbFixedMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 *
+            // TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);

@@ -9,8 +9,7 @@ public class NeutralClimbHookCommand extends CommandBase {
     private final ClimbSubsystem subsystem;
 
     /**
-     * Subsystems: {@link ClimbSubsystem}
-     * Sets the climb angled hook to the neutral position.
+     * Subsystems: {@link ClimbSubsystem} Sets the climb angled hook to the neutral position.
      */
     public NeutralClimbHookCommand() {
         this.subsystem = ClimbSubsystem.instance;

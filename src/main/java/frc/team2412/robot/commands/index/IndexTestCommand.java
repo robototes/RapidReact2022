@@ -15,16 +15,11 @@ public class IndexTestCommand extends SequentialCommandGroup {
         this.subsystem = IndexSubsystem.instance;
         addRequirements(subsystem);
 
-        addCommands(
-                new InstantCommand(() -> subsystem.ingestMotorIn()),
-                new WaitCommand(1),
-                new InstantCommand(() -> subsystem.ingestMotorOut()),
-                new WaitCommand(1),
+        addCommands(new InstantCommand(() -> subsystem.ingestMotorIn()), new WaitCommand(1),
+                new InstantCommand(() -> subsystem.ingestMotorOut()), new WaitCommand(1),
                 new InstantCommand(() -> subsystem.ingestMotorStop()),
-                new InstantCommand(() -> subsystem.feederMotorIn()),
-                new WaitCommand(1),
-                new InstantCommand(() -> subsystem.feederMotorOut()),
-                new WaitCommand(1),
+                new InstantCommand(() -> subsystem.feederMotorIn()), new WaitCommand(1),
+                new InstantCommand(() -> subsystem.feederMotorOut()), new WaitCommand(1),
                 new InstantCommand(() -> subsystem.feederMotorStop()));
     }
 }

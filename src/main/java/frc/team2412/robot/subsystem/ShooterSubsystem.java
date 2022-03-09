@@ -156,9 +156,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setInverted(true);
         hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
         hoodMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        // Current hood setup plan start hood at 0, below MIN_HOOD_ANGLE
         hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
                 (float) (MAX_HOOD_ANGLE / HOOD_REVS_TO_DEGREES));
+        // Current hood setup plan start hood at 0, below MIN_HOOD_ANGLE
         hoodMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
         hoodMotor.setSmartCurrentLimit(20);
         hoodMotor.setClosedLoopRampRate(1);

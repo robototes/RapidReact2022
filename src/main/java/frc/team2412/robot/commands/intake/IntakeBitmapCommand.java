@@ -12,8 +12,7 @@ public class IntakeBitmapCommand extends CommandBase {
 
     // bitmap
     public enum Bitmap {
-        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed,
-        // ingestspeed,
+        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed, ingestspeed,
         // feederspeed, misfire
         A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "no balls in system"),
         B(true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"),

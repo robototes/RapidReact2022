@@ -18,12 +18,9 @@ public class SparkMaxSimProfile extends SimProfile {
         public static final double FREE_SPEED_RPM = 11000;
     }
 
-    // Note: REVPhysicsSim is supposed to have a singleton, but instantiating separate instances
-    // works.
-    // Each sim has a separate ArrayList, though, so having separate sims with only one motor is
-    // inefficient. The reason to have separate instances for each sim profile is so that running
-    // one
-    // won't affect others.
+    // Note: REVPhysicsSim is supposed to have a singleton, but instantiating separate instances works. Each
+    // sim has a separate ArrayList, though, so having separate sims with only one motor is inefficient. The
+    // reason to have separate instances for each sim profile is so that running one won't affect others.
     private final REVPhysicsSim sim = new REVPhysicsSim();
 
     public SparkMaxSimProfile(CANSparkMax spark, double stallTorque, double freeSpeed) {

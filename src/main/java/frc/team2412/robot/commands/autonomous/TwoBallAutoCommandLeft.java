@@ -25,8 +25,7 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
      * {@link ShooterVisionSubsystem}
      */
     public TwoBallAutoCommandLeft() {
-        // Robot should be pressed up on the left side of the lower exit closest to the drivers,
-        // facing
+        // Robot should be pressed up on the left side of the lower exit closest to the drivers, facing
         // directly away from the hub with the turret facing towards it
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(new Vector2(337, 133), Rotation2.fromDegrees(-26.4))

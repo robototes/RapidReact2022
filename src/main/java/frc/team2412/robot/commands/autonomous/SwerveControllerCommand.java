@@ -29,8 +29,8 @@ public class SwerveControllerCommand extends CommandBase {
     private final DrivebaseSubsystem drivebase;
 
     /**
-     * Subsystems: {@link DrivebaseSubsystem} Constructs a new SwerveControllerCommand that when executed will
-     * follow the provided trajectory. This command will not return output voltages but rather raw module
+     * Subsystems: {@link DrivebaseSubsystem}. Constructs a new SwerveControllerCommand that when executed
+     * will follow the provided trajectory. This command will not return output voltages but rather raw module
      * states from the position controllers which need to be put into a velocity PID.
      *
      * <p>
@@ -82,9 +82,9 @@ public class SwerveControllerCommand extends CommandBase {
     }
 
     /**
-     * Constructs a new SwerveControllerCommand that when executed will follow the provided trajectory. This
-     * command will not return output voltages but rather raw module states from the position controllers
-     * which need to be put into a velocity PID.
+     * Subsystems: {@link DrivebaseSubsystem}. Constructs a new SwerveControllerCommand that when executed
+     * will follow the provided trajectory. This command will not return output voltages but rather raw module
+     * states from the position controllers which need to be put into a velocity PID.
      *
      * <p>
      * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is left
@@ -116,7 +116,7 @@ public class SwerveControllerCommand extends CommandBase {
     public SwerveControllerCommand(Trajectory trajectory, Supplier<Pose2d> pose,
             SwerveDriveKinematics kinematics, PIDController xController, PIDController yController,
             ProfiledPIDController thetaController, Consumer<ChassisSpeeds> outputModuleStates,
-            DrivebaseSubsystem drivebase, Subsystem... requirements) {
+            Subsystem... requirements) {
         this(trajectory, pose, kinematics, xController, yController, thetaController,
                 () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
                 outputModuleStates, requirements);

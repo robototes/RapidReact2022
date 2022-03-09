@@ -13,10 +13,9 @@ public class AutonomousTrajectories {
     private Trajectory linePathAuto;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
-        squarePathAuto = new Trajectory(
-                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO).lineTo(new Vector2(-24, 0))
-                        .lineTo(new Vector2(-24, 24)).lineTo(new Vector2(0, 24)).lineTo(new Vector2(0, 0)).build(),
-                trajectoryConstraints, SAMPLE_DISTANCE);
+        squarePathAuto = new Trajectory(new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+                .lineTo(new Vector2(-24, 0)).lineTo(new Vector2(-24, 24)).lineTo(new Vector2(0, 24))
+                .lineTo(new Vector2(0, 0)).build(), trajectoryConstraints, SAMPLE_DISTANCE);
 
         linePathAuto = new Trajectory(
                 new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO).lineTo(new Vector2(24, 0)).build(),

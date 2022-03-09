@@ -13,6 +13,7 @@ public class ClimbHighToTravCommand extends SequentialCommandGroup {
         var subsystem = ClimbSubsystem.instance;
 
         subsystem.setAutoClimbState(AutoClimbState.HIGH_TRAV);
-        addCommands(new AngleClimbHookCommand(), new ExtendAngledHookCommand(), new RetractAngledHookCommand());
+        addCommands(new AngleClimbHookCommand(), new ExtendAngledHookCommand(),
+                new RetractAngledHookCommand());
     }
 }

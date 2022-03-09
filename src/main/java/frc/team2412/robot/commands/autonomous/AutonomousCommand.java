@@ -35,7 +35,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final double WHEEL_BASE = 1.0;
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
-                new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2), new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2),
+                new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2),
                 new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2),
                 new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2));
     }

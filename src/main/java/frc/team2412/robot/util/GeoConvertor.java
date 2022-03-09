@@ -10,8 +10,8 @@ import org.frcteam2910.common.math.Vector2;
 
 public class GeoConvertor {
     public static Pose2d rigidInchesToPoseMeters(RigidTransform2 trans) {
-        return new Pose2d(Units.inchesToMeters(trans.translation.x), Units.inchesToMeters(trans.translation.y),
-                rotation2toRotation2d(trans.rotation));
+        return new Pose2d(Units.inchesToMeters(trans.translation.x),
+                Units.inchesToMeters(trans.translation.y), rotation2toRotation2d(trans.rotation));
     }
 
     public static RigidTransform2 poseToRigid(Pose2d pose) {

@@ -49,7 +49,7 @@ public class Robot extends TimedRobot implements Loggable {
     private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
     enum RobotType {
-        COMPETITION, AUTOMATED_TEST, DRIVEBASE;
+                    COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
     public Controls controls;
@@ -66,7 +66,8 @@ public class Robot extends TimedRobot implements Loggable {
     public TestingSubsystem testingSubsystem;
 
     protected Robot(RobotType type) {
-        System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
+        System.out.println(
+                "Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
     }
@@ -75,8 +76,8 @@ public class Robot extends TimedRobot implements Loggable {
         this(getTypeFromAddress());
     }
 
-    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] { 0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d,
-            (byte) 0xe7 };
+    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] { 0x00, (byte) 0x80, 0x2f, 0x33,
+            (byte) 0x9d, (byte) 0xe7 };
     private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] { 0x00, (byte) 0x80, 0x2f, 0x28, 0x40,
             (byte) 0x82 };
 
@@ -141,7 +142,8 @@ public class Robot extends TimedRobot implements Loggable {
                     // noinspection AssignmentToCatchBlockParameter
                     throwable = cause;
                 }
-                DriverStation.reportError("Unhandled exception: " + throwable.toString(), throwable.getStackTrace());
+                DriverStation.reportError("Unhandled exception: " + throwable.toString(),
+                        throwable.getStackTrace());
 
                 try {
                     sleep(2000);
@@ -169,10 +171,10 @@ public class Robot extends TimedRobot implements Loggable {
                 new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
         Logger.configureLoggingAndConfig(subsystems, false);
 
-        CommandScheduler.getInstance()
-                .onCommandInitialize(command -> System.out.println("Command initialized: " + command.getName()));
-        CommandScheduler.getInstance()
-                .onCommandInterrupt(command -> System.out.println("Command interrupted: " + command.getName()));
+        CommandScheduler.getInstance().onCommandInitialize(
+                command -> System.out.println("Command initialized: " + command.getName()));
+        CommandScheduler.getInstance().onCommandInterrupt(
+                command -> System.out.println("Command interrupted: " + command.getName()));
         CommandScheduler.getInstance()
                 .onCommandFinish(command -> System.out.println("Command finished: " + command.getName()));
 
@@ -240,8 +242,9 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void teleopInit() {
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(controls.driveController.getLeftYAxis(),
-                    controls.driveController.getLeftXAxis(), controls.driveController.getRightXAxis()));
+            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(
+                    controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
+                    controls.driveController.getRightXAxis()));
         }
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();

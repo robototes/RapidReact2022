@@ -13,6 +13,7 @@ public class ClimbGroundToMidCommand extends SequentialCommandGroup {
         var subsystem = ClimbSubsystem.instance;
 
         subsystem.setAutoClimbState(AutoClimbState.GROUND_MID);
-        addCommands(new UnangleClimbHookCommand(), new ExtendAngledHookCommand(), new RetractAngledHookCommand());
+        addCommands(new UnangleClimbHookCommand(), new ExtendAngledHookCommand(),
+                new RetractAngledHookCommand());
     }
 }

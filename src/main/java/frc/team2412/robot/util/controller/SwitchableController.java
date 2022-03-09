@@ -6,8 +6,8 @@ import org.frcteam2910.common.robot.input.XboxController;
 import java.util.*;
 
 /**
- * Controller class that maps multiple controllers to a single physical controller and allows the user to switch between
- * them
+ * Controller class that maps multiple controllers to a single physical controller and allows the user to
+ * switch between them
  *
  * @author Alex Stedman
  * @param <T>

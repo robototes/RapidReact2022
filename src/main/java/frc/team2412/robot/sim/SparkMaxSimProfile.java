@@ -8,7 +8,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 /**
  * Simulation profile for a CANSparkMax.
  *
- * Using PhysicsSim.addSparkMax() is recommended over manually creating sim profiles and adding them to the sim.
+ * Using PhysicsSim.addSparkMax() is recommended over manually creating sim profiles and adding them to the
+ * sim.
  */
 public class SparkMaxSimProfile extends SimProfile {
     public static class SparkMaxConstants {

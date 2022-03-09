@@ -56,9 +56,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90;// -200; Can barely reach -139 degrees physically 115
+        public static final double MIN_TURRET_ANGLE = -90;// -200; Can barely reach -139 degrees physically
+                                                            // 115
                                                             // tested
-        public static final double MAX_TURRET_ANGLE = 90;// 115; Can barely reach 210 degrees physically 245 tested
+        public static final double MAX_TURRET_ANGLE = 90;// 115; Can barely reach 210 degrees physically 245
+                                                            // tested
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -171,7 +173,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     // PID
     @Config(name = "Flywheel PID", columnIndex = 0, rowIndex = 0, width = 1, height = 3)
-    private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
+    private void setFlywheelPID(
+            @Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
             @Config(name = "flywheelF", defaultValueNumeric = FLYWHEEL_DEFAULT_F) double f) {
@@ -330,7 +333,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @param angle
      *            The angle (in degrees) to compare the hood's angle to.
-     * @return true if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE, false otherwise.
+     * @return true if difference between hood angle and given angle is less than HOOD_ANGLE_TOLERANCE, false
+     *         otherwise.
      */
     public boolean isHoodAtAngle(double angle) {
         return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
@@ -355,8 +359,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     /**
      * Sets the turret's target angle to the given angle.
      *
-     * If angle is too far in one direction but can be reached by rotating in the other direction, the turret will turn
-     * in that direction.
+     * If angle is too far in one direction but can be reached by rotating in the other direction, the turret
+     * will turn in that direction.
      *
      * @param angle
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
@@ -430,8 +434,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @param angle
      *            The angle (in degrees) to compare the turret's angle to.
-     * @return True if difference between turret angle and given angle is less than HOOD_ANGLE_TOLERANCE, False
-     *         otherwise.
+     * @return True if difference between turret angle and given angle is less than HOOD_ANGLE_TOLERANCE,
+     *         False otherwise.
      */
     public boolean isTurretAtAngle(double angle) {
         return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;

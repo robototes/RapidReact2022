@@ -49,12 +49,13 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         // Index Motor States
 
         public static enum IndexMotorState {
-            IN, OUT, STOPPED;
+                                            IN, OUT, STOPPED;
         }
 
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS * 1000);
+                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS,
+                CURRENT_LIMIT_TRIGGER_SECONDS * 1000);
 
     }
 
@@ -93,8 +94,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
-        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD).withPosition(0, 0).withSize(2, 1)
-                .getEntry();
+        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD).withPosition(0, 0)
+                .withSize(2, 1).getEntry();
 
         this.ingestMotor = hardware.ingestMotor;
         this.feederMotor = hardware.indexFeederMotor;

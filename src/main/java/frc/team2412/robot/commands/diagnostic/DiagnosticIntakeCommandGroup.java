@@ -15,8 +15,8 @@ public class DiagnosticIntakeCommandGroup extends SequentialCommandGroup {
      * Subsystems: {@link IntakeSubsystem}
      */
     public DiagnosticIntakeCommandGroup() {
-        super(new IntakeExtendCommand(), new WaitCommand(0.5), new IntakeMotorInCommand(), new WaitCommand(0.5),
-                new IntakeMotorOutCommand(), new WaitCommand(0.5), new IntakeStopCommand(), new WaitCommand(0.5),
-                new IntakeRetractCommand());
+        super(new IntakeExtendCommand(), new WaitCommand(0.5), new IntakeMotorInCommand(),
+                new WaitCommand(0.5), new IntakeMotorOutCommand(), new WaitCommand(0.5),
+                new IntakeStopCommand(), new WaitCommand(0.5), new IntakeRetractCommand());
     }
 }

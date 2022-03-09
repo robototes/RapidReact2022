@@ -9,8 +9,8 @@ public class ClimbTestCommand extends SequentialCommandGroup {
      * Subsystems: {@link ClimbSubsystem}
      */
     public ClimbTestCommand() {
-        addCommands(new ExtendAngledHookCommand(), new RetractAngledHookCommand(), new UnangleClimbHookCommand(),
-                new NeutralClimbHookCommand(), new AngleClimbHookCommand(), new ExtendFixedHookCommand(),
-                new RetractFixedHookCommand());
+        addCommands(new ExtendAngledHookCommand(), new RetractAngledHookCommand(),
+                new UnangleClimbHookCommand(), new NeutralClimbHookCommand(), new AngleClimbHookCommand(),
+                new ExtendFixedHookCommand(), new RetractFixedHookCommand());
     }
 }

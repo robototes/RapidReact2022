@@ -133,8 +133,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
-        modules = new SwerveModule[] { hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule,
-                hardware.backRightModule };
+        modules = new SwerveModule[] { hardware.frontLeftModule, hardware.frontRightModule,
+                hardware.backLeftModule, hardware.backRightModule };
         this.moduleMaxVelocityMetersPerSec = HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
         odometryXEntry = tab.add("X", 0.0).withPosition(0, 0).withSize(1, 1).getEntry();
@@ -167,7 +167,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         });
 
         speedModifier = tab.add("Speed Modifier", 0.5f).withPosition(2, 1).withSize(2, 1)
-                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0.0, "max", 1.0)).getEntry();
+                .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0.0, "max", 1.0))
+                .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
@@ -342,7 +343,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 getAngularVelocity(), time, dt);
         if (trajectorySignal.isPresent()) {
             signal = trajectorySignal.get();
-            signal = new HolonomicDriveSignal(signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
+            signal = new HolonomicDriveSignal(
+                    signal.getTranslation().scale(1.0 / RobotController.getBatteryVoltage()),
                     signal.getRotation() / RobotController.getBatteryVoltage(), signal.isFieldOriented());
         } else {
             synchronized (stateLock) {

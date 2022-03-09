@@ -30,11 +30,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         // Enums
 
         public static enum IntakeMotorState {
-            IN, OUT, STOPPED;
+                                                IN, OUT, STOPPED;
         }
 
         public static enum IntakeSolenoidState {
-            EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
+                                                EXTEND(DoubleSolenoid.Value.kForward, "Extended"),
+                                                RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
 
             public final DoubleSolenoid.Value value;
             public final String state;
@@ -102,7 +103,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor inwards and updates motor state. Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor inwards and updates motor state. Runs if Intake is extended which is when the solenoid is
+     * retracted.
      */
     public void intakeIn() {
         if (isIntakeExtended()) {
@@ -112,7 +114,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor outwards and updates motor state. Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor outwards and updates motor state. Runs if Intake is extended which is when the solenoid is
+     * retracted.
      */
     public void intakeOut() {
         if (isIntakeExtended()) {

@@ -68,7 +68,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     continue;
                 }
                 if (angle > ShooterConstants.MAX_HOOD_ANGLE) {
-                    System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
+                    System.out
+                            .println("Hood angle " + angle + " is greater than the max value, skipping line");
                     continue;
                 }
                 if (RPM < 0) {
@@ -174,7 +175,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         double slopeDistanceDifference = ceiling.getDistance() - floor.getDistance();
         if (slopeDistanceDifference == 0 || Double.isNaN(slopeDistanceDifference)
                 || Double.isInfinite(slopeDistanceDifference)) {
-            System.out.println("ERROR, distance between sample points is an illegal value: " + slopeDistanceDifference);
+            System.out.println(
+                    "ERROR, distance between sample points is an illegal value: " + slopeDistanceDifference);
             return null;
         }
         double angleSlope = (ceiling.getAngle() - floor.getAngle()) / slopeDistanceDifference;
@@ -182,7 +184,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         double distanceOffset = key - floor.getDistance();
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
         double interpolateRPM = rpmSlope * distanceOffset + floor.getRPM();
-        ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle, interpolateRPM);
+        ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle,
+                interpolateRPM);
 
         return interpolatePoint;
     }

@@ -83,7 +83,8 @@ public class PhysicsSim {
      */
     public void addTalonFX(TalonFX falcon, double accelToFullTime, double fullVel, boolean sensorPhase) {
         if (falcon != null) {
-            TalonFXSimProfile simFalcon = new TalonFXSimProfile(falcon, accelToFullTime, fullVel, sensorPhase);
+            TalonFXSimProfile simFalcon = new TalonFXSimProfile(falcon, accelToFullTime, fullVel,
+                    sensorPhase);
             simProfiles.add(simFalcon);
         }
     }

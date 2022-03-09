@@ -35,8 +35,10 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
 
         // This shoots, drives back to where the ball is with the intake extended, picks it up and
         // immediately shoots it
-        addCommands(new ParallelCommandGroup(new ScheduleCommand(new ShooterTargetCommand()), new WaitCommand(1)),
-                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand()), new IntakeExtendCommand(),
+        addCommands(
+                new ParallelCommandGroup(new ScheduleCommand(new ShooterTargetCommand()), new WaitCommand(1)),
+                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand()),
+                new IntakeExtendCommand(),
                 new ParallelCommandGroup(new Follow2910TrajectoryCommand(robotPath), new IntakeInCommand()));
 
     }

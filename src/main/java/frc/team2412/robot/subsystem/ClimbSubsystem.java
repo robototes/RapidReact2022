@@ -64,19 +64,19 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
                 true, 40, 60, 15);
 
         enum HookArmState {
-            ANGLED, UPRIGHT
+                            ANGLED, UPRIGHT
         }
 
         enum ClimbSubsystemState {
-            ENABLED, DISABLED
+                                    ENABLED, DISABLED
         }
 
         public enum AutoClimbState {
-            GROUND_MID, MID_HIGH, HIGH_TRAV
+                                    GROUND_MID, MID_HIGH, HIGH_TRAV
         }
 
         enum SolenoidState {
-            BACK, MID, FRONT
+                            BACK, MID, FRONT
         }
     }
 
@@ -127,16 +127,19 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
 
-        maxEncoderTicks = tab.add("Max encoder ticks", ARM_REACH_DISTANCE).withPosition(0, 0).withSize(2, 1).getEntry();
-        minEncoderTicks = tab.add("Min encoder ticks", MIN_ENCODER_TICKS).withPosition(0, 1).withSize(2, 1).getEntry();
+        maxEncoderTicks = tab.add("Max encoder ticks", ARM_REACH_DISTANCE).withPosition(0, 0).withSize(2, 1)
+                .getEntry();
+        minEncoderTicks = tab.add("Min encoder ticks", MIN_ENCODER_TICKS).withPosition(0, 1).withSize(2, 1)
+                .getEntry();
         encoderTicksPerRevolution = tab.add("Encoder ticks per revolution", ENCODER_TICKS_PER_REVOLUTION)
                 .withPosition(0, 2).withSize(2, 1).getEntry();
-        testSpeedExtend = tab.add("Test speed: Extension", TEST_SPEED_EXTEND).withPosition(2, 0).withSize(2, 1)
-                .getEntry();
-        testSpeedRetract = tab.add("Test speed: Retraction", TEST_SPEED_RETRACT).withPosition(2, 1).withSize(2, 1)
-                .getEntry();
+        testSpeedExtend = tab.add("Test speed: Extension", TEST_SPEED_EXTEND).withPosition(2, 0)
+                .withSize(2, 1).getEntry();
+        testSpeedRetract = tab.add("Test speed: Retraction", TEST_SPEED_RETRACT).withPosition(2, 1)
+                .withSize(2, 1).getEntry();
         rungDistance = tab.add("Rung distance", RUNG_DISTANCE).withPosition(4, 0).withSize(1, 2).getEntry();
-        gearboxReduction = tab.add("Gearbox reduction", GEARBOX_REDUCTION).withPosition(2, 2).withSize(2, 1).getEntry();
+        gearboxReduction = tab.add("Gearbox reduction", GEARBOX_REDUCTION).withPosition(2, 2).withSize(2, 1)
+                .getEntry();
         tab.addNumber("Solenoid state", () -> {
             return solenoidState == SolenoidState.BACK ? -1 : solenoidState == SolenoidState.MID ? 0 : 1;
         }).withPosition(4, 4).withSize(2, 1);
@@ -234,7 +237,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         double timeNow = Timer.getFPGATimestamp();
         double timeElapsed = timeNow - lastUpdatedTime;
         double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
-        climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
+        climbFixedMotor.getSimCollection()
+                .setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
         if (climbDynamicMotor != null) {
             double motorDynamicSpeed = climbDynamicMotor.getSelectedSensorVelocity();
             climbDynamicMotor.getSimCollection()
@@ -274,7 +278,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public void fixedClimbToHeight(double heightInches) {
         if (heightInches < 28.5)
             heightInches = 28.5;
-        climbFixedMotor.set(ControlMode.Position, (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
+        climbFixedMotor.set(ControlMode.Position,
+                (heightInches - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH);
     }
 
     // Singleton

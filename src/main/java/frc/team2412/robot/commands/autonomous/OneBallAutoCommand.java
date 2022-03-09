@@ -27,7 +27,8 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO).lineTo(new Vector2(0, 70)).build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
-        addCommands(new ParallelCommandGroup(new ScheduleCommand(new ShooterTargetCommand()), new WaitCommand(1)),
+        addCommands(
+                new ParallelCommandGroup(new ScheduleCommand(new ShooterTargetCommand()), new WaitCommand(1)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand()),
                 new Follow2910TrajectoryCommand(robotPath));
 

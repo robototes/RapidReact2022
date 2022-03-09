@@ -73,6 +73,7 @@ public class TalonFXSimProfile extends SimProfile {
         falconSimCollection.setSupplyCurrent(supplyCurrent);
         falconSimCollection.setStatorCurrent(statorCurrent);
         // Voltage
-        falconSimCollection.setBusVoltage(12 - outputPercentage * outputPercentage * 3 / 4 * random(0.95, 1.05));
+        falconSimCollection
+                .setBusVoltage(12 - outputPercentage * outputPercentage * 3 / 4 * random(0.95, 1.05));
     }
 }

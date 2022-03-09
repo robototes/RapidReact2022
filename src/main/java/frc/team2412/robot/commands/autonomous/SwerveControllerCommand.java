@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import org.frcteam2910.common.math.RigidTransform2;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -27,7 +28,7 @@ public class SwerveControllerCommand extends CommandBase {
     private final Consumer<ChassisSpeeds> outputModuleStates;
     private final Supplier<Rotation2d> desiredRotation;
     private final DrivebaseSubsystem drivebase;
-
+    private final Pose2d pathZero;
     /**
      * Constructs a new SwerveControllerCommand that when executed will follow the
      * provided
@@ -75,11 +76,12 @@ public class SwerveControllerCommand extends CommandBase {
             ProfiledPIDController thetaController,
             Supplier<Rotation2d> desiredRotation,
             Consumer<ChassisSpeeds> outputModuleStates,
-            DrivebaseSubsystem drivebase, Subsystem... requirements) {
+            DrivebaseSubsystem drivebase, Pose2d r, Subsystem... requirements) {
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         this.pose = requireNonNullParam(pose, "pose", "SwerveControllerCommand");
         this.kinematics = requireNonNullParam(kinematics, "kinematics", "SwerveControllerCommand");
         this.drivebase = drivebase;
+        pathZero = r;
 
         controller = new HolonomicDriveController(
                 requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
@@ -143,7 +145,7 @@ public class SwerveControllerCommand extends CommandBase {
             PIDController xController,
             PIDController yController,
             ProfiledPIDController thetaController,
-            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase,
+            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase, Pose2d r,
             Subsystem... requirements) {
         this(
                 trajectory,
@@ -154,13 +156,15 @@ public class SwerveControllerCommand extends CommandBase {
                 thetaController,
                 () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
                 outputModuleStates,
-                drivebase, requirements);
+                drivebase, r, requirements);
     }
 
     @Override
     public void initialize() {
         timer.reset();
         timer.start();
+        drivebase.resetPose(pathZero);
+        System.out.println(drivebase.getPose());
     }
 
     @Override
@@ -172,6 +176,7 @@ public class SwerveControllerCommand extends CommandBase {
 
         var targetChassisSpeeds = controller.calculate(pose.get(), desiredState, desiredRotation.get());
         outputModuleStates.accept(targetChassisSpeeds);
+        System.out.println(drivebase.getPose());
     }
 
     @Override

@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import org.frcteam2910.common.math.RigidTransform2;
 
 import java.util.List;
 
@@ -55,8 +56,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutoConstants.driveKinematics);
         // creating trajectory path (right now is a square)
+        Pose2d start = new Pose2d(5.513, 5.264, Rotation2d.fromDegrees(-55.7));
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.513, 5.264, Rotation2d.fromDegrees(-55.7)),
+                start,
                 List.of(),
                 new Pose2d(4.938, 6.210, Rotation2d.fromDegrees(-60.76)),
                 config);
@@ -75,7 +77,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 new PIDController(AutoConstants.PY_CONTROLLER, 0, 0),
                 thetaController,
                 drivebaseSubsystem::updateModules,
-                drivebaseSubsystem);
+                drivebaseSubsystem, start);
 
         return swerveControllerCommand;
     }

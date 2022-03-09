@@ -403,6 +403,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         // System.out.println(pose);
         Pose2d pose = getPoseAsPoseMeters();
         field.setRobotPose(pose);
+        System.out.println(getPose());
 
     }
 

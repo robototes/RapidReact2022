@@ -246,8 +246,20 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void autonomousInit() {
 
-        if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            //subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+        }
+
+        if (subsystems.shooterSubsystem != null) {
+            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        }
+
+        autonomousChooser.getCommand().schedule();
+    }
+    public void autonomousInit(RigidTransform2 r) {
+
+        if (SubsystemConstants.DRIVE_ENABLED) {
+            subsystems.drivebaseSubsystem.resetPose(r);
         }
 
         if (subsystems.shooterSubsystem != null) {
@@ -307,6 +319,7 @@ public class Robot extends TimedRobot implements Loggable {
     @Override
     public void simulationPeriodic() {
         PhysicsSim.getInstance().run();
+
     }
 
     public RobotType getRobotType() {

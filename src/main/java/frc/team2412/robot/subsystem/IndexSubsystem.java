@@ -26,7 +26,6 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IndexSubsystem extends SubsystemBase implements Loggable {
-
     // Constants
 
     public static class IndexConstants {
@@ -43,13 +42,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
         // Proximity Threshold
-        public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual
-                                                        // value
+        // Value not 700, actual value to be determined
+        public static double PROXIMITY_THRESHOLD = 700;
 
         // Index Motor States
-
         public static enum IndexMotorState {
-                                            IN, OUT, STOPPED;
+            IN, OUT, STOPPED
         }
 
         // The current limit

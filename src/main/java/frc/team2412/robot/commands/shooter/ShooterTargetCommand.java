@@ -30,7 +30,7 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!shooter.turretWorking)
+        if (!shooter.turretEnabled)
             return;
 
         double distance = vision.hasTarget() ? vision.getDistance() + shooter.getDistanceBias() : 0;

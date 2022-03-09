@@ -33,7 +33,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
-
     public static class ClimbConstants {
         public static final double MAX_SPEED = 1;
         public static final double TEST_SPEED_EXTEND = 0.1;
@@ -64,19 +63,19 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
                 true, 40, 60, 15);
 
         enum HookArmState {
-                            ANGLED, UPRIGHT
+            ANGLED, UPRIGHT
         }
 
         enum ClimbSubsystemState {
-                                    ENABLED, DISABLED
+            ENABLED, DISABLED
         }
 
         public enum AutoClimbState {
-                                    GROUND_MID, MID_HIGH, HIGH_TRAV
+            GROUND_MID, MID_HIGH, HIGH_TRAV
         }
 
         enum SolenoidState {
-                            BACK, MID, FRONT
+            BACK, MID, FRONT
         }
     }
 

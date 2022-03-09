@@ -49,7 +49,7 @@ public class Robot extends TimedRobot implements Loggable {
     private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
     enum RobotType {
-                    COMPETITION, AUTOMATED_TEST, DRIVEBASE;
+        COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
     public Controls controls;

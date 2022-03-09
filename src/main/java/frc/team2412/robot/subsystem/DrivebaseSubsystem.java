@@ -37,7 +37,6 @@ import java.util.Optional;
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
 public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable {
-
     // TODO find values as these are just copied from 2910
     public static class DriveConstants {
 
@@ -49,11 +48,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
+                // Old value was 11.0
                 new FeedforwardConstraint(3.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was
-                                                                                    // 11.0
-                new MaxAccelerationConstraint(3.0), // old value was 12.5 * 12.0
-                new CentripetalAccelerationConstraint(3.0), // old value was 15 * 12.0
+                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
+                // Old value was 12.5 * 12.0
+                new MaxAccelerationConstraint(3.0),
+                // Old value was 15 * 12.0
+                new CentripetalAccelerationConstraint(3.0),
                 // in inches
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),

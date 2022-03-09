@@ -17,7 +17,6 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
-
     // Constants
     public static class IntakeConstants {
 
@@ -30,12 +29,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         // Enums
 
         public static enum IntakeMotorState {
-                                                IN, OUT, STOPPED;
+            IN, OUT, STOPPED;
         }
 
         public static enum IntakeSolenoidState {
-                                                EXTEND(DoubleSolenoid.Value.kForward, "Extended"),
-                                                RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
+            EXTEND(DoubleSolenoid.Value.kForward, "Extended"),
+            RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
 
             public final DoubleSolenoid.Value value;
             public final String state;

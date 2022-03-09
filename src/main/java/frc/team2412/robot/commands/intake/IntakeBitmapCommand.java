@@ -12,14 +12,13 @@ public class IntakeBitmapCommand extends CommandBase {
 
     // bitmap
     public enum Bitmap {
-                        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed,
-                        // ingestspeed,
-                        // feederspeed, misfire
-                        A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED,
-                                "no balls in system"),
-                        B(true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"),
-                        C(false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, "Ball in Feeder"),
-                        D(true, true, 0, 0, 0, "Ball in both");
+        // ingesthasball, feederhasball, ingestcorrectcolor, feedercorrectcolor, intakespeed,
+        // ingestspeed,
+        // feederspeed, misfire
+        A(false, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "no balls in system"),
+        B(true, false, INTAKE_IN_SPEED, INDEX_IN_SPEED, INDEX_IN_SPEED, "Ball in Ingest"),
+        C(false, true, INTAKE_IN_SPEED, INDEX_IN_SPEED, 0, "Ball in Feeder"),
+        D(true, true, 0, 0, 0, "Ball in both");
 
         private boolean ingestSensor, feederSensor;
         private double intakeMotorSpeed, ingestMotorSpeed, feederMotorSpeed;

@@ -20,9 +20,9 @@ public class IntakeSetCommand extends CommandBase {
     public void execute() {
         if (intakeExtend) {
             subsystem.intakeExtend();
-            subsystem.setSpeed(speed);
         } else {
             subsystem.intakeRetract();
         }
+        subsystem.setSpeed(speed);
     }
 }

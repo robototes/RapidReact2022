@@ -7,8 +7,8 @@ import java.util.function.BooleanSupplier;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
-import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
+import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.FullExtendFixedHookCommand;

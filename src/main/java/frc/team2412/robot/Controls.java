@@ -65,6 +65,7 @@ public class Controls {
 
     // drive
     public final Button resetDriveGyroButton;
+    public final Button setPoseButton;
 
     public Subsystems subsystems;
 
@@ -100,6 +101,7 @@ public class Controls {
         // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
+        setPoseButton = driveController.getStartButton();
 
         intakeInButton = shootPreset.getRightBumperButton();
         intakeExtendButton = shootPreset.getXButton();
@@ -148,6 +150,7 @@ public class Controls {
 
     public void bindDriveControls() {
         resetDriveGyroButton.whenPressed(() -> subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO));
+        setPoseButton.whenPressed(() -> subsystems.drivebaseSubsystem.setPose());
     }
 
     public void bindIndexControls() {

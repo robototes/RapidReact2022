@@ -11,6 +11,10 @@ import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.PathTestingCommand;
+import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandLeft;
+import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
+import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandRight;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand;
 import frc.team2412.robot.commands.intake.IntakeExtendCommand;
@@ -29,14 +33,12 @@ public class AutonomousChooser {
 
         boolean setDefault = false;
         for (var mode : AutonomousMode.values()) {
-            if (mode != AutonomousMode.SQUARE_PATH) {
-                if (mode.enabled) {
-                    if (!setDefault) {
-                        autonomousModeChooser.setDefaultOption(mode.uiName, mode);
-                        setDefault = true;
-                    } else
-                        autonomousModeChooser.addOption(mode.uiName, mode);
-                }
+            if (mode.enabled) {
+                if (!setDefault) {
+                    autonomousModeChooser.setDefaultOption(mode.uiName, mode);
+                    setDefault = true;
+                } else
+                    autonomousModeChooser.addOption(mode.uiName, mode);
             }
         }
 
@@ -102,6 +104,25 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        TWO_BALL_LEFT((subsystems, trajectories) -> new TwoBallAutoCommandLeft(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            "Two ball auto left",
+            Subsystems.SubsystemConstants.INDEX_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        TWO_BALL_MIDDLE((subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            "Two ball auto middle",
+            Subsystems.SubsystemConstants.INDEX_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        TWO_BALL_RIGHT((subsystems, trajectories) -> new TwoBallAutoCommandRight(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
+            "Two ball auto right",
+            Subsystems.SubsystemConstants.INDEX_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        PATH_TESTING((subsystems, trajectories) -> new PathTestingCommand(subsystems.drivebaseSubsystem), "Path testing command", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),

@@ -139,6 +139,9 @@ public class Hardware {
             backRightModule = BACK_RIGHT_CONFIG.create(comp);
             gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
+        if (DRIVER_VIS_ENABLED) {
+            frontCamera = CameraServer.startAutomaticCapture();
+        }
         if (!comp)
             return;
         if (CLIMB_ENABLED) {
@@ -171,10 +174,6 @@ public class Hardware {
             flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
             turretMotor = new WPI_TalonFX(TURRET);
             hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
-        }
-        if (DRIVER_VIS_ENABLED) {
-            CameraServer.addCamera(frontCamera);
-            CameraServer.startAutomaticCapture();
         }
     }
 }

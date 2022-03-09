@@ -52,7 +52,7 @@ public class Robot extends TimedRobot implements Loggable {
     @Log.PowerDistribution
     private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
-    enum RobotType {
+    public enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot implements Loggable {
             0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
     };
 
-    private static RobotType getTypeFromAddress() {
+    public static RobotType getTypeFromAddress() {
         List<byte[]> macAddresses;
         try {
             macAddresses = getMacAddresses();

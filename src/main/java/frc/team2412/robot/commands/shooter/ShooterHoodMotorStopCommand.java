@@ -5,6 +5,6 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class ShooterHoodMotorStopCommand extends InstantCommand {
     public ShooterHoodMotorStopCommand(ShooterSubsystem shooter) {
-        super(() -> shooter.stopHoodMotor(), shooter);
+        super(shooter::stopHoodMotor, shooter);
     }
 }

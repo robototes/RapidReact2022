@@ -7,6 +7,6 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class SpitBallCommand extends ParallelCommandGroup {
     public SpitBallCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
-        addCommands(new IntakeMotorOutCommand(intakeSubsystem), new IndexSpitCommand(indexSubsystem));
+        addCommands(new IntakeSetOutCommand(intakeSubsystem), new IndexSpitCommand(indexSubsystem));
     }
 }

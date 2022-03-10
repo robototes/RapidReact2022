@@ -1,7 +1,6 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -10,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -27,10 +25,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
                 true, 20, 20, 1);
 
         // Enums
-
-        public static enum IntakeMotorState {
-            IN, OUT, STOPPED;
-        }
 
         public static enum IntakeSolenoidState {
             EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
@@ -51,14 +45,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     private final WPI_TalonFX motor1;
     private final WPI_TalonFX motor2;
 
-    // @Log
     private final DoubleSolenoid solenoid;
 
     // States
 
     @Log(name = "Solenoid State")
     public static String state = "";
-    private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
 
     // CONSTRUCTOR!
@@ -78,7 +70,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         this.solenoid = intakeSolenoid;
 
         intakeSolenoidState = EXTEND;
-        intakeMotorState = STOPPED;
 
         intakeRetract();
         intakeStop();
@@ -106,7 +97,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public void intakeIn() {
         if (isIntakeExtended()) {
             setSpeed(INTAKE_IN_SPEED);
-            intakeMotorState = IN;
         }
     }
 
@@ -117,7 +107,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public void intakeOut() {
         if (isIntakeExtended()) {
             setSpeed(INTAKE_OUT_SPEED);
-            intakeMotorState = OUT;
         }
     }
 
@@ -125,8 +114,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motor and updates motor state
      */
     public void intakeStop() {
-        setSpeed(0);
-        intakeMotorState = STOPPED;
+        motor1.stopMotor();
+        motor2.stopMotor();
     }
 
     /**
@@ -152,9 +141,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        // if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
-        // intakeStop();
-        // }
     }
 
     // Logging Methods

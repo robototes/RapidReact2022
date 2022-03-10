@@ -14,7 +14,7 @@ public class RetractAngledHookCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        subsystem.retractAngledArm();
+        subsystem.retractDynamicArm();
     }
 
     @Override

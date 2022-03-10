@@ -15,7 +15,7 @@ public class UnangleClimbHookCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        subsystem.angleClimbHook(DoubleSolenoid.Value.kReverse);
+        subsystem.retractArmSolenoid();
     }
 
     @Override

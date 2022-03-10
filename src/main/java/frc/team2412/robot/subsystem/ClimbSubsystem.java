@@ -135,9 +135,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         return enabled;
     }
 
-    public void angleClimbHook(DoubleSolenoid.Value value) {
-        solenoid.set(value);
+    public void extendArmSolenoid() {
+        solenoid.set(SolenoidState.EXTEND.value);
     }
+
+    public void retractArmSolenoid(){
+        solenoid.set(SolenoidState.RETRACT.value);
+    }
+
 
     @Config(name = "Stop Fixed Motor")
     public void stopFixedPID(boolean stop) {

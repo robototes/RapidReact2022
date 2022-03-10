@@ -15,7 +15,7 @@ public class AngleClimbHookCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        subsystem.angleClimbHook(DoubleSolenoid.Value.kForward);
+        subsystem.extendDynamicArm();
     }
 
     @Override

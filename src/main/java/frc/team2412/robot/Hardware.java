@@ -110,16 +110,16 @@ public class Hardware {
     public CANSparkMax hoodMotor;
 
     // intake
-    public WPI_TalonFX intakeMotor, intakeMotor2;
+    public WPI_TalonFX intakeMotor1, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
     // climb
-    public WPI_TalonFX climbMotorFixed, climbMotorDynamic;
+    public WPI_TalonFX climbFixedMotor, climbDynamicMotor;
 
-    public DoubleSolenoid climbAngle;
+    public DoubleSolenoid climbAngleSolenoid;
 
     // index
-    public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
+    public WPI_TalonFX ingestMotor, feederMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
     public DigitalInput ingestTopProximity;
@@ -143,19 +143,19 @@ public class Hardware {
             return;
         if (CLIMB_ENABLED) {
             // climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
-            climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+            climbFixedMotor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
             // climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
             // CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
-            intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
+            intakeMotor1 = new WPI_TalonFX(INTAKE_MOTOR);
             intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
             intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {
-            ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
-            feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+            ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+            feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
             // ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
             ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);

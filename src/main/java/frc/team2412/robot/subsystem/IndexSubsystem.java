@@ -98,29 +98,29 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
                 .withSize(2, 1)
                 .getEntry();
 
-        this.ingestMotor = hardware.ingestIndexMotor;
-        this.feederMotor = hardware.feederIndexMotor;
-        this.ingestProximity = hardware.ingestProximity;
-        this.feederProximity = hardware.feederProximity;
-        this.ingestTopProximity = hardware.ingestTopProximity;
-        this.ingestBlueColor = hardware.ingestBlueColor;
-        this.ingestRedColor = hardware.ingestRedColor;
-        this.feederBlueColor = hardware.feederBlueColor;
-        this.feederRedColor = hardware.feederRedColor;
-        this.ingestTopBlueColor = hardware.ingestTopBlueColor;
-        this.ingestTopRedColor = hardware.ingestTopRedColor;
+        ingestMotor = hardware.ingestMotor;
+        feederMotor = hardware.feederMotor;
+        ingestProximity = hardware.ingestProximity;
+        feederProximity = hardware.feederProximity;
+        ingestTopProximity = hardware.ingestTopProximity;
+        ingestBlueColor = hardware.ingestBlueColor;
+        ingestRedColor = hardware.ingestRedColor;
+        feederBlueColor = hardware.feederBlueColor;
+        feederRedColor = hardware.feederRedColor;
+        ingestTopBlueColor = hardware.ingestTopBlueColor;
+        ingestTopRedColor = hardware.ingestTopRedColor;
 
-        this.feederMotor.setInverted(true);
-        this.ingestMotor.configFactoryDefault();
-        this.feederMotor.configFactoryDefault();
+        feederMotor.setInverted(true);
+        ingestMotor.configFactoryDefault();
+        feederMotor.configFactoryDefault();
 
-        this.ingestMotor.setNeutralMode(NeutralMode.Brake);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        ingestMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setNeutralMode(NeutralMode.Brake);
 
-        this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
-        this.feederMotor.setInverted(true);
+        feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();
@@ -298,7 +298,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void setBitmapState(Bitmap bitmap) {
-        this.currentStateBitmap = bitmap;
+        currentStateBitmap = bitmap;
     }
 
     // Singleton

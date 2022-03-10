@@ -59,17 +59,17 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     private IntakeSubsystem() {
         var hardware = Hardware.instance;
 
-        this.motor1 = hardware.intakeMotor;
-        this.motor1.setNeutralMode(NeutralMode.Coast);
-        this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.motor2 = hardware.intakeMotor2;
+        motor1 = hardware.intakeMotor1;
+        motor1.setNeutralMode(NeutralMode.Coast);
+        motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motor2 = hardware.intakeMotor2;
 
-        if (this.motor2 != null) {
-            this.motor2.setNeutralMode(NeutralMode.Coast);
-            this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        if (motor2 != null) {
+            motor2.setNeutralMode(NeutralMode.Coast);
+            motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         }
 
-        this.solenoid = hardware.intakeSolenoid;
+        solenoid = hardware.intakeSolenoid;
 
         intakeSolenoidState = EXTEND;
 

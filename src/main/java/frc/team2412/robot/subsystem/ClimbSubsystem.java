@@ -106,9 +106,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         var hardware = Hardware.instance;
 
         setName("ClimbSubsystem");
-        this.climbFixedMotor = hardware.climbMotorFixed;
-        this.climbDynamicMotor = hardware.climbMotorDynamic;
-        solenoid = hardware.climbAngle;
+        climbFixedMotor = hardware.climbFixedMotor;
+        climbDynamicMotor = hardware.climbDynamicMotor;
+        solenoid = hardware.climbAngleSolenoid;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;

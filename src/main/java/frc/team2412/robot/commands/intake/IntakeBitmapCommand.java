@@ -53,9 +53,9 @@ public class IntakeBitmapCommand extends CommandBase {
     /**
      * Subsystems: {@link IndexSubsystem}, {@link IntakeSubsystem}
      */
-    public IntakeBitmapCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem) {
-        this.intakeSubsystem = intakeSubsystem;
-        this.indexSubsystem = indexSubsystem;
+    public IntakeBitmapCommand() {
+        this.intakeSubsystem = IntakeSubsystem.instance;
+        this.indexSubsystem = IndexSubsystem.instance;
         addRequirements(intakeSubsystem, indexSubsystem);
 
     }

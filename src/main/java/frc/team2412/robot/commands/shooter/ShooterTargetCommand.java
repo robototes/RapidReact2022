@@ -29,8 +29,7 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!shooter.turretWorking)
-            return;
+
         if (ShooterConstants.dataPoints != null) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
                     .getInterpolated(localizer.getAdjustedDistance());

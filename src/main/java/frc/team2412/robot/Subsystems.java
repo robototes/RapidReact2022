@@ -46,29 +46,20 @@ public class Subsystems implements Loggable {
         hardware = Hardware.instance;
 
         if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
+            drivebaseSubsystem = DrivebaseSubsystem.instance;
         if (!comp)
             return;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle);
+            climbSubsystem = ClimbSubsystem.instance;
         if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid);
+            intakeSubsystem = IntakeSubsystem.instance;
         if (SHOOTER_ENABLED) {
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
-                    hardware.turretMotor, hardware.hoodMotor);
-            shooterVisionSubsystem = new ShooterVisionSubsystem();
+            shooterSubsystem = ShooterSubsystem.instance;
+            shooterVisionSubsystem = ShooterVisionSubsystem.instance;
         }
 
         if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+            indexSubsystem = IndexSubsystem.instance;
         }
     }
 

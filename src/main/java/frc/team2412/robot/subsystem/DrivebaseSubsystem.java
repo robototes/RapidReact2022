@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
+import frc.team2412.robot.Hardware.HardwareConstants;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -123,19 +125,21 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final PFFController<Vector2> tipController;
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g,
-            double moduleMaxVelocityMetersPerSec) {
+    private DrivebaseSubsystem() {
+        var hardware = Hardware.instance;
+
         synchronized (sensorLock) {
-            gyroscope = g;
-            if (g instanceof Pigeon)
+            gyroscope = hardware.gyro;
+            if (gyroscope instanceof Pigeon)
                 gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
-        modules = new SwerveModule[] { fl, fr, bl, br };
-        this.moduleMaxVelocityMetersPerSec = moduleMaxVelocityMetersPerSec;
+        modules = new SwerveModule[] { hardware.frontLeftModule, hardware.frontRightModule, hardware.backLeftModule,
+                hardware.backRightModule };
+        this.moduleMaxVelocityMetersPerSec = HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)
@@ -421,4 +425,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public boolean getAntiTip() {
         return antiTip.getBoolean(false);
     }
+
+    // Singleton
+    public static final DrivebaseSubsystem instance = new DrivebaseSubsystem();
 }

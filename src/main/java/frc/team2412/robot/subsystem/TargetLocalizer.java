@@ -9,7 +9,7 @@ public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 4.8, TURRET_ANGULAR_FF = 4.8, TURRET_DEPTH_FF = 4.8;
+        public static final double TURRET_LATERAL_FF = 4.8, TURRET_ANGULAR_FF = 4.8, TURRET_DEPTH_FF = 0, LATERAL_DEPTH_COMPENSATION = 0;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -63,10 +63,11 @@ public class TargetLocalizer {
     }
 
     public double yawAdjustment() {
-        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage();
+        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage() + getDistance() * LATERAL_DEPTH_COMPENSATION;
     }
 
     public double getVoltage() {
+//        return 12;
         return Robot.getInstance().PDP.getVoltage();
     }
 }

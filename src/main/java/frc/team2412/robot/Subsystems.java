@@ -40,10 +40,10 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public Subsystems(Hardware h) {
-        boolean comp = Robot.getInstance().isCompetition();
+    private Subsystems() {
+        boolean comp = Robot.instance.isCompetition();
 
-        hardware = h;
+        hardware = Hardware.instance;
 
         if (DRIVE_ENABLED)
             drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
@@ -71,4 +71,7 @@ public class Subsystems implements Loggable {
                     hardware.ingestTopRedColor);
         }
     }
+
+    // Singleton
+    public static final Subsystems instance = new Subsystems();
 }

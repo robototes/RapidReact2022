@@ -38,7 +38,7 @@ public class Hardware {
         private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
 
         static {
-            GEAR_RATIO = Robot.getInstance().isCompetition()
+            GEAR_RATIO = Robot.instance.isCompetition()
                     ? Mk4SwerveModuleHelper.GearRatio.L2
                     : Mk4SwerveModuleHelper.GearRatio.L1;
         }
@@ -130,8 +130,8 @@ public class Hardware {
     public DigitalInput ingestTopBlueColor;
     public DigitalInput ingestTopRedColor;
 
-    public Hardware() {
-        boolean comp = Robot.getInstance().isCompetition();
+    private Hardware() {
+        boolean comp = Robot.instance.isCompetition();
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
             frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
@@ -178,4 +178,7 @@ public class Hardware {
             CameraServer.startAutomaticCapture();
         }
     }
+
+    // Singleton
+    public static final Hardware instance = new Hardware();
 }

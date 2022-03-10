@@ -60,9 +60,8 @@ public class Controls {
 
     public Subsystems subsystems;
 
-    public Controls(Subsystems s) {
-
-        subsystems = s;
+    private Controls() {
+        subsystems = Subsystems.instance;
 
         // driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
         driveController = new XboxController(CONTROLLER_PORT);
@@ -114,7 +113,7 @@ public class Controls {
 
         // driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
-        boolean comp = Robot.getInstance().isCompetition();
+        boolean comp = Robot.instance.isCompetition();
 
         if (subsystems.drivebaseSubsystem != null) {
             bindDriveControls();
@@ -160,8 +159,8 @@ public class Controls {
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
             b.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                        // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                        // subsystems.indexSubsystem));
+                                                                                                      // IntakeBitmapCommand(subsystems.intakeSubsystem,
+                                                                                                      // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
@@ -193,4 +192,7 @@ public class Controls {
         }
 
     }
+
+    // Singleton
+    public static final Controls instance = new Controls();
 }

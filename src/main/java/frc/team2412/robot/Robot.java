@@ -41,10 +41,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class Robot extends TimedRobot implements Loggable {
-    /**
-     * Singleton Stuff
-     */
-    private static Robot instance = null;
 
     // copied from the PR
     public static final int PDP_CAN_ID = 1;
@@ -55,12 +51,6 @@ public class Robot extends TimedRobot implements Loggable {
 
     enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
-    }
-
-    public static Robot getInstance() {
-        if (instance == null)
-            instance = new Robot();
-        return instance;
     }
 
     public Controls controls;
@@ -78,7 +68,6 @@ public class Robot extends TimedRobot implements Loggable {
 
     protected Robot(RobotType type) {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
-        instance = this;
         robotType = type;
     }
 
@@ -168,9 +157,9 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void robotInit() {
-        hardware = new Hardware();
-        subsystems = new Subsystems(hardware);
-        controls = new Controls(subsystems);
+        hardware = hardware.instance;
+        subsystems = subsystems.instance;
+        controls = controls.instance;
         if (SubsystemConstants.DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
@@ -314,4 +303,7 @@ public class Robot extends TimedRobot implements Loggable {
     public boolean isCompetition() {
         return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
     }
+
+    // Singleton
+    public static final Robot instance = new Robot();
 }

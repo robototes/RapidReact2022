@@ -12,37 +12,43 @@ import frc.team2412.robot.util.ShooterDataDistancePoint;
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final ShooterVisionSubsystem vision;
-    private final BooleanSupplier turret;
+    private final BooleanSupplier turretEnable;
 
     public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         this(shooter, vision, () -> false);
     }
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision, BooleanSupplier turretButton) {
+    public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision, BooleanSupplier turretEnable) {
         this.shooter = shooter;
         this.vision = vision;
+        this.turretEnable = turretEnable;
         addRequirements(shooter);
-        turret = turretButton;
     }
 
     @Override
     public void execute() {
-        if (!shooter.turretWorking)
+        if (!shooter.enableTurret) {
             return;
+        }
 
-        double distance = vision.hasTarget() ? vision.getDistance() + shooter.getDistanceBias() : 0;
+        double distance = 0, yaw = 0;
 
-        double yaw = vision.getYaw() + shooter.getTurretAngleBias();
+        if (vision.hasTarget()) {
+            distance = vision.getDistance() + shooter.getDistanceBias();
+            yaw = vision.getYaw() + shooter.getTurretAngleBias();
+        }
+
         if (ShooterConstants.dataPoints != null) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
-        if (turret.getAsBoolean()) {
-            shooter.updateTurretAngle(yaw);
-        } else
-            shooter.setTurretAngle(0);
 
+        if (turretEnable.getAsBoolean()) {
+            shooter.updateTurretAngle(yaw);
+        } else {
+            shooter.setTurretAngle(0);
+        }
     }
 
     @Override

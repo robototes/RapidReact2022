@@ -19,7 +19,12 @@ public class RetractAngledHookCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return subsystem.isDynamicFullyRetracted();
+        return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        subsystem.stopFixedArm();
     }
 
 }

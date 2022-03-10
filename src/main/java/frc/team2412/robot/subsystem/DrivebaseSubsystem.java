@@ -2,7 +2,6 @@ package frc.team2412.robot.subsystem;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -385,10 +384,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             synchronized (stateLock) {
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
-                            accelLimiter.calculate( //vector accel limiter
+                            accelLimiter.calculate( // vector accel limiter
                                     driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                    getAngle() : Rotation2.ZERO) // same code as other block
-                                    .add(tipController.update(getGyroscopeXY()))), // anti tip stuff
+                                            getAngle() : Rotation2.ZERO) // same code as other block
+                                            .add(tipController.update(getGyroscopeXY()))), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else
                     signal = driveSignal;

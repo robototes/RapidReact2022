@@ -6,7 +6,6 @@ package frc.team2412.robot.util;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.WPIUtilJNI;
-import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 /**
@@ -23,8 +22,10 @@ public class VectorSlewLimiter {
     /**
      * Creates a new SlewRateLimiter with the given rate limit and initial value.
      *
-     * @param rateLimit The rate-of-change limit, in units per second.
-     * @param initialValue The initial value of the input.
+     * @param rateLimit
+     *            The rate-of-change limit, in units per second.
+     * @param initialValue
+     *            The initial value of the input.
      */
     public VectorSlewLimiter(double rateLimit, Vector2 initialValue) {
         m_rateLimit = rateLimit;
@@ -32,23 +33,22 @@ public class VectorSlewLimiter {
         m_prevTime = WPIUtilJNI.now() * 1e-6;
     }
 
-
     public VectorSlewLimiter(double rateLimit) {
         this(rateLimit, Vector2.ZERO);
     }
 
-
     /**
      * Filters the input to limit its slew rate.
      *
-     * @param input The input value whose slew rate is to be limited.
+     * @param input
+     *            The input value whose slew rate is to be limited.
      * @return The filtered value, which will not change faster than the slew rate.
      */
     public Vector2 calculate(Vector2 input) {
         double currentTime = WPIUtilJNI.now() * 1e-6;
         double elapsedTime = currentTime - m_prevTime;
-        double x = MathUtil.clamp(input.x-m_prevVal.x, -m_rateLimit*elapsedTime, m_rateLimit*elapsedTime);
-        double y = MathUtil.clamp(input.y-m_prevVal.y, -m_rateLimit*elapsedTime, m_rateLimit*elapsedTime);
+        double x = MathUtil.clamp(input.x - m_prevVal.x, -m_rateLimit * elapsedTime, m_rateLimit * elapsedTime);
+        double y = MathUtil.clamp(input.y - m_prevVal.y, -m_rateLimit * elapsedTime, m_rateLimit * elapsedTime);
         m_prevVal = m_prevVal.add(x, y);
         return m_prevVal;
     }
@@ -56,7 +56,8 @@ public class VectorSlewLimiter {
     /**
      * Resets the slew rate limiter to the specified value; ignores the rate limit when doing so.
      *
-     * @param value The value to reset to.
+     * @param value
+     *            The value to reset to.
      */
     public void reset(Vector2 value) {
         m_prevVal = value;

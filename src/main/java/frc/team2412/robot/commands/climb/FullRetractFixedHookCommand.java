@@ -17,14 +17,9 @@ public class FullRetractFixedHookCommand extends CommandBase {
         subsystem.retractFixedArmFully();
     }
 
-    // @Override
-    // public boolean isFinished() {
-    // return subsystem.isFixedFullyExtended();
-    // }
-
-    // @Override
-    // public void end(boolean interrupted) {
-    // subsystem.stopFixedArm();
-    // }
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
 }

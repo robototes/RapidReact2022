@@ -13,18 +13,13 @@ public class FullExtendFixedHookCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void execute() {
         subsystem.extendFixedArm();
     }
 
-    // @Override
-    // public boolean isFinished() {
-    // return subsystem.isFixedFullyExtended();
-    // }
-
-    // @Override
-    // public void end(boolean interrupted) {
-    // subsystem.stopFixedArm();
-    // }
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
 }

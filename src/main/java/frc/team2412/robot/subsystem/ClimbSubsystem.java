@@ -36,7 +36,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double D = 0;
 
         public static final double MID_RUNG_HEIGHT_INCH = 31;
-        public static final double HIGH_RUNG_HEIGHT_INCH = 31; // need to test later
         public static final double RETRACT_HEIGHT_INCH = 15;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -45,13 +44,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log.MotorController
-    private final WPI_TalonFX climbFixedMotor;
+    private final WPI_TalonFX motor;
 
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    public ClimbSubsystem(WPI_TalonFX climbFixedMotor) {
+    public ClimbSubsystem(WPI_TalonFX motor) {
         setName("ClimbSubsystem");
-        this.climbFixedMotor = climbFixedMotor;
+        this.motor = motor;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -60,8 +59,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
 
-        climbFixedMotor.configAllSettings(motorConfig);
-        climbFixedMotor.setNeutralMode(NeutralMode.Brake);
+        motor.configAllSettings(motorConfig);
+        motor.setNeutralMode(NeutralMode.Brake);
 
         setFixedArmPID(P, I, D);
 
@@ -69,24 +68,24 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     @Config(name = "Stop Fixed Motor")
     public void stopFixedArm(boolean stop) {
-        if (stop) {
-            climbFixedMotor.stopMotor();
+        if (stop && motor != null) {
+            motor.stopMotor();
         }
     }
 
     public void extendFixedArm() {
-        setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
     public void retractFixedArm() {
-        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
     public void retractFixedArmFully() {
-        setMotor(2 * ENCODER_TICKS_PER_INCH, climbFixedMotor);
+        setMotor(2 * ENCODER_TICKS_PER_INCH);
     }
 
-    public void setMotor(double value, WPI_TalonFX motor) {
+    public void setMotor(double value) {
         if (motor != null)
             motor.set(ControlMode.Position, value);
     }
@@ -94,27 +93,29 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Override
     public void simulationPeriodic() {
         // max speed 6000 rpm, 2048 ticks per rotation
-        double timeNow = Timer.getFPGATimestamp();
-        double timeElapsed = timeNow - lastUpdatedTime;
-        double motorFixedSpeed = climbFixedMotor.getSelectedSensorVelocity();
-        climbFixedMotor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
-        lastUpdatedTime = timeNow;
+        if (motor != null) {
+            double timeNow = Timer.getFPGATimestamp();
+            double timeElapsed = timeNow - lastUpdatedTime;
+            double motorFixedSpeed = motor.getSelectedSensorVelocity();
+            motor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
+            lastUpdatedTime = timeNow;
+        }
     }
 
     @Log
     public double encoderPosition() {
-        return climbFixedMotor.getSelectedSensorPosition();
+        return motor != null ? motor.getSelectedSensorPosition() : 0;
     }
 
     @Log
     public double climbHeightInches() {
-        return encoderPosition() / ENCODER_TICKS_PER_INCH + CLIMB_OFFSET_INCHES;
+        return motor != null ? encoderPosition() / ENCODER_TICKS_PER_INCH + CLIMB_OFFSET_INCHES : 0;
     }
 
     @Config
     public void resetEncoder(boolean reset) {
         if (reset) {
-            climbFixedMotor.setSelectedSensorPosition(0);
+            motor.setSelectedSensorPosition(0);
         }
     }
 
@@ -122,9 +123,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     private void setFixedArmPID(@Config(name = "P", defaultValueNumeric = P) double p,
             @Config(name = "I", defaultValueNumeric = I) double i,
             @Config(name = "D", defaultValueNumeric = D) double d) {
-        climbFixedMotor.config_kP(PID_SLOT_0, p);
-        climbFixedMotor.config_kI(PID_SLOT_0, i);
-        climbFixedMotor.config_kD(PID_SLOT_0, d);
+        if (motor != null) {
+            motor.config_kP(PID_SLOT_0, p);
+            motor.config_kI(PID_SLOT_0, i);
+            motor.config_kD(PID_SLOT_0, d);
+        }
     }
 
 }

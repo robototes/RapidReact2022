@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.ClimbSubsystem;
 public class ClimbTestCommand extends SequentialCommandGroup {
 
     public ClimbTestCommand(ClimbSubsystem subsystem) {
-        addCommands(new FullExtendFixedHookCommand(subsystem),
-                new RetractFixedHookCommand(subsystem));
+        addCommands(new ExtendArmCommand(subsystem),
+                new RetractArmCommand(subsystem));
     }
 
 }

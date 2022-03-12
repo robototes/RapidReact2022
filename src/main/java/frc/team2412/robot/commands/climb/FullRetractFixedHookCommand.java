@@ -14,7 +14,7 @@ public class FullRetractFixedHookCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.retractFixedArmFully();
+        subsystem.retractArmFully();
     }
 
     @Override

@@ -14,7 +14,7 @@ public class FullExtendFixedHookCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.extendFixedArm();
+        subsystem.extendArm();
     }
 
     @Override

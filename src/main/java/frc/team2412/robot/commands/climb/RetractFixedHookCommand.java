@@ -14,7 +14,7 @@ public class RetractFixedHookCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        subsystem.retractFixedArm();
+        subsystem.retractArm();
     }
 
     @Override

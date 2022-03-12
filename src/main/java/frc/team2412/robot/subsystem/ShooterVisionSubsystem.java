@@ -27,7 +27,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         // TODO Handle different starting positions
         public static final Vector2 STARTING_ROBOT_POSITION = new Vector2(5 * 12, 5 * 12);
         public static final double LIMELIGHT_TO_TURRET_CENTER_DISTANCE = -7; // Estimated, negative because limelight is
-                                                                             // in back of turret
+                                                                                // in back of turret
         public static final Vector2 ROBOT_CENTER_TO_TURRET_CENTER = new Vector2(3.93, -4);
         // Rotation2 can be specified by degrees or radians
         // STARTING_ROBOT_ROTATION of 0 means straight forward from the driver station

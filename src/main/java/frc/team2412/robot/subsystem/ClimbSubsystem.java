@@ -115,7 +115,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Config(name = "PID")
-    private void setFixedArmPID(@Config(name = "P", defaultValueNumeric = P) double p,
+    private void setPID(@Config(name = "P", defaultValueNumeric = P) double p,
             @Config(name = "I", defaultValueNumeric = I) double i,
             @Config(name = "D", defaultValueNumeric = D) double d) {
         motor.config_kP(PID_SLOT_0, p);

@@ -96,6 +96,8 @@ public class Hardware {
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
+
+        public static final int PNEUMATIC_HUB = 60;
     }
 
     // drive
@@ -144,13 +146,13 @@ public class Hardware {
         if (CLIMB_ENABLED) {
             // climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-            // climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-            // CLIMB_ANGLE_DOWN_SOLENOID);
+            // climbAngle = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH,
+            // CLIMB_ANGLE_UP_SOLENOID, CLIMB_ANGLE_DOWN_SOLENOID);
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
             intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
-            intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+            intakeSolenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
         }
         if (INDEX_ENABLED) {

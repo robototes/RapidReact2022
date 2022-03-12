@@ -1,15 +1,12 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
+import frc.team2412.robot.subsystem.PneumaticHubSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import io.github.oblarg.oblog.Loggable;
@@ -24,6 +21,7 @@ public class Subsystems implements Loggable {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
         public static final boolean SHOOTER_TESTING = false;
+        public static final boolean PNEUMATICS_ENABLED = true;
     }
 
     public final Hardware hardware;
@@ -40,6 +38,8 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
+    public PneumaticHubSubsystem pneumaticHubSubsystem;
+
     public Subsystems(Hardware h) {
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -51,6 +51,10 @@ public class Subsystems implements Loggable {
                     Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
         if (!comp)
             return;
+
+        if (PNEUMATICS_ENABLED) {
+            pneumaticHubSubsystem = new PneumaticHubSubsystem();
+        }
         if (CLIMB_ENABLED)
             climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
                     hardware.climbAngle);

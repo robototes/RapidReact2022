@@ -60,26 +60,26 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         motor.setNeutralMode(NeutralMode.Brake);
 
-        setFixedArmPID(P, I, D);
+        setPID(P, I, D);
 
     }
 
     @Config(name = "Stop Fixed Motor")
-    public void stopFixedArm(boolean stop) {
+    public void stopArm(boolean stop) {
         if (stop) {
             motor.stopMotor();
         }
     }
 
-    public void extendFixedArm() {
+    public void extendArm() {
         setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
-    public void retractFixedArm() {
+    public void retractArm() {
         setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
-    public void retractFixedArmFully() {
+    public void retractArmFully() {
         setMotor(FULL_RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 

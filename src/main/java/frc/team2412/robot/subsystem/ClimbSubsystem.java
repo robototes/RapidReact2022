@@ -17,10 +17,7 @@ import io.github.oblarg.oblog.annotations.Log;
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public static class ClimbConstants {
-        public static final double EXTEND_SPEED = 0.1;
-        public static final double RETRACT_SPEED = -0.1;
-        public static final double STOP_SPEED = 0;
-
+        
         public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
@@ -87,17 +84,17 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void setMotor(double value) {
-            motor.set(ControlMode.Position, value);
+        motor.set(ControlMode.Position, value);
     }
 
     @Override
     public void simulationPeriodic() {
         // max speed 6000 rpm, 2048 ticks per rotation
-            double timeNow = Timer.getFPGATimestamp();
-            double timeElapsed = timeNow - lastUpdatedTime;
-            double motorFixedSpeed = motor.getSelectedSensorVelocity();
-            motor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
-            lastUpdatedTime = timeNow;
+        double timeNow = Timer.getFPGATimestamp();
+        double timeElapsed = timeNow - lastUpdatedTime;
+        double motorFixedSpeed = motor.getSelectedSensorVelocity();
+        motor.getSimCollection().setIntegratedSensorRawPosition((int) (motorFixedSpeed / timeElapsed));
+        lastUpdatedTime = timeNow;
     }
 
     @Log
@@ -121,9 +118,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     private void setFixedArmPID(@Config(name = "P", defaultValueNumeric = P) double p,
             @Config(name = "I", defaultValueNumeric = I) double i,
             @Config(name = "D", defaultValueNumeric = D) double d) {
-            motor.config_kP(PID_SLOT_0, p);
-            motor.config_kI(PID_SLOT_0, i);
-            motor.config_kD(PID_SLOT_0, d);
+        motor.config_kP(PID_SLOT_0, p);
+        motor.config_kI(PID_SLOT_0, i);
+        motor.config_kD(PID_SLOT_0, d);
     }
 
 }

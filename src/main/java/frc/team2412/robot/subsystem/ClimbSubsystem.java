@@ -17,7 +17,7 @@ import io.github.oblarg.oblog.annotations.Log;
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public static class ClimbConstants {
-        
+
         public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
@@ -66,7 +66,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     @Config(name = "Stop Fixed Motor")
     public void stopFixedArm(boolean stop) {
-        if (stop && motor != null) {
+        if (stop) {
             motor.stopMotor();
         }
     }

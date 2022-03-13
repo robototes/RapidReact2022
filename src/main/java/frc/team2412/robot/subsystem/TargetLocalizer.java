@@ -49,23 +49,24 @@ public class TargetLocalizer {
     }
 
     public double getLateralVelocity() {
+        // might need to do inverse
         return drivebaseSubsystem.getVelocity()
                 .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x;
     }
 
     public double getDepthVelocity() {
+        // might need to do inverse
         return drivebaseSubsystem.getVelocity()
                 .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).y;
     }
 
     public double getAngularVelocity() {
-        System.out.println(drivebaseSubsystem.getAngularVelocity());
         return drivebaseSubsystem.getAngularVelocity();
     }
 
     public double yawAdjustment() {
-        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage()
-                + getDistance() * LATERAL_DEPTH_COMPENSATION;
+        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF
+                + getDistance() * LATERAL_DEPTH_COMPENSATION) / getVoltage();
     }
 
     public double getVoltage() {

@@ -25,20 +25,18 @@ public class ShooterTargetCommand extends CommandBase {
         addRequirements(shooter);
     }
 
+    double turretAngle = 0;
+
     @Override
     public void execute() {
-
         if (ShooterConstants.dataPoints != null) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
                     .getInterpolated(localizer.getAdjustedDistance());
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
-        if (turretEnable.getAsBoolean()) {
-            shooter.setTurretAngle(shooter.getTurretAngle() + localizer.getYaw() + localizer.yawAdjustment());
-        } else {
-            shooter.setTurretAngle(0);
-        }
+        turretAngle = turretEnable.getAsBoolean() ? turretAngle + localizer.getYaw() : 0;
+        shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
 
     }
 }

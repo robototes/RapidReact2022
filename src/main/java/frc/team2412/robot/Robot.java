@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.Subsystems.SubsystemConstants;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
@@ -159,7 +158,7 @@ public class Robot extends TimedRobot {
         hardware = new Hardware();
         subsystems = new Subsystems(hardware);
         controls = new Controls(subsystems);
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
             updateManager.startLoop(5.0e-3);

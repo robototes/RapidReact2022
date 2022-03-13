@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
@@ -17,6 +18,7 @@ import io.github.oblarg.oblog.annotations.Log;
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     public static class ClimbConstants {
+        public static final double RETRACT_SPEED = -0.1;
 
         public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
 
@@ -43,11 +45,15 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX motor;
 
+    private final DigitalInput bottomLimitSwitch;
+
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    public ClimbSubsystem(WPI_TalonFX motor) {
+    public ClimbSubsystem(WPI_TalonFX motor, DigitalInput bottomLimitSwitch) {
         setName("ClimbSubsystem");
         this.motor = motor;
+
+        this.bottomLimitSwitch = bottomLimitSwitch;
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -121,6 +127,17 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.config_kP(PID_SLOT_0, p);
         motor.config_kI(PID_SLOT_0, i);
         motor.config_kD(PID_SLOT_0, d);
+    }
+
+    /**
+     * Lowers arm at set speed
+     */
+    public void lowerArm(){
+        motor.set(RETRACT_SPEED);
+    }
+
+    public boolean isHittingLimitSwitch(){
+        return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
     }
 
 }

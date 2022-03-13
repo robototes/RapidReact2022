@@ -7,11 +7,11 @@ public class ClimbResetCommand extends CommandBase {
 
     private ClimbSubsystem climbSubsystem;
 
-    public ClimbResetCommand(ClimbSubsystem climbSubsystem){
+    public ClimbResetCommand(ClimbSubsystem climbSubsystem) {
         this.climbSubsystem = climbSubsystem;
         addRequirements(climbSubsystem);
     }
-    
+
     @Override
     public void execute() {
         climbSubsystem.lowerArm();

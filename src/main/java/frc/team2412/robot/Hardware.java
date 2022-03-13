@@ -96,7 +96,7 @@ public class Hardware {
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
-                CLIMB_ANGLE_DOWN_SOLENOID = 8;
+                CLIMB_ANGLE_DOWN_SOLENOID = 8, CLIMB_LIMIT_SWTICH = 99;// to be determined
 
         // PDP logging
         public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
@@ -126,6 +126,8 @@ public class Hardware {
 
     public DoubleSolenoid climbAngle;
 
+    public DigitalInput climbLimitSwtich;
+
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
@@ -147,6 +149,7 @@ public class Hardware {
             return;
         if (CLIMB_ENABLED) {
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+            climbLimitSwtich = new DigitalInput(CLIMB_LIMIT_SWTICH);
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);

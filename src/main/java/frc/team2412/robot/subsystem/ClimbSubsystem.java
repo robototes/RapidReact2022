@@ -132,11 +132,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     /**
      * Lowers arm at set speed
      */
-    public void lowerArm(){
+    public void lowerArm() {
         motor.set(RETRACT_SPEED);
     }
 
-    public boolean isHittingLimitSwitch(){
+    public boolean isHittingLimitSwitch() {
         return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
     }
 

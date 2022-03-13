@@ -84,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    public boolean workingCommand = true;
+    public boolean shooterOvveride = true;
 
     public boolean enableTurret = true;
 
@@ -174,9 +174,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void periodic() {
     }
 
-    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
-    public void setWorkingCommand(boolean working) {
-        workingCommand = working;
+    @Config.ToggleSwitch(name = "Override shooter", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
+    public void setShooterOverride(boolean override) {
+        shooterOvveride = override;
     }
 
     // PID
@@ -250,8 +250,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param RPM
      *            The target RPM for the flywheel motors.
      */
-    @Config.NumberSlider(name = "Set flywheel", columnIndex = 3, rowIndex = 0, min = 0, max = 6000)
     public void setFlywheelRPM(double RPM) {
+        if (shooterOvveride) {
+            RPM = flywheelTestRPM;
+        }
         targetRPM = RPM;
         setFlywheelVelocity(RPM * FLYWHEEL_RPM_TO_VELOCITY);
     }
@@ -321,6 +323,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     @Config.NumberSlider(name = "Set hood", columnIndex = 3, rowIndex = 1, min = MIN_HOOD_ANGLE, max = MAX_HOOD_ANGLE)
     public void setHoodAngle(double degrees) {
+        if (shooterOvveride) {
+            degrees = hoodTestAngle;
+        }
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
         hoodPID.setReference(degrees / HOOD_REVS_TO_DEGREES, CANSparkMax.ControlType.kPosition);
     }
@@ -378,7 +383,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             return;
         }
 
-        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE) {
+        if (MIN_TURRET_ANGLE < angle && angle < MAX_TURRET_ANGLE) {
             turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
         }
     }

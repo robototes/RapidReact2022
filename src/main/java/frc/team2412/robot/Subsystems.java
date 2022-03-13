@@ -52,7 +52,7 @@ public class Subsystems implements Loggable {
         if (!comp)
             return;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbLimitSwtich);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid,
                     hardware.ingestProximity);

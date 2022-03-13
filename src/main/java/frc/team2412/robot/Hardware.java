@@ -98,7 +98,7 @@ public class Hardware {
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
 
-        //PDP logging
+        // PDP logging
         public static final int PDP_ID = 63; // needs to be verified on the bot (Can be found in REV)
 
     }

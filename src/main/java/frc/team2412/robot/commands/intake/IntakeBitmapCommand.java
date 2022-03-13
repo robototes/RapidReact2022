@@ -62,7 +62,7 @@ public class IntakeBitmapCommand extends CommandBase {
     @Override
     public void execute() {
 
-        boolean ingestSensor = indexSubsystem.ingestSensorHasBallIn();
+        boolean ingestSensor = intakeSubsystem.hasBallIn();
         boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
 
         for (Bitmap value : Bitmap.values()) {
@@ -72,7 +72,6 @@ public class IntakeBitmapCommand extends CommandBase {
             }
         }
 
-        indexSubsystem.setBitmapState(currentState);
         intakeSubsystem.setSpeed(currentState.intakeMotorSpeed);
         indexSubsystem.setSpeed(currentState.ingestMotorSpeed, currentState.feederMotorSpeed);
     }

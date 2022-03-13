@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
@@ -47,6 +48,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     private final DoubleSolenoid solenoid;
 
+    private final DigitalInput ingestProximity;
+
     // States
 
     @Log(name = "Solenoid State")
@@ -55,7 +58,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motor, WPI_TalonFX motor2, DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(WPI_TalonFX motor, WPI_TalonFX motor2, DoubleSolenoid intakeSolenoid,
+            DigitalInput ingestProximity) {
 
         this.motor1 = motor;
         this.motor1.setNeutralMode(NeutralMode.Coast);
@@ -68,6 +72,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         }
 
         this.solenoid = intakeSolenoid;
+
+        this.ingestProximity = ingestProximity;
 
         intakeSolenoidState = EXTEND;
 
@@ -167,5 +173,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
         return (intakeSolenoidState == RETRACT);
+    }
+
+    /**
+     * Checks if sensor is detecting ball
+     */
+    public boolean hasBallIn() {
+        return ingestProximity.get();
     }
 }

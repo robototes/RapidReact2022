@@ -130,13 +130,6 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
-    public DigitalInput ingestTopProximity;
-    public DigitalInput ingestBlueColor;
-    public DigitalInput ingestRedColor;
-    public DigitalInput feederBlueColor;
-    public DigitalInput feederRedColor;
-    public DigitalInput ingestTopBlueColor;
-    public DigitalInput ingestTopRedColor;
 
     public Hardware() {
         boolean comp = Robot.getInstance().isCompetition();
@@ -160,19 +153,12 @@ public class Hardware {
             intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
             intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
+            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            // ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
-            ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);
-            // ingestBlueColor = new DigitalInput(INGEST_BLUE);
-            // ingestRedColor = new DigitalInput(INGEST_RED);
-            // feederBlueColor = new DigitalInput(FEEDER_BLUE);
-            // feederRedColor = new DigitalInput(FEEDER_RED);
-            // ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
-            // ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

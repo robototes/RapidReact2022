@@ -1,6 +1,5 @@
 package frc.team2412.robot.subsystem;
 
-import frc.team2412.robot.Robot;
 import org.frcteam2910.common.math.Rotation2;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -69,7 +68,7 @@ public class TargetLocalizer {
     }
 
     public double getVoltage() {
-         return 12;
-         //kinda want pdp for better accuracy but yall removed it
+        return 12;
+        // kinda want pdp for better accuracy but yall removed it
     }
 }

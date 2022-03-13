@@ -99,7 +99,7 @@ public class Hardware {
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
 
         // PDP logging
-        public static final int PDP_ID = 63; // needs to be verified on the bot (Can be found in REV)
+        public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
 
     }
 

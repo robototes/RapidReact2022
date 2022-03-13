@@ -9,6 +9,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import org.frcteam2910.common.drivers.Gyroscope;
 
@@ -96,7 +97,14 @@ public class Hardware {
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
                 CLIMB_ANGLE_DOWN_SOLENOID = 8;
+
+        // PDP logging
+        public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
+
     }
+
+    // PDP
+    public PowerDistribution PDP;
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
@@ -132,6 +140,9 @@ public class Hardware {
 
     public Hardware() {
         boolean comp = Robot.getInstance().isCompetition();
+
+        PDP = new PowerDistribution(PDP_ID, ModuleType.kRev);
+
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
             frontRightModule = FRONT_RIGHT_CONFIG.create(comp);

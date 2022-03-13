@@ -69,7 +69,7 @@ public class TargetLocalizer {
     }
 
     public double getVoltage() {
-        // return 12;
-        return Robot.getInstance().PDP.getVoltage();
+         return 12;
+         //kinda want pdp for better accuracy but yall removed it
     }
 }

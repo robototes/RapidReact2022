@@ -18,6 +18,8 @@ import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
 
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+
 public class AutonomousChooser {
 
     private final SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
@@ -101,30 +103,23 @@ public class AutonomousChooser {
 
         ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem),
             "One ball auto",
-            Subsystems.SubsystemConstants.INDEX_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-            Subsystems.SubsystemConstants.DRIVE_ENABLED),
+            INDEX_ENABLED && SHOOTER_ENABLED && DRIVE_ENABLED),
             TWO_BALL((subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem),
             "TWo ball auto",
-            Subsystems.SubsystemConstants.INDEX_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
-            Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-            Subsystems.SubsystemConstants.INTAKE_ENABLED),
+            INDEX_ENABLED && SHOOTER_ENABLED && DRIVE_ENABLED && INTAKE_ENABLED),
 
-        SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
-        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+        //these can be method refs because only one will be used at once
+        SQUARE_PATH(AutonomousChooser::getSquarePathAutoCommand, "Square Path", DRIVE_ENABLED),
+        LINE_PATH(AutonomousChooser::getLineAutoCommand, "Line Path", DRIVE_ENABLED),
+        STAR_PATH(AutonomousChooser::getStarPathAutoCommand, "Star Path", DRIVE_ENABLED),
+        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path", DRIVE_ENABLED),
+        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test", CLIMB_ENABLED),
+        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", INDEX_ENABLED),
+        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", INTAKE_ENABLED && INDEX_ENABLED),
+        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", SHOOTER_ENABLED),
         INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.intakeSubsystem, subsystems.indexSubsystem),
             "Intake and shoot",
-            Subsystems.SubsystemConstants.INTAKE_ENABLED &&
-            Subsystems.SubsystemConstants.INDEX_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_ENABLED);
+            INTAKE_ENABLED && INDEX_ENABLED && SHOOTER_ENABLED);
         // spotless:on
 
         public final CommandSupplier commandSupplier;

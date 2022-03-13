@@ -12,16 +12,16 @@ import frc.team2412.robot.util.ShooterDataDistancePoint;
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
-    private final BooleanSupplier turret;
+    private final BooleanSupplier turretEnable;
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer vision) {
-        this(shooter, vision, () -> false);
+    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer) {
+        this(shooter, localizer, () -> false);
     }
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer vision, BooleanSupplier turretButton) {
+    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer, BooleanSupplier turretButton) {
         this.shooter = shooter;
-        localizer = vision;
-        turret = turretButton;
+        this.localizer = localizer;
+        turretEnable = turretButton;
         addRequirements(shooter);
     }
 
@@ -36,23 +36,11 @@ public class ShooterTargetCommand extends CommandBase {
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
-        if (turret.getAsBoolean()) {
-            turretAngle = shooter.getTurretAngle() + localizer.getYaw();
-            shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
+        if (turretEnable.getAsBoolean()) {
+            shooter.setTurretAngle(shooter.getTurretAngle() + localizer.getYaw() + localizer.yawAdjustment());
         } else {
             shooter.setTurretAngle(0);
-            turretAngle = 0;
         }
 
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        shooter.stopFlywheel();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 }

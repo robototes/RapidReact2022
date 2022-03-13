@@ -25,8 +25,6 @@ public class ShooterTargetCommand extends CommandBase {
         addRequirements(shooter);
     }
 
-    double turretAngle = 0;
-
     @Override
     public void execute() {
 

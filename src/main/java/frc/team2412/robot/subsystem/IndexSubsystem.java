@@ -1,12 +1,7 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_RESET_AMPS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_AMPS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_SECONDS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.PROXIMITY_THRESHOLD;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -21,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
+import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -59,16 +55,18 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    private final DigitalInput ingestProximity;
+    // private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
     private final DigitalInput ingestTopProximity;
 
-    private final DigitalInput ingestBlueColor;
-    private final DigitalInput ingestRedColor;
-    private final DigitalInput feederBlueColor;
-    private final DigitalInput feederRedColor;
-    private final DigitalInput ingestTopBlueColor;
-    private final DigitalInput ingestTopRedColor;
+    /*
+     * private final DigitalInput ingestBlueColor;
+     * private final DigitalInput ingestRedColor;
+     * private final DigitalInput feederBlueColor;
+     * private final DigitalInput feederRedColor;
+     * private final DigitalInput ingestTopBlueColor;
+     * private final DigitalInput ingestTopRedColor;
+     */
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -87,10 +85,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
-            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
+    public IndexSubsystem() {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Index");
 
@@ -99,29 +94,29 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
                 .withSize(2, 1)
                 .getEntry();
 
-        this.ingestMotor = firstMotor;
-        this.feederMotor = secondMotor;
-        this.ingestProximity = ingestProximity;
-        this.feederProximity = feederProximity;
-        this.ingestTopProximity = ingestTopProximity;
-        this.ingestBlueColor = ingestBlueColor;
-        this.ingestRedColor = ingestRedColor;
-        this.feederBlueColor = feederBlueColor;
-        this.feederRedColor = feederRedColor;
-        this.ingestTopBlueColor = ingestTopBlueColor;
-        this.ingestTopRedColor = ingestTopRedColor;
+        ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+        feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+        // ingestProximity = new DigitalInput(INGEST_PROXIMITY);
+        feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+        ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);
+        // ingestBlueColor = new DigitalInput(INGEST_BLUE);
+        // ingestRedColor = new DigitalInput(INGEST_RED);
+        // feederBlueColor = new DigitalInput(FEEDER_BLUE);
+        // feederRedColor = new DigitalInput(FEEDER_RED);
+        // ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
+        // ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
-        this.feederMotor.setInverted(true);
-        this.ingestMotor.configFactoryDefault();
-        this.feederMotor.configFactoryDefault();
+        feederMotor.setInverted(true);
+        ingestMotor.configFactoryDefault();
+        feederMotor.configFactoryDefault();
 
-        this.ingestMotor.setNeutralMode(NeutralMode.Brake);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        ingestMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setNeutralMode(NeutralMode.Brake);
 
-        this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
-        this.feederMotor.setInverted(true);
+        feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();
@@ -133,6 +128,11 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     // Methods
+
+    public void simulationInit(PhysicsSim sim) {
+        sim.addTalonFX(ingestMotor, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(feederMotor, 1, SIM_FULL_VELOCITY);
+    }
 
     public void setSpeed(double ingestSpeed, double feederSpeed) {
         System.out.println(ingestSpeed);

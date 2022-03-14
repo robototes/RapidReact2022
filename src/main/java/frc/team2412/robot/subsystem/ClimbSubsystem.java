@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -10,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -45,9 +47,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
-    public ClimbSubsystem(WPI_TalonFX motor) {
+    public ClimbSubsystem() {
         setName("ClimbSubsystem");
-        this.motor = motor;
+        this.motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+        /*
+         * climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
+         * climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
+         * CLIMB_ANGLE_DOWN_SOLENOID);
+         */
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -62,6 +69,12 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         setPID(P, I, D);
 
+    }
+
+    public void simulationInit(PhysicsSim sim) {
+        // Motor, acceleration time from 0 to full in seconds, max velocity
+        sim.addTalonFX(motor, 1, SIM_FULL_VELOCITY);
+        // sim.addTalonFX(climbMotorDynamic, 1, SIM_FULL_VELOCITY);
     }
 
     @Config(name = "Stop Fixed Motor")

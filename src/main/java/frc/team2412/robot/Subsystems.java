@@ -26,8 +26,6 @@ public class Subsystems implements Loggable {
         public static final boolean SHOOTER_TESTING = false;
     }
 
-    public final Hardware hardware;
-
     public ClimbSubsystem climbSubsystem;
 
     public DrivebaseSubsystem drivebaseSubsystem;
@@ -40,34 +38,27 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public Subsystems(Hardware h) {
+    public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
 
-        hardware = h;
-
-        if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (!comp)
-            return;
-        if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed);
-        if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid);
-        if (SHOOTER_ENABLED) {
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
-                    hardware.turretMotor, hardware.hoodMotor);
-            shooterVisionSubsystem = new ShooterVisionSubsystem();
+        if (DRIVE_ENABLED) {
+            drivebaseSubsystem = new DrivebaseSubsystem();
         }
-
+        if (!comp) {
+            return;
+        }
+        if (CLIMB_ENABLED) {
+            climbSubsystem = new ClimbSubsystem();
+        }
         if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+            indexSubsystem = new IndexSubsystem();
+        }
+        if (INTAKE_ENABLED) {
+            intakeSubsystem = new IntakeSubsystem();
+        }
+        if (SHOOTER_ENABLED) {
+            shooterSubsystem = new ShooterSubsystem();
+            shooterVisionSubsystem = new ShooterVisionSubsystem();
         }
     }
 }

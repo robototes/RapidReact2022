@@ -96,7 +96,7 @@ public class Hardware {
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
-                CLIMB_ANGLE_DOWN_SOLENOID = 8;
+                CLIMB_ANGLE_DOWN_SOLENOID = 8, CLIMB_LIMIT_SWTICH = 30;// to be determined
 
         // PDP logging
         public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
@@ -126,17 +126,12 @@ public class Hardware {
 
     public DoubleSolenoid climbAngle;
 
+    public DigitalInput climbLimitSwtich;
+
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
-    public DigitalInput ingestTopProximity;
-    public DigitalInput ingestBlueColor;
-    public DigitalInput ingestRedColor;
-    public DigitalInput feederBlueColor;
-    public DigitalInput feederRedColor;
-    public DigitalInput ingestTopBlueColor;
-    public DigitalInput ingestTopRedColor;
 
     public Hardware() {
         boolean comp = Robot.getInstance().isCompetition();
@@ -153,29 +148,20 @@ public class Hardware {
         if (!comp)
             return;
         if (CLIMB_ENABLED) {
-            // climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-            // climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-            // CLIMB_ANGLE_DOWN_SOLENOID);
+            climbLimitSwtich = new DigitalInput(CLIMB_LIMIT_SWTICH);
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
             intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
             intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
+            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            // ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
-            ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);
-            // ingestBlueColor = new DigitalInput(INGEST_BLUE);
-            // ingestRedColor = new DigitalInput(INGEST_RED);
-            // feederBlueColor = new DigitalInput(FEEDER_BLUE);
-            // feederRedColor = new DigitalInput(FEEDER_RED);
-            // ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
-            // ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

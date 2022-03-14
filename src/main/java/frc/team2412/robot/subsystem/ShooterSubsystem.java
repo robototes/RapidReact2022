@@ -22,35 +22,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterSubsystem extends SubsystemBase implements Loggable {
-    /**
-     * Constructor for shooter subsystem.
-     *
-     * @param flywheelMotor1
-     *            The first motor connected to the flywheel
-     *
-     * @param flywheelMotor2
-     *            The second motor connected to the flywheel
-     *
-     * @param turretMotor
-     *            The motor that controls the horizontal rotation of the
-     *            turret
-     *
-     * @param hoodMotor
-     *            The motor that controls the angle of the hood above the
-     *            turret
-     *
-     */
-    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
-            CANSparkMax hoodMotor) {
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
-        this.hoodEncoder = hoodMotor.getEncoder();
-        this.hoodPID = hoodMotor.getPIDController();
-        configMotors();
-    }
-
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
@@ -84,9 +55,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90;// -200; // Can barely reach -139 degrees physically 115
-                                                            // tested
-        public static final double MAX_TURRET_ANGLE = 90;// 115; // Can barely reach 210 degrees physically 245 tested
+        public static final double MIN_TURRET_ANGLE = -90;
+        public static final double MAX_TURRET_ANGLE = 90;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -102,10 +72,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     /* INSTANCE VARIABLES */
 
-    // @Log.MotorController(name = "Flywheel motor 1", columnIndex = 3, rowIndex = 0)
+    // TODO Fix motor logging
+    // @Log.MotorController(name = "Flywheel motor", columnIndex = 3, rowIndex = 0)
     private final WPI_TalonFX flywheelMotor1;
-
-    // @Log.MotorController(name = "Flywheel motor 2", columnIndex = 3, rowIndex = 1)
     private final WPI_TalonFX flywheelMotor2;
 
     // @Log.MotorController(name = "Turret motor", columnIndex = 3, rowIndex = 2)
@@ -115,12 +84,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
-    public void setWorkingCommand(boolean working) {
-        workingCommand = working;
-    }
-
     public boolean workingCommand = true;
+
+    public boolean enableTurret = true;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -132,6 +98,35 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double turretAngleBias;
     private double turretTestAngle;
     private double distanceBias;
+
+    /**
+     * Constructor for shooter subsystem.
+     *
+     * @param flywheelMotor1
+     *            The first motor connected to the flywheel
+     *
+     * @param flywheelMotor2
+     *            The second motor connected to the flywheel
+     *
+     * @param turretMotor
+     *            The motor that controls the horizontal rotation of the
+     *            turret
+     *
+     * @param hoodMotor
+     *            The motor that controls the angle of the hood above the
+     *            turret
+     *
+     */
+    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
+            CANSparkMax hoodMotor) {
+        this.flywheelMotor1 = flywheelMotor1;
+        this.flywheelMotor2 = flywheelMotor2;
+        this.turretMotor = turretMotor;
+        this.hoodMotor = hoodMotor;
+        this.hoodEncoder = hoodMotor.getEncoder();
+        this.hoodPID = hoodMotor.getPIDController();
+        configMotors();
+    }
 
     /* FUNCTIONS */
 
@@ -157,7 +152,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        // turretMotor.configClosedloopRamp(10, 0);
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 50);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
@@ -178,6 +172,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+    }
+
+    @Config.ToggleSwitch(name = "Working command", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
+    public void setWorkingCommand(boolean working) {
+        workingCommand = working;
     }
 
     // PID
@@ -373,49 +372,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
-    boolean loopToMin = false;
-    boolean loopToMax = false;
-    //
-    // @Log.BooleanBox(name="yeet turret", columnIndex = 9, rowIndex = 4)
-    // public void yeetTurret(boolean reset) {
-    // if(reset){
-    // turretWorking = false;
-    // }
-    // }
-    // @Log.BooleanBox(name="add turret", columnIndex = 8, rowIndex = 4)
-    // public void addTurret(boolean reset) {
-    // if(reset){
-    // turretWorking = true;
-    // }
-    // }
-    public boolean turretWorking = true;
-
     public void setTurretAngle(double angle) {
-        if (isTurretAtAngle(angle) || !turretWorking) {
+        // TODO reimplement turret wrapping
+        if (isTurretAtAngle(angle) || !enableTurret) {
             return;
         }
 
-        // if (angle < MIN_TURRET_ANGLE) {
-        // loopToMax = true;
-        // } else if (angle > MAX_TURRET_ANGLE) {
-        // loopToMin = true;
-        // }
-        //
-        // if (loopToMax) {
-        // if (!isTurretAtAngle(MAX_TURRET_ANGLE)) {
-        // angle = MAX_TURRET_ANGLE;
-        // } else {
-        // loopToMax = false;
-        // }
-        // } else if (loopToMin) {
-        // if (!isTurretAtAngle(MIN_TURRET_ANGLE)) {
-        // angle = MIN_TURRET_ANGLE;
-        // } else {
-        // loopToMin = false;
-        // }
-        // }
-        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE)
+        if (angle > MIN_TURRET_ANGLE && angle < MAX_TURRET_ANGLE) {
             turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
+        }
     }
 
     /**

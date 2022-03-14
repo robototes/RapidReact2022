@@ -1,21 +1,20 @@
 package frc.team2412.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AngleClimbHookCommand extends CommandBase {
+public class RetractArmFullyCommand extends CommandBase {
 
     private final ClimbSubsystem subsystem;
 
-    public AngleClimbHookCommand(ClimbSubsystem subsystem) {
+    public RetractArmFullyCommand(ClimbSubsystem subsystem) {
         this.subsystem = subsystem;
         addRequirements(subsystem);
     }
 
     @Override
-    public void initialize() {
-        subsystem.angleClimbHook(DoubleSolenoid.Value.kForward);
+    public void execute() {
+        subsystem.retractArmFully();
     }
 
     @Override

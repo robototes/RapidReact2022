@@ -5,21 +5,21 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class ShooterHoodSetConstantAngleCommand extends CommandBase {
     private final ShooterSubsystem shooter;
-    private final double angle;
+    private final double hoodAngle;
 
     public ShooterHoodSetConstantAngleCommand(ShooterSubsystem shooter, double angle) {
         this.shooter = shooter;
-        this.angle = angle;
+        this.hoodAngle = angle;
         addRequirements(shooter);
     }
 
     @Override
     public void execute() {
-        shooter.setHoodAngle(angle);
+        shooter.setHoodAngle(hoodAngle);
     }
 
     @Override
     public boolean isFinished() {
-        return shooter.isHoodAtAngle(angle);
+        return shooter.isHoodAtAngle(hoodAngle);
     }
 }

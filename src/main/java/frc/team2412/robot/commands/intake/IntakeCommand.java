@@ -17,7 +17,7 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (indexSubsystem.feederSensorHasBallIn() && intakeSubsystem.hasBallIn()) {
+        if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
             intakeSubsystem.intakeStop();
         } else {
             intakeSubsystem.intakeIn();

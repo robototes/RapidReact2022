@@ -13,7 +13,7 @@ public class IndexCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!subsystem.feederSensorHasBallIn()) {
+        if (!subsystem.hasCargo()) {
             subsystem.ingestMotorIn();
             subsystem.feederMotorIn();
         } else {

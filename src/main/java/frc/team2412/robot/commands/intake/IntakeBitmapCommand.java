@@ -62,8 +62,8 @@ public class IntakeBitmapCommand extends CommandBase {
     @Override
     public void execute() {
 
-        boolean ingestSensor = intakeSubsystem.hasBallIn();
-        boolean feederSensor = indexSubsystem.feederSensorHasBallIn();
+        boolean ingestSensor = intakeSubsystem.hasCargo();
+        boolean feederSensor = indexSubsystem.hasCargo();
 
         for (Bitmap value : Bitmap.values()) {
             if (value.equals(ingestSensor, feederSensor)) {

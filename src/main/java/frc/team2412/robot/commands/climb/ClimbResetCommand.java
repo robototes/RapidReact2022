@@ -20,6 +20,7 @@ public class ClimbResetCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         climbSubsystem.resetEncoder(true);
+        climbSubsystem.stopArm(true);
     }
 
     @Override

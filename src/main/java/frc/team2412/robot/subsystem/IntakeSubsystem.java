@@ -178,7 +178,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if sensor is detecting ball
      */
-    public boolean hasBallIn() {
+    public boolean hasCargo() {
         return ingestProximity.get();
     }
 }

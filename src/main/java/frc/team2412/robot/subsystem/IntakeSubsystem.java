@@ -87,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Methods
 
-    public void simulationInit(PhysicsSim sim) {
+    public void simInit(PhysicsSim sim) {
         sim.addTalonFX(motor1, 1, SIM_FULL_VELOCITY);
         sim.addTalonFX(motor2, 1, SIM_FULL_VELOCITY);
     }

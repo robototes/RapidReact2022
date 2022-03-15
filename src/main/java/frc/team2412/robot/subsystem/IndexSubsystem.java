@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
 import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -70,7 +69,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Methods
 
-    public void simulationInit(PhysicsSim sim) {
+    public void simInit(PhysicsSim sim) {
         sim.addTalonFX(ingestMotor, 1, SIM_FULL_VELOCITY);
         sim.addTalonFX(feederMotor, 1, SIM_FULL_VELOCITY);
     }

@@ -263,10 +263,10 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationInit() {
         PhysicsSim sim = PhysicsSim.getInstance();
-        subsystems.climbSubsystem.simulationInit(sim);
-        subsystems.indexSubsystem.simulationInit(sim);
-        subsystems.intakeSubsystem.simulationInit(sim);
-        subsystems.shooterSubsystem.simulationInit(sim);
+        subsystems.climbSubsystem.simInit(sim);
+        subsystems.indexSubsystem.simInit(sim);
+        subsystems.intakeSubsystem.simInit(sim);
+        subsystems.shooterSubsystem.simInit(sim);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     }
 
-    public void simulationInit(PhysicsSim sim) {
+    public void simInit(PhysicsSim sim) {
         // Motor, acceleration time from 0 to full in seconds, max velocity
         sim.addTalonFX(motor, 1, SIM_FULL_VELOCITY);
         // sim.addTalonFX(climbMotorDynamic, 1, SIM_FULL_VELOCITY);

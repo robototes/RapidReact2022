@@ -128,7 +128,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final PFFController<Vector2> tipController;
 
     public DrivebaseSubsystem() {
-        var comp = Robot.getInstance().isCompetition();
+        var comp = Robot.getInstance().isCompetition() && !Robot.isSimulation();
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);

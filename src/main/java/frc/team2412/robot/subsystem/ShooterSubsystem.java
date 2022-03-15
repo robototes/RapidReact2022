@@ -162,7 +162,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void periodic() {
     }
 
-    public void simulationInit(PhysicsSim sim) {
+    public void simInit(PhysicsSim sim) {
         sim.addTalonFX(flywheelMotor1, 3, SIM_FULL_VELOCITY);
         sim.addTalonFX(flywheelMotor2, 3, SIM_FULL_VELOCITY);
         sim.addTalonFX(turretMotor, 1, SIM_FULL_VELOCITY);

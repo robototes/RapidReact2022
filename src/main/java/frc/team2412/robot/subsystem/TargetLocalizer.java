@@ -30,7 +30,9 @@ public class TargetLocalizer {
         return getDistance() + distanceAdjustment();
     }
 
-    /** very basic feedforward math to adjust the depth depending on the distance you are moving away from target
+    /**
+     * very basic feedforward math to adjust the depth depending on the distance you are moving away
+     * from target
      *
      * @return adjustment
      */
@@ -51,7 +53,8 @@ public class TargetLocalizer {
         return shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
     }
 
-    /** unit vector component of chassis velocity perpendicular to the turret output
+    /**
+     * unit vector component of chassis velocity perpendicular to the turret output
      *
      * @return that
      */
@@ -61,7 +64,8 @@ public class TargetLocalizer {
                 .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x;
     }
 
-    /** unit vector component of chassis velocity parallel to the turret output
+    /**
+     * unit vector component of chassis velocity parallel to the turret output
      *
      * @return that
      */
@@ -75,15 +79,18 @@ public class TargetLocalizer {
         return drivebaseSubsystem.getAngularVelocity();
     }
 
-    /** feedforward math for turret angle feedforward
+    /**
+     * feedforward math for turret angle feedforward
      * multiply the lateral velocity by distance.
      * This is to compensate for a longer time of flight the farther away you are
      * and it is not perfect but it should work.
      * angular velocity is to help the turret keep heading when the robot itself is turning
+     *
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage();
+        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF)
+                / getVoltage();
     }
 
     public double getVoltage() {

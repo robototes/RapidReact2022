@@ -42,12 +42,11 @@ public class MACAddress {
      *            thing to compare
      * @return if they should be the same
      */
-    @Override
-    public boolean equals(Object obj) {
+    public boolean matches(Object obj) {
         if (obj instanceof byte[])
             return Arrays.equals(address, (byte[]) obj);
         if (obj instanceof MACAddress)
-            return equals(((MACAddress) obj).getAddress());
+            return matches(((MACAddress) obj).getAddress());
         return false;
     }
 
@@ -59,7 +58,7 @@ public class MACAddress {
     public boolean exists() {
         try {
             for (byte[] b : getAll()) {
-                if (equals(b))
+                if (matches(b))
                     return true;
             }
             return false;

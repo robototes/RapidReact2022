@@ -386,8 +386,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             accelLimiter.calculate( // vector accel limiter
                                     driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                            getAngle() : Rotation2.ZERO) // same code as other block
-                                            .add(tipController.update(getGyroscopeXY()))), // anti tip stuff
+                                            getAngle() : Rotation2.ZERO)) // same code as other block
+                                    .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else
                     signal = driveSignal;

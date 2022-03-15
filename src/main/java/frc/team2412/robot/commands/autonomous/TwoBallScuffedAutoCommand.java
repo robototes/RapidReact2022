@@ -1,5 +1,6 @@
 package frc.team2412.robot.commands.autonomous;
 
+import frc.team2412.robot.subsystem.*;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
@@ -12,15 +13,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
 public class TwoBallScuffedAutoCommand extends SequentialCommandGroup {
     public TwoBallScuffedAutoCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
+            TargetLocalizer shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
             IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)

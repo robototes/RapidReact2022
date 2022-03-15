@@ -96,4 +96,12 @@ public class TargetLocalizer {
     public double getVoltage() {
         return Robot.getInstance().hardware.PDP.getVoltage();
     }
+
+    public void limelightOn() {
+        shooterVisionSubsystem.setLedOn();
+    }
+
+    public void limelightOff() {
+        shooterVisionSubsystem.setLedOff();
+    }
 }

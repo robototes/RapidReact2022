@@ -28,6 +28,11 @@ public class ShooterTargetCommand extends CommandBase {
     double turretAngle = 0;
 
     @Override
+    public void initialize() {
+        localizer.limelightOn();
+    }
+
+    @Override
     public void execute() {
         if (ShooterConstants.dataPoints != null) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
@@ -38,5 +43,10 @@ public class ShooterTargetCommand extends CommandBase {
         turretAngle = turretEnable.getAsBoolean() ? turretAngle + localizer.getYaw() : 0;
         shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
 
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        localizer.limelightOff();
     }
 }

@@ -13,7 +13,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double LIMELIGHT_HEIGHT_OFFSET = 39;
         public static final double RIM_HEIGHT = 104; // 8ft8in
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
-        public static final double HUB_RADIUS = 4 * 12 / 2;
+        public static final double HUB_RADIUS = 24;
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
     }
 
@@ -23,11 +23,6 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         limelight = NetworkTableInstance.getDefault().getTable(Hardware.HardwareConstants.LIMELIGHT);
     }
 
-    @Override
-    public void periodic() {
-
-    }
-
     public boolean hasTarget() {
         return limelight.getEntry("tv").getDouble(0) == 1;
     }
@@ -35,7 +30,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     // x-axis
     @Log(name = "Yaw")
     public double getYaw() {
-        return limelight.getEntry("tx").getDouble(0);
+        return -limelight.getEntry("tx").getDouble(0);
     }
 
     // returns in inches

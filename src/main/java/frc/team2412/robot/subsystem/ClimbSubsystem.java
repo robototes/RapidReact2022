@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
@@ -17,16 +18,15 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
-
     public static class ClimbConstants {
+        public static final double RETRACT_SPEED = -0.1;
 
         public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
-        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH; // Max robot
-                                                                                                            // height is
-                                                                                                            // 66 inches
+        // Max robot height is 66 inches
+        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH;
         public static final double MIN_ENCODER_TICKS = 0;
 
         public static final int PID_SLOT_0 = 0;
@@ -45,16 +45,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX motor;
 
+    private final DigitalInput bottomLimitSwitch;
+
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
     public ClimbSubsystem() {
         setName("ClimbSubsystem");
-        this.motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-        /*
-         * climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
-         * climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-         * CLIMB_ANGLE_DOWN_SOLENOID);
-         */
+        motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+        bottomLimitSwitch = new DigitalInput(CLIMB_LIMIT_SWITCH);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
         motorConfig.forwardSoftLimitEnable = false;
@@ -136,4 +134,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.config_kD(PID_SLOT_0, d);
     }
 
+    /**
+     * Lowers arm at set speed
+     */
+    public void lowerArm() {
+        motor.set(RETRACT_SPEED);
+    }
+
+    public boolean isHittingLimitSwitch() {
+        return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
+    }
 }

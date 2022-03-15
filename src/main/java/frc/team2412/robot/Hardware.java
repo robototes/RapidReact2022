@@ -79,7 +79,7 @@ public class Hardware {
 
     // climb can ids are range 50-59
     public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
-            CLIMB_ANGLE_DOWN_SOLENOID = 8;
+            CLIMB_ANGLE_DOWN_SOLENOID = 8, CLIMB_LIMIT_SWITCH = 30;
 
     // PDP logging
     public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
@@ -87,54 +87,4 @@ public class Hardware {
     // Simulation stuff
     // TODO Find more accurate values
     public static final double SIM_FULL_VELOCITY = 6000 * TalonFXConstants.RPM_TO_VELOCITY;
-
-    /*
-     * public Hardware() {
-     * boolean comp = Robot.getInstance().isCompetition();
-     *
-     * PDP = new PowerDistribution(PDP_ID, ModuleType.kRev);
-     *
-     * if (DRIVE_ENABLED) {
-     * frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
-     * frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
-     * backLeftModule = BACK_LEFT_CONFIG.create(comp);
-     * backRightModule = BACK_RIGHT_CONFIG.create(comp);
-     * gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
-     * }
-     * if (!comp)
-     * return;
-     * if (CLIMB_ENABLED) {
-     * }
-     * if (INTAKE_ENABLED) {
-     * intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
-     * intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
-     * intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
-     * INTAKE_SOLENOID_DOWN);
-     * }
-     * if (INDEX_ENABLED) {
-     * ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
-     * feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-     * // ingestProximity = new DigitalInput(INGEST_PROXIMITY);
-     * feederProximity = new DigitalInput(FEEDER_PROXIMITY);
-     * ingestTopProximity = new DigitalInput(INGEST_PROXIMITY);
-     * // ingestBlueColor = new DigitalInput(INGEST_BLUE);
-     * // ingestRedColor = new DigitalInput(INGEST_RED);
-     * // feederBlueColor = new DigitalInput(FEEDER_BLUE);
-     * // feederRedColor = new DigitalInput(FEEDER_RED);
-     * // ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
-     * // ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
-     *
-     * }
-     * if (SHOOTER_ENABLED) {
-     * flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
-     * flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
-     * turretMotor = new WPI_TalonFX(TURRET);
-     * hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
-     * }
-     * if (DRIVER_VIS_ENABLED) {
-     * CameraServer.addCamera(frontCamera);
-     * CameraServer.startAutomaticCapture();
-     * }
-     * }
-     */
 }

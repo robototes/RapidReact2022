@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -50,6 +51,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     private final DoubleSolenoid solenoid;
 
+    private final DigitalInput ingestProximity;
+
     // States
 
     @Log(name = "Solenoid State")
@@ -59,19 +62,20 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // CONSTRUCTOR!
 
     public IntakeSubsystem() {
+        motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
+        motor1.setNeutralMode(NeutralMode.Coast);
+        motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
 
-        this.motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
-        this.motor1.setNeutralMode(NeutralMode.Coast);
-        this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
-
-        if (this.motor2 != null) {
-            this.motor2.setNeutralMode(NeutralMode.Coast);
-            this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        if (motor2 != null) {
+            motor2.setNeutralMode(NeutralMode.Coast);
+            motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         }
 
-        this.solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
+        solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
                 CLIMB_ANGLE_DOWN_SOLENOID);
+
+        ingestProximity = new DigitalInput(INGEST_PROXIMITY);
 
         intakeSolenoidState = EXTEND;
 
@@ -176,5 +180,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
         return (intakeSolenoidState == RETRACT);
+    }
+
+    /**
+     * Checks if sensor is detecting ball
+     */
+    public boolean hasCargo() {
+        return ingestProximity.get();
     }
 }

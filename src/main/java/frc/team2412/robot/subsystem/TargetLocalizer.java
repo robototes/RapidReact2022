@@ -9,8 +9,7 @@ public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 4.8, TURRET_ANGULAR_FF = 4.8, TURRET_DEPTH_FF = 0,
-                LATERAL_DEPTH_COMPENSATION = 0;
+        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0.1;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -31,8 +30,12 @@ public class TargetLocalizer {
         return getDistance() + distanceAdjustment();
     }
 
+    /** very basic feedforward math to adjust the depth depending on the distance you are moving away from target
+     *
+     * @return adjustment
+     */
     public double distanceAdjustment() {
-        return (getDepthVelocity() * TURRET_DEPTH_FF) / getVoltage();
+        return (getDepthVelocity() * getDistance() * TURRET_DEPTH_FF) / getVoltage();
     }
 
     public double getPitch() {
@@ -48,12 +51,20 @@ public class TargetLocalizer {
         return shooterVisionSubsystem.getYaw() + shooterSubsystem.getTurretAngleBias();
     }
 
+    /** unit vector component of chassis velocity perpendicular to the turret output
+     *
+     * @return that
+     */
     public double getLateralVelocity() {
         // might need to do inverse
         return drivebaseSubsystem.getVelocity()
                 .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x;
     }
 
+    /** unit vector component of chassis velocity parallel to the turret output
+     *
+     * @return that
+     */
     public double getDepthVelocity() {
         // might need to do inverse
         return drivebaseSubsystem.getVelocity()
@@ -64,13 +75,18 @@ public class TargetLocalizer {
         return drivebaseSubsystem.getAngularVelocity();
     }
 
+    /** feedforward math for turret angle feedforward
+     * multiply the lateral velocity by distance.
+     * This is to compensate for a longer time of flight the farther away you are
+     * and it is not perfect but it should work.
+     * angular velocity is to help the turret keep heading when the robot itself is turning
+     * @return adjustment
+     */
     public double yawAdjustment() {
-        return (getLateralVelocity() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF
-                + getDistance() * LATERAL_DEPTH_COMPENSATION) / getVoltage();
+        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF) / getVoltage();
     }
 
     public double getVoltage() {
-        // return 12;
         return Robot.getInstance().hardware.PDP.getVoltage();
     }
 }

@@ -9,6 +9,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import org.frcteam2910.common.drivers.Gyroscope;
 
@@ -84,19 +85,26 @@ public class Hardware {
         public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
         // intake can ids are range 30-39
-        public static final int INTAKE_MOTOR = 30, INTAKE_SOLENOID_UP = 14,
-                INTAKE_SOLENOID_DOWN = 15;
+        public static final int INTAKE_MOTOR = 30, INTAKE_MOTOR_2 = 31, INTAKE_SOLENOID_UP = 1,
+                INTAKE_SOLENOID_DOWN = 0;
 
         // index can ids are range 40-49
         public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
                 INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
                 INGEST_TOP_BLUE = 7,
-                INGEST_TOP_PROXIMITY = 8;
+                INGEST_TOP_PROXIMITY = 2;
 
         // climb can ids are range 50-59
         public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
-                CLIMB_ANGLE_DOWN_SOLENOID = 8;
+                CLIMB_ANGLE_DOWN_SOLENOID = 8, CLIMB_LIMIT_SWTICH = 30;// to be determined
+
+        // PDP logging
+        public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
+
     }
+
+    // PDP
+    public PowerDistribution PDP;
 
     // drive
     public SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
@@ -110,7 +118,7 @@ public class Hardware {
     public CANSparkMax hoodMotor;
 
     // intake
-    public WPI_TalonFX intakeMotor;
+    public WPI_TalonFX intakeMotor, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
     // climb
@@ -118,20 +126,18 @@ public class Hardware {
 
     public DoubleSolenoid climbAngle;
 
+    public DigitalInput climbLimitSwtich;
+
     // index
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
-    public DigitalInput ingestTopProximity;
-    public DigitalInput ingestBlueColor;
-    public DigitalInput ingestRedColor;
-    public DigitalInput feederBlueColor;
-    public DigitalInput feederRedColor;
-    public DigitalInput ingestTopBlueColor;
-    public DigitalInput ingestTopRedColor;
 
     public Hardware() {
         boolean comp = Robot.getInstance().isCompetition();
+
+        PDP = new PowerDistribution(PDP_ID, ModuleType.kRev);
+
         if (DRIVE_ENABLED) {
             frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
             frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
@@ -145,28 +151,20 @@ public class Hardware {
         if (!comp)
             return;
         if (CLIMB_ENABLED) {
-            climbMotorDynamic = new WPI_TalonFX(CLIMB_DYNAMIC_MOTOR);
             climbMotorFixed = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-            climbAngle = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-                    CLIMB_ANGLE_DOWN_SOLENOID);
+            climbLimitSwtich = new DigitalInput(CLIMB_LIMIT_SWTICH);
         }
         if (INTAKE_ENABLED) {
             intakeMotor = new WPI_TalonFX(INTAKE_MOTOR);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+            intakeMotor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
+            intakeSolenoid = new DoubleSolenoid(60, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                     INTAKE_SOLENOID_DOWN);
+            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
         }
         if (INDEX_ENABLED) {
             ingestIndexMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
             feederIndexMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-            ingestProximity = new DigitalInput(INGEST_PROXIMITY);
             feederProximity = new DigitalInput(FEEDER_PROXIMITY);
-            ingestTopProximity = new DigitalInput(INGEST_TOP_PROXIMITY);
-            ingestBlueColor = new DigitalInput(INGEST_BLUE);
-            ingestRedColor = new DigitalInput(INGEST_RED);
-            feederBlueColor = new DigitalInput(FEEDER_BLUE);
-            feederRedColor = new DigitalInput(FEEDER_RED);
-            ingestTopBlueColor = new DigitalInput(INGEST_TOP_BLUE);
-            ingestTopRedColor = new DigitalInput(INGEST_TOP_RED);
 
         }
         if (SHOOTER_ENABLED) {

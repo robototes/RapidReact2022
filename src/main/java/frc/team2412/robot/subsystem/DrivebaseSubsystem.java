@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -62,18 +61,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_DEFAULT = true;
+        public static final boolean ANTI_TIP_DEFAULT = false;
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0.002, TIP_TOLERANCE = 5;
-
-        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(180), COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(90);
+        public static final double TIP_P = 0.1, TIP_F = 0, TIP_TOLERANCE = 10;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.069834, 0.0, 0.0),
-            new PidConstants(3.0, 0.0, 0.0),
+            new PidConstants(0.1, 0.0, 0.0),
+            new PidConstants(0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -184,7 +181,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
-        speedModifier = tab.add("Speed Modifier", 1.0f)
+        speedModifier = tab.add("Speed Modifier", 0.5f)
                 .withPosition(2, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
@@ -194,13 +191,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(2, 2)
+                .withPosition(3, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
 
         fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
-                .withPosition(2, 3)
+                .withPosition(3, 2)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
@@ -230,8 +227,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public Vector2 getGyroscopeXY() {
         synchronized (sensorLock) {
             if (gyroscope instanceof Pigeon)
-                return new Vector2(((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL),
-                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH)).scale(180 / Math.PI);
+                return new Vector2(-((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH),
+                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL)).scale(180 / Math.PI);
             if (gyroscope instanceof NavX)
                 return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
                         ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180 / Math.PI);
@@ -270,7 +267,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return pose.rotation.inverse();
+            return getPose().rotation;
+            // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 
@@ -300,6 +298,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             gyroscope.setAdjustmentAngle(
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
+            tipController.setTargetPosition(getGyroscopeXY());
         }
     }
 

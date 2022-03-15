@@ -1,16 +1,15 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeMotorState;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -21,17 +20,13 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Constants
     public static class IntakeConstants {
 
-        public static final double INTAKE_IN_SPEED = 0.5;
-        public static final double INTAKE_OUT_SPEED = -0.5; // will adjust later after testing?
+        public static final double INTAKE_IN_SPEED = 0.7;
+        public static final double INTAKE_OUT_SPEED = -0.7; // will adjust later after testing?
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, 20, 20, 1);
 
         // Enums
-
-        public static enum IntakeMotorState {
-            IN, OUT, STOPPED;
-        }
 
         public static enum IntakeSolenoidState {
             EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
@@ -49,29 +44,39 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Define Hardware
 
     @Log
-    private final WPI_TalonFX motor;
+    private final WPI_TalonFX motor1;
+    private final WPI_TalonFX motor2;
 
     private final DoubleSolenoid solenoid;
+
+    private final DigitalInput ingestProximity;
 
     // States
 
     @Log(name = "Solenoid State")
     public static String state = "";
-    private IntakeMotorState intakeMotorState;
     private IntakeSolenoidState intakeSolenoidState;
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motor, DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(WPI_TalonFX motor, WPI_TalonFX motor2, DoubleSolenoid intakeSolenoid,
+            DigitalInput ingestProximity) {
 
-        this.motor = motor;
-        this.motor.setNeutralMode(NeutralMode.Coast);
-        this.motor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor1 = motor;
+        this.motor1.setNeutralMode(NeutralMode.Coast);
+        this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        this.motor2 = motor2;
+
+        if (this.motor2 != null) {
+            this.motor2.setNeutralMode(NeutralMode.Coast);
+            this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        }
 
         this.solenoid = intakeSolenoid;
 
+        this.ingestProximity = ingestProximity;
+
         intakeSolenoidState = EXTEND;
-        intakeMotorState = STOPPED;
 
         intakeRetract();
         intakeStop();
@@ -87,7 +92,9 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * @param speed
      */
     public void setSpeed(double speed) {
-        motor.set(speed);
+        motor1.set(speed);
+        if (motor2 != null)
+            motor2.set(-speed);
     }
 
     /**
@@ -96,8 +103,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeIn() {
         if (isIntakeExtended()) {
-            motor.set(INTAKE_IN_SPEED);
-            intakeMotorState = IN;
+            setSpeed(INTAKE_IN_SPEED);
         }
     }
 
@@ -107,8 +113,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeOut() {
         if (isIntakeExtended()) {
-            motor.set(INTAKE_OUT_SPEED);
-            intakeMotorState = OUT;
+            setSpeed(INTAKE_OUT_SPEED);
         }
     }
 
@@ -116,8 +121,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motor and updates motor state
      */
     public void intakeStop() {
-        motor.set(0);
-        intakeMotorState = STOPPED;
+        motor1.stopMotor();
+        motor2.stopMotor();
     }
 
     /**
@@ -125,7 +130,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     public void intakeExtend() {
         intakeSolenoidState = RETRACT;
-        solenoid.set(RETRACT.value);
+        if (solenoid != null)
+            solenoid.set(RETRACT.value);
         state = EXTEND.toString();
     }
 
@@ -135,15 +141,13 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public void intakeRetract() {
         intakeSolenoidState = EXTEND;
         intakeStop();
-        solenoid.set(EXTEND.value);
+        if (solenoid != null)
+            solenoid.set(EXTEND.value);
         state = RETRACT.toString();
     }
 
     @Override
     public void periodic() {
-        if (intakeSolenoidState == RETRACT && intakeMotorState != STOPPED) {
-            intakeStop();
-        }
     }
 
     // Logging Methods
@@ -153,7 +157,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Motor Speed")
     public double getMotorSpeed() {
-        return motor.get();
+        return motor1.get();
     }
 
     /**
@@ -161,7 +165,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Motor Moving")
     public boolean isMotorOn() {
-        return motor.get() != 0;
+        return motor1.get() != 0;
     }
 
     /**
@@ -172,12 +176,10 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         return (intakeSolenoidState == RETRACT);
     }
 
-    @Config
-    public void setSolenoid(boolean extend) {
-        if (extend) {
-            solenoid.set(DoubleSolenoid.Value.kReverse);
-        }
-        solenoid.set(DoubleSolenoid.Value.kForward);
-
+    /**
+     * Checks if sensor is detecting ball
+     */
+    public boolean hasCargo() {
+        return ingestProximity.get();
     }
 }

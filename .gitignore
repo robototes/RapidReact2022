@@ -41,7 +41,6 @@
 
 # Log file
 *.log
-*.log.json
 
 # BlueJ files
 *.ctxt
@@ -170,3 +169,6 @@ Session.vim
 # Intellij IDEA platform
 .idea
 local.properties
+
+# Don't know what's creating this
+.project

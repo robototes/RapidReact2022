@@ -118,7 +118,7 @@ public class Hardware {
     public CANSparkMax hoodMotor;
 
     // intake
-    public WPI_TalonFX intakeMotor;
+    public WPI_TalonFX intakeMotor, intakeMotor2;
     public DoubleSolenoid intakeSolenoid;
 
     // climb
@@ -132,9 +132,6 @@ public class Hardware {
     public WPI_TalonFX ingestIndexMotor, feederIndexMotor;
     public DigitalInput ingestProximity;
     public DigitalInput feederProximity;
-
-    // monitoring
-    public PowerDistribution powerDistributionPanel;
 
     public Hardware() {
         boolean comp = Robot.getInstance().isCompetition();
@@ -176,11 +173,6 @@ public class Hardware {
         if (DRIVER_VIS_ENABLED) {
             CameraServer.addCamera(frontCamera);
             CameraServer.startAutomaticCapture();
-        }
-        if (SHOOTER_VISION_ENABLED) {
-        }
-        if (MONITOR_ENABLED) {
-            powerDistributionPanel = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
         }
     }
 }

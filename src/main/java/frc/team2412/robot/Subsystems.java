@@ -4,14 +4,12 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.MONITOR_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.MonitoringSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 import io.github.oblarg.oblog.Loggable;
@@ -26,7 +24,6 @@ public class Subsystems implements Loggable {
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
         public static final boolean SHOOTER_TESTING = false;
-        public static final boolean MONITOR_ENABLED = true;
     }
 
     public final Hardware hardware;
@@ -42,8 +39,6 @@ public class Subsystems implements Loggable {
     public IntakeSubsystem intakeSubsystem;
 
     public ShooterSubsystem shooterSubsystem;
-
-    public MonitoringSubsystem monitoringSubsystem;
 
     public Subsystems(Hardware h) {
         boolean comp = Robot.getInstance().isCompetition();
@@ -69,9 +64,6 @@ public class Subsystems implements Loggable {
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
                     hardware.feederProximity);
-        }
-        if (MONITOR_ENABLED) {
-            monitoringSubsystem = new MonitoringSubsystem(hardware.powerDistributionPanel);
         }
     }
 }

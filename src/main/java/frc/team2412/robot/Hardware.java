@@ -139,10 +139,10 @@ public class Hardware {
         PDP = new PowerDistribution(PDP_ID, ModuleType.kRev);
 
         if (DRIVE_ENABLED) {
-            frontLeftModule = FRONT_LEFT_CONFIG.create(comp);
-            frontRightModule = FRONT_RIGHT_CONFIG.create(comp);
-            backLeftModule = BACK_LEFT_CONFIG.create(comp);
-            backRightModule = BACK_RIGHT_CONFIG.create(comp);
+            frontLeftModule = FRONT_LEFT_CONFIG.create(comp && !Robot.isSimulation());
+            frontRightModule = FRONT_RIGHT_CONFIG.create(comp && !Robot.isSimulation());
+            backLeftModule = BACK_LEFT_CONFIG.create(comp && !Robot.isSimulation());
+            backRightModule = BACK_RIGHT_CONFIG.create(comp && !Robot.isSimulation());
             gyro = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
         }
         if (!comp)

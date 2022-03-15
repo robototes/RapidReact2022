@@ -11,11 +11,13 @@ import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.AutonomousCommand;
 import frc.team2412.robot.commands.autonomous.Follow2910TrajectoryCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
+import frc.team2412.robot.commands.autonomous.TwoBallScuffedAutoCommand;
 
 public class AutonomousChooser {
 
@@ -95,28 +97,51 @@ public class AutonomousChooser {
 
     public enum AutonomousMode {
         // Replace with individual testing commands
-        // spotless:off
-        ONE_BALL((subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
-            "One ball auto",
-            Subsystems.SubsystemConstants.INDEX_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
-            Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories), "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories), "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories), "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem), "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
-        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test", Subsystems.SubsystemConstants.SHOOTER_ENABLED),
-        INTAKE_SHOOTER((subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem), 
-            "Intake and shoot", 
-            Subsystems.SubsystemConstants.INTAKE_ENABLED && 
-            Subsystems.SubsystemConstants.INDEX_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED);
-        // spotless:on
+        ONE_BALL(
+                (subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem),
+                "One ball auto",
+                Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        TWO_BALL(
+                (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem),
+                "TWo ball auto",
+                Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED),
+        TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem,
+                subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem,
+                subsystems.intakeSubsystem), "TWO SCUFFED", true),
+        SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
+                "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),
+                "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories),
+                "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
+                Subsystems.SubsystemConstants.DRIVE_ENABLED),
+        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
+                Subsystems.SubsystemConstants.CLIMB_ENABLED),
+        INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,
+                subsystems.intakeSubsystem),
+                "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
+        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test",
+                Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
+        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+                subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
+                Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+        INTAKE_SHOOTER(
+                (subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem,
+                        subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem),
+                "Intake and shoot",
+                Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+                        Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED);
 
         public final CommandSupplier commandSupplier;
         public final String uiName;

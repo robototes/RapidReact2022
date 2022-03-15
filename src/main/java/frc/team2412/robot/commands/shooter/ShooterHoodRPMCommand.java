@@ -3,23 +3,21 @@ package frc.team2412.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
-public class ShooterHoodSetConstantAngleCommand extends CommandBase {
+public class ShooterHoodRPMCommand extends CommandBase {
     private final ShooterSubsystem shooter;
+    private final double rpm;
     private final double hoodAngle;
 
-    public ShooterHoodSetConstantAngleCommand(ShooterSubsystem shooter, double angle) {
+    public ShooterHoodRPMCommand(ShooterSubsystem shooter, double targetRPM, double targetHood) {
         this.shooter = shooter;
-        this.hoodAngle = angle;
+        this.rpm = targetRPM;
+        this.hoodAngle = targetHood;
         addRequirements(shooter);
     }
 
     @Override
     public void execute() {
+        shooter.setFlywheelRPM(rpm);
         shooter.setHoodAngle(hoodAngle);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return shooter.isHoodAtAngle(hoodAngle);
     }
 }

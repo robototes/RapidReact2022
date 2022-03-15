@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeExtendCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
+import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -39,10 +39,10 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
                         new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
                         new WaitCommand(1)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-                new IntakeExtendCommand(intakeSubsystem),
+                new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
                         new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                        new IntakeInCommand(indexSubsystem, intakeSubsystem)));
+                        new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
 
     }
 }

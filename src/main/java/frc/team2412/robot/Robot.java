@@ -4,33 +4,8 @@
 
 package frc.team2412.robot;
 
-import static java.lang.Thread.sleep;
-
-import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-import frc.team2412.robot.sim.PhysicsSim;
-import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
-import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
-
-import org.frcteam2910.common.math.RigidTransform2;
-import org.frcteam2910.common.robot.UpdateManager;
-
-import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.Subsystems.SubsystemConstants;
-import frc.team2412.robot.commands.drive.DriveCommand;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.TestingSubsystem;
-import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
-import frc.team2412.robot.util.autonomous.AutonomousChooser;
-import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Log;
+import static java.lang.Thread.sleep;
 
 import java.io.IOException;
 import java.net.NetworkInterface;
@@ -39,18 +14,31 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
-public class Robot extends TimedRobot implements Loggable {
+import org.frcteam2910.common.math.RigidTransform2;
+import org.frcteam2910.common.robot.UpdateManager;
+
+import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.commands.drive.DriveCommand;
+import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
+import frc.team2412.robot.sim.PhysicsSim;
+import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
+import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
+import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.TestingSubsystem;
+import frc.team2412.robot.util.autonomous.AutonomousChooser;
+import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
+import io.github.oblarg.oblog.Logger;
+
+public class Robot extends TimedRobot {
     /**
      * Singleton Stuff
      */
     private static Robot instance = null;
-
-    // copied from the PR
-    public static final int PDP_CAN_ID = 1;
-    public static final PowerDistribution.ModuleType PDP_MODULE_TYPE = PowerDistribution.ModuleType.kRev;
-
-    @Log.PowerDistribution
-    private final PowerDistribution PDP = new PowerDistribution(PDP_CAN_ID, PDP_MODULE_TYPE);
 
     enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
@@ -68,6 +56,7 @@ public class Robot extends TimedRobot implements Loggable {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+
     final private RobotType robotType;
 
     private Thread controlAuto;
@@ -169,7 +158,7 @@ public class Robot extends TimedRobot implements Loggable {
         hardware = new Hardware();
         subsystems = new Subsystems(hardware);
         controls = new Controls(subsystems);
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
             updateManager.startLoop(5.0e-3);
@@ -255,10 +244,17 @@ public class Robot extends TimedRobot implements Loggable {
 
     @Override
     public void teleopInit() {
-        if (SubsystemConstants.DRIVE_ENABLED) {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftXAxis(), controls.driveController.getLeftYAxis(),
+                    controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
                     controls.driveController.getRightXAxis()));
+        }
+        if (subsystems.intakeSubsystem != null) {
+            subsystems.intakeSubsystem.intakeExtend();
+        }
+        if (subsystems.shooterSubsystem != null) {
+            // subsystems.shooterSubsystem.setDefaultCommand(new
+            // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
     }
 
@@ -274,7 +270,7 @@ public class Robot extends TimedRobot implements Loggable {
         if (CLIMB_ENABLED) {
             // Motor, acceleration time from 0 to full in seconds, max velocity
             physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
+            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
         }
         if (INTAKE_ENABLED) {
             physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);

@@ -128,7 +128,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final PFFController<Vector2> tipController;
 
     public DrivebaseSubsystem() {
-        var comp = Robot.getInstance().isCompetition() && !Robot.isSimulation();
+        var comp = Robot.getInstance().isCompetition();
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
@@ -139,10 +139,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
-        modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(comp && !Robot.isSimulation()),
-                FRONT_RIGHT_CONFIG.create(comp && !Robot.isSimulation()),
-                BACK_LEFT_CONFIG.create(comp && !Robot.isSimulation()),
-                BACK_RIGHT_CONFIG.create(comp && !Robot.isSimulation()) };
+        boolean supportAbsoluteEncoder = comp && !Robot.isSimulation();
+        modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
         moduleMaxVelocityMetersPerSec = MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
         odometryXEntry = tab.add("X", 0.0)

@@ -30,7 +30,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     // x-axis
     @Log(name = "Yaw")
     public double getYaw() {
-        return -limelight.getEntry("tx").getDouble(0);
+        return limelight.getEntry("tx").getDouble(0);
     }
 
     // returns in inches

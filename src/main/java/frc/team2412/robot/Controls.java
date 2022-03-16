@@ -15,7 +15,6 @@ import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
-import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
@@ -152,7 +151,6 @@ public class Controls {
     public void bindIndexControls() {
         subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
 
-
         // driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
 
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
@@ -162,12 +160,14 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-subsystems.intakeSubsystem.setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+        subsystems.intakeSubsystem
+                .setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
 
         // for (Button b : intakeInButton)
-        //     b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                            // subsystems.indexSubsystem));
+        // b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));//
+        // .whenReleased(new
+        // IntakeBitmapCommand(subsystems.intakeSubsystem,
+        // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));

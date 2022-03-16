@@ -151,12 +151,7 @@ public class Controls {
     public void bindIndexControls() {
         subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
 
-        // driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
-
-        // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
-        // subsystems.indexSubsystem));
         // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-        // shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {

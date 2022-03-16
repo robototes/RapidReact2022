@@ -52,10 +52,10 @@ public class Subsystems implements Loggable {
         if (!comp)
             return;
         if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbLimitSwtich);
+            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbLimitSwitch);
         if (INTAKE_ENABLED)
             intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid,
-                    hardware.ingestProximity);
+                    hardware.intakeProximity);
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
                     hardware.turretMotor, hardware.hoodMotor);
@@ -63,7 +63,7 @@ public class Subsystems implements Loggable {
         }
         if (INDEX_ENABLED) {
             indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.feederProximity);
+                    hardware.indexProximity);
         }
     }
 }

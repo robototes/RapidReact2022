@@ -139,9 +139,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
-        modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(comp),
-                FRONT_RIGHT_CONFIG.create(comp), BACK_LEFT_CONFIG.create(comp),
-                BACK_RIGHT_CONFIG.create(comp) };
+        modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(comp && !Robot.isSimulation()),
+                FRONT_RIGHT_CONFIG.create(comp && !Robot.isSimulation()),
+                BACK_LEFT_CONFIG.create(comp && !Robot.isSimulation()),
+                BACK_RIGHT_CONFIG.create(comp && !Robot.isSimulation()) };
         moduleMaxVelocityMetersPerSec = MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
         odometryXEntry = tab.add("X", 0.0)

@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
-import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
-import frc.team2412.robot.sim.TalonFXSimProfile.TalonFXConstants;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
@@ -45,7 +43,6 @@ public class Robot extends TimedRobot {
 
     public Controls controls;
     public Subsystems subsystems;
-    public Hardware hardware;
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
@@ -108,8 +105,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        hardware = new Hardware();
-        subsystems = new Subsystems(hardware);
+        subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
@@ -206,28 +202,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationInit() {
-        PhysicsSim physicsSim = PhysicsSim.getInstance();
-        // TODO Find more accurate values
-        if (CLIMB_ENABLED) {
-            // Motor, acceleration time from 0 to full in seconds, max velocity
-            physicsSim.addTalonFX(hardware.climbMotorFixed, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            // physicsSim.addTalonFX(hardware.climbMotorDynamic, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-        }
-        if (INTAKE_ENABLED) {
-            physicsSim.addTalonFX(hardware.intakeMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-        }
-        if (INDEX_ENABLED) {
-            physicsSim.addTalonFX(hardware.ingestIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.feederIndexMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-        }
-        if (SHOOTER_ENABLED) {
-            physicsSim.addTalonFX(hardware.flywheelMotor1, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.flywheelMotor2, 3, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            physicsSim.addTalonFX(hardware.turretMotor, 1, 6000 * TalonFXConstants.RPM_TO_VELOCITY);
-            // Motor, stall torque, maximum free RPM
-            physicsSim.addSparkMax(hardware.hoodMotor, SparkMaxConstants.STALL_TORQUE,
-                    SparkMaxConstants.FREE_SPEED_RPM);
-        }
+        PhysicsSim sim = PhysicsSim.getInstance();
+        subsystems.climbSubsystem.simInit(sim);
+        subsystems.indexSubsystem.simInit(sim);
+        subsystems.intakeSubsystem.simInit(sim);
+        subsystems.shooterSubsystem.simInit(sim);
     }
 
     @Override

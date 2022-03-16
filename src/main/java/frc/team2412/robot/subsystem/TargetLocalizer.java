@@ -94,7 +94,9 @@ public class TargetLocalizer {
     }
 
     public double getVoltage() {
-        return Robot.getInstance().hardware.PDP.getVoltage();
+        return 12;
+        //WHERE THE PDP GO AAAAAAAAA
+       // return Robot.getInstance().PDP.getVoltage();
     }
 
     public void limelightOn() {

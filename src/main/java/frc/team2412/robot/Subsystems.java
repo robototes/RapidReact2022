@@ -6,12 +6,7 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
+import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
 
 public class Subsystems implements Loggable {
@@ -38,6 +33,8 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
+    public TargetLocalizer targetLocalizer;
+
     public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -59,6 +56,9 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem();
             shooterVisionSubsystem = new ShooterVisionSubsystem();
+        }
+        if(SHOOTER_ENABLED && DRIVE_ENABLED){
+            targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
         }
     }
 }

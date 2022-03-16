@@ -19,8 +19,10 @@ public class IntakeCommand extends CommandBase {
     public void execute() {
         if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
             intakeSubsystem.intakeStop();
+            indexSubsystem.ingestMotorStop();
         } else {
             intakeSubsystem.intakeIn();
+            indexSubsystem.ingestMotorIn();
         }
     }
 

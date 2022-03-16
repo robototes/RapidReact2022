@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
+import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
@@ -149,7 +150,10 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
+        subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
+
+
+        // driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
 
         // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
         // subsystems.indexSubsystem));
@@ -158,8 +162,10 @@ public class Controls {
     }
 
     public void bindIntakeControls() {
-        for (Button b : intakeInButton)
-            b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
+subsystems.intakeSubsystem.setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+
+        // for (Button b : intakeInButton)
+        //     b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
                                                                                                             // IntakeBitmapCommand(subsystems.intakeSubsystem,
                                                                                                             // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));

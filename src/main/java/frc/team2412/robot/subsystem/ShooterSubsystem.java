@@ -171,7 +171,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
-    public void setWorkingCommand(boolean override) {
+    public void setShooterOverride(boolean override) {
         shooterOverride = override;
     }
 

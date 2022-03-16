@@ -72,17 +72,16 @@ public class Hardware {
             INTAKE_SOLENOID_DOWN = 0;
 
     // index can ids are range 40-49
-    public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_RED = 0, INGEST_BLUE = 1,
-            INGEST_PROXIMITY = 2, FEEDER_RED = 3, FEEDER_BLUE = 4, FEEDER_PROXIMITY = 5, INGEST_TOP_RED = 6,
-            INGEST_TOP_BLUE = 7,
-            INGEST_TOP_PROXIMITY = 2;
+    public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_PROXIMITY = 2,
+            FEEDER_PROXIMITY = 5;
 
     // climb can ids are range 50-59
-    public static final int CLIMB_DYNAMIC_MOTOR = 50, CLIMB_FIXED_MOTOR = 51, CLIMB_ANGLE_UP_SOLENOID = 7,
-            CLIMB_ANGLE_DOWN_SOLENOID = 8, CLIMB_LIMIT_SWITCH = 30;
+    public static final int CLIMB_FIXED_MOTOR = 51;
+    public static final int CLIMB_LIMIT_SWITCH = 9; // to be determined - digital I/O pins are 0-9
 
-    // PDP logging
+    // Other hardware
     public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)
+    public static final int PNEUMATIC_HUB = 60;
 
     // Simulation stuff
     // TODO Find more accurate values

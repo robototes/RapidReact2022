@@ -50,7 +50,6 @@ public class Robot extends TimedRobot {
 
     public Controls controls;
     public Subsystems subsystems;
-    public Hardware hardware;
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;

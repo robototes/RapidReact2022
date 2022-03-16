@@ -72,8 +72,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         }
 
-        solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, CLIMB_ANGLE_UP_SOLENOID,
-                CLIMB_ANGLE_DOWN_SOLENOID);
+        solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+                INTAKE_SOLENOID_DOWN);
 
         ingestProximity = new DigitalInput(INGEST_PROXIMITY);
 

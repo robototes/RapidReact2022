@@ -1,5 +1,7 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.Hardware.*;
+
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -8,12 +10,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import org.frcteam2910.common.control.*;
@@ -123,19 +127,24 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     private final PFFController<Vector2> tipController;
 
-    public DrivebaseSubsystem(SwerveModule fl, SwerveModule fr, SwerveModule bl, SwerveModule br, Gyroscope g,
-            double moduleMaxVelocityMetersPerSec) {
+    public DrivebaseSubsystem() {
+        var comp = Robot.getInstance().isCompetition();
+
         synchronized (sensorLock) {
-            gyroscope = g;
-            if (g instanceof Pigeon)
+            gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
+            if (gyroscope instanceof Pigeon)
                 gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
-        modules = new SwerveModule[] { fl, fr, bl, br };
-        this.moduleMaxVelocityMetersPerSec = moduleMaxVelocityMetersPerSec;
+        boolean supportAbsoluteEncoder = comp && !Robot.isSimulation();
+        modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
+        moduleMaxVelocityMetersPerSec = MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)

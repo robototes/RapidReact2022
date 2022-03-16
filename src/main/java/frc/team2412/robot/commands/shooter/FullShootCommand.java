@@ -5,8 +5,8 @@ import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.subsystem.*;
 
 public class FullShootCommand extends ParallelCommandGroup {
-    public FullShootCommand(ShooterSubsystem shooter, TargetLocalizer vision, IntakeSubsystem intake,
+    public FullShootCommand(ShooterSubsystem shooter, TargetLocalizer localizer, IntakeSubsystem intake,
             IndexSubsystem index) {
-        addCommands(new ShooterTargetCommand(shooter, vision), new IntakeIndexInCommand(index, intake));
+        addCommands(new ShooterTargetCommand(shooter, localizer), new IntakeIndexInCommand(index, intake));
     }
 }

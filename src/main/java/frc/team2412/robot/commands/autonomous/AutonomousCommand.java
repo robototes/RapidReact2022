@@ -47,20 +47,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         drivebaseSubsystem = d;
     }
 
-    public Command getAutonomousCommand() {
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                AutoConstants.MAX_SPEED_METERS_PER_SECOND,
-                AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(AutoConstants.driveKinematics);
-        // creating trajectory path (right now is a square)
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
-                List.of(new Translation2d(7.3,1.1), new Translation2d(5.1, 1.8), new Translation2d(2.1,1.3)),
-                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(0)),
-                config);
-        // creates thetacontroller (rotation)
+    public Command getAutonomousCommand(Trajectory exampleTrajectory) {
+
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 0.000000005, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);

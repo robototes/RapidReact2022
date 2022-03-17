@@ -99,7 +99,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
 
-        command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand());
+        command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand(exampleTrajectory));
         return command;
     }
 

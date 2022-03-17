@@ -28,8 +28,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double MAX_SPEED_METERS_PER_SECOND = 0.3;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.1;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
         public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot
         public static final double WHEEL_BASE = 1.0;
@@ -56,9 +56,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         .setKinematics(AutoConstants.driveKinematics);
         // creating trajectory path (right now is a square)
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                List.of(new Translation2d(1, 0), new Translation2d(1, 1), new Translation2d(0, 1)),
-                new Pose2d(0, 0.0, Rotation2d.fromDegrees(0)),
+                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
+                List.of(new Translation2d(7.3,1.1), new Translation2d(5.1, 1.8), new Translation2d(2.1,1.3)),
+                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(0)),
                 config);
         // creates thetacontroller (rotation)
         ProfiledPIDController thetaController = new ProfiledPIDController(

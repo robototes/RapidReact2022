@@ -176,9 +176,9 @@ public class SwerveControllerCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        if (interrupted) {
             outputModuleStates.accept(new ChassisSpeeds(0, 0, 0));
-        }
+
+
         timer.stop();
     }
 

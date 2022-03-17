@@ -28,7 +28,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
         public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot

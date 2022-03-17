@@ -101,6 +101,7 @@ public class AutonomousChooser {
 
         command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand(exampleTrajectory));
         return command;
+
     }
 
     private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,

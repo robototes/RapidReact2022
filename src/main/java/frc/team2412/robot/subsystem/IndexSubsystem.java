@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -9,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -45,29 +47,32 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor,
-            DigitalInput feederProximity) {
-        this.ingestMotor = firstMotor;
-        this.feederMotor = secondMotor;
+    public IndexSubsystem() {
+        ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+        feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+        feederProximity = new DigitalInput(FEEDER_PROXIMITY);
 
-        this.feederProximity = feederProximity;
+        ingestMotor.configFactoryDefault();
+        feederMotor.configFactoryDefault();
 
-        this.ingestMotor.configFactoryDefault();
-        this.feederMotor.configFactoryDefault();
+        ingestMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setNeutralMode(NeutralMode.Brake);
 
-        this.ingestMotor.setNeutralMode(NeutralMode.Brake);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
-        this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-
-        this.feederMotor.setInverted(true);
+        feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();
     }
 
     // Methods
+
+    public void simInit(PhysicsSim sim) {
+        sim.addTalonFX(ingestMotor, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(feederMotor, 1, SIM_FULL_VELOCITY);
+    }
 
     public void setSpeed(double ingestSpeed, double feederSpeed) {
         System.out.println(ingestSpeed);

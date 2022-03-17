@@ -17,7 +17,6 @@ import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import frc.team2412.robot.commands.autonomous.OneBallAutoCommand;
 import frc.team2412.robot.commands.autonomous.TwoBallAutoCommandMiddle;
-import frc.team2412.robot.commands.autonomous.TwoBallScuffedAutoCommand;
 
 public class AutonomousChooser {
 

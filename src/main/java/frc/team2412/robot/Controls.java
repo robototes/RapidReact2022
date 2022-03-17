@@ -18,7 +18,6 @@ import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
-import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -160,8 +159,8 @@ public class Controls {
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
             b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                           // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                           // subsystems.indexSubsystem));
+                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
+                                                                                                            // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));

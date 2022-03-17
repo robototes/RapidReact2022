@@ -40,6 +40,10 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             InterpolatingTreeMap map = new InterpolatingTreeMap();
 
             while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    System.out.println("Line " + line + " starts with #, skipping line");
+                    continue;
+                }
                 String[] items = line.split(",");
                 if (items.length < 3) {
                     System.out.println("Line " + line + " has less than 3 items, skipping line");

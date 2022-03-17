@@ -160,8 +160,8 @@ public class Controls {
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
             b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                            // subsystems.indexSubsystem));
+                                                                                                           // IntakeBitmapCommand(subsystems.intakeSubsystem,
+                                                                                                           // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
@@ -175,13 +175,13 @@ public class Controls {
             driveController.getDPadButton(Direction.DOWN).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 500, 35).withInterrupt(interrupt));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2200, 0.6).withInterrupt(interrupt));
 
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-            subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem,
-                            driveController.getLeftBumperButton()::get));
+            // subsystems.shooterSubsystem.setDefaultCommand(
+            // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem,
+            // driveController.getLeftBumperButton()::get));
             // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));
             // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,

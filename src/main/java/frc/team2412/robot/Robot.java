@@ -228,7 +228,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+            subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
         if (subsystems.shooterSubsystem != null) {

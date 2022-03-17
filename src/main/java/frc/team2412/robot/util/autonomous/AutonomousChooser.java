@@ -2,6 +2,9 @@ package frc.team2412.robot.util.autonomous;
 
 import com.google.errorprone.annotations.Immutable;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -51,6 +54,9 @@ public class AutonomousChooser {
 
     public CommandBase getCommand() {
         return autonomousModeChooser.getSelected().commandSupplier.getCommand(subsystems, trajectories);
+    }
+    public Pose2d getStartPose() {
+        return autonomousModeChooser.getSelected().startPose;
     }
 
     private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems,
@@ -103,7 +109,8 @@ public class AutonomousChooser {
                 "One ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d()),
         TWO_BALL(
                 (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem,
@@ -113,44 +120,48 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-                        Subsystems.SubsystemConstants.INTAKE_ENABLED),
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED,
+                new Pose2d()),
         TWO_SCUFFED((subsystems, trajectories) -> new TwoBallScuffedAutoCommand(subsystems.indexSubsystem,
                 subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem, subsystems.drivebaseSubsystem,
-                subsystems.intakeSubsystem), "TWO SCUFFED", true),
+                subsystems.intakeSubsystem), "TWO SCUFFED", true, new Pose2d()),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
-                "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED, new Pose2d()),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),
-                "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED, new Pose2d()),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories),
-                "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED, new Pose2d()),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
-                Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                Subsystems.SubsystemConstants.DRIVE_ENABLED, new Pose2d(new Translation2d(20,20),new Rotation2d(0))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
-                Subsystems.SubsystemConstants.CLIMB_ENABLED),
+                Subsystems.SubsystemConstants.CLIMB_ENABLED, new Pose2d()),
         INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,
                 subsystems.intakeSubsystem),
-                "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
+                "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED, new Pose2d()),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test",
-                Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
+                Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED,
+                new Pose2d()),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
                 subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
-                Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+                Subsystems.SubsystemConstants.SHOOTER_ENABLED, new Pose2d()),
         INTAKE_SHOOTER(
                 (subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem,
                         subsystems.shooterVisionSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED);
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED, new Pose2d());
 
         public final CommandSupplier commandSupplier;
         public final String uiName;
         public final boolean enabled;
+        public final Pose2d startPose;
 
-        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled) {
+        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose) {
             this.commandSupplier = commandSupplier;
             this.uiName = uiName;
             this.enabled = enabled;
+            this.startPose = startPose;
         }
     }
 }

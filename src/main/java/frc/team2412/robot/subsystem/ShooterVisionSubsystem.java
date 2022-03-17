@@ -14,7 +14,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double LIMELIGHT_HEIGHT_OFFSET = 39;
         public static final double RIM_HEIGHT = 104; // 8ft8in
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
-        public static final double HUB_RADIUS = 4 * 12 / 2;
+        public static final double HUB_RADIUS = 24;
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
         // new LL crosshair angle is -0.7375
     }
@@ -23,11 +23,6 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
 
     public ShooterVisionSubsystem() {
         limelight = NetworkTableInstance.getDefault().getTable(LIMELIGHT);
-    }
-
-    @Override
-    public void periodic() {
-
     }
 
     public boolean hasTarget() {

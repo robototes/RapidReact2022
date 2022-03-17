@@ -1,5 +1,6 @@
 package frc.team2412.robot.subsystem;
 
+import frc.team2412.robot.Robot;
 import org.frcteam2910.common.math.Rotation2;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -93,9 +94,7 @@ public class TargetLocalizer {
     }
 
     public double getVoltage() {
-        return 12;
-        // WHERE THE PDP GO AAAAAAAAA
-        // return Robot.getInstance().PDP.getVoltage();
+        return Robot.getInstance().getVoltage();
     }
 
     public void limelightOn() {

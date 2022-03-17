@@ -7,6 +7,7 @@ package frc.team2412.robot;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.team2412.robot.util.MACAddress;
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
+    public final PowerDistribution PDP;
+
     public Controls controls;
     public Subsystems subsystems;
 
@@ -57,6 +60,11 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
+        PDP = new PowerDistribution(Hardware.PDP_ID, PowerDistribution.ModuleType.kRev);
+    }
+
+    public double getVoltage() {
+        return PDP.getVoltage();
     }
 
     protected Robot() {

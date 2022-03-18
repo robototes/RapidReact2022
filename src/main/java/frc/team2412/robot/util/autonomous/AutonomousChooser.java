@@ -161,8 +161,7 @@ public class AutonomousChooser {
                 "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
         INTAKE((subsystems, trajectories) -> new DiagnosticIntakeCommandGroup(subsystems.intakeSubsystem),
                 "Intake test",
-                Subsystems.SubsystemConstants.INTAKE_ENABLED
-                        && Subsystems.SubsystemConstants.INDEX_ENABLED),
+                Subsystems.SubsystemConstants.INTAKE_ENABLED),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
                 subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),

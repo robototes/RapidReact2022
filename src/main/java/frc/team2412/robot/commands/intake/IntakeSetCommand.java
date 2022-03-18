@@ -25,4 +25,9 @@ public class IntakeSetCommand extends CommandBase {
         }
         subsystem.setSpeed(speed);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

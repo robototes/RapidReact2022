@@ -129,7 +129,7 @@ public class Controls {
             bindIndexControls();
         }
 
-        if (subsystems.intakeSubsystem != null) {
+        if (subsystems.intakeSubsystem != null && subsystems.indexSubsystem != null) {
             bindIntakeControls();
         }
 
@@ -184,10 +184,15 @@ public class Controls {
 
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-            subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                            driveController.getLeftBumperButton()::get));
-            // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+         
+         
+            // subsystems.shooterSubsystem.setDefaultCommand(
+            //         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+            //                 driveController.getLeftBumperButton()::get));
+           
+           
+           
+                            // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));
             // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() - 1));

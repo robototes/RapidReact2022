@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
 
     public final PowerDistribution PDP;
     public UsbCamera driverVisionCamera;
-    private final PneumaticHub pneumaticHub;
+    private PneumaticHub pneumaticHub;
 
     private static final double MIN_PRESSURE = 100;
     private static final double MAX_PRESSURE = 110;
@@ -72,9 +72,9 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
-
-        pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+       
         if(COMPRESSOR_ENABLED){
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
         robotType = type;

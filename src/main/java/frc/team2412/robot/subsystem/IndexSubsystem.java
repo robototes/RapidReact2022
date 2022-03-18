@@ -26,7 +26,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.2; // will change values later
+        public static double INDEX_IN_SPEED = 0.4; // will change values later
         public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
         // The current limit
@@ -125,7 +125,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Log(name = "Feeder Proximity")
+    @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
         return feederProximity.get();
     }

@@ -91,9 +91,9 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
-                + getAngularVelocity() * TURRET_ANGULAR_FF)
-                / getVoltage();
+        return Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+                + (getAngularVelocity() * TURRET_ANGULAR_FF)
+                        / getVoltage();
     }
 
     public void limelightOn() {

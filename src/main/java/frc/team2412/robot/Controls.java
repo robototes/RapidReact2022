@@ -4,6 +4,7 @@ import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 
 import java.util.function.BooleanSupplier;
 
+import frc.team2412.robot.commands.drive.DriveCommand;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
-import frc.team2412.robot.commands.intake.IntakeInCommand;
+import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
@@ -145,6 +146,9 @@ public class Controls {
     }
 
     public void bindDriveControls() {
+        subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
+                driveController.getLeftYAxis(), driveController.getLeftXAxis(),
+                driveController.getRightXAxis()));
         resetDriveGyroButton.whenPressed(() -> subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO));
     }
 
@@ -159,9 +163,9 @@ public class Controls {
 
     public void bindIntakeControls() {
         for (Button b : intakeInButton)
-            b.whenPressed(new IntakeInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                        // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                        // subsystems.indexSubsystem));
+            b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
+                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
+                                                                                                            // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
@@ -180,7 +184,7 @@ public class Controls {
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
             subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem,
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
                             driveController.getLeftBumperButton()::get));
             // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));

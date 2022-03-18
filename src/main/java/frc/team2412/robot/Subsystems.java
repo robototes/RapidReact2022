@@ -6,12 +6,7 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
+import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
 
 public class Subsystems implements Loggable {
@@ -26,8 +21,6 @@ public class Subsystems implements Loggable {
         public static final boolean SHOOTER_TESTING = false;
     }
 
-    public final Hardware hardware;
-
     public ClimbSubsystem climbSubsystem;
 
     public DrivebaseSubsystem drivebaseSubsystem;
@@ -40,34 +33,32 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
-    public Subsystems(Hardware h) {
+    public TargetLocalizer targetLocalizer;
+
+    public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
 
-        hardware = h;
-
-        if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (!comp)
+        if (DRIVE_ENABLED) {
+            drivebaseSubsystem = new DrivebaseSubsystem();
+        }
+        if (!comp) {
             return;
-        if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed);
-        if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid);
-        if (SHOOTER_ENABLED) {
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
-                    hardware.turretMotor, hardware.hoodMotor);
-            shooterVisionSubsystem = new ShooterVisionSubsystem(hardware.gyro,
-                    SHOOTER_ENABLED ? shooterSubsystem::getTurretAngle : () -> 0);
+        }
+        if (CLIMB_ENABLED) {
+            climbSubsystem = new ClimbSubsystem();
         }
         if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+            indexSubsystem = new IndexSubsystem();
+        }
+        if (INTAKE_ENABLED) {
+            intakeSubsystem = new IntakeSubsystem();
+        }
+        if (SHOOTER_ENABLED) {
+            shooterSubsystem = new ShooterSubsystem();
+            shooterVisionSubsystem = new ShooterVisionSubsystem();
+        }
+        if (SHOOTER_ENABLED && DRIVE_ENABLED) {
+            targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
         }
     }
 }

@@ -1,26 +1,16 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_RESET_AMPS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_AMPS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.CURRENT_LIMIT_TRIGGER_SECONDS;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_OUT_SPEED;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.MAX_MOTOR_CURRENT;
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.PROXIMITY_THRESHOLD;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.commands.intake.IntakeBitmapCommand.Bitmap;
+import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -29,8 +19,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     // Constants
 
     public static class IndexConstants {
-
-        public static Alliance teamColor = DriverStation.getAlliance();
 
         public static double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
         public static double CURRENT_LIMIT_RESET_AMPS = 10;
@@ -41,16 +29,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         public static double INDEX_IN_SPEED = 0.2; // will change values later
         public static double INDEX_OUT_SPEED = -0.3; // will also change later
 
-        // Proximity Threshold
-        public static double PROXIMITY_THRESHOLD = 700; // value not 700, to be determined actual
-                                                        // value
-
-        // Index Motor States
-
-        public static enum IndexMotorState {
-            IN, OUT, STOPPED;
-        }
-
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS);
@@ -59,16 +37,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    private final DigitalInput ingestProximity;
     private final DigitalInput feederProximity;
-    private final DigitalInput ingestTopProximity;
-
-    private final DigitalInput ingestBlueColor;
-    private final DigitalInput ingestRedColor;
-    private final DigitalInput feederBlueColor;
-    private final DigitalInput feederRedColor;
-    private final DigitalInput ingestTopBlueColor;
-    private final DigitalInput ingestTopRedColor;
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -76,63 +45,34 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX feederMotor;
 
-    private boolean ingestBallState;
-    private boolean feederBallState;
-
-    // For logging
-    private final NetworkTableEntry proximityThreshold;
-
-    @Log.ToString
-    private Bitmap currentStateBitmap;
-
     // Constructor
 
-    public IndexSubsystem(WPI_TalonFX firstMotor, WPI_TalonFX secondMotor, DigitalInput ingestProximity,
-            DigitalInput feederProximity, DigitalInput ingestBlueColor, DigitalInput ingestRedColor,
-            DigitalInput feederBlueColor, DigitalInput feederRedColor, DigitalInput ingestTopProximity,
-            DigitalInput ingestTopBlueColor, DigitalInput ingestTopRedColor) {
+    public IndexSubsystem() {
+        ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
+        feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
+        feederProximity = new DigitalInput(FEEDER_PROXIMITY);
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Index");
+        ingestMotor.configFactoryDefault();
+        feederMotor.configFactoryDefault();
 
-        proximityThreshold = tab.add("Proximity Threshold", PROXIMITY_THRESHOLD)
-                .withPosition(0, 0)
-                .withSize(2, 1)
-                .getEntry();
+        ingestMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setNeutralMode(NeutralMode.Brake);
 
-        this.ingestMotor = firstMotor;
-        this.feederMotor = secondMotor;
-        this.ingestProximity = ingestProximity;
-        this.feederProximity = feederProximity;
-        this.ingestTopProximity = ingestTopProximity;
-        this.ingestBlueColor = ingestBlueColor;
-        this.ingestRedColor = ingestRedColor;
-        this.feederBlueColor = feederBlueColor;
-        this.feederRedColor = feederRedColor;
-        this.ingestTopBlueColor = ingestTopBlueColor;
-        this.ingestTopRedColor = ingestTopRedColor;
+        ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
 
-        this.feederMotor.setInverted(true);
-        this.ingestMotor.configFactoryDefault();
-        this.feederMotor.configFactoryDefault();
-
-        this.ingestMotor.setNeutralMode(NeutralMode.Brake);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
-
-        this.ingestMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.feederMotor.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-
-        this.feederMotor.setInverted(true);
+        feederMotor.setInverted(true);
 
         ingestMotorStop();
         feederMotorStop();
-
-        ingestBallState = false;
-        feederBallState = false;
-
-        setName("IndexSubsystem");
     }
 
     // Methods
+
+    public void simInit(PhysicsSim sim) {
+        sim.addTalonFX(ingestMotor, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(feederMotor, 1, SIM_FULL_VELOCITY);
+    }
 
     public void setSpeed(double ingestSpeed, double feederSpeed) {
         System.out.println(ingestSpeed);
@@ -183,18 +123,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Checks if ball is positioned at the first sensor
-     */
-    @Log(name = "Ingest Proximity")
-    public boolean ingestSensorHasBallIn() { // also might rename later?
-        return ingestTopProximity.get();
-    }
-
-    /**
      * Checks if ball is positioned at the second sensor
      */
     @Log(name = "Feeder Proximity")
-    public boolean feederSensorHasBallIn() { // might rename methods later?
+    public boolean hasCargo() { // might rename methods later?
         return feederProximity.get();
     }
 
@@ -212,33 +144,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         return feederMotor.get() != 0;
     }
 
-    /**
-     * Checks if ingest has the correct cargo (also includes the top sensor)
-     */
-    // @Log(name = "Ingest Cargo")
-    // public boolean ingestHasCorrectCargo() {
-    // return ((teamColor == Alliance.Blue && (ingestBlueColor.get() || ingestTopBlueColor.get()))
-    // || teamColor == Alliance.Red && (ingestRedColor.get() || ingestTopRedColor.get()));
-    // }
-
-    /**
-     * Checks if feeder has the correct cargo
-     */
-    // @Log(name = "Feeder Cargo")
-    // public boolean feederHasCorrectCargo() {
-    // return ((teamColor == Alliance.Blue && feederBlueColor.get())
-    // || teamColor == Alliance.Red && feederRedColor.get());
-    // }
-
     private double ingestOverCurrentStart = 0;
     private double feederOverCurrentStart = 0;
 
     // do need now! :D D: :3 8) B) :P C: xD :p :] E: :} :> .U.
     @Override
     public void periodic() {
-        ingestBallState = ingestSensorHasBallIn();
-        feederBallState = feederSensorHasBallIn();
-
         // Checking for jamming
         double ingestCurrent = ingestMotor.getSupplyCurrent();
         if (ingestCurrent > CURRENT_LIMIT_TRIGGER_AMPS) {
@@ -296,10 +207,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
         return isIngestMotorOn();
-    }
-
-    public void setBitmapState(Bitmap bitmap) {
-        this.currentStateBitmap = bitmap;
     }
 
 }

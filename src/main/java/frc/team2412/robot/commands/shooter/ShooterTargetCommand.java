@@ -6,58 +6,49 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
+import frc.team2412.robot.subsystem.TargetLocalizer;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
 
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
-    private final ShooterVisionSubsystem vision;
+    private final TargetLocalizer localizer;
     private final BooleanSupplier turretEnable;
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        this(shooter, vision, () -> false);
+    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer) {
+        this(shooter, localizer, () -> false);
     }
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, ShooterVisionSubsystem vision, BooleanSupplier turretEnable) {
+    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer, BooleanSupplier turretButton) {
         this.shooter = shooter;
-        this.vision = vision;
-        this.turretEnable = turretEnable;
+        this.localizer = localizer;
+        turretEnable = turretButton;
         addRequirements(shooter);
+    }
+
+    double turretAngle = 0;
+
+    @Override
+    public void initialize() {
+        localizer.limelightOn();
     }
 
     @Override
     public void execute() {
-        if (!shooter.enableTurret) {
+        if (!localizer.hasTarget())
             return;
-        }
-
-        double distance = 0, yaw = 0;
-
-        if (vision.hasTarget()) {
-            distance = vision.getDistance() + shooter.getDistanceBias();
-            yaw = vision.getYaw() + shooter.getTurretAngleBias();
-        }
-
         if (ShooterConstants.dataPoints != null) {
-            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
+            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
+                    .getInterpolated(localizer.getAdjustedDistance());
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
         }
+        turretAngle = turretEnable.getAsBoolean() ? turretAngle + localizer.getYaw() : 0;
+        shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
 
-        if (turretEnable.getAsBoolean()) {
-            shooter.updateTurretAngle(yaw);
-        } else {
-            shooter.setTurretAngle(0);
-        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stopFlywheel();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+        localizer.limelightOff();
     }
 }

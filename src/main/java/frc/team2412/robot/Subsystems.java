@@ -2,13 +2,7 @@ package frc.team2412.robot;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
-import frc.team2412.robot.subsystem.ClimbSubsystem;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.PneumaticHubSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
+import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
 
 public class Subsystems implements Loggable {
@@ -24,8 +18,6 @@ public class Subsystems implements Loggable {
         public static final boolean PNEUMATICS_ENABLED = true;
     }
 
-    public final Hardware hardware;
-
     public ClimbSubsystem climbSubsystem;
 
     public DrivebaseSubsystem drivebaseSubsystem;
@@ -38,41 +30,37 @@ public class Subsystems implements Loggable {
 
     public ShooterSubsystem shooterSubsystem;
 
+    public TargetLocalizer targetLocalizer;
+
     public PneumaticHubSubsystem pneumaticHubSubsystem;
 
-    public Subsystems(Hardware h) {
+    public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
 
-        hardware = h;
-
-        if (DRIVE_ENABLED)
-            drivebaseSubsystem = new DrivebaseSubsystem(hardware.frontLeftModule, hardware.frontRightModule,
-                    hardware.backLeftModule, hardware.backRightModule, hardware.gyro,
-                    Hardware.HardwareConstants.MODULE_MAX_VELOCITY_METERS_PER_SEC);
-        if (!comp)
+        if (DRIVE_ENABLED) {
+            drivebaseSubsystem = new DrivebaseSubsystem();
+        }
+        if (!comp) {
             return;
-
+        }
         if (PNEUMATICS_ENABLED) {
             pneumaticHubSubsystem = new PneumaticHubSubsystem();
         }
-        if (CLIMB_ENABLED)
-            climbSubsystem = new ClimbSubsystem(hardware.climbMotorFixed, hardware.climbMotorDynamic,
-                    hardware.climbAngle);
-        if (INTAKE_ENABLED)
-            intakeSubsystem = new IntakeSubsystem(hardware.intakeMotor, hardware.intakeMotor2, hardware.intakeSolenoid);
+        if (CLIMB_ENABLED) {
+            climbSubsystem = new ClimbSubsystem();
+        }
+        if (INDEX_ENABLED) {
+            indexSubsystem = new IndexSubsystem();
+        }
+        if (INTAKE_ENABLED) {
+            intakeSubsystem = new IntakeSubsystem();
+        }
         if (SHOOTER_ENABLED) {
-            shooterSubsystem = new ShooterSubsystem(hardware.flywheelMotor1, hardware.flywheelMotor2,
-                    hardware.turretMotor, hardware.hoodMotor);
+            shooterSubsystem = new ShooterSubsystem();
             shooterVisionSubsystem = new ShooterVisionSubsystem();
         }
-
-        if (INDEX_ENABLED) {
-            indexSubsystem = new IndexSubsystem(hardware.ingestIndexMotor, hardware.feederIndexMotor,
-                    hardware.ingestProximity, hardware.feederProximity, hardware.ingestBlueColor,
-                    hardware.ingestRedColor, hardware.feederBlueColor, hardware.feederRedColor,
-                    hardware.ingestTopProximity,
-                    hardware.ingestTopBlueColor,
-                    hardware.ingestTopRedColor);
+        if (SHOOTER_ENABLED && DRIVE_ENABLED) {
+            targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
         }
     }
 }

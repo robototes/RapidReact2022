@@ -1,10 +1,11 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
+import static frc.team2412.robot.Hardware.*;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.Hardware;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -13,19 +14,14 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double LIMELIGHT_HEIGHT_OFFSET = 39;
         public static final double RIM_HEIGHT = 104; // 8ft8in
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
-        public static final double HUB_RADIUS = 4 * 12 / 2;
+        public static final double HUB_RADIUS = 24;
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
     }
 
     public NetworkTable limelight;
 
     public ShooterVisionSubsystem() {
-        limelight = NetworkTableInstance.getDefault().getTable(Hardware.HardwareConstants.LIMELIGHT);
-    }
-
-    @Override
-    public void periodic() {
-
+        limelight = NetworkTableInstance.getDefault().getTable(LIMELIGHT);
     }
 
     public boolean hasTarget() {

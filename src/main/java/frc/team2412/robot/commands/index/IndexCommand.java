@@ -13,13 +13,17 @@ public class IndexCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.ingestMotorIn();
-        subsystem.feederMotorIn();
+        if (!subsystem.hasCargo()) {
+            subsystem.feederMotorIn();
+        } else {
+            subsystem.feederMotorStop();
+        }
+
     }
 
     @Override
-    public void end(boolean cancel) {
-        subsystem.ingestMotorStop();
-        subsystem.feederMotorStop();
+    public boolean isFinished() {
+        return false;
     }
+
 }

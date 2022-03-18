@@ -26,8 +26,9 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_IN_SPEED = 0.2; // will change values later
-        public static double INDEX_OUT_SPEED = -0.3; // will also change later
+        public static double INDEX_FEEDER_SPEED = 0.25;
+        public static double INDEX_IN_SPEED = 0.35;
+        public static double INDEX_OUT_SPEED = -0.3;
 
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
@@ -105,7 +106,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Spins second motor inward and updates second motor state
      */
     public void feederMotorIn() {
-        feederMotor.set(INDEX_IN_SPEED);
+        feederMotor.set(INDEX_FEEDER_SPEED);
     }
 
     /**
@@ -125,7 +126,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if ball is positioned at the second sensor
      */
-    @Log(name = "Feeder Proximity")
+    @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
         return feederProximity.get();
     }

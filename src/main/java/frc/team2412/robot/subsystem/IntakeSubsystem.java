@@ -23,7 +23,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public static class IntakeConstants {
 
         public static final double INTAKE_IN_SPEED = 0.7;
-        public static final double INTAKE_OUT_SPEED = -0.7; // will adjust later after testing?
+        public static final double INTAKE_OUT_SPEED = -0.3;
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 20, 20, 1);
@@ -65,11 +65,13 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
         motor1.setNeutralMode(NeutralMode.Coast);
         motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motor1.setInverted(true);
         motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
 
         if (motor2 != null) {
             motor2.setNeutralMode(NeutralMode.Coast);
             motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+            motor2.setInverted(true);
         }
 
         solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
@@ -185,6 +187,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     /**
      * Checks if sensor is detecting ball
      */
+    @Log
     public boolean hasCargo() {
         return ingestProximity.get();
     }

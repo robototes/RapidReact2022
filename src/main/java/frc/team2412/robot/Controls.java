@@ -13,9 +13,9 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
-import frc.team2412.robot.commands.climb.RetractArmCommand;
+import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
-import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
+import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
@@ -139,7 +139,7 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
+        climbFixedArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
         climbFixedArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
         // climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         // climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
@@ -153,19 +153,20 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
+        subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
 
-        // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
-        // subsystems.indexSubsystem));
         // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-        // shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
-        for (Button b : intakeInButton)
-            b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                            // subsystems.indexSubsystem));
+        subsystems.intakeSubsystem
+                .setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+
+        // for (Button b : intakeInButton)
+        // b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));//
+        // .whenReleased(new
+        // IntakeBitmapCommand(subsystems.intakeSubsystem,
+        // subsystems.indexSubsystem));
         // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));

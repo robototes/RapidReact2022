@@ -2,6 +2,12 @@ package frc.team2412.robot.util.autonomous;
 
 import com.google.errorprone.annotations.Immutable;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -16,6 +22,8 @@ import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+
+import java.util.List;
 
 public class AutonomousChooser {
 
@@ -51,12 +59,17 @@ public class AutonomousChooser {
         return autonomousModeChooser.getSelected().commandSupplier.getCommand(subsystems, trajectories);
     }
 
+    public Pose2d getStartPose() {
+        return autonomousModeChooser.getSelected().startPose;
+    }
+
     private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems,
             AutonomousTrajectories trajectories) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getSquarePathAuto()));
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
+                        trajectories.getSquarePathAuto()));
 
         return command;
     }
@@ -66,16 +79,30 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getStarPathAuto()));
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
+                        trajectories.getStarPathAuto()));
 
         return command;
     }
 
     private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
+        // Create config for trajectory
+        TrajectoryConfig config = new TrajectoryConfig(
+                AutonomousCommand.AutoConstants.MAX_SPEED_METERS_PER_SECOND,
+                AutonomousCommand.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
+                List.of(new Translation2d(7.3, 1.1), new Translation2d(5.1, 1.8), new Translation2d(2.1, 1.3)),
+                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(0)),
+                config);
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        command.addCommands(new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand());
+        command.addCommands(
+                new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand(exampleTrajectory));
         return command;
+
     }
 
     private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,
@@ -83,7 +110,8 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem, trajectories.getLinePathAuto()));
+                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
+                        trajectories.getLinePathAuto()));
         return command;
     }
 
@@ -97,6 +125,7 @@ public class AutonomousChooser {
         // Replace with individual testing commands
         ONE_BALL(
                 (subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem,
+
                         subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem),
                 "One ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
@@ -104,7 +133,8 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.DRIVE_ENABLED),
         TWO_BALL(
                 (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
-                        subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
+                        subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
                 "TWo ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
@@ -112,26 +142,32 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED),
+
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
+
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories),
+        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems,
+                trajectories),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
-                Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(318, 77), new Rotation2d(180))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,
                 subsystems.intakeSubsystem),
                 "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
         INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test",
-                Subsystems.SubsystemConstants.INTAKE_ENABLED && Subsystems.SubsystemConstants.INDEX_ENABLED),
+                Subsystems.SubsystemConstants.INTAKE_ENABLED
+                        && Subsystems.SubsystemConstants.INDEX_ENABLED),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
                 subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
                 (subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem,
+
                         subsystems.targetLocalizer, subsystems.intakeSubsystem, subsystems.indexSubsystem),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
@@ -141,11 +177,20 @@ public class AutonomousChooser {
         public final CommandSupplier commandSupplier;
         public final String uiName;
         public final boolean enabled;
+        public final Pose2d startPose;
+
+        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose) {
+            this.commandSupplier = commandSupplier;
+            this.uiName = uiName;
+            this.enabled = enabled;
+            this.startPose = startPose;
+        }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled) {
             this.commandSupplier = commandSupplier;
             this.uiName = uiName;
             this.enabled = enabled;
+            this.startPose = new Pose2d();
         }
     }
 }

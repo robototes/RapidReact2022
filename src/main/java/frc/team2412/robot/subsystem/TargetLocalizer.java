@@ -1,7 +1,8 @@
 package frc.team2412.robot.subsystem;
 
-import frc.team2412.robot.Robot;
 import org.frcteam2910.common.math.Rotation2;
+
+import frc.team2412.robot.Robot;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -93,15 +94,15 @@ public class TargetLocalizer {
                 / getVoltage();
     }
 
-    public double getVoltage() {
-        return Robot.getInstance().getVoltage();
-    }
-
     public void limelightOn() {
         shooterVisionSubsystem.setLedOn();
     }
 
     public void limelightOff() {
         shooterVisionSubsystem.setLedOff();
+    }
+
+    public double getVoltage() {
+        return Robot.getInstance().getVoltage();
     }
 }

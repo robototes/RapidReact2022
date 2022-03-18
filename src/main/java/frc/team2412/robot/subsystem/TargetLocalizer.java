@@ -24,7 +24,8 @@ public class TargetLocalizer {
     }
 
     public double getDistance() {
-        return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 0;
+        return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias()
+                : ShooterVisionSubsystem.ShooterVisionConstants.HUB_RADIUS;
     }
 
     public double getAdjustedDistance() {
@@ -90,7 +91,7 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (Math.atan2(getLateralVelocity(), getDistance()) * TURRET_LATERAL_FF
+        return (Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
                 + getAngularVelocity() * TURRET_ANGULAR_FF)
                 / getVoltage();
     }

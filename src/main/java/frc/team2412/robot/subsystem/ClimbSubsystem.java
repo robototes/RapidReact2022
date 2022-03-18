@@ -21,7 +21,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public static class ClimbConstants {
         public static final double RETRACT_SPEED = -0.1;
 
-        public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
+        public static final double ENCODER_TICKS_PER_INCH = 272816 / 58 * 2;
+        //8789 was previous value
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
@@ -34,9 +35,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double I = 0;
         public static final double D = 0;
 
-        public static final double MID_RUNG_HEIGHT_INCH = 31;
+        //was prevously mid
+        public static final double MID_RUNG_HEIGHT_INCH = 32;
         public static final double RETRACT_HEIGHT_INCH = 15;
-        public static final double FULL_RETRACT_HEIGHT_INCH = 2;
+        public static final double FULL_RETRACT_HEIGHT_INCH = 1;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 60, 15);

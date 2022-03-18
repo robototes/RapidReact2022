@@ -14,6 +14,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
+import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
@@ -139,7 +140,7 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
+        climbFixedArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
         climbFixedArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
         // climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
         // climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));

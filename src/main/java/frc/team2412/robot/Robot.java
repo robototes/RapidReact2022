@@ -220,4 +220,9 @@ public class Robot extends TimedRobot {
     public boolean isCompetition() {
         return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
     }
+
+    @Override
+    public void disabledInit() {
+        subsystems.climbSubsystem.stopArm(true);
+    }
 }

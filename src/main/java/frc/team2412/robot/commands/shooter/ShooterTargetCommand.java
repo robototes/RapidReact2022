@@ -13,7 +13,7 @@ public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
     private final BooleanSupplier turretEnable;
-
+    
     public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer) {
         this(shooter, localizer, () -> false);
     }
@@ -66,10 +66,11 @@ public class ShooterTargetCommand extends CommandBase {
             case WRAP_RIGHT:
                 turretAngle = ShooterConstants.LEFT_WRAP;
                 break;
-            case TRACKING:
+            case TRACKING:   
                 turretAngle += localizer.getYaw();
 
-        }
+        } 
+        // shooter.updateTurretAngle(l);
         shooter.setTurretAngle(turretAngle - (state == TurretState.TRACKING ? localizer.yawAdjustment() : 0));
 
     }

@@ -2,7 +2,6 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
 
-import org.frcteam2910.common.math.Rotation2;
 import static frc.team2412.robot.Hardware.*;
 
 import edu.wpi.first.networktables.NetworkTable;

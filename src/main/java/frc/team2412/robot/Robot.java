@@ -49,7 +49,6 @@ public class Robot extends TimedRobot {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
-    private PowerDistribution PDP;
 
     final private RobotType robotType;
 
@@ -62,7 +61,6 @@ public class Robot extends TimedRobot {
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
         robotType = type;
-        PDP = new PowerDistribution(Hardware.PDP_ID, PowerDistribution.ModuleType.kRev);
     }
 
     public double getVoltage() {

@@ -8,7 +8,6 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.util.MACAddress;
-import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
@@ -178,7 +177,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+            subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
         if (subsystems.shooterSubsystem != null) {

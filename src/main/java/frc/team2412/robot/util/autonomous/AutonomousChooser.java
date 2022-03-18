@@ -177,10 +177,10 @@ public class AutonomousChooser {
         }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled) {
-                this.commandSupplier = commandSupplier;
-                this.uiName = uiName;
-                this.enabled = enabled;
-                this.startPose = new Pose2d();
-            }
+            this.commandSupplier = commandSupplier;
+            this.uiName = uiName;
+            this.enabled = enabled;
+            this.startPose = new Pose2d();
+        }
     }
 }

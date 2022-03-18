@@ -7,14 +7,7 @@ package frc.team2412.robot;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
 
-import java.io.IOException;
-import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
 import frc.team2412.robot.util.MACAddress;
-import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;

@@ -72,7 +72,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
-        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 0.0001;
+        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 4;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -394,8 +394,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             accelLimiter.calculate( // vector accel limiter
-                                    driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                            getAngle() : Rotation2.ZERO)) // same code as other block
+                                    driveSignal.getTranslation()).rotateBy(driveSignal.isFieldOriented() ? // flatten
+                                            getAngle() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

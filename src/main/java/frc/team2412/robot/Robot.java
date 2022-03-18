@@ -4,14 +4,14 @@
 
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
 import static java.lang.Thread.sleep;
 
-import frc.team2412.robot.util.MACAddress;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +20,7 @@ import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
+import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
@@ -40,6 +41,8 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
+    public final PowerDistribution PDP;
+
     public Controls controls;
     public Subsystems subsystems;
 
@@ -56,6 +59,11 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         robotType = type;
+        PDP = new PowerDistribution(Hardware.PDP_ID, PowerDistribution.ModuleType.kRev);
+    }
+
+    public double getVoltage() {
+        return PDP.getVoltage();
     }
 
     protected Robot() {
@@ -223,6 +231,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        subsystems.climbSubsystem.stopArm(true);
+        if(subsystems.climbSubsystem != null) subsystems.climbSubsystem.stopArm(true);
     }
 }

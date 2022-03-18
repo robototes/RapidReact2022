@@ -32,6 +32,12 @@ public class ShooterTargetCommand extends CommandBase {
         localizer.limelightOn();
     }
 
+    public enum TurretState {
+        WRAP_LEFT, WRAP_RIGHT, STOPPED, TRACKING;
+    }
+
+    TurretState state;
+
     @Override
     public void execute() {
         if (!localizer.hasTarget())
@@ -41,9 +47,30 @@ public class ShooterTargetCommand extends CommandBase {
                     .getInterpolated(localizer.getAdjustedDistance());
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
+        }       
+        if (!turretEnable.getAsBoolean())
+            state = TurretState.STOPPED;
+        else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
+            state = TurretState.WRAP_LEFT;
+        else if (turretAngle > ShooterConstants.RIGHT_WRAP_THRESHOLD)
+            state = TurretState.WRAP_RIGHT;
+        else if (turretAngle > ShooterConstants.LEFT_WRAP && turretAngle < ShooterConstants.RIGHT_WRAP)
+            state = TurretState.TRACKING;
+        switch (state) {
+            case STOPPED:
+                turretAngle = 0;
+                break;
+            case WRAP_LEFT:
+                turretAngle = ShooterConstants.RIGHT_WRAP;
+                break;
+            case WRAP_RIGHT:
+                turretAngle = ShooterConstants.LEFT_WRAP;
+                break;
+            case TRACKING:
+                turretAngle += localizer.getYaw();
+
         }
-        turretAngle = turretEnable.getAsBoolean() ? turretAngle + localizer.getYaw() : 0;
-        shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
+        shooter.setTurretAngle(turretAngle - (state == TurretState.TRACKING ? localizer.yawAdjustment() : 0));
 
     }
 

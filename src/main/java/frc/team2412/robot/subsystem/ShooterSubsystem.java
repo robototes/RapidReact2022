@@ -144,7 +144,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 50);
-        turretMotor.configClosedloopRamp(0.5, 100);
+        turretMotor.configClosedloopRamp(0.1, 100);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 

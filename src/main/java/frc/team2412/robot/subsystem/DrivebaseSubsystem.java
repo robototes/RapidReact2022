@@ -71,7 +71,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 0.0001;
 
-        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(90),
+        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0), // should be 90
                 COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
     }
 
@@ -138,7 +138,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
-            if (gyroscope instanceof Pigeon)
+            //if (gyroscope instanceof Pigeon)
                 gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
@@ -283,8 +283,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return getPose().rotation;
-            // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
+            //return getPose().rotation;
+            return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
 
@@ -306,8 +306,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(RigidTransform2 pose) {
         synchronized (kinematicsLock) {
             this.pose = pose;
-            swerveOdometry.resetPose(pose);
             resetGyroAngle(Rotation2.ZERO);
+            swerveOdometry.resetPose(pose);
         }
     }
 

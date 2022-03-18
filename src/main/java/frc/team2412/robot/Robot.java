@@ -5,6 +5,8 @@
 package frc.team2412.robot;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Hardware.*;
+
 import static java.lang.Thread.sleep;
 
 import org.frcteam2910.common.robot.UpdateManager;
@@ -13,6 +15,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -27,6 +30,7 @@ import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class Robot extends TimedRobot {
     /**
@@ -46,6 +50,16 @@ public class Robot extends TimedRobot {
 
     public final PowerDistribution PDP;
     public UsbCamera driverVisionCamera;
+    private final PneumaticHub pneumaticHub;
+
+    private static final double MIN_PRESSURE = 100;
+    private static final double MAX_PRESSURE = 120;
+
+    @Log(name = "Pressure")
+    public double getPressure() {
+        return pneumaticHub.getPressure(0);
+    }
+
 
     public Controls controls;
     public Subsystems subsystems;
@@ -63,6 +77,8 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
+        pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+        pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         robotType = type;
     }
 

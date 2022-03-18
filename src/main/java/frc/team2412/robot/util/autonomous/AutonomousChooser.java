@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.*;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
+import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
+import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
@@ -156,10 +158,9 @@ public class AutonomousChooser {
                 new Pose2d(new Translation2d(318, 77), new Rotation2d(180))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,
-                subsystems.intakeSubsystem),
+        INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem),
                 "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new IntakeTestCommand(subsystems.intakeSubsystem), "Intake test",
+        INTAKE((subsystems, trajectories) -> new DiagnosticIntakeCommandGroup(subsystems.intakeSubsystem), "Intake test",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED
                         && Subsystems.SubsystemConstants.INDEX_ENABLED),
         SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,

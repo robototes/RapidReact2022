@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -82,19 +83,19 @@ public class AutonomousChooser {
     private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
-                AutonomousCommand.AutoConstants.MAX_SPEED_METERS_PER_SECOND,
-                AutonomousCommand.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+                FollowWpilibTrajectory.AutoConstants.MAX_SPEED_METERS_PER_SECOND,
+                FollowWpilibTrajectory.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
                         // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
+                        .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
                 List.of(new Translation2d(7.3, 1.1), new Translation2d(5.1, 1.8), new Translation2d(2.1, 1.3)),
-                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(0)),
+                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(180)),
                 config);
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new AutonomousCommand(subsystems.drivebaseSubsystem).getAutonomousCommand(exampleTrajectory));
+                new FollowWpilibTrajectory(subsystems.drivebaseSubsystem, exampleTrajectory));
         return command;
 
     }
@@ -142,6 +143,9 @@ public class AutonomousChooser {
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
                 Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(318, 77), new Rotation2d(180))),
+        TWO_BALL_FENDER((subsystems, trajectories) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
+                "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,

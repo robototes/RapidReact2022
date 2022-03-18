@@ -7,10 +7,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.util.GeoConvertor;
 
-public class AutonomousCommand extends SequentialCommandGroup {
+public class FollowWpilibTrajectory extends CommandBase {
     public static class AutoConstants {
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
@@ -36,19 +37,22 @@ public class AutonomousCommand extends SequentialCommandGroup {
     }
 
     DrivebaseSubsystem drivebaseSubsystem;
+    SwerveControllerCommand swerveControllerCommand;
+    Trajectory trajectory;
 
-    public AutonomousCommand(DrivebaseSubsystem d) {
-        drivebaseSubsystem = d;
+    public FollowWpilibTrajectory(DrivebaseSubsystem drivebaseSubsystem, Trajectory trajectory) {
+        this.drivebaseSubsystem = drivebaseSubsystem;
+        this.trajectory = trajectory;
     }
 
-    public Command getAutonomousCommand(Trajectory exampleTrajectory) {
-
+    @Override
+    public void initialize() {
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                0.000000005, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                0.1, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        exampleTrajectory.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                exampleTrajectory,
+        trajectory.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
+        swerveControllerCommand = new SwerveControllerCommand(
+                trajectory,
                 drivebaseSubsystem::getPoseAsPoseMeters, // Functional interface to feed supplier
                 AutoConstants.driveKinematics,
 
@@ -58,7 +62,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 thetaController,
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);
-
-        return swerveControllerCommand;
+        //drivebaseSubsystem.resetPose(GeoConvertor.poseToRigid(trajectory.getInitialPose()));
     }
+
+    @Override
+    public boolean isFinished() {
+        return swerveControllerCommand.isFinished();
+    }
+
+    
 }

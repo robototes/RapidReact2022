@@ -284,7 +284,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            // return getPose().rotation;
             return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? getPose().rotation.inverse()
                     : getPose().rotation;
         }
@@ -301,7 +300,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
-            resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()));
+            resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()).inverse());
             swerveOdometry.resetPose(this.pose);
         }
     }
@@ -349,7 +348,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         double angularVelocity;
         synchronized (sensorLock) {
             angle = gyroscope.getAngle();
-            // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
         }
 
         ChassisVelocity velocity = swerveKinematics.toChassisVelocity(moduleVelocities);
@@ -372,11 +370,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (fieldCentric.getBoolean(true)) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getAngle()),//.rotateBy(getRotationAdjustment().inverse()),
+                    driveSignal.getTranslation().rotateBy(getAngle()),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation(),//.rotateBy(getRotationAdjustment()),
+                    driveSignal.getTranslation(),
                     driveSignal.getRotation());
         }
 

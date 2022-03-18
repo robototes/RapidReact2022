@@ -1,5 +1,6 @@
 package frc.team2412.robot.commands.autonomous;
 
+import frc.team2412.robot.subsystem.*;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
@@ -14,15 +15,10 @@ import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.subsystem.IndexSubsystem;
-import frc.team2412.robot.subsystem.IntakeSubsystem;
-import frc.team2412.robot.subsystem.ShooterSubsystem;
-import frc.team2412.robot.subsystem.ShooterVisionSubsystem;
 
 public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
     public TwoBallAutoCommandMiddle(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            ShooterVisionSubsystem shooterVisionSubsystem, DrivebaseSubsystem drivebaseSubsystem,
+            TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
             IntakeSubsystem intakeSubsystem) {
         // Robot should be pressed up on the right side of the lower exit closest to the drivers, facing
         // directly away from the hub with the turret facing towards it
@@ -36,7 +32,7 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
         // immediately shoots it
         addCommands(
                 new ParallelCommandGroup(
-                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, shooterVisionSubsystem)),
+                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
                         new WaitCommand(1)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 new IntakeSetExtendCommand(intakeSubsystem),

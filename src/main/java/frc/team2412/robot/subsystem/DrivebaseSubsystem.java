@@ -34,6 +34,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.frcteam2910.common.util.*;
+import org.opencv.core.RotatedRect;
 
 import java.util.Map;
 import java.util.Optional;
@@ -71,7 +72,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 0.0001;
 
-        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0), // should be 90
+        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(-90), // should be 90
                 COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
     }
 
@@ -291,7 +292,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
+            driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)).rotateBy(getRotationAdjustment()),
                     rotationalVelocity * speedModifier.getDouble(1.0), false); // changing so drive signal is
                                                                                 // shuffleboard only
         }
@@ -300,6 +301,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
+            resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()));
             swerveOdometry.resetPose(this.pose);
         }
     }
@@ -370,11 +372,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (fieldCentric.getBoolean(true)) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getAngle()).rotateBy(getRotationAdjustment().inverse()),
+                    driveSignal.getTranslation().rotateBy(getAngle()),//.rotateBy(getRotationAdjustment().inverse()),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getRotationAdjustment()),
+                    driveSignal.getTranslation(),//.rotateBy(getRotationAdjustment()),
                     driveSignal.getRotation());
         }
 

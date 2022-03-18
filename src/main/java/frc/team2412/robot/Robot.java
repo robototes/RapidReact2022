@@ -13,6 +13,7 @@ import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,6 +49,7 @@ public class Robot extends TimedRobot {
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
+    private PowerDistribution PDP;
 
     final private RobotType robotType;
 
@@ -58,6 +60,7 @@ public class Robot extends TimedRobot {
     protected Robot(RobotType type) {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
+        PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
         robotType = type;
         PDP = new PowerDistribution(Hardware.PDP_ID, PowerDistribution.ModuleType.kRev);
     }

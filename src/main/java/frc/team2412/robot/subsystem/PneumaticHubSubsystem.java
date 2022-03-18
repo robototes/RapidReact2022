@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
-import static frc.team2412.robot.Hardware.HardwareConstants.PNEUMATIC_HUB;
+import static frc.team2412.robot.Hardware.PNEUMATIC_HUB;
 
 public class PneumaticHubSubsystem extends SubsystemBase implements Loggable {
 

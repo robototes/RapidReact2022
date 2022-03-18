@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
@@ -59,7 +60,6 @@ public class Robot extends TimedRobot {
     public double getPressure() {
         return pneumaticHub.getPressure(0);
     }
-
 
     public Controls controls;
     public Subsystems subsystems;
@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
                     subsystems.drivebaseSubsystem);
             updateManager.startLoop(5.0e-3);
         }
-        if(DRIVER_VIS_ENABLED){
+        if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
@@ -217,7 +217,10 @@ public class Robot extends TimedRobot {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 
-        autonomousChooser.getCommand().schedule();
+        Command autoCommand = autonomousChooser.getCommand();
+        if(autoCommand != null){
+            autoCommand.schedule();
+        }
     }
 
     @Override

@@ -124,9 +124,14 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED),
         TWO_BALL(
-                (subsystems, trajectories) -> new TwoBallAutoCommandLeft(subsystems.drivebaseSubsystem),
-                "TWo ball auto",
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                (subsystems, trajectories) -> new TwoBallAutoCommandLeft(subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
+                subsystems.intakeSubsystem),
+                "Two ball auto",
+                Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+                Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                Subsystems.SubsystemConstants.DRIVE_ENABLED),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),

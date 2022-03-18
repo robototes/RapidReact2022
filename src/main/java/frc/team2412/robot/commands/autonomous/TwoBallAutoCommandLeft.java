@@ -18,8 +18,8 @@ import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
     public TwoBallAutoCommandLeft(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
-            IntakeSubsystem intakeSubsystem) {
+           TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
+           IntakeSubsystem intakeSubsystem) {
         // Robot should be pressed up on the left side of the lower exit closest to the drivers, facing
         // directly away from the hub with the turret facing towards it
         Trajectory robotPath = new Trajectory(
@@ -37,7 +37,7 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
-                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
+                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
                         new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
 
     }

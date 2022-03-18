@@ -8,6 +8,7 @@ import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
 
 import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
+import org.jetbrains.annotations.Nullable;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
@@ -20,18 +21,19 @@ public class Subsystems implements Loggable {
         public static final boolean SHOOTER_TESTING = false;
     }
 
+    @Nullable
     public ClimbSubsystem climbSubsystem;
-
+    @Nullable
     public DrivebaseSubsystem drivebaseSubsystem;
-
+    @Nullable
     public ShooterVisionSubsystem shooterVisionSubsystem;
-
+    @Nullable
     public IndexSubsystem indexSubsystem;
-
+    @Nullable
     public IntakeSubsystem intakeSubsystem;
-
+    @Nullable
     public ShooterSubsystem shooterSubsystem;
-
+    @Nullable
     public TargetLocalizer targetLocalizer;
 
     public Subsystems() {

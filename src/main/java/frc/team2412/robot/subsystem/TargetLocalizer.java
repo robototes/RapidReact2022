@@ -10,7 +10,7 @@ public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0.1;
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -90,7 +90,8 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF)
+        return (Math.atan2(getLateralVelocity(), getDistance()) * TURRET_LATERAL_FF
+                + getAngularVelocity() * TURRET_ANGULAR_FF)
                 / getVoltage();
     }
 

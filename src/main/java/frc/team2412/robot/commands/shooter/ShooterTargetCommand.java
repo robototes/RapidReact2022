@@ -10,6 +10,7 @@ import frc.team2412.robot.subsystem.TargetLocalizer;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
 
 public class ShooterTargetCommand extends CommandBase {
+
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
     private final BooleanSupplier turretEnable;

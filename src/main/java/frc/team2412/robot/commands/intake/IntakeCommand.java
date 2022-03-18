@@ -23,6 +23,7 @@ public class IntakeCommand extends CommandBase {
         } else {
             intakeSubsystem.intakeIn();
             indexSubsystem.ingestMotorIn();
+
         }
     }
 

@@ -15,10 +15,22 @@ public class TargetLocalizer {
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
 
-    public TargetLocalizer(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        drivebaseSubsystem = drivebase;
-        shooterSubsystem = shooter;
-        shooterVisionSubsystem = vision;
+    /**
+     * Creates a new {@link TargetLocalizer}.
+     * If {@code drivebase} is null, will assume robot is stationary.
+     *
+     * @param drivebaseSubsystem
+     *            The drivebase subsystem.
+     * @param shooterSubsystem
+     *            The shooter subsystem.
+     * @param visionSubsystem
+     *            The vision subsystem.
+     */
+    public TargetLocalizer(DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem,
+            ShooterVisionSubsystem visionSubsystem) {
+        this.drivebaseSubsystem = drivebaseSubsystem;
+        this.shooterSubsystem = shooterSubsystem;
+        this.shooterVisionSubsystem = visionSubsystem;
     }
 
     public double getDistance() {
@@ -58,9 +70,11 @@ public class TargetLocalizer {
      * @return that
      */
     public double getLateralVelocity() {
-        // might need to do inverse
-        return drivebaseSubsystem.getVelocity()
-                .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x;
+        return (drivebaseSubsystem != null)
+                // might need to do inverse
+                ? drivebaseSubsystem.getVelocity()
+                        .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).x
+                : 0;
     }
 
     /**
@@ -69,13 +83,15 @@ public class TargetLocalizer {
      * @return that
      */
     public double getDepthVelocity() {
-        // might need to do inverse
-        return drivebaseSubsystem.getVelocity()
-                .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).y;
+        return (drivebaseSubsystem != null)
+                // might need to do inverse
+                ? drivebaseSubsystem.getVelocity()
+                        .rotateBy(Rotation2.fromDegrees(TURRET_OFFSET + shooterSubsystem.getTurretAngle())).y
+                : 0;
     }
 
     public double getAngularVelocity() {
-        return drivebaseSubsystem.getAngularVelocity();
+        return (drivebaseSubsystem != null) ? drivebaseSubsystem.getAngularVelocity() : 0;
     }
 
     /**

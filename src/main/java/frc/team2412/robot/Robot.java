@@ -4,11 +4,13 @@
 
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
 
 import org.frcteam2910.common.robot.UpdateManager;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
     }
 
     public final PowerDistribution PDP;
+    public UsbCamera driverVisionCamera;
 
     public Controls controls;
     public Subsystems subsystems;
@@ -119,6 +122,11 @@ public class Robot extends TimedRobot {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
             updateManager.startLoop(5.0e-3);
+        }
+        if(DRIVER_VIS_ENABLED){
+            driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            CameraServer.addCamera(driverVisionCamera);
+            CameraServer.startAutomaticCapture();
         }
 
         // Create and push Field2d to SmartDashboard.

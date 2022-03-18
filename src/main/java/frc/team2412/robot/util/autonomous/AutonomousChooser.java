@@ -133,7 +133,8 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.DRIVE_ENABLED),
         TWO_BALL(
                 (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
-                        subsystems.targetLocalizer,
+                        subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
                 "TWo ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&

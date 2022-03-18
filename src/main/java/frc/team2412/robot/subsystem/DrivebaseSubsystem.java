@@ -35,7 +35,6 @@ import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.robot.drivers.Pigeon;
 import org.frcteam2910.common.util.*;
 
-import java.nio.BufferUnderflowException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -51,9 +50,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.96561,
-                0.044938,
-                0.011787);
+                0.0574, // velocity
+                0.00275, // acceleration
+                0.169); // static
 
         // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
@@ -71,11 +70,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
         public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 0.0001;
+
+        //public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(90),
+        //        COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
+        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0),
+                COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.1, 0.0, 0.0),
-            new PidConstants(0, 0.0, 0.0),
+            new PidConstants(0.111, 0.0, 0.0),
+            new PidConstants(5.0, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
@@ -136,10 +140,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
-            if (gyroscope instanceof NavX)
+            if (gyroscope instanceof Pigeon)
                 gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
-        }        
+        }
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
@@ -217,22 +221,23 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .setTargetPositionTolerance(TIP_TOLERANCE);
 
         poseSetX = tab.add("Set Pose X", 0.0)
-                .withPosition(5, 0)
+                .withPosition(5, 3)
                 .withSize(1, 1)
                 .withWidget(BuiltInWidgets.kTextView)
                 .getEntry();
 
         poseSetY = tab.add("Set Pose Y", 0.0)
-                .withPosition(6, 0)
+                .withPosition(6, 3)
                 .withSize(1, 1)
                 .withWidget(BuiltInWidgets.kTextView)
                 .getEntry();
 
         poseSetAngle = tab.add("Set Pose Angle", 0.0)
-                .withPosition(7, 0)
+                .withPosition(7, 3)
                 .withSize(1, 1)
                 .withWidget(BuiltInWidgets.kTextView)
                 .getEntry();
+
         accelLimiter = new VectorSlewLimiter(ACCEL_LIMIT);
     }
 
@@ -261,7 +266,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public void setPose() {
-        resetPose(new Pose2d(poseSetX.getDouble(0.0), poseSetY.getDouble(0.0), Rotation2d.fromDegrees(poseSetAngle.getDouble(0.0))));
+        resetPose(new Pose2d(poseSetX.getDouble(0.0), poseSetY.getDouble(0.0),
+                Rotation2d.fromDegrees(poseSetAngle.getDouble(0.0))));
         resetGyroAngle(Rotation2.fromDegrees(poseSetAngle.getDouble(0.0)).inverse());
     }
 
@@ -287,7 +293,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(translationalVelocity.scale(speedModifier.getDouble(1.0)),
-                    rotationalVelocity * speedModifier.getDouble(1.0), false); // changing so drive signal is shuffleboard only
+                    rotationalVelocity * speedModifier.getDouble(1.0), false); // changing so drive signal is
+                                                                                // shuffleboard only
         }
     }
 
@@ -312,6 +319,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
             tipController.setTargetPosition(getGyroscopeXY());
         }
+    }
+
+    // this returns a value that can be rotated to the pose to make the intake the front of the robot
+    private Rotation2 getRotationAdjustment() {
+        return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? PRACTICE_BOT_DRIVE_OFFSET
+                : COMP_BOT_DRIVE_OFFSET;
     }
 
     public double getAverageAbsoluteValueVelocity() {
@@ -358,11 +371,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
         } else if (fieldCentric.getBoolean(true)) {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(getAngle()),
+                    driveSignal.getTranslation().rotateBy(getAngle()).rotateBy(getRotationAdjustment().inverse()),
                     driveSignal.getRotation());
         } else {
             chassisVelocity = new ChassisVelocity(
-                    driveSignal.getTranslation().rotateBy(Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? PRACTICE_BOT_DRIVE_OFFSET : COMP_BOT_DRIVE_OFFSET),
+                    driveSignal.getTranslation().rotateBy(getRotationAdjustment()),
                     driveSignal.getRotation());
         }
 

@@ -12,6 +12,7 @@ import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.team2412.robot.Robot.RobotType;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
@@ -88,6 +89,7 @@ public class Controls {
         // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
+        setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
         shootButton = driveController.getLeftBumperButton();
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
@@ -151,7 +153,9 @@ public class Controls {
                 driveController.getLeftYAxis(), driveController.getLeftXAxis(),
                 driveController.getRightXAxis()));
         resetDriveGyroButton.whenPressed(() -> subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO));
-        setPoseButton.whenPressed(() -> subsystems.drivebaseSubsystem.setPose());
+
+        if (Robot.getTypeFromAddress() == RobotType.DRIVEBASE)
+            setPoseButton.whenPressed(() -> subsystems.drivebaseSubsystem.setPose());
     }
 
     public void bindIndexControls() {

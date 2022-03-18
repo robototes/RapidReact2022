@@ -2,13 +2,11 @@ package frc.team2412.robot.commands.intake;
 
 import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.INDEX_IN_SPEED;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeBitmapCommand extends CommandBase {
-
     public final double MISFIRE_VELOCITY = 400;
 
     // bitmap
@@ -48,7 +46,6 @@ public class IntakeBitmapCommand extends CommandBase {
     //
     private IntakeSubsystem intakeSubsystem;
     private IndexSubsystem indexSubsystem;
-
     private Bitmap currentState;
 
     // constructor
@@ -59,32 +56,15 @@ public class IntakeBitmapCommand extends CommandBase {
 
     }
 
-    Bitmap actualValue = Bitmap.A;
-
     @Override
     public void execute() {
 
         boolean ingestSensor = intakeSubsystem.hasCargo();
         boolean feederSensor = indexSubsystem.hasCargo();
-
         for (Bitmap value : Bitmap.values()) {
             if (value.equals(ingestSensor, feederSensor)) {
                 currentState = value;
                 break;
-
-                // double yaw = shooterVisionSubsystem.getDistance() + shooterSubsystem.getTurretAngleBias();
-                // shooterSubsystem.updateTurretAngle(yaw);
-
-                // if (value.shooterMisfire) {
-                // shooterSubsystem.setHoodAngle(0);
-                // shooterSubsystem.setFlywheelVelocity(MISFIRE_VELOCITY);
-
-                // } else {
-                // double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
-                // ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints.getInterpolated(distance);
-                // shooterSubsystem.setHoodAngle(shooterData.getAngle());
-                // shooterSubsystem.setFlywheelRPM(shooterData.getRPM());
-                // }
             }
         }
 

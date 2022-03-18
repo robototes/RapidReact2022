@@ -21,8 +21,6 @@ import frc.team2412.robot.commands.intake.IntakeTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-
 import java.util.List;
 
 public class AutonomousChooser {
@@ -126,15 +124,9 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED),
         TWO_BALL(
-                (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
-                        subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
-                        subsystems.intakeSubsystem),
+                (subsystems, trajectories) -> new TwoBallAutoCommandLeft(subsystems.drivebaseSubsystem),
                 "TWo ball auto",
-                Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-                        Subsystems.SubsystemConstants.INTAKE_ENABLED),
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),

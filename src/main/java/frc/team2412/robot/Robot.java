@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
      */
     private static Robot instance = null;
 
-    enum RobotType {
+    public enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
     public static final MACAddress COMPEITION_ADDRESS = MACAddress.of(0x33, 0x9d, 0xe7);
     public static final MACAddress PRACTICE_ADDRESS = MACAddress.of(0x28, 0x40, 0x82);
 
-    private static RobotType getTypeFromAddress() {
+    public static RobotType getTypeFromAddress() {
         if (PRACTICE_ADDRESS.exists())
             return RobotType.DRIVEBASE;
         else

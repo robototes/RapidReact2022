@@ -257,7 +257,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        if (subsystems.climbSubsystem != null)
+        if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.stopArm(true);
+        }
+        if(subsystems.shooterSubsystem != null){
+            subsystems.shooterSubsystem.stopHoodMotor();
+        }
     }
 }

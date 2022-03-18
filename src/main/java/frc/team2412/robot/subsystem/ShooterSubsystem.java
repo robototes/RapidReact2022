@@ -131,9 +131,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
+        
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
+
         setFlywheelPID(FLYWHEEL_DEFAULT_P, FLYWHEEL_DEFAULT_I, FLYWHEEL_DEFAULT_D, FLYWHEEL_DEFAULT_F);
 
         turretMotor.configFactoryDefault();

@@ -21,8 +21,9 @@ public class Mk4Configuration {
         return create(true);
     }
 
-    public SwerveModule create(boolean steer) {
-        return Mk4SwerveModuleHelper.createFalcon500(ratio, drive, angle, steer ? encoder : -1, steer ? offset : 0);
+    public SwerveModule create(boolean supportAbsoluteEncoder) {
+        return Mk4SwerveModuleHelper.createFalcon500(ratio, drive, angle, supportAbsoluteEncoder ? encoder : -1,
+                supportAbsoluteEncoder ? offset : 0);
     }
 
     public Mk4SwerveModuleHelper.GearRatio getRatio() {

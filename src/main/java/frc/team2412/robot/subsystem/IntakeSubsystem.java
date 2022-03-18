@@ -2,6 +2,7 @@ package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -9,7 +10,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -59,22 +62,21 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // CONSTRUCTOR!
 
-    public IntakeSubsystem(WPI_TalonFX motor, WPI_TalonFX motor2, DoubleSolenoid intakeSolenoid,
-            DigitalInput ingestProximity) {
+    public IntakeSubsystem() {
+        motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
+        motor1.setNeutralMode(NeutralMode.Coast);
+        motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
 
-        this.motor1 = motor;
-        this.motor1.setNeutralMode(NeutralMode.Coast);
-        this.motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        this.motor2 = motor2;
-
-        if (this.motor2 != null) {
-            this.motor2.setNeutralMode(NeutralMode.Coast);
-            this.motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        if (motor2 != null) {
+            motor2.setNeutralMode(NeutralMode.Coast);
+            motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         }
 
-        this.solenoid = intakeSolenoid;
+        solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
+                INTAKE_SOLENOID_DOWN);
 
-        this.ingestProximity = ingestProximity;
+        ingestProximity = new DigitalInput(INGEST_PROXIMITY);
 
         intakeSolenoidState = EXTEND;
 
@@ -85,6 +87,11 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     // Methods
+
+    public void simInit(PhysicsSim sim) {
+        sim.addTalonFX(motor1, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(motor2, 1, SIM_FULL_VELOCITY);
+    }
 
     /**
      * Manually sets the speed of the motor

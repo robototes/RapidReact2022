@@ -138,8 +138,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
-            //if (gyroscope instanceof Pigeon)
-                gyroscope.setInverted(true);
+            // if (gyroscope instanceof Pigeon)
+            gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
@@ -283,8 +283,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            //return getPose().rotation;
-            return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? getPose().rotation.inverse() : getPose().rotation;
+            // return getPose().rotation;
+            return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? getPose().rotation.inverse()
+                    : getPose().rotation;
         }
     }
 

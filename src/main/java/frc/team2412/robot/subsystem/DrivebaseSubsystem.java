@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
+import frc.team2412.robot.util.VectorSlewLimiter;
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -36,6 +37,7 @@ import org.frcteam2910.common.util.*;
 import java.util.Map;
 import java.util.Optional;
 
+import static frc.team2412.robot.Hardware.*;
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
 public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable {
@@ -66,11 +68,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
 
-        public static final boolean ANTI_TIP_DEFAULT = false;
+        public static final boolean ANTI_TIP_DEFAULT = true;
 
         public static final boolean FIELD_CENTRIC_DEFAULT = true;
 
-        public static final double TIP_P = 0.1, TIP_F = 0, TIP_TOLERANCE = 10;
+        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 0.0001;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -126,9 +128,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final Field2d field = new Field2d();
 
     private final PFFController<Vector2> tipController;
+    private final VectorSlewLimiter accelLimiter;
 
     public DrivebaseSubsystem() {
-        var comp = Robot.getInstance().isCompetition();
+        boolean comp = Robot.getInstance().isCompetition();
 
         synchronized (sensorLock) {
             gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
@@ -188,7 +191,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
-        speedModifier = tab.add("Speed Modifier", 0.5f)
+        speedModifier = tab.add("Speed Modifier", 1f)
                 .withPosition(2, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
@@ -211,6 +214,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
+
+        accelLimiter = new VectorSlewLimiter(ACCEL_LIMIT);
     }
 
     public Vector2 getGyroscopeXY() {
@@ -308,7 +313,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (sensorLock) {
             angle = gyroscope.getAngle();
             // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
-            angularVelocity = gyroscope.getRate();
         }
 
         ChassisVelocity velocity = swerveKinematics.toChassisVelocity(moduleVelocities);
@@ -321,7 +325,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             }
             latencyCompensationMap.put(new InterpolatingDouble(time), pose);
             this.velocity = velocity.getTranslationalVelocity();
-            this.angularVelocity = angularVelocity;
+            this.angularVelocity = velocity.getAngularVelocity();
         }
     }
 
@@ -387,11 +391,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal.isFieldOriented());
         } else {
             synchronized (stateLock) {
-
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
-                            driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                    getAngle() : Rotation2.ZERO) // same code as other block
+                            accelLimiter.calculate( // vector accel limiter
+                                    driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
+                                            getAngle() : Rotation2.ZERO)) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

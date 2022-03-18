@@ -7,14 +7,7 @@ package frc.team2412.robot;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
 
-import java.io.IOException;
-import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.frcteam2910.common.math.RigidTransform2;
+import frc.team2412.robot.util.MACAddress;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
@@ -25,7 +18,6 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.commands.drive.DriveCommand;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
@@ -74,54 +66,14 @@ public class Robot extends TimedRobot {
         this(getTypeFromAddress());
     }
 
-    private static final byte[] COMPETITION_BOT_MAC_ADDRESS = new byte[] {
-            0x00, (byte) 0x80, 0x2f, 0x33, (byte) 0x9d, (byte) 0xe7
-    };
-    private static final byte[] PRACTICE_BOT_MAC_ADDRESS = new byte[] {
-            0x00, (byte) 0x80, 0x2f, 0x28, 0x40, (byte) 0x82
-    };
+    public static final MACAddress COMPEITION_ADDRESS = MACAddress.of(0x33, 0x9d, 0xe7);
+    public static final MACAddress PRACTICE_ADDRESS = MACAddress.of(0x28, 0x40, 0x82);
 
     private static RobotType getTypeFromAddress() {
-        List<byte[]> macAddresses;
-        try {
-            macAddresses = getMacAddresses();
-        } catch (IOException ignored) {
-            macAddresses = List.of();
-        }
-
-        for (byte[] macAddress : macAddresses) {
-            // First check if we are the competition bot
-            if (Arrays.compare(COMPETITION_BOT_MAC_ADDRESS, macAddress) == 0) {
-                return RobotType.COMPETITION;
-            }
-
-            // Next check if we are the practice bot
-            if (Arrays.compare(PRACTICE_BOT_MAC_ADDRESS, macAddress) == 0) {
-                return RobotType.DRIVEBASE;
-            }
-        }
-        // lol fallback
-        return RobotType.COMPETITION;
-    }
-
-    private static List<byte[]> getMacAddresses() throws IOException {
-        List<byte[]> macAddresses = new ArrayList<>();
-
-        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-
-        NetworkInterface networkInterface;
-        while (networkInterfaces.hasMoreElements()) {
-            networkInterface = networkInterfaces.nextElement();
-
-            byte[] address = networkInterface.getHardwareAddress();
-            if (address == null) {
-                continue;
-            }
-
-            macAddresses.add(address);
-        }
-
-        return macAddresses;
+        if (PRACTICE_ADDRESS.exists())
+            return RobotType.DRIVEBASE;
+        else
+            return RobotType.COMPETITION;
     }
 
     // TODO add other override methods
@@ -182,36 +134,33 @@ public class Robot extends TimedRobot {
                         command -> System.out.println("Command finished: " + command.getName()));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
-            controlAuto = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Waiting two seconds for robot to finish startup");
-                    try {
-                        sleep(2000);
-                    } catch (InterruptedException ignored) {
-                    }
-
-                    System.out.println("Enabling autonomous mode and waiting 10 seconds");
-                    DriverStationDataJNI.setAutonomous(true);
-                    DriverStationDataJNI.setEnabled(true);
-
-                    try {
-                        sleep(10000);
-                    } catch (InterruptedException ignored) {
-                    }
-
-                    System.out.println("Disabling robot and waiting two seconds");
-                    DriverStationDataJNI.setEnabled(false);
-
-                    try {
-                        sleep(2000);
-                    } catch (InterruptedException ignored) {
-                    }
-
-                    System.out.println("Ending competition");
-                    suppressExitWarning(true);
-                    endCompetition();
+            controlAuto = new Thread(() -> {
+                System.out.println("Waiting two seconds for robot to finish startup");
+                try {
+                    sleep(2000);
+                } catch (InterruptedException ignored) {
                 }
+
+                System.out.println("Enabling autonomous mode and waiting 10 seconds");
+                DriverStationDataJNI.setAutonomous(true);
+                DriverStationDataJNI.setEnabled(true);
+
+                try {
+                    sleep(10000);
+                } catch (InterruptedException ignored) {
+                }
+
+                System.out.println("Disabling robot and waiting two seconds");
+                DriverStationDataJNI.setEnabled(false);
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException ignored) {
+                }
+
+                System.out.println("Ending competition");
+                suppressExitWarning(true);
+                endCompetition();
             });
             controlAuto.start();
         }
@@ -232,7 +181,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.resetPose(RigidTransform2.ZERO);
+            subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
         if (subsystems.shooterSubsystem != null) {
@@ -244,17 +193,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.setDefaultCommand(new DriveCommand(subsystems.drivebaseSubsystem,
-                    controls.driveController.getLeftYAxis(), controls.driveController.getLeftXAxis(),
-                    controls.driveController.getRightXAxis()));
-        }
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
-        }
-        if (subsystems.shooterSubsystem != null) {
-            // subsystems.shooterSubsystem.setDefaultCommand(new
-            // ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
         }
     }
 

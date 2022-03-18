@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_D = 0;
         public static final double FLYWHEEL_DEFAULT_F = 0.057;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.06;
+        public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
         public static final double HOOD_DEFAULT_D = 0;
         public static final double HOOD_DEFAULT_F = 0.005;

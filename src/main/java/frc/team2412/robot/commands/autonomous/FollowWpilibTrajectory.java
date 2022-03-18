@@ -62,7 +62,12 @@ public class FollowWpilibTrajectory extends CommandBase {
                 thetaController,
                 drivebaseSubsystem::updateModules,
                 drivebaseSubsystem);
-        //drivebaseSubsystem.resetPose(GeoConvertor.poseToRigid(trajectory.getInitialPose()));
+        swerveControllerCommand.schedule();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        swerveControllerCommand.cancel();
     }
 
     @Override

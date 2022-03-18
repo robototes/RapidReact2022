@@ -7,4 +7,9 @@ public class ShooterIdleCommand extends CommandBase {
     public ShooterIdleCommand(ShooterSubsystem shooter) {
         addRequirements(shooter);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

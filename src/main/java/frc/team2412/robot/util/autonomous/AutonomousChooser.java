@@ -139,7 +139,6 @@ public class AutonomousChooser {
                 "TWo ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED),
 

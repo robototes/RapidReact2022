@@ -15,10 +15,11 @@ public class Subsystems implements Loggable {
         public static final boolean DRIVE_ENABLED = false;
         public static final boolean DRIVER_VIS_ENABLED = true;
         public static final boolean SHOOTER_VISION_ENABLED = false;
-        public static final boolean INDEX_ENABLED = false;
-        public static final boolean INTAKE_ENABLED = false;
+        public static final boolean INDEX_ENABLED = true;
+        public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = false;
         public static final boolean SHOOTER_TESTING = false;
+        public static final boolean COMPRESSOR_ENABLED = false;
     }
 
     public ClimbSubsystem climbSubsystem;

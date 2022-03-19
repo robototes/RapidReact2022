@@ -22,7 +22,7 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
             TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
-                        .lineTo(new Vector2(0, 70))
+                        .lineTo(new Vector2(0, 120))
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 

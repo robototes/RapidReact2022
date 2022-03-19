@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -135,13 +136,16 @@ public class Robot extends TimedRobot {
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
-            updateManager.startLoop(0.011); //0.005 previously
+            updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
             driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
+
+            Shuffleboard.getTab("Drivebase").add(driverVisionCamera).withSize(2, 2).withPosition(5, 0);
+
         }
 
         // Create and push Field2d to SmartDashboard.
@@ -227,7 +231,7 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
-        
+
     }
 
     @Override

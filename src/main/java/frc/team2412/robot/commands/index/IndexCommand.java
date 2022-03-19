@@ -15,7 +15,7 @@ public class IndexCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(!intakeSubsystem.isIntakeExtended()) {
+        if (!intakeSubsystem.isIntakeExtended()) {
             indexSubsystem.feederMotorStop();
             indexSubsystem.ingestMotorStop();
             return;
@@ -27,7 +27,7 @@ public class IndexCommand extends CommandBase {
             indexSubsystem.feederMotorIn();
         }
 
-        if(intakeSubsystem.hasCargo()){
+        if (intakeSubsystem.hasCargo()) {
             indexSubsystem.ingestMotorStop();
         } else {
             indexSubsystem.ingestMotorIn();

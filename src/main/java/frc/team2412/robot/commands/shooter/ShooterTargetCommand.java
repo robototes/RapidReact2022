@@ -43,7 +43,7 @@ public class ShooterTargetCommand extends CommandBase {
         if (!localizer.hasTarget())
             return;
 
-        if (ShooterConstants.dataPoints != null) {
+        if (ShooterConstants.dataPoints != null && localizer.getAdjustedDistance() < 254) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
                     .getInterpolated(localizer.getAdjustedDistance());
             shooter.setHoodAngle(shooterData.getAngle());

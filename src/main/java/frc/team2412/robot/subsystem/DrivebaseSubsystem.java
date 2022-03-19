@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -300,6 +301,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
+            resetGyroAngle(Rotation2.ZERO);
             resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()).inverse());
             swerveOdometry.resetPose(this.pose);
         }
@@ -428,9 +430,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             synchronized (stateLock) {
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
-                            accelLimiter.calculate( // vector accel limiter
-                                    driveSignal.getTranslation().rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                            getAngle() : Rotation2.ZERO)) // same code as other block
+                            accelLimiter.calculate(driveSignal.getTranslation()) // vector accel limiter
+                                    .rotateBy(driveSignal.isFieldOriented() ? // flatten
+                                            getAngle() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else
@@ -444,8 +446,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void periodic() {
         // Pose2d pose = getPoseAsPoseMeters();
         synchronized (kinematicsLock) {
-            odometryXEntry.setDouble(pose.translation.x);
-            odometryYEntry.setDouble(pose.translation.y);
+            odometryXEntry.setDouble(Units.inchesToMeters(pose.translation.x));
+            odometryYEntry.setDouble(Units.inchesToMeters(pose.translation.y));
             odometryAngleEntry.setDouble(pose.rotation.toDegrees());
         }
         // System.out.println(pose);

@@ -19,9 +19,13 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public static class ClimbConstants {
-        public static final double RETRACT_SPEED = -0.1;
+        public static final double EXTEND_SPEED = 0.15;
+        public static final double RETRACT_SPEED = -0.15;
 
-        public static final double ENCODER_TICKS_PER_INCH = 78417 / 11.5 * 2;
+        // Doing integer division, which returns 11757
+        // Probably should do floating point division, which returns 11759.3
+        public static final double ENCODER_TICKS_PER_INCH = ((272816.0 / 58) * 2 * 5) / 4;
+        // 8789 was previous value
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;
 
@@ -34,12 +38,16 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double I = 0;
         public static final double D = 0;
 
-        public static final double MID_RUNG_HEIGHT_INCH = 31;
+        // was prevously mid
+        public static final double MID_RUNG_HEIGHT_INCH = 32;
         public static final double RETRACT_HEIGHT_INCH = 15;
-        public static final double FULL_RETRACT_HEIGHT_INCH = 2;
+        public static final double FULL_RETRACT_HEIGHT_INCH = 1;
 
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 60, 15);
+
+        public static final double CLIMB_SPEED = 0.4;
+
     }
 
     @Log.MotorController
@@ -60,6 +68,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
+        motorConfig.peakOutputForward = CLIMB_SPEED;
+        motorConfig.peakOutputReverse = -CLIMB_SPEED;
 
         motor.configAllSettings(motorConfig);
 
@@ -138,6 +148,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     public void lowerArm() {
         motor.set(RETRACT_SPEED);
+    }
+
+    /**
+     * Extends arm at set speed
+     */
+    public void extendArmSlowly() {
+        motor.set(EXTEND_SPEED);
     }
 
     public boolean isHittingLimitSwitch() {

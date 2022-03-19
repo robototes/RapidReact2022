@@ -10,7 +10,7 @@ public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0;
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 10, TURRET_DEPTH_FF = 0;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -25,7 +25,7 @@ public class TargetLocalizer {
 
     public double getDistance() {
         return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias()
-                : ShooterVisionSubsystem.ShooterVisionConstants.HUB_RADIUS;
+                : 0;
     }
 
     public double getAdjustedDistance() {
@@ -91,7 +91,8 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+        return (getDistance() != 0 ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+                : 0)
                 + (getAngularVelocity() * TURRET_ANGULAR_FF)
                         / getVoltage();
     }

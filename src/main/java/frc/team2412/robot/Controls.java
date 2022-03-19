@@ -2,8 +2,8 @@ package frc.team2412.robot;
 
 import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.team2412.robot.commands.drive.DriveCommand;
-import frc.team2412.robot.commands.shooter.ShooterIdleCommand;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
@@ -19,6 +19,8 @@ import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+
+import java.util.function.BooleanSupplier;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -116,15 +118,16 @@ public class Controls {
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
 
-            driveController.getDPadButton(Direction.UP)
-                    .whenPressed(new ShooterIdleCommand(subsystems.shooterSubsystem));
+            BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
             driveController.getDPadButton(Direction.DOWN).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
             driveController.getDPadButton(Direction.RIGHT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
+                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90)))
+                            .withInterrupt(b));
 
             subsystems.shooterSubsystem.setDefaultCommand(
                     new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,

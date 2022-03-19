@@ -17,7 +17,7 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if(!intakeSubsystem.isIntakeExtended()){
+        if (!intakeSubsystem.isIntakeExtended()) {
             indexSubsystem.feederMotorStop();
             indexSubsystem.ingestMotorStop();
             intakeSubsystem.intakeStop();

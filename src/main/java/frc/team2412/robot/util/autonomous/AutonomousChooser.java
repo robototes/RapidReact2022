@@ -56,8 +56,10 @@ public class AutonomousChooser {
     }
 
     public CommandBase getCommand() {
-            AutonomousMode autoMode = autonomousModeChooser.getSelected();
-        return autoMode != null ? autonomousModeChooser.getSelected().commandSupplier.getCommand(subsystems, trajectories) : null;
+        AutonomousMode autoMode = autonomousModeChooser.getSelected();
+        return autoMode != null
+                ? autonomousModeChooser.getSelected().commandSupplier.getCommand(subsystems, trajectories)
+                : null;
     }
 
     public Pose2d getStartPose() {

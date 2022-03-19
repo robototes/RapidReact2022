@@ -183,7 +183,7 @@ public class Controls {
 
             BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
 
-            fenderShotButton.whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(interrupt));
+            fenderShotButton.whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2250, 13.5).withInterrupt(interrupt));
 
             driveController.getDPadButton(Direction.LEFT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));

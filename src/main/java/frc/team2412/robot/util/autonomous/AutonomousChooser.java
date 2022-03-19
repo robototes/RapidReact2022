@@ -126,7 +126,7 @@ public class AutonomousChooser {
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
         FIVE_BALL((subsystems, trajectories) -> new FiveBallAutoCommand(subsystems.drivebaseSubsystem),
                 "Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0))),
+                new Pose2d(new Translation2d(295.2, 74), Rotation2d.fromDegrees(0))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,

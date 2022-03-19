@@ -163,7 +163,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        System.out.println("Shooter target RPM: " + targetRPM);
     }
 
     public void simInit(PhysicsSim sim) {

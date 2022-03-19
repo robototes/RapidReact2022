@@ -159,7 +159,7 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
+        subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
 
         shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }

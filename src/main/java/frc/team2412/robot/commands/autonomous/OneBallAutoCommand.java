@@ -22,13 +22,14 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
             TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
-                        .lineTo(new Vector2(0, 120))
+                        .lineTo(new Vector2(0, 70))
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         addCommands(
                 new ParallelCommandGroup(new IntakeSetRetractCommand(intakeSubsystem),
-                        new ShooterHoodRPMCommand(shooterSubsystem, 3000.0, 0.0),  new WaitCommand(3)),
+                new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                new WaitCommand(3)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
 

@@ -7,7 +7,6 @@ import java.util.function.BooleanSupplier;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
-import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
@@ -35,7 +34,6 @@ public class Controls {
     // climb
     public final Button climbFixedArmUp;
     public final Button climbFixedArmDown;
-    public final Button climbFixedArmFullDown;
 
     public Controller shootPreset, climbPreset;
     public XboxController codriverController;
@@ -63,7 +61,7 @@ public class Controls {
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         shootButton = driveController.getRightBumperButton();
-      
+
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),
@@ -133,18 +131,19 @@ public class Controls {
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
-           
+
             driveController.getDPadButton(Direction.RIGHT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
                             .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
                             .withInterrupt(b));
 
-            if(subsystems.drivebaseSubsystem != null){
+            if (subsystems.drivebaseSubsystem != null) {
                 subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                            driveController.getLeftBumperButton()::get));
+                        new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+                                driveController.getLeftBumperButton()::get));
 
             }
-            
+
+        }
     }
 }

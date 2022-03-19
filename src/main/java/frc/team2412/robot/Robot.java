@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
     private UsbCamera driverVisionCamera;
     private PneumaticHub pneumaticHub;
 
-    private static final double MIN_PRESSURE = 100;
+    private static final double MIN_PRESSURE = 90;
     private static final double MAX_PRESSURE = 110;
 
     public Controls controls;
@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
+
         robotType = type;
     }
 

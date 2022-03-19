@@ -15,7 +15,7 @@ public class IndexShootCommand extends CommandBase {
     public void initialize() {
         // turn on both motors
         subsystem.ingestMotorIn();
-        subsystem.feederMotorIn();
+        subsystem.feederMotorInFullSpeed();
     }
 
     @Override

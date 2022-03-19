@@ -80,25 +80,6 @@ public class AutonomousChooser {
         return command;
     }
 
-    private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                FollowWpilibTrajectory.AutoConstants.MAX_SPEED_METERS_PER_SECOND,
-                FollowWpilibTrajectory.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
-                List.of(new Translation2d(7.3, 1.1), new Translation2d(5.1, 1.8), new Translation2d(2.1, 1.3)),
-                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(180)),
-                config);
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                new FollowWpilibTrajectory(subsystems.drivebaseSubsystem, exampleTrajectory));
-        return command;
-
-    }
 
     private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,
             AutonomousTrajectories trajectories) {
@@ -140,12 +121,12 @@ public class AutonomousChooser {
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
-                Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(318, 77), new Rotation2d(180))),
         TWO_BALL_FENDER((subsystems, trajectories) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
+        FIVE_BALL((subsystems, trajectories) -> new FiveBallAutoCommand(subsystems.drivebaseSubsystem),
+                "Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IntakeIndexInCommand(subsystems.indexSubsystem,

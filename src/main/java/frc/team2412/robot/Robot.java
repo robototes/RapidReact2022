@@ -143,9 +143,6 @@ public class Robot extends TimedRobot {
             driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
-
-            Shuffleboard.getTab("Drivebase").add(driverVisionCamera).withSize(2, 2).withPosition(5, 0);
-
         }
 
         // Create and push Field2d to SmartDashboard.

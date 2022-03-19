@@ -10,6 +10,7 @@ public class IndexCommand extends CommandBase {
 
     public IndexCommand(IndexSubsystem subsystem, IntakeSubsystem intakeSubsystem) {
         this.indexSubsystem = subsystem;
+        this.intakeSubsystem = intakeSubsystem;
         addRequirements(subsystem);
     }
 

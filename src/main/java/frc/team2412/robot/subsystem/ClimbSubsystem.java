@@ -19,7 +19,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public static class ClimbConstants {
-        public static final double RETRACT_SPEED = -0.1;
+        public static final double RETRACT_SPEED = -0.15;
 
         // Doing integer division, which returns 11757
         // Probably should do floating point division, which returns 11759.3

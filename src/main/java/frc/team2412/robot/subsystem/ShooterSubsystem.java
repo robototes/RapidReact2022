@@ -93,8 +93,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     public boolean shooterOverride = false;
 
-    public boolean enableTurret = true;
-
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
     @Log(name = "Target RPM", columnIndex = 8, rowIndex = 0)
@@ -382,7 +380,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setTurretAngle(double angle) {
         // TODO reimplement turret wrapping
-        if (isTurretAtAngle(angle) || !enableTurret) {
+        if (isTurretAtAngle(angle) || shooterOverride) {
             return;
         }
 

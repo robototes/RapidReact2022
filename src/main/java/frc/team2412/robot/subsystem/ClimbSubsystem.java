@@ -19,6 +19,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public static class ClimbConstants {
+        public static final double EXTEND_SPEED = 0.15;
         public static final double RETRACT_SPEED = -0.15;
 
         // Doing integer division, which returns 11757
@@ -147,6 +148,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     public void lowerArm() {
         motor.set(RETRACT_SPEED);
+    }
+
+    /**
+     * Extends arm at set speed
+     */
+    public void extendArmSlowly() {
+        motor.set(EXTEND_SPEED);
     }
 
     public boolean isHittingLimitSwitch() {

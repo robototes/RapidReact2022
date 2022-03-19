@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.*;
+import frc.team2412.robot.commands.climb.ClimbExtendSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbRetractSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
@@ -175,6 +176,14 @@ public class AutonomousChooser {
                 (subsystems, trajectories) -> new ClimbRetractSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),
                 "Climb down in queue",
+                Subsystems.SubsystemConstants.CLIMB_ENABLED &&
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+                        Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+        CLIMB_UP_IN_QUEUE(
+                (subsystems, trajectories) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
+                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),
+                "Climb up in queue",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&

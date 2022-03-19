@@ -90,7 +90,7 @@ public class Controls {
         // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
-        shootButton = driveController.getLeftBumperButton();
+        shootButton = driveController.getRightBumperButton();
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),
@@ -160,7 +160,7 @@ public class Controls {
     public void bindIndexControls() {
         subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
 
-        indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {

@@ -68,8 +68,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
         motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
         motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
-        motorConfig.peakOutputForward = CLIMB_SPEED;
-        motorConfig.peakOutputReverse = -CLIMB_SPEED;
 
         motor.configAllSettings(motorConfig);
 

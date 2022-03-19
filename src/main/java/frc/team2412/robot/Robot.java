@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
         }
         if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }

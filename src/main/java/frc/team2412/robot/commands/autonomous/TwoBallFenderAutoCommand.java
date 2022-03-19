@@ -18,8 +18,10 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
     public TwoBallFenderAutoCommand(DrivebaseSubsystem drivebaseSubsystem) {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
-        TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8);
-        TrajectoryConfig slowConfig = new TrajectoryConfig(0.2, 1);
+        TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
+                                            .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
+        TrajectoryConfig slowConfig = new TrajectoryConfig(0.2, 1)
+                                            .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
 
         Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),
@@ -42,8 +44,10 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
             fastConfig
         );
 
-        Trajectory mainTrajectory = trajectory1.concatenate(trajectory2.concatenate(trajectory3));
+        Trajectory mainTrajectory = trajectory3.concatenate(trajectory2.concatenate(trajectory1));
 
-        addCommands(new FollowWpilibTrajectory(drivebaseSubsystem, mainTrajectory));
+        addCommands(
+            new FollowWpilibTrajectory(drivebaseSubsystem, mainTrajectory)
+        );
     }
 }

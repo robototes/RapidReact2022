@@ -202,10 +202,14 @@ public class Controls {
                             .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
                             .withInterrupt(b));
 
-            subsystems.shooterSubsystem.setDefaultCommand(
+
+            if(subsystems.drivebaseSubsystem != null){
+                subsystems.shooterSubsystem.setDefaultCommand(
                     new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
                             driveController.getLeftBumperButton()::get));
 
+            }
+            
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
 

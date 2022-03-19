@@ -44,7 +44,6 @@ public class Controls {
 
     // shooter
     public final Button shootButton;
-    public final Button fenderShotButton;
 
     // intake
     public final Button[] intakeInButton;
@@ -64,18 +63,16 @@ public class Controls {
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         shootButton = driveController.getRightBumperButton();
+      
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),
-
         };
+
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
         climbFixedArmUp = driveController.getStartButton();
         climbFixedArmDown = driveController.getBackButton();
-        climbFixedArmFullDown = driveController.getDPadButton(DPadButton.Direction.DOWN);
-
-        fenderShotButton = driveController.getDPadButton(Direction.RIGHT);
 
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -136,11 +133,11 @@ public class Controls {
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
+           
             driveController.getDPadButton(Direction.RIGHT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
                             .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
                             .withInterrupt(b));
-
 
             if(subsystems.drivebaseSubsystem != null){
                 subsystems.shooterSubsystem.setDefaultCommand(

@@ -393,8 +393,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             synchronized (stateLock) {
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
-                            accelLimiter.calculate( // vector accel limiter
-                                    driveSignal.getTranslation()).rotateBy(driveSignal.isFieldOriented() ? // flatten
+                            accelLimiter.calculate(driveSignal.getTranslation()) // vector accel limiter
+                                    .rotateBy(driveSignal.isFieldOriented() ? // flatten
                                             getAngle() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation

@@ -4,6 +4,7 @@ import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.team2412.robot.commands.drive.DriveCommand;
+import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton;
@@ -105,6 +106,9 @@ public class Controls {
 
     public void bindIndexControls() {
         subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
+
+        driveController.getRightBumperButton()
+                .whileHeld(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
     }
 
     public void bindIntakeControls() {

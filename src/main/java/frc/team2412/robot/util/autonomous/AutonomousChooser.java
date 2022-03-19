@@ -132,11 +132,13 @@ public class AutonomousChooser {
         // Replace with individual testing commands
         ONE_BALL(
                 (subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem,
-                        subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem),
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem),
                 "One ball auto",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED),
         TWO_BALL(
                 (subsystems, trajectories) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,

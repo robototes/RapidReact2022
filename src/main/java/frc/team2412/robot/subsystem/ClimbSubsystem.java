@@ -24,7 +24,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         // Doing integer division, which returns 11757
         // Probably should do floating point division, which returns 11759.3
-        public static final double ENCODER_TICKS_PER_INCH = ((272816 / 58) * 2 * 5) / 4;
+        public static final double ENCODER_TICKS_PER_INCH = ((272816.0 / 58) * 2 * 5) / 4;
         // 8789 was previous value
 
         public static final double CLIMB_OFFSET_INCHES = 28.5;

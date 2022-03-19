@@ -181,7 +181,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
-        return (intakeSolenoidState == RETRACT);
+        return solenoid.get() == EXTEND.value;
     }
 
     /**

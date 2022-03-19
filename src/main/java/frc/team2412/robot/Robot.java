@@ -262,6 +262,7 @@ public class Robot extends TimedRobot {
         }
         if(subsystems.shooterSubsystem != null){
             subsystems.shooterSubsystem.stopHoodMotor();
+            subsystems.shooterSubsystem.stopFlywheel();
         }
     }
 }

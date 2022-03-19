@@ -91,7 +91,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    public boolean shooterOverride = true;
+    public boolean shooterOverride = false;
 
     public boolean enableTurret = true;
 
@@ -166,6 +166,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+        System.out.println(targetRPM);
     }
 
     public void simInit(PhysicsSim sim) {
@@ -176,7 +177,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         sim.addSparkMax(hoodMotor, SparkMaxConstants.STALL_TORQUE, SparkMaxConstants.FREE_SPEED_RPM);
     }
 
-    @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
+    @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
     public void setShooterOverride(boolean override) {
         shooterOverride = override;
     }

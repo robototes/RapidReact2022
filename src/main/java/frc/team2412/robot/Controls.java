@@ -45,6 +45,8 @@ public class Controls {
 
     // shooter
     public final Button shootButton;
+    public final Button fenderShotButton;
+
     // public final Button hoodUpButton;
     // public final Button hoodDownButton;
     // public final Button turretLeftButton;
@@ -98,6 +100,8 @@ public class Controls {
         climbFixedArmUp = driveController.getStartButton();
         climbFixedArmDown = driveController.getBackButton();
         climbFixedArmFullDown = driveController.getDPadButton(DPadButton.Direction.DOWN);
+
+        fenderShotButton = driveController.getDPadButton(Direction.RIGHT);
 
         // intakeInButton = shootPreset.getRightBumperButton();
         // intakeExtendButton = shootPreset.getXButton();
@@ -177,10 +181,14 @@ public class Controls {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
 
             BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
-            driveController.getDPadButton(Direction.DOWN).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 500, 35).withInterrupt(interrupt));
+
+            fenderShotButton.whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2700, 7.3).withInterrupt(interrupt));
+
             driveController.getDPadButton(Direction.LEFT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+
+            
+
 
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));

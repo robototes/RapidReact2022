@@ -31,7 +31,6 @@ import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
-import io.github.oblarg.oblog.annotations.Log;
 
 public class Robot extends TimedRobot {
     /**
@@ -72,8 +71,8 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
-       
-        if(COMPRESSOR_ENABLED){
+
+        if (COMPRESSOR_ENABLED) {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
@@ -216,7 +215,7 @@ public class Robot extends TimedRobot {
         }
 
         Command autoCommand = autonomousChooser.getCommand();
-        if(autoCommand != null){
+        if (autoCommand != null) {
             autoCommand.schedule();
         }
     }
@@ -260,7 +259,7 @@ public class Robot extends TimedRobot {
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.stopArm(true);
         }
-        if(subsystems.shooterSubsystem != null){
+        if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.stopHoodMotor();
             subsystems.shooterSubsystem.stopFlywheel();
         }

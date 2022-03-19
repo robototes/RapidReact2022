@@ -185,7 +185,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log(name = "solenoid state")
-    public String solenoidState(){
+    public String solenoidState() {
         return solenoid.get().toString();
     }
 

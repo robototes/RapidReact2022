@@ -20,7 +20,6 @@ import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
-import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -183,25 +182,20 @@ public class Controls {
 
             BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
 
-            fenderShotButton.whenPressed(new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2250, 13.5).withInterrupt(interrupt));
+            fenderShotButton.whenPressed(
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2250, 13.5).withInterrupt(interrupt));
 
             driveController.getDPadButton(Direction.LEFT).whenPressed(
                     new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
 
-            
-
-
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-         
-         
+
             // subsystems.shooterSubsystem.setDefaultCommand(
-            //         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-            //                 driveController.getLeftBumperButton()::get));
-           
-           
-           
-                            // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
+            // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+            // driveController.getLeftBumperButton()::get));
+
+            // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() + 1));
             // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
             // subsystems.shooterSubsystem.getHoodAngle() - 1));

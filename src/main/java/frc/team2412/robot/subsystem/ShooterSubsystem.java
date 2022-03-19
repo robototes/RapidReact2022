@@ -435,7 +435,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *         HOOD_ANGLE_TOLERANCE, False otherwise.
      */
     public boolean isTurretAtAngle(double angle) {
-        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
+        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE; 
     }
 
     /**
@@ -447,4 +447,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE);
         }
     }
+
+    @Log(name = "raw hood rev")
+    public double getRawHood(){
+        return hoodMotor.getEncoder().getPosition();
+    }
+
 }

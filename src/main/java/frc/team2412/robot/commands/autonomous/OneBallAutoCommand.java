@@ -28,7 +28,7 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
 
         addCommands(
                 new ParallelCommandGroup(new IntakeSetRetractCommand(intakeSubsystem),
-                        new ShooterHoodRPMCommand(shooterSubsystem, 3000.0, 0.0),  new WaitCommand(5)),
+                        new ShooterHoodRPMCommand(shooterSubsystem, 3000.0, 0.0),  new WaitCommand(3)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
 

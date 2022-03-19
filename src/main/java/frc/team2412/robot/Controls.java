@@ -7,20 +7,21 @@ import java.util.function.BooleanSupplier;
 import frc.team2412.robot.commands.drive.DriveCommand;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
-import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.Robot.RobotType;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
-import frc.team2412.robot.commands.climb.RetractArmCommand;
+import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
-import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
+import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -29,31 +30,22 @@ public class Controls {
         public static final int CODRIVER_CONTROLLER_PORT = 1;
     }
 
-    // public CompoundController<MultiController.Controllers, XboxController> driveController;
     public XboxController driveController;
 
     // climb
     public final Button climbFixedArmUp;
-    // public final Button climbFixedArmFullUp;
     public final Button climbFixedArmDown;
-    public final Button climbFixedArmFullDown;
 
     public Controller shootPreset, climbPreset;
     public XboxController codriverController;
 
     // index
-    // public final Button indexShootButton;
 
     // shooter
     public final Button shootButton;
-    // public final Button hoodUpButton;
-    // public final Button hoodDownButton;
-    // public final Button turretLeftButton;
-    // public final Button turretRightButton;
 
     // intake
     public final Button[] intakeInButton;
-    // public final Button intakeExtendButton;
     public final Button[] intakeSpitButton;
     public final Button intakeRetractButton;
 
@@ -67,26 +59,7 @@ public class Controls {
 
         subsystems = s;
 
-        // driveController = CompoundController.of(CONTROLLER_PORT, PRIMARY, SECONDARY);
         driveController = new XboxController(CONTROLLER_PORT);
-
-        // driveController.activate(PRIMARY);
-
-        // shootPreset = driveController.getPreset(PRIMARY);
-
-        // climbPreset = driveController.getPreset(SECONDARY);
-
-        // fixedArmUpManualButton = climbPreset.getDPadButton(Direction.UP);
-        // fixedArmDownManualButton = climbPreset.getDPadButton(Direction.DOWN);
-        // dynamicArmUpManualButton = climbPreset.getDPadButton(Direction.LEFT);
-        // dynamicArmDownManualButton = climbPreset.getDPadButton(Direction.RIGHT);
-
-        // fixedArmUpButton = climbPreset.getXButton();
-        // fixedArmDownButton = climbPreset.getYButton();
-        // dynamicArmUpButton = climbPreset.getAButton();
-        // dynamicArmDownButton = climbPreset.getBButton();
-
-        // rungClimbButton = climbPreset.getRightBumperButton();
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
@@ -94,29 +67,12 @@ public class Controls {
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),
-
         };
+
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
         climbFixedArmUp = driveController.getStartButton();
         climbFixedArmDown = driveController.getBackButton();
-        climbFixedArmFullDown = driveController.getDPadButton(DPadButton.Direction.DOWN);
-
-        // intakeInButton = shootPreset.getRightBumperButton();
-        // intakeExtendButton = shootPreset.getXButton();
-        // intakeSpitButton = shootPreset.getAButton();
-        // intakeRetractButton = shootPreset.getBButton();
-
-        // indexShootButton = shootPreset.getLeftBumperButton();
-        // shootButton = shootPreset.getLeftTriggerAxis().getButton(0.5);
-        // hoodUpButton = shootPreset.getDPadButton(Direction.UP);
-        // hoodDownButton = shootPreset.getDPadButton(Direction.DOWN);
-        // turretLeftButton = shootPreset.getDPadButton(Direction.LEFT);
-        // turretRightButton = shootPreset.getDPadButton(Direction.RIGHT);
-
-        // driveController.getStartButton().whenPressed(() -> driveController.activate(PRIMARY));
-
-        // driveController.getBackButton().whenPressed(() -> driveController.activate(SECONDARY));
 
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -132,7 +88,7 @@ public class Controls {
             bindIndexControls();
         }
 
-        if (subsystems.intakeSubsystem != null) {
+        if (subsystems.intakeSubsystem != null && subsystems.indexSubsystem != null) {
             bindIntakeControls();
         }
 
@@ -142,10 +98,8 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
+        climbFixedArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
         climbFixedArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
-        // climbFixedArmFullUp.whenPressed(new FullExtendFixedHookCommand(subsystems.climbSubsystem));
-        // climbFixedArmFullDown.whenPressed(new FullRetractFixedHookCommand(subsystems.climbSubsystem));
     }
 
     public void bindDriveControls() {
@@ -159,20 +113,16 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        driveController.getRightBumperButton().whileHeld(new IndexCommand(subsystems.indexSubsystem));
+        subsystems.indexSubsystem
+                .setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
 
-        // subsystems.indexSubsystem.setDefaultCommand(new IntakeBitmapCommand(subsystems.intakeSubsystem,
-        // subsystems.indexSubsystem));
-        // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
-        // shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {
-        for (Button b : intakeInButton)
-            b.whenPressed(new IntakeIndexInCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));// .whenReleased(new
-                                                                                                            // IntakeBitmapCommand(subsystems.intakeSubsystem,
-                                                                                                            // subsystems.indexSubsystem));
-        // intakeExtendButton.whenPressed(new IntakeExtendCommand(subsystems.intakeSubsystem));
+        subsystems.intakeSubsystem
+                .setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeSetRetractCommand(subsystems.intakeSubsystem));
@@ -180,27 +130,25 @@ public class Controls {
 
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
+            BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
-            BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
             driveController.getDPadButton(Direction.DOWN).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 500, 35).withInterrupt(interrupt));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
 
-            // shootButton.whileHeld(
-            // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));
-            subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                            driveController.getLeftBumperButton()::get));
-            // hoodUpButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
-            // subsystems.shooterSubsystem.getHoodAngle() + 1));
-            // hoodDownButton.whileHeld(new ShooterHoodSetConstantAngleCommand(subsystems.shooterSubsystem,
-            // subsystems.shooterSubsystem.getHoodAngle() - 1));
-            // turretLeftButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-            // subsystems.shooterSubsystem.getTurretAngle() - 5));
-            // turretRightButton.whileHeld(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
-            // subsystems.shooterSubsystem.getTurretAngle() + 5));
+            driveController.getDPadButton(Direction.RIGHT).whenPressed(
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
+                            .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
+                            .withInterrupt(b));
+
+            if (subsystems.drivebaseSubsystem != null) {
+                subsystems.shooterSubsystem.setDefaultCommand(
+                        new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+                                driveController.getLeftBumperButton()::get));
+
+            }
+
         }
-
     }
 }

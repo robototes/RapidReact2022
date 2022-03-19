@@ -48,8 +48,8 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
-    public final PowerDistribution PDP;
-    public UsbCamera driverVisionCamera;
+    private final PowerDistribution PDP;
+    private UsbCamera driverVisionCamera;
     private PneumaticHub pneumaticHub;
 
     private static final double MIN_PRESSURE = 100;

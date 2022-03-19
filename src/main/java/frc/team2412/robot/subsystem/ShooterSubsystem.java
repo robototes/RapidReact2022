@@ -59,8 +59,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -180;
-        public static final double MAX_TURRET_ANGLE = 360;
+        public static final double MIN_TURRET_ANGLE = -90;
+        public static final double MAX_TURRET_ANGLE = 90;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
@@ -145,8 +145,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 50);
-        turretMotor.configClosedloopRamp(0.5, 100);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.1);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
@@ -166,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        System.out.println(targetRPM);
+        System.out.println("Shooter target RPM: " + targetRPM);
     }
 
     public void simInit(PhysicsSim sim) {

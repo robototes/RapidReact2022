@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
+import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
@@ -159,7 +160,7 @@ public class Controls {
     public void bindIndexControls() {
         subsystems.indexSubsystem.setDefaultCommand(new IndexCommand(subsystems.indexSubsystem));
 
-        // indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        indexShootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
     }
 
     public void bindIntakeControls() {

@@ -62,17 +62,20 @@ public class ShooterTargetCommand extends CommandBase {
                 break;
             case WRAP_LEFT:
                 turretAngle = ShooterConstants.RIGHT_WRAP;
-                break;
-            case WRAP_RIGHT:
-                turretAngle = ShooterConstants.LEFT_WRAP;
-                break;
-            case TRACKING:
-                turretAngle += localizer.getYaw();
+                if (Math.abs(shooter.getTurretAngle() - ShooterConstants.RIGHT_WRAP) < 5)
+                state = TurretState.TRACKING;
+            break;
+        case WRAP_RIGHT:
+            turretAngle = ShooterConstants.LEFT_WRAP;
+            if (Math.abs(shooter.getTurretAngle() - ShooterConstants.LEFT_WRAP) < 5)
+                state = TurretState.TRACKING;
+            break;
+        case TRACKING:
+            turretAngle = shooter.getTurretAngle() + localizer.getYaw();
 
-        }
-        // shooter.updateTurretAngle(l);
-        shooter.setTurretAngle(turretAngle - (state == TurretState.TRACKING ? localizer.yawAdjustment() : 0));
+    }
 
+    shooter.setTurretAngle(turretAngle + (state == TurretState.TRACKING ? localizer.yawAdjustment() : 0));
     }
 
     @Override

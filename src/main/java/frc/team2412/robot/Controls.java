@@ -20,6 +20,8 @@ import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
+import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -180,13 +182,28 @@ public class Controls {
     public void bindShooterControls() {
         if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
 
-            BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
+            // BooleanSupplier interrupt = driveController.getDPadButton(Direction.UP)::get;
 
-            fenderShotButton.whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2250, 13.5).withInterrupt(interrupt));
+            // fenderShotButton.whenPressed(
+            // new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2250, 13.5).withInterrupt(interrupt));
 
+            // driveController.getDPadButton(Direction.LEFT).whenPressed(
+            // new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+
+            BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
+
+            driveController.getDPadButton(Direction.DOWN).whenPressed(
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2000, 15).withInterrupt(interrupt));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
+            driveController.getDPadButton(Direction.RIGHT).whenPressed(
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
+                            .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
+                            .withInterrupt(b));
+
+            subsystems.shooterSubsystem.setDefaultCommand(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+                            driveController.getLeftBumperButton()::get));
 
             // shootButton.whileHeld(
             // new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.shooterVisionSubsystem));

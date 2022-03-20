@@ -92,6 +92,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final SparkMaxPIDController hoodPID;
 
     public boolean shooterOverride = false;
+    public boolean turretDisable = false;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -176,6 +177,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
     public void setShooterOverride(boolean override) {
         shooterOverride = override;
+    }
+
+    @Config.ToggleSwitch(name = "Override turret", columnIndex = 4, rowIndex = 2, width = 1, height = 1, defaultValue = false)
+    public void setTurretDisable(boolean disable) {
+        turretDisable = disable;
     }
 
     // PID
@@ -379,7 +385,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setTurretAngle(double angle) {
         // TODO reimplement turret wrapping
-        if (isTurretAtAngle(angle) || shooterOverride) {
+        if (isTurretAtAngle(angle) || turretDisable){
             return;
         }
 

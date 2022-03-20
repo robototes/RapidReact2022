@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }
-
+           
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 

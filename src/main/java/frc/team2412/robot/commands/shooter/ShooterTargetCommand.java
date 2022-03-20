@@ -38,7 +38,6 @@ public class ShooterTargetCommand extends CommandBase {
 
     TurretState state;
 
-        
     @Override
     public void execute() {
         if (!localizer.hasTarget())

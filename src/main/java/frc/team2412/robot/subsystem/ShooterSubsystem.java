@@ -52,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final int FLYWHEEL_SLOT_ID = 0;
 
         // Placeholder gearing constant
-        public static final double HOOD_REVS_TO_DEGREES =  1/(5.23*5.23) * 20/84 * 360;//     45 / 9.78;
+        public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
         public static final double MAX_HOOD_ANGLE = 60.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
@@ -385,7 +385,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setTurretAngle(double angle) {
         // TODO reimplement turret wrapping
-        if (isTurretAtAngle(angle) || turretDisable){
+        if (isTurretAtAngle(angle) || turretDisable) {
             return;
         }
 
@@ -441,7 +441,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *         HOOD_ANGLE_TOLERANCE, False otherwise.
      */
     public boolean isTurretAtAngle(double angle) {
-        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE; 
+        return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;
     }
 
     /**
@@ -455,9 +455,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log(name = "raw hood rev")
-    public double getRawHood(){
+    public double getRawHood() {
         return hoodMotor.getEncoder().getPosition();
     }
 
-    
 }

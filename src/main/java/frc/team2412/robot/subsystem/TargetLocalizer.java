@@ -10,7 +10,7 @@ public class TargetLocalizer {
     public static class LocalizerConstants {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 10, TURRET_DEPTH_FF = 0.1;
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;

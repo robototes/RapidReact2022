@@ -132,7 +132,7 @@ public class Controls {
                             .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 3000, 0).withInterrupt(b)
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2700, 0).withInterrupt(b)
                             .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
             driveController.getDPadButton(Direction.RIGHT).whenPressed(

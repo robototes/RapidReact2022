@@ -459,4 +459,5 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodMotor.getEncoder().getPosition();
     }
 
+    
 }

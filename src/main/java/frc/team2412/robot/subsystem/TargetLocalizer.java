@@ -2,6 +2,7 @@ package frc.team2412.robot.subsystem;
 
 import org.frcteam2910.common.math.Rotation2;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -16,15 +17,18 @@ public class TargetLocalizer {
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
+    private final LinearFilter distanceFilter;
 
     public TargetLocalizer(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         drivebaseSubsystem = drivebase;
         shooterSubsystem = shooter;
         shooterVisionSubsystem = vision;
+        distanceFilter = LinearFilter.movingAverage(10);
+        
     }
 
     public double getDistance() {
-        return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 0;
+        return distanceFilter.calculate(hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 120);
     }
 
     public double getAdjustedDistance() {
@@ -90,7 +94,7 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF)
+        return (getDistance() != 0 && getDistance() > getLateralVelocity() ? Math.toDegrees(Math.asin(getLateralVelocity()/getDistance() * TURRET_LATERAL_FF)) : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
                 / getVoltage();
     }
 

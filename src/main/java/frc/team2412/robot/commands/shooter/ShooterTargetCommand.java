@@ -46,8 +46,17 @@ public class ShooterTargetCommand extends CommandBase {
         if (ShooterConstants.dataPoints != null && localizer.getAdjustedDistance() < 254) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
                     .getInterpolated(localizer.getAdjustedDistance());
+
+            System.out.println("Limelight distance: " + localizer.getDistance());
+            System.out.println("Localizer distance" + localizer.getAdjustedDistance());
+            
+            System.out.println(shooterData);
+
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
+            
+            System.out.println("Actual shooter RPM : " + shooter.getFlywheelRPM());
+            System.out.println("Actual hood angle: "  + shooter.getHoodAngle());
         }
 
         if (!turretEnable.getAsBoolean())
@@ -78,8 +87,16 @@ public class ShooterTargetCommand extends CommandBase {
                 turretAngle = shooter.getTurretAngle() + localizer.getYaw();
                 break;
         }
+        
+        double localizerTurretAdjustment = state == TurretState.TRACKING ? localizer.yawAdjustment() : 0;
+        System.out.println("Localizer turret adjustment: " + localizerTurretAdjustment);
 
-        shooter.setTurretAngle(turretAngle + (state == TurretState.TRACKING ? localizer.yawAdjustment() : 0));
+        turretAngle =  turretAngle + localizerTurretAdjustment;
+        System.out.println("turret angle : " + turretAngle);
+
+        shooter.setTurretAngle(turretAngle);
+
+        System.out.println("Actual turret angle : " + shooter.getTurretAngle());
     }
 
     @Override

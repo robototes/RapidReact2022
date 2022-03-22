@@ -1,6 +1,6 @@
 # Distance (inches), Angle (degrees), Velocity (RPM)
-
-80,  15.77, 2375 //change
+0,   7.3,   2700
+80,  15.77, 2375
 100, 17.41, 2375
 121, 23.75, 2416
 141, 24.37, 2518.77
@@ -11,3 +11,4 @@
 280, 40.34, 3215
 320, 47.71, 3500
 360, 49.76, 3911
+999, 49.76, 3911 # Make distances above max value have same outputs

@@ -4,12 +4,14 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import frc.team2412.robot.Robot;
+
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
 public class TargetLocalizer {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0.1;
+        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 10, TURRET_DEPTH_FF = 0.1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches
@@ -137,12 +139,6 @@ public class TargetLocalizer {
                 / getVoltage();
     }
 
-    public double getVoltage() {
-        return 12;
-        // WHERE THE PDP GO AAAAAAAAA
-        // return Robot.getInstance().PDP.getVoltage();
-    }
-
     // TODO Validate references
 
     /**
@@ -211,5 +207,9 @@ public class TargetLocalizer {
 
     public void limelightOff() {
         shooterVisionSubsystem.setLedOff();
+    }
+
+    public double getVoltage() {
+        return Robot.getInstance().getVoltage();
     }
 }

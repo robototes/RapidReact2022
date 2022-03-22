@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
-import frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -23,7 +22,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public static class IntakeConstants {
 
         public static final double INTAKE_IN_SPEED = 0.7;
-        public static final double INTAKE_OUT_SPEED = -0.7; // will adjust later after testing?
+        public static final double INTAKE_OUT_SPEED = -0.3;
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
                 true, 20, 20, 1);
@@ -57,7 +56,6 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     @Log(name = "Solenoid State")
     public static String state = "";
-    private IntakeSolenoidState intakeSolenoidState;
 
     // CONSTRUCTOR!
 
@@ -65,19 +63,19 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
         motor1.setNeutralMode(NeutralMode.Coast);
         motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motor1.setInverted(true);
         motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
 
         if (motor2 != null) {
             motor2.setNeutralMode(NeutralMode.Coast);
             motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+            motor2.setInverted(true);
         }
 
         solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
                 INTAKE_SOLENOID_DOWN);
 
         ingestProximity = new DigitalInput(INGEST_PROXIMITY);
-
-        intakeSolenoidState = EXTEND;
 
         intakeRetract();
         intakeStop();
@@ -132,20 +130,18 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Extends Intake by retract solenoid and updates solenoid state
+     * Extends Intake by retract solenoid
      */
     public void intakeExtend() {
-        intakeSolenoidState = RETRACT;
         if (solenoid != null)
             solenoid.set(RETRACT.value);
         state = EXTEND.toString();
     }
 
     /**
-     * Retracts Intake by extending solenoid and updates solenoid state
+     * Retracts Intake by extending solenoid
      */
     public void intakeRetract() {
-        intakeSolenoidState = EXTEND;
         intakeStop();
         if (solenoid != null)
             solenoid.set(EXTEND.value);
@@ -179,12 +175,18 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
-        return (intakeSolenoidState == RETRACT);
+        return solenoid.get() == RETRACT.value;
+    }
+
+    @Log(name = "solenoid state")
+    public String solenoidState() {
+        return solenoid.get().toString();
     }
 
     /**
      * Checks if sensor is detecting ball
      */
+    @Log
     public boolean hasCargo() {
         return ingestProximity.get();
     }

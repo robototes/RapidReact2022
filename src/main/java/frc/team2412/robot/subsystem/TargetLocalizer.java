@@ -24,11 +24,12 @@ public class TargetLocalizer {
         shooterSubsystem = shooter;
         shooterVisionSubsystem = vision;
         distanceFilter = LinearFilter.movingAverage(10);
-        
+
     }
 
     public double getDistance() {
-        return distanceFilter.calculate(hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 120);
+        return distanceFilter.calculate(
+                hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 120);
     }
 
     public double getAdjustedDistance() {
@@ -94,8 +95,10 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getDistance() != 0 && getDistance() > getLateralVelocity() ? Math.toDegrees(Math.asin(getLateralVelocity()/getDistance() * TURRET_LATERAL_FF)) : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
-                / getVoltage();
+        return (getDistance() != 0 && getDistance() > getLateralVelocity()
+                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
+                        / getVoltage();
     }
 
     public void limelightOn() {

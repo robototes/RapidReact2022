@@ -160,7 +160,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setClosedLoopRampRate(1);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
-        resetHoodEncoder(true); 
+        resetHoodEncoder(true);
     }
 
     @Override

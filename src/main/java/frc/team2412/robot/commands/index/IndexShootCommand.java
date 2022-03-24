@@ -15,13 +15,16 @@ public class IndexShootCommand extends CommandBase {
     public void initialize() {
         // turn on both motors
         subsystem.ingestMotorIn();
-        subsystem.feederMotorIn();
+        subsystem.feederMotorInFullSpeed();
+        System.out.println("*****************SHOOTING NOW*********************");
     }
 
     @Override
     public void end(boolean interrupted) {
         subsystem.ingestMotorStop();
         subsystem.feederMotorStop();
+        System.out.println("++++++++++++++++SHOOTING DONE+++++++++++++++++++");
+
     }
 
     @Override

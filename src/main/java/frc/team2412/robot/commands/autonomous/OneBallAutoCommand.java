@@ -12,11 +12,12 @@ import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class OneBallAutoCommand extends SequentialCommandGroup {
     public OneBallAutoCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-            TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem) {
+            TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
                         .lineTo(new Vector2(0, 70))
@@ -24,9 +25,9 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         addCommands(
-                new ParallelCommandGroup(
+                new ParallelCommandGroup(new IntakeSetRetractCommand(intakeSubsystem),
                         new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                        new WaitCommand(1)),
+                        new WaitCommand(3)),
                 new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
 

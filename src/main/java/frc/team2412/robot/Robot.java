@@ -48,11 +48,11 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
-    public final PowerDistribution PDP;
-    public UsbCamera driverVisionCamera;
+    private final PowerDistribution PDP;
+    private UsbCamera driverVisionCamera;
     private PneumaticHub pneumaticHub;
 
-    private static final double MIN_PRESSURE = 100;
+    private static final double MIN_PRESSURE = 90;
     private static final double MAX_PRESSURE = 110;
 
     public Controls controls;
@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
+
         robotType = type;
     }
 
@@ -134,10 +135,11 @@ public class Robot extends TimedRobot {
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
-            updateManager.startLoop(5.0e-3);
+            updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }
@@ -225,6 +227,7 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
+
     }
 
     @Override
@@ -235,14 +238,18 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationInit() {
         PhysicsSim sim = PhysicsSim.getInstance();
-        if (subsystems.climbSubsystem != null)
+        if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.simInit(sim);
-        if (subsystems.indexSubsystem != null)
+        }
+        if (subsystems.indexSubsystem != null) {
             subsystems.indexSubsystem.simInit(sim);
-        if (subsystems.intakeSubsystem != null)
+        }
+        if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.simInit(sim);
-        if (subsystems.shooterSubsystem != null)
+        }
+        if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.simInit(sim);
+        }
     }
 
     @Override

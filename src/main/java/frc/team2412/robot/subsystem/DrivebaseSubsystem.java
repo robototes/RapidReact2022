@@ -195,13 +195,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withPosition(2, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0))
+                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
                 .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(3, 1)
+                .withPosition(3, 0)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
@@ -393,8 +393,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             synchronized (stateLock) {
                 if (getAntiTip() && driveSignal != null) {
                     signal = new HolonomicDriveSignal( // create updated drive signal
-                            accelLimiter.calculate( // vector accel limiter
-                                    driveSignal.getTranslation()).rotateBy(driveSignal.isFieldOriented() ? // flatten
+                            accelLimiter.calculate(driveSignal.getTranslation()) // vector accel limiter
+                                    .rotateBy(driveSignal.isFieldOriented() ? // flatten
                                             getAngle() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation

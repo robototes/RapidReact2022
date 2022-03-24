@@ -17,7 +17,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double HUB_RADIUS = 24;
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
 
-        // -0.766666 limelight crosshair offset
+        // -0.766666 limelight crosshair offset (3/19 update)
     }
 
     public NetworkTable limelight;

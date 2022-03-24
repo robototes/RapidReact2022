@@ -38,7 +38,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    private final DigitalInput feederProximity;
+    private final DigitalInput leftFeederProximity;
+    private final DigitalInput rightFeederProximity;
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -51,7 +52,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     public IndexSubsystem() {
         ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
         feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-        feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+        leftFeederProximity = new DigitalInput(LEFT_FEEDER_PROXIMITY);
+        rightFeederProximity = new DigitalInput(RIGHT_FEEDER_PROXIMITY);
 
         ingestMotor.configFactoryDefault();
         feederMotor.configFactoryDefault();
@@ -124,11 +126,11 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Checks if ball is positioned at the second sensor
+     * Checks if ball is positioned at the sensors
      */
     @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
-        return feederProximity.get();
+        return (leftFeederProximity.get() && rightFeederProximity.get());
     }
 
     /**

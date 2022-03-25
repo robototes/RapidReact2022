@@ -1,6 +1,9 @@
 package frc.team2412.robot.util;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Queue;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -8,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * A class that implements a median filter based on how recent information is.
  */
-public class TimeBasedAverageFilter {
+public class TimeBasedMedianFilter {
 
     private static class TimeData {
         public final double time;
@@ -21,6 +24,7 @@ public class TimeBasedAverageFilter {
     }
 
     private final Queue<TimeData> values;
+    private final List<Double> orderedValues;
     private final double filterTime;
 
     /**
@@ -29,9 +33,10 @@ public class TimeBasedAverageFilter {
      * @param filterTime
      *            Length of time in seconds that inputs affect average.
      */
-    public TimeBasedAverageFilter(double filterTime) {
+    public TimeBasedMedianFilter(double filterTime) {
         this.filterTime = filterTime;
         this.values = new ArrayDeque<>();
+        this.orderedValues = new ArrayList<>();
     }
 
     /**
@@ -44,15 +49,16 @@ public class TimeBasedAverageFilter {
     public double calculate(double next) {
         double time = Timer.getFPGATimestamp();
         values.add(new TimeData(time, next));
+        orderedValues.add(next);
+        orderedValues.sort(Comparator.comparingDouble((value) -> value.doubleValue()));
         while (values.peek().time < time - filterTime) {
-            values.remove();
+            orderedValues.remove(values.remove().data);
         }
-        int count = values.size();
-        double total = 0;
-        for (TimeData value : values) {
-            total += value.data;
+        int size = values.size();
+        if (size % 2 != 0) {
+            return orderedValues.get(size / 2);
         }
-        return total / count;
+        return (orderedValues.get(size / 2 - 1) + orderedValues.get(size / 2)) / 2.0;
     }
 
     /**

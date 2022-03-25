@@ -197,13 +197,13 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withPosition(2, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0))
+                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
                 .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(3, 1)
+                .withPosition(3, 0)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();

@@ -175,12 +175,14 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         CLIMB_DOWN_IN_QUEUE(
                 (subsystems, trajectories) -> new ClimbRetractSlowlyCommand(subsystems.climbSubsystem,
-                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),
+                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                        subsystems.drivebaseSubsystem),
                 "Climb down in queue",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
         CLIMB_UP_IN_QUEUE(
                 (subsystems, trajectories) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),

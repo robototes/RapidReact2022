@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
@@ -37,16 +38,41 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         System.out.println("Deserializing " + fileName + " to an InterpolatingTreeMap");
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName))) {
             String line;
+            int lineNum = 0;
             InterpolatingTreeMap map = new InterpolatingTreeMap();
 
             while ((line = reader.readLine()) != null) {
-                String[] items = line.split(",");
+                lineNum++;
+                String msgPrefix = "Line #" + lineNum + ": ";
+                Consumer<String> debug = (msg) -> {
+                    System.out.println(msgPrefix + msg);
+                };
+
+                int hashtagIndex = line.indexOf("#");
+                int doubleSlashIndex = line.indexOf("//");
+                if (hashtagIndex == 0) {
+                    debug.accept("Starts with '#', skipping line");
+                    continue;
+                }
+                if (doubleSlashIndex == 0) {
+                    debug.accept("Starts with '//', skipping line");
+                    continue;
+                }
+                if (hashtagIndex != -1 && (doubleSlashIndex == -1 || hashtagIndex < doubleSlashIndex)) {
+                    debug.accept("'#' at char index " + hashtagIndex + ", trimming comment");
+                    line = line.substring(0, hashtagIndex);
+                } else if (doubleSlashIndex != -1 && (hashtagIndex == -1 || doubleSlashIndex < hashtagIndex)) {
+                    debug.accept("'//' at char index " + doubleSlashIndex + ", trimming comment");
+                    line = line.substring(0, doubleSlashIndex);
+                }
+
+                String[] items = line.split(",", -1);
                 if (items.length < 3) {
-                    System.out.println("Line " + line + " has less than 3 items, skipping line");
+                    debug.accept("Less than 3 items, skipping line");
                     continue;
                 } else if (items.length > 3) {
-                    System.out.println(
-                            "Line " + line + " has more than 3 items, ignoring extra items");
+                    debug.accept("More than 3 items, ignoring extra items");
+                    // Extra items aren't processed, could use Arrays.copyOf(items, [newlength]) if needed
                 }
 
                 double distance, angle, RPM;
@@ -56,24 +82,24 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     angle = Double.parseDouble(items[1]);
                     RPM = Double.parseDouble(items[2]);
                 } catch (NumberFormatException err) {
-                    System.out.println("Line " + line + " contains a non-numerical value, skipping line");
+                    debug.accept("Non-numerical value, skipping line");
                     continue;
                 }
 
                 if (distance < 0) {
-                    System.out.println("Distance " + distance + " is negative, skipping line");
+                    debug.accept("Distance " + distance + " is negative, skipping line");
                     continue;
                 }
                 if (angle < ShooterConstants.MIN_HOOD_ANGLE) {
-                    System.out.println("Hood angle " + angle + " is less than the min value, skipping line");
+                    debug.accept("Hood angle " + angle + " is less than the min value, skipping line");
                     continue;
                 }
                 if (angle > ShooterConstants.MAX_HOOD_ANGLE) {
-                    System.out.println("Hood angle " + angle + " is greater than the max value, skipping line");
+                    debug.accept("Hood angle " + angle + " is greater than the max value, skipping line");
                     continue;
                 }
                 if (RPM < 0) {
-                    System.out.println("Flywheel RPM " + RPM + " is negative, skipping line");
+                    debug.accept("Flywheel RPM " + RPM + " is negative, skipping line");
                     continue;
                 }
 

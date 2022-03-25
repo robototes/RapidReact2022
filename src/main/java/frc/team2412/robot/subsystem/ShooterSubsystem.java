@@ -48,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEGREES_TO_ENCODER_TICKS = FLYWHEEL_REVS_TO_ENCODER_TICKS / 360;
         public static final double FLYWHEEL_RPM_TO_VELOCITY = FLYWHEEL_REVS_TO_ENCODER_TICKS / (60 * 10);
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
-        public static final double FLYWHEEL_DEFAULT_VELOCITY = 2000 * FLYWHEEL_RPM_TO_VELOCITY;
+        public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
 
         // Placeholder gearing constant
@@ -102,9 +102,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double flywheelTestRPM;
     @Log(name = "Target RPM", columnIndex = 8, rowIndex = 0)
     private double targetRPM;
-    @Log(name = "Target velocity", columnIndex = 8, rowIndex = 1)
-    private double targetVelocity;
     private double hoodTestAngle;
+    @Log(name = "Target hood angle", columnIndex = 8, rowIndex = 1)
+    private double targetHoodAngle;
     private double turretAngleBias;
     private double turretTestAngle;
     private double distanceBias;
@@ -168,7 +168,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
-        System.out.println("Shooter target RPM: " + targetRPM);
     }
 
     public void simInit(PhysicsSim sim) {
@@ -179,7 +178,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         sim.addSparkMax(hoodMotor, SparkMaxConstants.STALL_TORQUE, SparkMaxConstants.FREE_SPEED_RPM);
     }
 
-    @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
+    @Config.ToggleSwitch(name = "Override Shooter", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
     public void setShooterOverride(boolean override) {
         shooterOverride = override;
     }
@@ -270,7 +269,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Flywheel RPM", columnIndex = 7, rowIndex = 0)
     public double getFlywheelRPM() {
-        return flywheelMotor1.getSelectedSensorVelocity() / FLYWHEEL_RPM_TO_VELOCITY;
+        return getFlywheelVelocity() / FLYWHEEL_RPM_TO_VELOCITY;
     }
 
     /**
@@ -298,7 +297,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The velocity of the flywheel motors.
      */
-    @Log(name = "Flywheel velocity", columnIndex = 7, rowIndex = 1)
     public double getFlywheelVelocity() {
         return flywheelMotor1.getSelectedSensorVelocity();
     }
@@ -329,14 +327,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param degrees
      *            Target angle for the hood motor in degrees.
      */
-    @Config.NumberSlider(name = "Set hood", columnIndex = 3, rowIndex = 1, min = MIN_HOOD_ANGLE, max = MAX_HOOD_ANGLE)
     public void setHoodAngle(double degrees) {
         if (shooterOverride) {
             degrees = hoodTestAngle;
         }
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
+
         hoodTarget = degrees / HOOD_REVS_TO_DEGREES;
         hoodPID.setReference(hoodTarget, CANSparkMax.ControlType.kPosition);
+
     }
 
     /**
@@ -344,7 +343,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The current angle of the hood.
      */
-    @Log(name = "Hood angle", columnIndex = 7, rowIndex = 2)
+    @Log(name = "Hood angle", columnIndex = 7, rowIndex = 1)
     public double getHoodAngle() {
         return hoodEncoder.getPosition() * HOOD_REVS_TO_DEGREES;
     }
@@ -359,11 +358,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public boolean isHoodAtAngle(double angle) {
         return Math.abs(getHoodAngle() - angle) < HOOD_ANGLE_TOLERANCE;
-    }
-
-    @Log(name = "Hood speed", columnIndex = 8, rowIndex = 2)
-    private double getHoodSpeed() {
-        return hoodMotor.get();
     }
 
     /**

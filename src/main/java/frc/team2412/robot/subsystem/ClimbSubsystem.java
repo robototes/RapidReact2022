@@ -113,14 +113,15 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Retract the dynamic climb arm, professionally,
-     * going down about 15 inches
+     * going down the RETRACT_HEIGHT_INCH value (most of the way)
      */
     public void retractArm() {
         setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
     /**
-     * Graciously retract the climb arm down 1 inch
+     * Graciously retract the climb arm down the extra
+     * amount needed to fully retract it.
      */
     public void retractArmFully() {
         setMotor(FULL_RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);

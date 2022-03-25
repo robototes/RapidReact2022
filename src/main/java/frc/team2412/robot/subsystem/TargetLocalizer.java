@@ -14,7 +14,6 @@ public class TargetLocalizer {
         // TODO tune these more
 
         public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
-        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 10, TURRET_DEPTH_FF = 0.1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches

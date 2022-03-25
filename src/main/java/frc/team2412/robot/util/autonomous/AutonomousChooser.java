@@ -22,7 +22,6 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
-
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import java.util.List;

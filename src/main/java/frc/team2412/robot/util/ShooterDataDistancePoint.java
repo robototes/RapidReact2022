@@ -20,4 +20,9 @@ public class ShooterDataDistancePoint {
     public double getRPM() {
         return RPM;
     }
+
+    @Override
+    public String toString() {
+        return "{distance: " + distance + ", angle: " + angle + ", RPM: " + RPM + "}";
+    }
 }

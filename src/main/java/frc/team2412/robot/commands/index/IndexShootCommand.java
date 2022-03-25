@@ -7,23 +7,26 @@ import frc.team2412.robot.subsystem.TargetLocalizer;
 public class IndexShootCommand extends CommandBase {
     private final IndexSubsystem subsystem;
     private final TargetLocalizer localizer;
+
     public IndexShootCommand(IndexSubsystem subsystem, TargetLocalizer targetLocalizer) {
         this.subsystem = subsystem;
         localizer = targetLocalizer;
         addRequirements(subsystem);
     }
+
     public IndexShootCommand(IndexSubsystem subsystem) {
         this(subsystem, null);
     }
+
     @Override
     public void execute() {
         // turn on both motors
-        if(localizer == null || localizer.upToSpeed()){
+        if (localizer == null || localizer.upToSpeed()) {
             subsystem.ingestMotorIn();
             subsystem.feederMotorIn();
-        }else{
+        } else {
             subsystem.ingestMotorStop();
-            subsystem.feederMotorStop();   
+            subsystem.feederMotorStop();
         }
     }
 

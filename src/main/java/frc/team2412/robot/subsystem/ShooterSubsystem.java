@@ -109,7 +109,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double turretTestAngle;
     private double distanceBias;
 
-
     /**
      * Constructor for shooter subsystem.
      */
@@ -459,6 +458,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     public boolean upToSpeed() {
         return Math.abs(flywheelMotor1.getClosedLoopError()) <= ALLOWED_FLYWHEEL_ERROR
-                && Math.abs(hoodEncoder.getPosition()-hoodTarget) <= ALLOWED_HOOD_ERROR;
+                && Math.abs(hoodEncoder.getPosition() - hoodTarget) <= ALLOWED_HOOD_ERROR;
     }
 }

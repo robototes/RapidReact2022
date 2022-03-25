@@ -73,7 +73,7 @@ public class Hardware {
 
     // index can ids are range 40-49
     public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_PROXIMITY = 1,
-            LEFT_FEEDER_PROXIMITY = 0, RIGHT_FEEDER_PROXIMITY = 0;
+            LEFT_FEEDER_PROXIMITY = 0, RIGHT_FEEDER_PROXIMITY = 2;
 
     // climb can ids are range 50-59
     public static final int CLIMB_FIXED_MOTOR = 51;

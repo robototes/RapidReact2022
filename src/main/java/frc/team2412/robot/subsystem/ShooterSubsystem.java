@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
+import static frc.team2412.robot.Hardware.*;
 
 import java.io.File;
 
@@ -11,11 +12,14 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.sim.PhysicsSim;
+import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
 import frc.team2412.robot.util.InterpolatingTreeMap;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -30,12 +34,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_D = 0;
         public static final double FLYWHEEL_DEFAULT_F = 0.057;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.06;
+        public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
         public static final double HOOD_DEFAULT_D = 0;
         public static final double HOOD_DEFAULT_F = 0.005;
         // Placeholder PID constants
-        public static final double TURRET_DEFAULT_P = 0.1;
+        public static final double TURRET_DEFAULT_P = 0.07;
         public static final double TURRET_DEFAULT_I = 0;
         public static final double TURRET_DEFAULT_D = 0;
 
@@ -55,11 +59,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90;
-        public static final double MAX_TURRET_ANGLE = 90;
+        public static final double MIN_TURRET_ANGLE = -300;
+        public static final double MAX_TURRET_ANGLE = 120;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
+
+        public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -270;
+        public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 90;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
@@ -84,7 +91,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final RelativeEncoder hoodEncoder;
     private final SparkMaxPIDController hoodPID;
 
-    public boolean shooterOvveride = true;
+    public boolean shooterOverride = false;
 
     public boolean enableTurret = true;
 
@@ -101,28 +108,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Constructor for shooter subsystem.
-     *
-     * @param flywheelMotor1
-     *            The first motor connected to the flywheel
-     *
-     * @param flywheelMotor2
-     *            The second motor connected to the flywheel
-     *
-     * @param turretMotor
-     *            The motor that controls the horizontal rotation of the
-     *            turret
-     *
-     * @param hoodMotor
-     *            The motor that controls the angle of the hood above the
-     *            turret
-     *
      */
-    public ShooterSubsystem(WPI_TalonFX flywheelMotor1, WPI_TalonFX flywheelMotor2, WPI_TalonFX turretMotor,
-            CANSparkMax hoodMotor) {
-        this.flywheelMotor1 = flywheelMotor1;
-        this.flywheelMotor2 = flywheelMotor2;
-        this.turretMotor = turretMotor;
-        this.hoodMotor = hoodMotor;
+    public ShooterSubsystem() {
+        this.flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
+        this.flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
+        this.turretMotor = new WPI_TalonFX(TURRET);
+        this.hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.hoodEncoder = hoodMotor.getEncoder();
         this.hoodPID = hoodMotor.getPIDController();
         configMotors();
@@ -140,9 +131,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configFactoryDefault();
         flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
+
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
+
         setFlywheelPID(FLYWHEEL_DEFAULT_P, FLYWHEEL_DEFAULT_I, FLYWHEEL_DEFAULT_D, FLYWHEEL_DEFAULT_F);
 
         turretMotor.configFactoryDefault();
@@ -152,7 +145,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 50);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.1);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
@@ -172,11 +165,20 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+        System.out.println("Shooter target RPM: " + targetRPM);
     }
 
-    @Config.ToggleSwitch(name = "Override shooter", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = true)
+    public void simInit(PhysicsSim sim) {
+        sim.addTalonFX(flywheelMotor1, 3, SIM_FULL_VELOCITY);
+        sim.addTalonFX(flywheelMotor2, 3, SIM_FULL_VELOCITY);
+        sim.addTalonFX(turretMotor, 1, SIM_FULL_VELOCITY);
+        // Motor, stall torque, maximum free RPM
+        sim.addSparkMax(hoodMotor, SparkMaxConstants.STALL_TORQUE, SparkMaxConstants.FREE_SPEED_RPM);
+    }
+
+    @Config.ToggleSwitch(name = "Override Shooter`", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
     public void setShooterOverride(boolean override) {
-        shooterOvveride = override;
+        shooterOverride = override;
     }
 
     // PID
@@ -251,7 +253,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *            The target RPM for the flywheel motors.
      */
     public void setFlywheelRPM(double RPM) {
-        if (shooterOvveride) {
+        if (shooterOverride) {
             RPM = flywheelTestRPM;
         }
         targetRPM = RPM;
@@ -303,6 +305,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Stops the hood motor.
      */
     public void stopHoodMotor() {
+        setHoodAngle(0);
         hoodMotor.stopMotor();
     }
 
@@ -323,7 +326,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     @Config.NumberSlider(name = "Set hood", columnIndex = 3, rowIndex = 1, min = MIN_HOOD_ANGLE, max = MAX_HOOD_ANGLE)
     public void setHoodAngle(double degrees) {
-        if (shooterOvveride) {
+        if (shooterOverride) {
             degrees = hoodTestAngle;
         }
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);

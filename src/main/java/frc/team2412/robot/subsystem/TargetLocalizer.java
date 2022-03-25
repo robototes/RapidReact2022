@@ -4,6 +4,7 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -11,7 +12,8 @@ import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 public class TargetLocalizer {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 10, TURRET_DEPTH_FF = 0.1;
+
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches
@@ -23,6 +25,7 @@ public class TargetLocalizer {
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
+    private final LinearFilter distanceFilter;
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
@@ -42,6 +45,7 @@ public class TargetLocalizer {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
+        this.distanceFilter = LinearFilter.movingAverage(10);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
         startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
@@ -50,7 +54,8 @@ public class TargetLocalizer {
     }
 
     public double getDistance() {
-        return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 0;
+        return distanceFilter.calculate(
+                hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 120);
     }
 
     public double getAdjustedDistance() {
@@ -152,8 +157,10 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getLateralVelocity() * getDistance() * TURRET_LATERAL_FF + getAngularVelocity() * TURRET_ANGULAR_FF)
-                / getVoltage();
+        return (getDistance() != 0 && getDistance() > getLateralVelocity()
+                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
+                        / getVoltage();
     }
 
     /**

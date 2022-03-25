@@ -5,11 +5,12 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IndexCommand extends CommandBase {
-    private IndexSubsystem indexSubsystem;
-    private IntakeSubsystem intakeSubsystem;
+    private final IndexSubsystem indexSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
 
     public IndexCommand(IndexSubsystem subsystem, IntakeSubsystem intakeSubsystem) {
         this.indexSubsystem = subsystem;
+        this.intakeSubsystem = intakeSubsystem;
         addRequirements(subsystem);
     }
 
@@ -24,7 +25,7 @@ public class IndexCommand extends CommandBase {
         if (indexSubsystem.hasCargo()) {
             indexSubsystem.feederMotorStop();
         } else {
-            indexSubsystem.feederMotorIn();
+            // indexSubsystem.feederMotorIn();
         }
 
         if (intakeSubsystem.hasCargo()) {

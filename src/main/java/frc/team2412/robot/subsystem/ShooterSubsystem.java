@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double HOOD_DEFAULT_D = 0;
         public static final double HOOD_DEFAULT_F = 0.005;
         // Placeholder PID constants
-        public static final double TURRET_DEFAULT_P = 0.07;
+        public static final double TURRET_DEFAULT_P = 0.1;
         public static final double TURRET_DEFAULT_I = 0;
         public static final double TURRET_DEFAULT_D = 0;
 
@@ -52,8 +52,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final int FLYWHEEL_SLOT_ID = 0;
 
         // Placeholder gearing constant
-        public static final double HOOD_REVS_TO_DEGREES = 45 / 9.78;
-        public static final double MAX_HOOD_ANGLE = 60.0;
+        public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
+        public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
 
@@ -92,8 +92,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private final SparkMaxPIDController hoodPID;
 
     public boolean shooterOverride = false;
-
-    public boolean enableTurret = true;
+    public boolean turretDisable = false;
 
     /* SHUFFLEBOARD INSTANCE VARIABLES */
     private double flywheelTestRPM;
@@ -145,7 +144,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.1);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.2);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
@@ -161,6 +160,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setClosedLoopRampRate(1);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
+        resetHoodEncoder(true);
     }
 
     @Override
@@ -178,6 +178,11 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     @Config.ToggleSwitch(name = "Override Shooter", columnIndex = 3, rowIndex = 2, width = 1, height = 1, defaultValue = false)
     public void setShooterOverride(boolean override) {
         shooterOverride = override;
+    }
+
+    @Config.ToggleSwitch(name = "Override turret", columnIndex = 4, rowIndex = 2, width = 1, height = 1, defaultValue = false)
+    public void setTurretDisable(boolean disable) {
+        turretDisable = disable;
     }
 
     // PID
@@ -375,7 +380,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     public void setTurretAngle(double angle) {
         // TODO reimplement turret wrapping
-        if (isTurretAtAngle(angle) || !enableTurret) {
+        if (isTurretAtAngle(angle) || turretDisable) {
             return;
         }
 
@@ -443,4 +448,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE);
         }
     }
+
+    @Log(name = "raw hood rev")
+    public double getRawHood() {
+        return hoodMotor.getEncoder().getPosition();
+    }
+
 }

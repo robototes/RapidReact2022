@@ -31,14 +31,14 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
         // This shoots, drives back to where the ball is with the intake extended, picks it up and
         // immediately shoots it
         addCommands(
+//                new ParallelCommandGroup(
+//                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+//                        new WaitCommand(1)),
+//                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
+//                new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
-                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                        new WaitCommand(1)),
-                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-                new IntakeSetExtendCommand(intakeSubsystem),
-                new ParallelCommandGroup(
-                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                        new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
+                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath)));
+//                        ,new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
 
     }
 }

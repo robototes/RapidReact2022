@@ -50,9 +50,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Sensor Override
 
-    @Config
     public boolean ignoreFeeder = false;
-    @Config
     public boolean feederOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
 
     // Constructor
@@ -221,6 +219,23 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
         return isIngestMotorOn();
+    }
+
+        /**
+     * sets ignoreIngest value
+     * @param ignore
+     */
+    @Config
+    public void setIgnoreFeeder(boolean ignore) {
+        ignoreFeeder = ignore;
+    }
+
+    /**
+     * sets ingestOverridenValue value
+     */
+    @Config
+    public void setFeederOverridenValue(boolean value) {
+        feederOverridenValue = value;
     }
 
 }

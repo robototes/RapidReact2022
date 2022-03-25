@@ -59,9 +59,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Solenoid State")
     public static String state = "";
 
-    @Config
     public boolean ignoreIngest = false;
-    @Config
     public boolean ingestOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
 
     // CONSTRUCTOR!
@@ -201,5 +199,22 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             return ingestOverridenValue;
         }
         return ingestProximity.get();
+    }
+
+    /**
+     * sets ignoreIngest value
+     * @param ignore
+     */
+    @Config
+    public void setIgnoreIngest(boolean ignore) {
+        ignoreIngest = ignore;
+    }
+
+    /**
+     * sets ingestOverridenValue value
+     */
+    @Config
+    public void setIngestOverridenValue(boolean value) {
+        ingestOverridenValue = value;
     }
 }

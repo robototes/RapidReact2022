@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
@@ -21,7 +22,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Constants
     public static class IntakeConstants {
 
-        public static final double INTAKE_IN_SPEED = 0.7;
+        public static final double INNER_INTAKE_IN_SPEED = 0.35; // TODO
+        public static final double INTAKE_IN_SPEED = 0.5;
         public static final double INTAKE_OUT_SPEED = -0.3;
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
@@ -57,9 +59,15 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Solenoid State")
     public static String state = "";
 
+    @Config
+    public boolean ignoreIngest = false;
+    @Config
+    public boolean ingestOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
+
     // CONSTRUCTOR!
 
     public IntakeSubsystem() {
+
         motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
         motor1.setNeutralMode(NeutralMode.Coast);
         motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
@@ -188,6 +196,10 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log
     public boolean hasCargo() {
+
+        if (ignoreIngest) {
+            return ingestOverridenValue;
+        }
         return ingestProximity.get();
     }
 }

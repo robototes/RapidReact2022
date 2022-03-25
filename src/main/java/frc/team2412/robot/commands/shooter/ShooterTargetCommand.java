@@ -43,8 +43,8 @@ public class ShooterTargetCommand extends CommandBase {
         if (!localizer.hasTarget())
             return;
 
-        if (ShooterConstants.dataPoints != null) {
-            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
+        if (ShooterConstants.DATA_POINTS != null) {
+            ShooterDataDistancePoint shooterData = ShooterConstants.DATA_POINTS
                     .getInterpolated(localizer.getAdjustedDistance());
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());

@@ -69,12 +69,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 90;
 
         // Current limits
-        public static final SupplyCurrentLimitConfiguration flywheelCurrentLimit = new SupplyCurrentLimitConfiguration(
+        public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 40, 500);
-        public static final SupplyCurrentLimitConfiguration turretCurrentLimit = new SupplyCurrentLimitConfiguration(
+        public static final SupplyCurrentLimitConfiguration TURRET_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 10, 10, 500);
-        public static final InterpolatingTreeMap dataPoints = InterpolatingTreeMap
+        public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
+
+        public static final double ALLOWED_FLYWHEEL_ERROR = 50;
+        public static final double ALLOWED_HOOD_ERROR = 1;
     }
 
     /* INSTANCE VARIABLES */
@@ -106,6 +109,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double turretTestAngle;
     private double distanceBias;
 
+
     /**
      * Constructor for shooter subsystem.
      */
@@ -126,10 +130,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      */
     private void configMotors() {
         flywheelMotor1.configFactoryDefault();
-        flywheelMotor1.configSupplyCurrentLimit(flywheelCurrentLimit);
+        flywheelMotor1.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor1.setNeutralMode(NeutralMode.Coast);
         flywheelMotor2.configFactoryDefault();
-        flywheelMotor2.configSupplyCurrentLimit(flywheelCurrentLimit);
+        flywheelMotor2.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
 
         flywheelMotor1.setInverted(false);
@@ -143,7 +147,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitThreshold(MIN_TURRET_ANGLE * TURRET_DEGREES_TO_ENCODER_TICKS);
         turretMotor.configForwardSoftLimitEnable(true);
         turretMotor.configReverseSoftLimitEnable(true);
-        turretMotor.configSupplyCurrentLimit(turretCurrentLimit);
+        turretMotor.configSupplyCurrentLimit(TURRET_CURRENT_LIMIT);
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.1);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
@@ -318,6 +322,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodTestAngle;
     }
 
+    public double hoodTarget = 0;
+
     /**
      * Sets the target angle for the hood motor
      *
@@ -330,7 +336,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             degrees = hoodTestAngle;
         }
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
-        hoodPID.setReference(degrees / HOOD_REVS_TO_DEGREES, CANSparkMax.ControlType.kPosition);
+        hoodTarget = degrees / HOOD_REVS_TO_DEGREES;
+        hoodPID.setReference(hoodTarget, CANSparkMax.ControlType.kPosition);
     }
 
     /**
@@ -381,7 +388,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *            The angle (in degrees) to set the turret to (negative for counterclockwise).
      */
     public void setTurretAngle(double angle) {
-        // TODO reimplement turret wrapping
         if (isTurretAtAngle(angle) || !enableTurret) {
             return;
         }
@@ -449,5 +455,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         if (reset) {
             turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE);
         }
+    }
+
+    public boolean upToSpeed() {
+        return Math.abs(flywheelMotor1.getClosedLoopError()) <= ALLOWED_FLYWHEEL_ERROR
+                && Math.abs(hoodEncoder.getPosition()-hoodTarget) <= ALLOWED_HOOD_ERROR;
     }
 }

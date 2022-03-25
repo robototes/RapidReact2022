@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -26,7 +27,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_FEEDER_SPEED = 0.15;
+        public static double INDEX_FEEDER_SPEED = 0.2;
         public static double INDEX_IN_SPEED = 0.35;
         public static double INDEX_OUT_SPEED = -0.3;
 
@@ -46,6 +47,13 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     @Log.MotorController
     private final WPI_TalonFX feederMotor;
+
+    // Sensor Override
+
+    @Config
+    public boolean ignoreFeeder = false;
+    @Config
+    public boolean feederOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
 
     // Constructor
 
@@ -130,7 +138,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
-        return (leftFeederProximity.get() && rightFeederProximity.get());
+        if (ignoreFeeder) {
+            return feederOverridenValue;
+        }
+        return !(leftFeederProximity.get() && rightFeederProximity.get());
     }
 
     /**

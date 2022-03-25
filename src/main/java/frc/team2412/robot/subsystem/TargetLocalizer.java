@@ -2,6 +2,8 @@ package frc.team2412.robot.subsystem;
 
 import org.frcteam2910.common.math.Rotation2;
 
+import frc.team2412.robot.util.TimeBasedMedianFilter;
+
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
 public class TargetLocalizer {
@@ -9,20 +11,24 @@ public class TargetLocalizer {
         public static final double TURRET_OFFSET = 0;
         // TODO tune these more
         public static final double TURRET_LATERAL_FF = 0.1, TURRET_ANGULAR_FF = 5, TURRET_DEPTH_FF = 0.1;
+        public static final double FILTER_TIME = 1; // TODO replace with constant value
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
+    private final TimeBasedMedianFilter distanceFilter;
 
     public TargetLocalizer(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         drivebaseSubsystem = drivebase;
         shooterSubsystem = shooter;
         shooterVisionSubsystem = vision;
+        distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
     }
 
     public double getDistance() {
-        return hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 0;
+        return hasTarget() ? distanceFilter.calculate(
+                shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias()) : 0;
     }
 
     public double getAdjustedDistance() {

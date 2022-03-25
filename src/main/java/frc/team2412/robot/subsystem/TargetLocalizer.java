@@ -2,7 +2,7 @@ package frc.team2412.robot.subsystem;
 
 import org.frcteam2910.common.math.Rotation2;
 
-import frc.team2412.robot.util.TimeBasedMedianFilter;
+import frc.team2412.robot.util.TimeBasedAverageFilter;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -17,13 +17,13 @@ public class TargetLocalizer {
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
-    private final TimeBasedMedianFilter distanceFilter;
+    private final TimeBasedAverageFilter distanceFilter;
 
     public TargetLocalizer(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
         drivebaseSubsystem = drivebase;
         shooterSubsystem = shooter;
         shooterVisionSubsystem = vision;
-        distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
+        distanceFilter = new TimeBasedAverageFilter(FILTER_TIME);
     }
 
     public double getDistance() {

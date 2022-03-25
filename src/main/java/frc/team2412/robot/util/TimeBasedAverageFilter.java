@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * A class that implements a median filter based on how recent information is.
  */
-public class TimeBasedMedianFilter {
+public class TimeBasedAverageFilter {
 
     private static class TimeData {
         public final double time;
@@ -24,12 +24,12 @@ public class TimeBasedMedianFilter {
     private final double filterTime;
 
     /**
-     * Creates a new {@code TimeBasedMedianFilter}.
+     * Creates a new {@code TimeBasedAverageFilter}.
      *
      * @param filterTime
      *            Length of time in seconds that inputs affect average.
      */
-    public TimeBasedMedianFilter(double filterTime) {
+    public TimeBasedAverageFilter(double filterTime) {
         this.filterTime = filterTime;
         this.values = new ArrayDeque<>();
     }

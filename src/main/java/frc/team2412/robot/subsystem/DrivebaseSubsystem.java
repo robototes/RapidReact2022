@@ -232,6 +232,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         return Vector2.ZERO;
     }
 
+    public Rotation2 getGyroscopeUnadjustedAngle() {
+        synchronized (sensorLock) {
+            return gyroscope.getUnadjustedAngle();
+        }
+    }
+
     public RigidTransform2 getPose() {
         synchronized (kinematicsLock) {
             return pose;

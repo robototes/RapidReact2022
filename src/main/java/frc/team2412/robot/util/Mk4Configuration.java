@@ -24,7 +24,7 @@ public class Mk4Configuration {
     public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off) {
         this(rat, dr, ang, enc, off, "rio");
     }
-S
+
     public SwerveModule create() {
         return create(true);
     }

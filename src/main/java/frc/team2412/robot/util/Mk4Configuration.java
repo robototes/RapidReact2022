@@ -10,14 +10,6 @@ public class Mk4Configuration {
     private final double offset;
     private final String canBus;
 
-    public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off) {
-        ratio = rat;
-        drive = dr;
-        angle = ang;
-        encoder = enc;
-        offset = off;
-        canBus = "rio";
-    }
 
     public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off,
             String canBusName) {
@@ -29,6 +21,10 @@ public class Mk4Configuration {
         canBus = canBusName;
     }
 
+    public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off) {
+        this(rat, dr, ang, enc, off, "rio");
+    }
+S
     public SwerveModule create() {
         return create(true);
     }

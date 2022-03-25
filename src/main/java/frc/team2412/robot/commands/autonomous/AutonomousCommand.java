@@ -22,8 +22,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 
-        public static final double PX_CONTROLLER = 0.15;
-        public static final double PY_CONTROLLER = 0.15;
+        public static final double PX_CONTROLLER = 0.3;
+        public static final double PY_CONTROLLER = 0.3;
 
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
@@ -61,17 +61,17 @@ public class AutonomousCommand extends SequentialCommandGroup {
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.5, 1.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(-90)),
                 fastSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(180)),
                 List.of(),
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)),normalSpeedConfig
+                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(180)),normalSpeedConfig
         );
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)),
+                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(180)),
                 List.of(),
-                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)),normalSpeedConfig
+                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(180)),normalSpeedConfig
         );
         Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)),

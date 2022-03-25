@@ -8,6 +8,7 @@ public class Mk4Configuration {
     private final Mk4SwerveModuleHelper.GearRatio ratio;
     private final int drive, angle, encoder;
     private final double offset;
+    private final String canBus;
 
     public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off) {
         ratio = rat;
@@ -15,6 +16,17 @@ public class Mk4Configuration {
         angle = ang;
         encoder = enc;
         offset = off;
+        canBus = "rio";
+    }
+
+    public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off,
+            String canBusName) {
+        ratio = rat;
+        drive = dr;
+        angle = ang;
+        encoder = enc;
+        offset = off;
+        canBus = canBusName;
     }
 
     public SwerveModule create() {
@@ -23,7 +35,7 @@ public class Mk4Configuration {
 
     public SwerveModule create(boolean supportAbsoluteEncoder) {
         return Mk4SwerveModuleHelper.createFalcon500(ratio, drive, angle, supportAbsoluteEncoder ? encoder : -1,
-                supportAbsoluteEncoder ? offset : 0);
+                supportAbsoluteEncoder ? offset : 0, canBus);
     }
 
     public Mk4SwerveModuleHelper.GearRatio getRatio() {

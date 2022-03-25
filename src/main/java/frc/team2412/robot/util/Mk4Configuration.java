@@ -10,7 +10,6 @@ public class Mk4Configuration {
     private final double offset;
     private final String canBus;
 
-
     public Mk4Configuration(Mk4SwerveModuleHelper.GearRatio rat, int dr, int ang, int enc, double off,
             String canBusName) {
         ratio = rat;

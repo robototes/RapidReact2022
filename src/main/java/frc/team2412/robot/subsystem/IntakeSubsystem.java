@@ -203,6 +203,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * sets ignoreIngest value
+     *
      * @param ignore
      */
     @Config

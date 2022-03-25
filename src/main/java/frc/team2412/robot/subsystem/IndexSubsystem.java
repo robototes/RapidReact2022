@@ -221,8 +221,9 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         return isIngestMotorOn();
     }
 
-        /**
+    /**
      * sets ignoreIngest value
+     *
      * @param ignore
      */
     @Config

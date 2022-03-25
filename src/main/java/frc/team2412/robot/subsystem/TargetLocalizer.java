@@ -26,14 +26,27 @@ public class TargetLocalizer {
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
-    public TargetLocalizer(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, ShooterVisionSubsystem vision) {
-        drivebaseSubsystem = drivebase;
-        shooterSubsystem = shooter;
-        shooterVisionSubsystem = vision;
+    /**
+     * Creates a new {@link TargetLocalizer}.
+     * If {@code drivebase} is null, will assume robot is stationary.
+     *
+     * @param drivebaseSubsystem
+     *            The drivebase subsystem.
+     * @param shooterSubsystem
+     *            The shooter subsystem.
+     * @param visionSubsystem
+     *            The vision subsystem.
+     */
+    public TargetLocalizer(DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem,
+            ShooterVisionSubsystem visionSubsystem) {
+        this.drivebaseSubsystem = drivebaseSubsystem;
+        this.shooterSubsystem = shooterSubsystem;
+        this.shooterVisionSubsystem = visionSubsystem;
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
         startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
-        gyroAdjustmentAngle = startingPose.rotation.rotateBy(drivebase.getGyroscopeUnadjustedAngle().inverse());
+        gyroAdjustmentAngle = startingPose.rotation
+                .rotateBy(drivebaseSubsystem.getGyroscopeUnadjustedAngle().inverse());
     }
 
     public double getDistance() {
@@ -107,8 +120,10 @@ public class TargetLocalizer {
      * @return that
      */
     public double getLateralVelocity() {
-        // might need to do inverse
-        return drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).x;
+        return (drivebaseSubsystem != null)
+                // might need to do inverse
+                ? drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).x
+                : 0;
     }
 
     /**
@@ -117,12 +132,14 @@ public class TargetLocalizer {
      * @return that
      */
     public double getDepthVelocity() {
-        // might need to do inverse
-        return drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).y;
+        return (drivebaseSubsystem != null)
+                // might need to do inverse
+                ? drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).y
+                : 0;
     }
 
     public double getAngularVelocity() {
-        return drivebaseSubsystem.getAngularVelocity();
+        return (drivebaseSubsystem != null) ? drivebaseSubsystem.getAngularVelocity() : 0;
     }
 
     /**

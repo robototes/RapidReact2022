@@ -319,7 +319,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodTestAngle;
     }
 
-    public double hoodTarget = 0;
+    private double hoodTarget = 0;
 
     /**
      * Sets the target angle for the hood motor

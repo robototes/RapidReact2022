@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 
 /**
- * Extend and then retract the climb arm to verify that 
+ * Extend and then retract the climb arm to verify that
  * climb motors are working correctly
  */
 public class ClimbTestCommand extends SequentialCommandGroup {

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ClimbSubsystem;
 
 /**
- * Reset the climb subsystem, by lowering the arm fully, 
+ * Reset the climb subsystem, by lowering the arm fully,
  * resetting the encoder and stopping the arm once the
  * limit switch has been graciously reached.
  */

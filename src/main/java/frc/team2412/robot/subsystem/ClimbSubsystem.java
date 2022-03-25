@@ -78,10 +78,12 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Graciously initialize the simulation, by setting 
+     * Graciously initialize the simulation, by setting
      * the initialization time of the motor (from 0 to full)
      * to 1 second, and setting the maximum velocity.
-     * @param sim The current gracious simulation
+     *
+     * @param sim
+     *            The current gracious simulation
      */
     public void simInit(PhysicsSim sim) {
         // Motor, acceleration time from 0 to full in seconds, max velocity
@@ -90,7 +92,9 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Stop the dynamic climb arm motor, graciously
-     * @param stop Whether to stop the motor
+     *
+     * @param stop
+     *            Whether to stop the motor
      */
     @Config(name = "Stop Fixed Motor")
     public void stopArm(boolean stop) {
@@ -100,8 +104,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Graciously extend the dynamic climb arm, 
-     * to the mid rung height 
+     * Graciously extend the dynamic climb arm,
+     * to the mid rung height
      */
     public void extendArm() {
         setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
@@ -124,14 +128,16 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Set the position to which the motor will graciously follow
-     * @param value The position to set the motor
+     *
+     * @param value
+     *            The position to set the motor
      */
     public void setMotor(double value) {
         motor.set(ControlMode.Position, value);
     }
 
     /**
-     * Periodic function 🙊🙉🙈 in the simulation 
+     * Periodic function 🙊🙉🙈 in the simulation
      * Graciously updates the encoder position in the sim
      * calculating it with time and speed.
      */
@@ -147,6 +153,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Get (graciously) the dynamic climb arm's encoder value
+     *
      * @return the motor's encoder position
      */
     @Log
@@ -157,6 +164,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     /**
      * Get the height that has so graciously been climbed,
      * using the encoder position and offset 🤪
+     *
      * @return the total climbed height in inches
      */
     @Log
@@ -166,9 +174,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Professionally set the encoder position to 0,
-     * only if the reset value has been graciously 
+     * only if the reset value has been graciously
      * specified as true.
-     * @param reset whether to reset the encoder
+     *
+     * @param reset
+     *            whether to reset the encoder
      */
     @Config
     public void resetEncoder(boolean reset) {
@@ -179,9 +189,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Configure the motor PID (probably graciously)
-     * @param p the P value to configure
-     * @param i the I value to configure
-     * @param d the D value to configure
+     *
+     * @param p
+     *            the P value to configure
+     * @param i
+     *            the I value to configure
+     * @param d
+     *            the D value to configure
      */
     @Config(name = "PID")
     private void setPID(@Config(name = "P", defaultValueNumeric = P) double p,
@@ -208,6 +222,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     /**
      * Determine whether the limit switch has been triggered
+     *
      * @return whether the limit switch has been hit
      */
     public boolean isHittingLimitSwitch() {

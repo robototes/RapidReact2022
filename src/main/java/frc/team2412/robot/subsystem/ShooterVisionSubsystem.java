@@ -1,6 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
+
 import static frc.team2412.robot.Hardware.*;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,10 +12,12 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterVisionConstants {
+        // Dimensions are in inches
         public static final double LIMELIGHT_HEIGHT_OFFSET = 37.5;
         public static final double RIM_HEIGHT = 104; // 8ft8in
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
         public static final double HUB_RADIUS = 24;
+        // Angles are in degrees
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
 
         // -0.766666 limelight crosshair offset (3/19 update)
@@ -30,25 +33,46 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         return limelight.getEntry("tv").getDouble(0) == 1;
     }
 
-    // x-axis
+    /**
+     * Returns the yaw from the limelight to the (estimated) center of the hub.
+     * Note: The limelight returns measurements relative to the center of the targets in its field of
+     * view, which may differ from the center of the hub.
+     *
+     * @return The yaw (horizontal rotation) in degrees.
+     */
     @Log(name = "Yaw")
     public double getYaw() {
         return limelight.getEntry("tx").getDouble(0);
     }
 
-    // returns in inches
+    /**
+     * Returns the distance from the limelight to the (estimated) center of the hub.
+     * Note: The limelight returns measurements relative to the center of the targets in its field of
+     * view, which may differ from the center of the hub.
+     *
+     * @return The distance in inches.
+     */
     @Log(name = "Distance")
     public double getDistance() {
-        double distance = HEIGHT_TO_RIM / Math.tan(Math.toRadians(getAdjustedPitch()));
-        return distance + HUB_RADIUS;
+        double distanceToHubRim = HEIGHT_TO_RIM / Math.tan(Math.toRadians(getAdjustedPitch()));
+        return distanceToHubRim + HUB_RADIUS;
     }
 
+    /**
+     * Returns the pitch from the horizontal plane to the hub.
+     *
+     * @return The adjusted pitch (vertical rotation) in degrees.
+     */
     @Log(name = "Pitch from horizontal")
     public double getAdjustedPitch() {
-        return LIMELIGHT_ANGLE_OFFSET + getPitch();
+        return getPitch() + LIMELIGHT_ANGLE_OFFSET;
     }
 
-    // y-axis
+    /**
+     * Returns the raw pitch value from the limelight.
+     *
+     * @return The raw pitch (vertical rotation) in degrees.
+     */
     @Log(name = "Raw limelight pitch")
     public double getPitch() {
         return limelight.getEntry("ty").getDouble(0);

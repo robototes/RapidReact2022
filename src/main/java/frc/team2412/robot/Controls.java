@@ -40,7 +40,6 @@ public class Controls {
     public final Button climbArmUpManual;
 
     public Controller shootPreset, climbPreset;
-   
 
     // index
 
@@ -73,7 +72,6 @@ public class Controls {
 
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
-      
 
         climbArmUp = codriverController.getStartButton();
         climbArmDown = codriverController.getBackButton();

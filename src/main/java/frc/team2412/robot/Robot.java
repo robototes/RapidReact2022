@@ -14,7 +14,6 @@ import org.frcteam2910.common.robot.UpdateManager;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -138,7 +137,7 @@ public class Robot extends TimedRobot {
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }
-        
+
         if (COMPRESSOR_ENABLED) {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);

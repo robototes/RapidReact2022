@@ -76,10 +76,12 @@ public class AutonomousCommand extends SequentialCommandGroup {
         ;
 
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                0.000000005, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                4, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         trajectoryOne.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
         trajectoryTwo.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
+        trajectoryThree.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
+        trajectoryFour.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
 
         SwerveControllerCommand swerveControllerCommandOne = new SwerveControllerCommand(
                 trajectoryOne,

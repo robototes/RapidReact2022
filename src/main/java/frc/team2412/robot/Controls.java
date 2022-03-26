@@ -12,6 +12,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.team2412.robot.commands.climb.ClimbSetArmCommand;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
@@ -30,13 +31,16 @@ public class Controls {
     }
 
     public XboxController driveController;
+    public XboxController codriverController;
 
     // climb
-    public final Button climbFixedArmUp;
-    public final Button climbFixedArmDown;
+    public final Button climbArmUp;
+    public final Button climbArmDown;
+    public final Button climbArmDownManual;
+    public final Button climbArmUpManual;
 
     public Controller shootPreset, climbPreset;
-    public XboxController codriverController;
+   
 
     // index
 
@@ -69,8 +73,12 @@ public class Controls {
 
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
-        climbFixedArmUp = driveController.getStartButton();
-        climbFixedArmDown = driveController.getBackButton();
+      
+
+        climbArmUp = codriverController.getStartButton();
+        climbArmDown = codriverController.getBackButton();
+        climbArmDownManual = codriverController.getRightBumperButton();
+        climbArmUpManual = codriverController.getLeftBumperButton();
 
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -96,8 +104,12 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbFixedArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
-        climbFixedArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
+        climbArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
+        climbArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
+
+        climbArmDownManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, -0.4));
+        climbArmUpManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, 0.4));
+
     }
 
     public void bindDriveControls() {

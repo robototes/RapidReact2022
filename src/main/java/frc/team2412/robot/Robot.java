@@ -14,6 +14,7 @@ import org.frcteam2910.common.robot.UpdateManager;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -71,12 +72,6 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
-
-        if (COMPRESSOR_ENABLED) {
-            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
-            pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
-        }
-
         robotType = type;
     }
 
@@ -142,6 +137,11 @@ public class Robot extends TimedRobot {
             driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
+        }
+        
+        if (COMPRESSOR_ENABLED) {
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+            pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
 
         // Create and push Field2d to SmartDashboard.

@@ -1,9 +1,13 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVER_VIS_ENABLED;
 import static frc.team2412.robot.Hardware.*;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -150,6 +154,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
                 BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
         moduleMaxVelocityMetersPerSec = MODULE_MAX_VELOCITY_METERS_PER_SEC;
+
+        if (DRIVER_VIS_ENABLED) {
+            UsbCamera driverCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            driverCamera.setResolution(160, 90);
+            CameraServer.addCamera(driverCamera);
+            CameraServer.startAutomaticCapture();
+            tab.add("Driver camera", driverCamera)
+                    .withPosition(5, 0)
+                    .withSize(2, 2);
+        }
 
         odometryXEntry = tab.add("X", 0.0)
                 .withPosition(0, 0)

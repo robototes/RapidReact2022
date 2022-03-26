@@ -11,8 +11,6 @@ import static java.lang.Thread.sleep;
 
 import org.frcteam2910.common.robot.UpdateManager;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -49,7 +47,6 @@ public class Robot extends TimedRobot {
     }
 
     private final PowerDistribution PDP;
-    private UsbCamera driverVisionCamera;
     private PneumaticHub pneumaticHub;
 
     private static final double MIN_PRESSURE = 90;
@@ -136,12 +133,6 @@ public class Robot extends TimedRobot {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
             updateManager.startLoop(0.011); // 0.005 previously
-        }
-        if (DRIVER_VIS_ENABLED) {
-            driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
-            driverVisionCamera.setResolution(160, 90);
-            CameraServer.addCamera(driverVisionCamera);
-            CameraServer.startAutomaticCapture();
         }
 
         // Create and push Field2d to SmartDashboard.

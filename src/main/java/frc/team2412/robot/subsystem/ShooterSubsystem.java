@@ -324,8 +324,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodTestAngle;
     }
 
-    private double hoodTarget = 0;
-
     /**
      * Sets the target angle for the hood motor
      *
@@ -338,8 +336,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
         degrees = Math.min(Math.max(degrees, MIN_HOOD_ANGLE), MAX_HOOD_ANGLE);
 
-        hoodTarget = degrees / HOOD_REVS_TO_DEGREES;
-        hoodPID.setReference(hoodTarget, CANSparkMax.ControlType.kPosition);
+        targetHoodAngle = degrees;
+        hoodPID.setReference(targetHoodAngle / HOOD_REVS_TO_DEGREES, CANSparkMax.ControlType.kPosition);
 
     }
 
@@ -458,7 +456,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     public boolean upToSpeed() {
         return Math.abs(flywheelMotor1.getClosedLoopError()) <= FLYWHEEL_ALLOWED_ERROR
-                && Math.abs(hoodEncoder.getPosition() - hoodTarget) <= HOOD_ALLOWED_ERROR;
+                && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
     }
 
     @Log(name = "raw hood rev")

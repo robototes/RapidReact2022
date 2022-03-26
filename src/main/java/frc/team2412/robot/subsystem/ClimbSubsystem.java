@@ -136,7 +136,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.set(ControlMode.Position, value);
     }
 
-    public void setMotorSpeed(double speed){
+    public void setMotorSpeed(double speed) {
         motor.set(speed);
     }
 

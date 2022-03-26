@@ -143,12 +143,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log
-    public boolean leftFeederValue(){
+    public boolean leftFeederValue() {
         return leftFeederProximity.get();
     }
 
     @Log
-    public boolean rightFeederValue(){
+    public boolean rightFeederValue() {
         return rightFeederProximity.get();
     }
 

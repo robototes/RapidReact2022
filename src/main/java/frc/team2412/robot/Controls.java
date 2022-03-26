@@ -34,7 +34,7 @@ public class Controls {
     public XboxController codriverController;
 
     // climb
-    public final Button climbArmUp;             
+    public final Button climbArmUp;
     public final Button climbArmDown;
     public final Button climbArmDownManual;
     public final Button climbArmUpManual;

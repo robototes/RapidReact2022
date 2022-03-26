@@ -61,7 +61,7 @@ public class Controls {
         subsystems = s;
 
         driveController = new XboxController(CONTROLLER_PORT);
-        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT)
+        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         shootButton = driveController.getRightBumperButton();

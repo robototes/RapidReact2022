@@ -1,14 +1,15 @@
 package frc.team2412.robot.subsystem;
 
-import org.frcteam2910.common.math.RigidTransform2;
-import org.frcteam2910.common.math.Rotation2;
-import org.frcteam2910.common.math.Vector2;
-
 import frc.team2412.robot.Robot;
-
+import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.TimeBasedMedianFilter;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 
 public class TargetLocalizer {
     public static class LocalizerConstants {
@@ -18,19 +19,20 @@ public class TargetLocalizer {
         public static final double FILTER_TIME = 1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
-        // Dimensions are in inches
-        public static final double VISION_DEFAULT_DISTANCE = 118;
+        // Dimensions are in meters
+        public static final double VISION_DEFAULT_DISTANCE = Units.inchesToMeters(118);
         // Estimated, negative because limelight is in back of turret
-        public static final double LIMELIGHT_TO_TURRET_CENTER_DISTANCE = -7;
-        public static final Vector2 ROBOT_CENTRIC_TURRET_CENTER = new Vector2(3.93, -4);
+        public static final double LIMELIGHT_TO_TURRET_CENTER_DISTANCE = Units.inchesToMeters(-7);
+        public static final Translation2d ROBOT_CENTRIC_TURRET_CENTER = new Translation2d(Units.inchesToMeters(3.93),
+                Units.inchesToMeters(-4));
     }
 
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
     private final TimeBasedMedianFilter distanceFilter;
-    private final Rotation2 gyroAdjustmentAngle;
-    private final RigidTransform2 startingPose;
+    private final Rotation2d gyroAdjustmentAngle;
+    private final Pose2d startingPose;
 
     /**
      * Creates a new {@link TargetLocalizer}.
@@ -51,9 +53,8 @@ public class TargetLocalizer {
         this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
-        this.startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
-        this.gyroAdjustmentAngle = startingPose.rotation
-                .rotateBy(drivebaseSubsystem.getGyroscopeUnadjustedAngle().inverse());
+        this.startingPose = new Pose2d(Units.feetToMeters(5), Units.feetToMeters(5), new Rotation2d());
+        this.gyroAdjustmentAngle = startingPose.getRotation().minus(drivebaseSubsystem.getGyroscopeUnadjustedAngle());
     }
 
     public double getDistance() {
@@ -114,7 +115,7 @@ public class TargetLocalizer {
      *         positive rotation is
      *         clockwise).
      */
-    public Rotation2 getFieldCentricRobotAngle() {
+    public Rotation2d getFieldCentricRobotAngle() {
         return drivebaseSubsystem.getGyroscopeUnadjustedAngle().rotateBy(gyroAdjustmentAngle);
     }
 
@@ -123,8 +124,15 @@ public class TargetLocalizer {
      *
      * @return The turret angle (0 is intake side, positive is clockwise).
      */
-    public Rotation2 getTurretAngle() {
-        return Rotation2.fromDegrees(shooterSubsystem.getTurretAngle() + STARTING_TURRET_ANGLE);
+    public Rotation2d getTurretAngle() {
+        return Rotation2d.fromDegrees(shooterSubsystem.getTurretAngle() + STARTING_TURRET_ANGLE);
+    }
+
+    public Translation2d getTurretRelativeVelocity() {
+        return (drivebaseSubsystem != null)
+                // might need to do inverse
+                ? GeoConvertor.vector2ToTranslation2d(drivebaseSubsystem.getVelocity()).rotateBy(getTurretAngle())
+                : new Translation2d();
     }
 
     /**
@@ -133,10 +141,7 @@ public class TargetLocalizer {
      * @return that
      */
     public double getLateralVelocity() {
-        return (drivebaseSubsystem != null)
-                // might need to do inverse
-                ? drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).x
-                : 0;
+        return getTurretRelativeVelocity().getX();
     }
 
     /**
@@ -145,10 +150,7 @@ public class TargetLocalizer {
      * @return that
      */
     public double getDepthVelocity() {
-        return (drivebaseSubsystem != null)
-                // might need to do inverse
-                ? drivebaseSubsystem.getVelocity().rotateBy(getTurretAngle()).y
-                : 0;
+        return getTurretRelativeVelocity().getX();
     }
 
     public double getAngularVelocity() {
@@ -175,88 +177,72 @@ public class TargetLocalizer {
     /**
      * Returns the estimated limelight pose according to vision and the gyroscope.
      *
-     * The translation (inches) is relative to the hub, and the rotation is relative
-     * to straight forward
-     * from the driver station (Positive rotation is clockwise). If the limelight
-     * doesn't have a target,
-     * returns {@link RigidTransform2#ZERO}.
+     * The translation (inches) is relative to the hub, and the rotation is relative to straight forward
+     * from the driver station (Positive rotation is clockwise). If the limelight doesn't have a target,
+     * returns {@code Pose2d()}.
      *
-     * For example, returning
-     * {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
-     * that, looking out from the driver station, the limelight is one foot to the
-     * right of and two feet
-     * in front of the center of the hub and is pointing 20 degrees to the right
-     * (clockwise).
+     * For example, returning {@code Pose2d(1, -2, Rotation2d.fromDegrees(20))} means that, looking out
+     * from the driver station, the limelight is one meter to the right of and two meters in front of
+     * the center of the hub and is pointing 20 degrees to the right (clockwise).
      *
      * @return The estimated limelight pose according to vision and the gyroscope.
      */
-    public RigidTransform2 getVisionGyroLimelightPose() {
+    public Pose2d getVisionGyroLimelightPose() {
         if (!hasTarget()) {
-            return RigidTransform2.ZERO;
+            return new Pose2d();
         }
-        Rotation2 fieldCentricLimelightAngle = getFieldCentricRobotAngle().rotateBy(getTurretAngle());
-        Rotation2 fieldCentricLimelightToHubAngle = fieldCentricLimelightAngle
-                .rotateBy(Rotation2.fromDegrees(getVisionYaw()));
-        Rotation2 fieldCentricHubToLimelightAngle = fieldCentricLimelightToHubAngle
-                .rotateBy(Rotation2.fromDegrees(180));
-        Vector2 forwardXTranslation = Vector2.fromAngle(fieldCentricHubToLimelightAngle).scale(getDistance());
-        Vector2 forwardYTranslation = forwardXTranslation.rotateBy(Rotation2.fromDegrees(90));
-        return new RigidTransform2(forwardYTranslation, fieldCentricLimelightAngle);
+        Rotation2d fieldCentricLimelightAngle = getFieldCentricRobotAngle().rotateBy(getTurretAngle());
+        Rotation2d fieldCentricLimelightToHubAngle = fieldCentricLimelightAngle
+                .rotateBy(Rotation2d.fromDegrees(getVisionYaw()));
+        Rotation2d fieldCentricHubToLimelightAngle = fieldCentricLimelightToHubAngle
+                .rotateBy(Rotation2d.fromDegrees(180));
+        Translation2d forwardXTranslation = new Translation2d(getDistance(), fieldCentricHubToLimelightAngle);
+        Translation2d forwardYTranslation = forwardXTranslation.rotateBy(Rotation2d.fromDegrees(90));
+        return new Pose2d(forwardYTranslation, fieldCentricLimelightAngle);
     }
 
     /**
      * Returns the estimated robot pose according to vision and the gyroscope.
      *
-     * The translation (inches) is relative to the hub, and the rotation is relative
-     * to straight forward
-     * from the drive station (Positive rotation is clockwise). If the limelight
-     * doesn't have a target,
-     * returns {@link RigidTransform2#ZERO}.
+     * The translation (inches) is relative to the hub, and the rotation is relative to straight forward
+     * from the drive station (Positive rotation is clockwise). If the limelight doesn't have a target,
+     * returns {@code Pose2d()}.
      *
-     * For example, returning
-     * {@code RigidTransform2(Vector2(12, -24), Rotation.fromDegrees(20))} means
-     * that, looking from the driver station, the center of the robot is one foot to
-     * the right of and
-     * two feet in front of the center of the hub and is pointing 20 degrees to the
-     * right (clockwise).
+     * For example, returning {@code Pose2d(1, -2, Rotation.fromDegrees(20))} means that, looking from
+     * the driver station, the center of the robot is one meter to the right of and two meters in front
+     * of the center of the hub and is pointing 20 degrees to the right (clockwise).
      *
      * @return The estimated robot pose according to vision and the gyroscope.
      */
-    public RigidTransform2 getVisionGyroRobotPose() {
+    public Pose2d getVisionGyroRobotPose() {
         if (!hasTarget()) {
-            return RigidTransform2.ZERO;
+            return new Pose2d();
         }
-        Vector2 fieldCentricHubToLimelight = getVisionGyroLimelightPose().translation;
-        Vector2 robotCentricTurretToLimelight = Vector2.fromAngle(getTurretAngle())
-                .scale(LIMELIGHT_TO_TURRET_CENTER_DISTANCE);
-        Vector2 robotCentricLimelightPosition = ROBOT_CENTRIC_TURRET_CENTER.add(robotCentricTurretToLimelight);
-        Vector2 fieldCentricRobotToLimelight = robotCentricLimelightPosition.rotateBy(getFieldCentricRobotAngle())
-                .rotateBy(Rotation2.fromDegrees(90));
-        Vector2 hubToRobot = fieldCentricHubToLimelight.subtract(fieldCentricRobotToLimelight);
-        return new RigidTransform2(hubToRobot, getFieldCentricRobotAngle());
+        Translation2d fieldCentricHubToLimelight = getVisionGyroLimelightPose().getTranslation();
+        Translation2d robotCentricTurretToLimelight = new Translation2d(LIMELIGHT_TO_TURRET_CENTER_DISTANCE,
+                getTurretAngle());
+        Translation2d robotCentricLimelightPosition = ROBOT_CENTRIC_TURRET_CENTER.plus(robotCentricTurretToLimelight);
+        Translation2d fieldCentricRobotToLimelight = robotCentricLimelightPosition.rotateBy(getFieldCentricRobotAngle())
+                .rotateBy(Rotation2d.fromDegrees(90));
+        Translation2d hubToRobot = fieldCentricHubToLimelight.minus(fieldCentricRobotToLimelight);
+        return new Pose2d(hubToRobot, getFieldCentricRobotAngle());
     }
 
     /**
-     * Returns the estimated robot pose relative to the start according to vision
-     * and the gyroscope.
+     * Returns the estimated robot pose relative to the start according to vision and the gyroscope.
      *
-     * The translation (inches) is from the starting position, and the rotation is
-     * relative to the
-     * starting rotation (Positive is clockwise). If the limelight doesn't have a
-     * target, returns
-     * {@link RigidTransform2#ZERO}.
+     * The translation (inches) is from the starting position, and the rotation is relative to the
+     * starting rotation (Positive is clockwise). If the limelight doesn't have a target, returns
+     * {@code Pose2d()}.
      *
-     * For example, returning
-     * {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
-     * that, looking from the driver station, the robot moved one foot to the right
-     * and two feet closer,
-     * and rotated 20 degrees clockwise.
+     * For example, returning {@code Pose2d(1, -2, Rotation2d.fromDegrees(20))} means that, looking from
+     * the driver station, the robot moved one foot to the right and two feet closer, and rotated 20
+     * degrees clockwise.
      *
-     * @return The estimated robot pose relative to the start according to vision
-     *         and the gyroscope.
+     * @return The estimated robot pose relative to the start according to vision and the gyroscope.
      */
-    public RigidTransform2 getVisionGyroRobotPoseRelativeToStart() {
-        return hasTarget() ? getVisionGyroRobotPose().transformBy(startingPose.inverse()) : RigidTransform2.ZERO;
+    public Pose2d getVisionGyroRobotPoseRelativeToStart() {
+        return hasTarget() ? getVisionGyroRobotPose().transformBy(startingPose.minus(new Pose2d())) : new Pose2d();
     }
 
     public void limelightOn() {

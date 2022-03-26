@@ -42,7 +42,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         // Relating to physical climb structure things
         // was prevously mid
-        public static final double MID_RUNG_HEIGHT_INCH = 31;
+        public static final double MID_RUNG_HEIGHT_INCH = 33;
         public static final double RETRACT_HEIGHT_INCH = 15;
         public static final double FULL_RETRACT_HEIGHT_INCH = 1;
 

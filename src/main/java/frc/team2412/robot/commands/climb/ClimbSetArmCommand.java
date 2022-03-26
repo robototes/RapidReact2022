@@ -15,7 +15,7 @@ public class ClimbSetArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.setMotor(value);
+        subsystem.setMotorSpeed(value);
     }
 
     @Override

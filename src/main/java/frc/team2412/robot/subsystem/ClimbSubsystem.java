@@ -136,6 +136,10 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.set(ControlMode.Position, value);
     }
 
+    public void setMotorSpeed(double speed){
+        motor.set(speed);
+    }
+
     /**
      * Periodic function 🙊🙉🙈 in the simulation
      * Graciously updates the encoder position in the sim

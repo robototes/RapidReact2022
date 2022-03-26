@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import frc.team2412.robot.sim.PhysicsSim;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -66,11 +67,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     public IntakeSubsystem() {
 
-        motor1 = new WPI_TalonFX(INTAKE_MOTOR_1);
+        motor1 = new WPI_TalonFX(INTAKE_MOTOR_1, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+
         motor1.setNeutralMode(NeutralMode.Coast);
         motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         motor1.setInverted(true);
-        motor2 = new WPI_TalonFX(INTAKE_MOTOR_2);
+        motor2 = new WPI_TalonFX(INTAKE_MOTOR_2, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
         if (motor2 != null) {
             motor2.setNeutralMode(NeutralMode.Coast);

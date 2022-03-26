@@ -17,6 +17,7 @@ public class Hardware {
     public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(221.924);
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.980);
     public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.398);
+    public static final String DRIVETRAIN_INTAKE_CAN_BUS_NAME = "DrivebaseIntake";
 
     // Changes swerve modules & disables subsystems missing from the swerve test bot
     private static final Mk4SwerveModuleHelper.GearRatio GEAR_RATIO;
@@ -32,25 +33,29 @@ public class Hardware {
             DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR,
             DRIVETRAIN_FRONT_LEFT_ENCODER_PORT,
-            DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET);
+            DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET,
+            DRIVETRAIN_INTAKE_CAN_BUS_NAME);
     public static final Mk4Configuration FRONT_RIGHT_CONFIG = new Mk4Configuration(
             GEAR_RATIO,
             DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR,
             DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
-            DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET);
+            DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET,
+            DRIVETRAIN_INTAKE_CAN_BUS_NAME);
     public static final Mk4Configuration BACK_LEFT_CONFIG = new Mk4Configuration(
             GEAR_RATIO,
             DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR,
             DRIVETRAIN_BACK_LEFT_ENCODER_PORT,
-            DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET);
+            DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET,
+            DRIVETRAIN_INTAKE_CAN_BUS_NAME);
     public static final Mk4Configuration BACK_RIGHT_CONFIG = new Mk4Configuration(
             GEAR_RATIO,
             DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR,
             DRIVETRAIN_BACK_RIGHT_ENCODER_PORT,
-            DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET);
+            DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET,
+            DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
     public static final double MODULE_MAX_RPM = 6000.0;
     public static final double MODULE_MAX_VELOCITY_METERS_PER_SEC = FRONT_LEFT_CONFIG.getRatio()
@@ -72,8 +77,8 @@ public class Hardware {
             INTAKE_SOLENOID_DOWN = 0;
 
     // index can ids are range 40-49
-    public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_PROXIMITY = 2,
-            FEEDER_PROXIMITY = 5;
+    public static final int INDEX_INGEST_MOTOR = 40, INDEX_FEEDER_MOTOR = 41, INGEST_PROXIMITY = 1,
+            FEEDER_PROXIMITY = 0;
 
     // climb can ids are range 50-59
     public static final int CLIMB_FIXED_MOTOR = 51;

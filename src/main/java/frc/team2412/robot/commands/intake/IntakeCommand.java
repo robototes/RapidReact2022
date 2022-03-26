@@ -6,8 +6,8 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeCommand extends CommandBase {
 
-    private IntakeSubsystem intakeSubsystem;
-    private IndexSubsystem indexSubsystem;
+    private final IntakeSubsystem intakeSubsystem;
+    private final IndexSubsystem indexSubsystem;
 
     public IntakeCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
@@ -17,12 +17,15 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!(indexSubsystem.hasCargo() && intakeSubsystem.hasCargo())) {
-            intakeSubsystem.intakeIn();
-            indexSubsystem.ingestMotorIn();
-        } else {
+        if (!intakeSubsystem.isIntakeExtended()) {
             intakeSubsystem.intakeStop();
-            indexSubsystem.ingestMotorStop();
+            return;
+        }
+
+        if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
+            intakeSubsystem.intakeStop();
+        } else {
+            intakeSubsystem.intakeIn();
         }
     }
 

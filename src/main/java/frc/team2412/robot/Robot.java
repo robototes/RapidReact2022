@@ -5,23 +5,29 @@
 package frc.team2412.robot;
 
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
+import static frc.team2412.robot.Hardware.*;
+
 import static java.lang.Thread.sleep;
 
-import frc.team2412.robot.util.MACAddress;
 import org.frcteam2910.common.robot.UpdateManager;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
+import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
@@ -42,12 +48,18 @@ public class Robot extends TimedRobot {
         return instance;
     }
 
+    private final PowerDistribution PDP;
+    private UsbCamera driverVisionCamera;
+    private PneumaticHub pneumaticHub;
+
+    private static final double MIN_PRESSURE = 90;
+    private static final double MAX_PRESSURE = 110;
+
     public Controls controls;
     public Subsystems subsystems;
 
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
-    private PowerDistribution PDP;
 
     final private RobotType robotType;
 
@@ -59,7 +71,17 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
+
+        if (COMPRESSOR_ENABLED) {
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+            pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        }
+
         robotType = type;
+    }
+
+    public double getVoltage() {
+        return PDP.getVoltage();
     }
 
     protected Robot() {
@@ -113,7 +135,13 @@ public class Robot extends TimedRobot {
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
-            updateManager.startLoop(5.0e-3);
+            updateManager.startLoop(0.011); // 0.005 previously
+        }
+        if (DRIVER_VIS_ENABLED) {
+            driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            driverVisionCamera.setResolution(160, 90);
+            CameraServer.addCamera(driverVisionCamera);
+            CameraServer.startAutomaticCapture();
         }
 
         // Create and push Field2d to SmartDashboard.
@@ -188,7 +216,10 @@ public class Robot extends TimedRobot {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 
-        autonomousChooser.getCommand().schedule();
+        Command autoCommand = autonomousChooser.getCommand();
+        if (autoCommand != null) {
+            autoCommand.schedule();
+        }
     }
 
     @Override
@@ -196,6 +227,7 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
+
     }
 
     @Override
@@ -206,10 +238,18 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationInit() {
         PhysicsSim sim = PhysicsSim.getInstance();
-        subsystems.climbSubsystem.simInit(sim);
-        subsystems.indexSubsystem.simInit(sim);
-        subsystems.intakeSubsystem.simInit(sim);
-        subsystems.shooterSubsystem.simInit(sim);
+        if (subsystems.climbSubsystem != null) {
+            subsystems.climbSubsystem.simInit(sim);
+        }
+        if (subsystems.indexSubsystem != null) {
+            subsystems.indexSubsystem.simInit(sim);
+        }
+        if (subsystems.intakeSubsystem != null) {
+            subsystems.intakeSubsystem.simInit(sim);
+        }
+        if (subsystems.shooterSubsystem != null) {
+            subsystems.shooterSubsystem.simInit(sim);
+        }
     }
 
     @Override
@@ -223,5 +263,16 @@ public class Robot extends TimedRobot {
 
     public boolean isCompetition() {
         return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
+    }
+
+    @Override
+    public void disabledInit() {
+        if (subsystems.climbSubsystem != null) {
+            subsystems.climbSubsystem.stopArm(true);
+        }
+        if (subsystems.shooterSubsystem != null) {
+            subsystems.shooterSubsystem.stopHoodMotor();
+            subsystems.shooterSubsystem.stopFlywheel();
+        }
     }
 }

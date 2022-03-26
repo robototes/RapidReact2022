@@ -14,6 +14,8 @@ public class ShooterTargetCommand extends CommandBase {
     private final TargetLocalizer localizer;
     private final BooleanSupplier turretEnable;
 
+    private double turretAngle = 0;
+
     public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer) {
         this(shooter, localizer, () -> false);
     }
@@ -25,26 +27,76 @@ public class ShooterTargetCommand extends CommandBase {
         addRequirements(shooter);
     }
 
-    double turretAngle = 0;
-
     @Override
     public void initialize() {
         localizer.limelightOn();
     }
 
+    public enum TurretState {
+        WRAP_LEFT, WRAP_RIGHT, STOPPED, TRACKING;
+    }
+
+    TurretState state;
+
     @Override
     public void execute() {
-        if (!localizer.hasTarget())
-            return;
-        if (ShooterConstants.dataPoints != null) {
+        // if (!localizer.hasTarget())
+        // return;
+
+        if (ShooterConstants.dataPoints != null && localizer.getAdjustedDistance() < 280) {
             ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
                     .getInterpolated(localizer.getAdjustedDistance());
+
+            System.out.println("Limelight distance: " + localizer.getDistance());
+            System.out.println("Localizer distance" + localizer.getAdjustedDistance());
+
+            System.out.println(shooterData);
+
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
-        }
-        turretAngle = turretEnable.getAsBoolean() ? turretAngle + localizer.getYaw() : 0;
-        shooter.setTurretAngle(turretAngle + localizer.yawAdjustment());
 
+            System.out.println("Actual shooter RPM : " + shooter.getFlywheelRPM());
+            System.out.println("Actual hood angle: " + shooter.getHoodAngle());
+        }
+
+        if (!turretEnable.getAsBoolean())
+            state = TurretState.STOPPED;
+        else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
+            state = TurretState.WRAP_LEFT;
+        else if (turretAngle > ShooterConstants.RIGHT_WRAP_THRESHOLD)
+            state = TurretState.WRAP_RIGHT;
+        else if (turretAngle > ShooterConstants.LEFT_WRAP && turretAngle < ShooterConstants.RIGHT_WRAP)
+            state = TurretState.TRACKING;
+
+        switch (state) {
+            case STOPPED:
+                turretAngle = 0;
+                break;
+            case WRAP_LEFT:
+                turretAngle = ShooterConstants.RIGHT_WRAP;
+                // call the isTurretAt Angle method instead of this logic, also how is this if check being called?
+                if (Math.abs(shooter.getTurretAngle() - ShooterConstants.RIGHT_WRAP) < 5)
+                    state = TurretState.TRACKING;
+                break;
+            case WRAP_RIGHT:
+                turretAngle = ShooterConstants.LEFT_WRAP;
+                if (Math.abs(shooter.getTurretAngle() - ShooterConstants.LEFT_WRAP) < 5)
+                    state = TurretState.TRACKING;
+                break;
+            case TRACKING:
+                turretAngle = shooter.getTurretAngle() + localizer.getTargetYaw();
+                break;
+        }
+
+        double localizerTurretAdjustment = state == TurretState.TRACKING ? localizer.yawAdjustment() : 0;
+        System.out.println("Localizer turret adjustment: " + localizerTurretAdjustment);
+
+        turretAngle = turretAngle + localizerTurretAdjustment;
+        System.out.println("turret angle : " + turretAngle);
+
+        shooter.setTurretAngle(turretAngle);
+
+        System.out.println("Actual turret angle : " + shooter.getTurretAngle());
     }
 
     @Override

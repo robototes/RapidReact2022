@@ -65,7 +65,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double MAX_TURRET_ANGLE = 120;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
-        
+
         public static final int TURRET_SLOT_ID = 0;
 
         public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -270;

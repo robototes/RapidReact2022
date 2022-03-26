@@ -117,10 +117,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         feederMotor.set(INDEX_FEEDER_SPEED);
     }
 
-    public void feederMotorInFullSpeed() {
-        feederMotor.set(INDEX_IN_SPEED);
-    }
-
     /**
      * Spins second motor outward and updates second motor state
      */
@@ -143,7 +139,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         if (ignoreFeeder) {
             return feederOverridenValue;
         }
-        return !(leftFeederProximity.get() && rightFeederProximity.get());
+        return (leftFeederProximity.get() && rightFeederProximity.get());
     }
 
     /**

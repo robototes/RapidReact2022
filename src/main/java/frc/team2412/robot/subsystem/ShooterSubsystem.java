@@ -50,12 +50,14 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 100 * FLYWHEEL_RPM_TO_VELOCITY;
 
         // Placeholder gearing constant
         public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
+        public static final double HOOD_ALLOWED_ERROR = 1;
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
@@ -63,6 +65,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double MAX_TURRET_ANGLE = 120;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
+        
         public static final int TURRET_SLOT_ID = 0;
 
         public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -270;
@@ -75,9 +78,6 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
-
-        public static final double ALLOWED_FLYWHEEL_ERROR = 50;
-        public static final double ALLOWED_HOOD_ERROR = 1;
     }
 
     /* INSTANCE VARIABLES */
@@ -457,8 +457,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     }
 
     public boolean upToSpeed() {
-        return Math.abs(flywheelMotor1.getClosedLoopError()) <= ALLOWED_FLYWHEEL_ERROR
-                && Math.abs(hoodEncoder.getPosition() - hoodTarget) <= ALLOWED_HOOD_ERROR;
+        return Math.abs(flywheelMotor1.getClosedLoopError()) <= FLYWHEEL_ALLOWED_ERROR
+                && Math.abs(hoodEncoder.getPosition() - hoodTarget) <= HOOD_ALLOWED_ERROR;
     }
 
     @Log(name = "raw hood rev")

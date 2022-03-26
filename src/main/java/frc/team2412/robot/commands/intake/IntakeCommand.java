@@ -22,7 +22,6 @@ public class IntakeCommand extends CommandBase {
             return;
         }
         
-        System.out.println(indexSubsystem.hasCargo() && intakeSubsystem.hasCargo());
         if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
           intakeSubsystem.intakeStop();
         } else {

@@ -59,16 +59,16 @@ public class AutonomousCommand extends SequentialCommandGroup {
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.5, 1.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(-90)),
+                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
                 fastSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(180)),
+                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(180)), normalSpeedConfig);
+                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(180)),
+                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(180)), normalSpeedConfig);
+                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)),
                 List.of(),

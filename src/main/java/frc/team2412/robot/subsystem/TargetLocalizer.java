@@ -270,4 +270,8 @@ public class TargetLocalizer {
     public double getVoltage() {
         return Robot.getInstance().getVoltage();
     }
+
+    public boolean upToSpeed() {
+        return shooterSubsystem.upToSpeed();
+    }
 }

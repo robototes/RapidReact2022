@@ -60,20 +60,20 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(7.5, 1.9, Rotation2d.fromDegrees(0)),
+                new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(7.3, 1.0, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 0.9, Rotation2d.fromDegrees(0)),
                 fastSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(7.3, 1.0, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(2.1, 1.3, Rotation2d.fromDegrees(0)),
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
                 List.of(),
                 new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         ;

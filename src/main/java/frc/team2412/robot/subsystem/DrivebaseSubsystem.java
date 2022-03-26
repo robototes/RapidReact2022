@@ -60,8 +60,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
-                new MaxAccelerationConstraint(0.5 * 12.0), // old value was 12.5 * 12.0
-                new MaxVelocityConstraint(1.0 * 12.0),
+                new MaxAccelerationConstraint(1 * 12.0), // old value was 12.5 * 12.0
+                new MaxVelocityConstraint(2.0 * 12.0),
                 new CentripetalAccelerationConstraint(1.0 * 12.0), // old value was 15 * 12.0
         };
 
@@ -142,7 +142,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope = comp ? new PigeonTwo(GYRO_PORT, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME)
                     : new NavX(SerialPort.Port.kMXP);
             if (gyroscope instanceof PigeonTwo)
-                gyroscope.setInverted(true);
+                gyroscope.setInverted(false);
             SmartDashboard.putData("Field", field);
         }
 

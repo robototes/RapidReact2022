@@ -19,6 +19,8 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
+import frc.team2412.robot.subsystem.*;
+
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class AutonomousChooser {
@@ -89,7 +91,8 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new AutonomousCommand(subsystems.drivebaseSubsystem));
+                new AutonomousCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem));
         return command;
 
     }

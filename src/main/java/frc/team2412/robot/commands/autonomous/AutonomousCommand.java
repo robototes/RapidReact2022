@@ -10,8 +10,9 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.*;
 
 import java.util.List;
 
@@ -27,8 +28,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double MAX_SPEED_METERS_PER_SECOND = 2;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
         public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot
         public static final double WHEEL_BASE = 1.0;
@@ -42,8 +43,10 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     DrivebaseSubsystem drivebaseSubsystem;
 
-    public AutonomousCommand(DrivebaseSubsystem d) {
-        drivebaseSubsystem = d;
+    public AutonomousCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
+                             TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
+                             IntakeSubsystem intakeSubsystem) {
+
 
         // Create normalSpeedConfig for trajectory
         TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(
@@ -59,10 +62,10 @@ public class AutonomousCommand extends SequentialCommandGroup {
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.5, 1.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 1.0, Rotation2d.fromDegrees(0)),
                 fastSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(7.3, 1.1, Rotation2d.fromDegrees(0)),
+                new Pose2d(7.3, 1.0, Rotation2d.fromDegrees(0)),
                 List.of(),
                 new Pose2d(5.1, 1.8, Rotation2d.fromDegrees(0)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
@@ -134,9 +137,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 // new WaitCommand(1)),
                 // new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 // new IntakeSetExtendCommand(intakeSubsystem),
-                swerveControllerCommandOne, swerveControllerCommandTwo, swerveControllerCommandThree,
-                swerveControllerCommandFour,
-                new SequentialCommandGroup());
+                new ParallelCommandGroup(new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandTwo, swerveControllerCommandThree,
+                        swerveControllerCommandFour),
+                        new SequentialCommandGroup()));
 
     }
 

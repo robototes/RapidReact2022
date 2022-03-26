@@ -253,7 +253,6 @@ public class Robot extends TimedRobot {
             subsystems.shooterSubsystem.simInit(sim);
         }
 
-
     }
 
     @Override

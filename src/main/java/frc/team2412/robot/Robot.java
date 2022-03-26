@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
-            updateManager.startLoop(5.0e-3);
+            updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
@@ -227,6 +227,7 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
+
     }
 
     @Override
@@ -251,6 +252,7 @@ public class Robot extends TimedRobot {
         if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.simInit(sim);
         }
+
 
     }
 

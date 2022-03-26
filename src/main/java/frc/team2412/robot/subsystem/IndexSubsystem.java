@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
@@ -26,8 +27,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_FEEDER_SPEED = 0.15;
-        public static double INDEX_IN_SPEED = 0.35;
+        public static double INDEX_FEEDER_SPEED = 0.2;
+        public static double INDEX_IN_SPEED = 0.175;
         public static double INDEX_OUT_SPEED = -0.3;
 
         // The current limit
@@ -38,7 +39,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    private final DigitalInput feederProximity;
+    private final DigitalInput leftFeederProximity;
+    private final DigitalInput rightFeederProximity;
 
     @Log.MotorController
     private final WPI_TalonFX ingestMotor;
@@ -46,12 +48,18 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log.MotorController
     private final WPI_TalonFX feederMotor;
 
+    // Sensor Override
+
+    public boolean ignoreFeeder = false;
+    public boolean feederOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
+
     // Constructor
 
     public IndexSubsystem() {
         ingestMotor = new WPI_TalonFX(INDEX_INGEST_MOTOR);
         feederMotor = new WPI_TalonFX(INDEX_FEEDER_MOTOR);
-        feederProximity = new DigitalInput(FEEDER_PROXIMITY);
+        leftFeederProximity = new DigitalInput(LEFT_FEEDER_PROXIMITY);
+        rightFeederProximity = new DigitalInput(RIGHT_FEEDER_PROXIMITY);
 
         ingestMotor.configFactoryDefault();
         feederMotor.configFactoryDefault();
@@ -124,11 +132,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Checks if ball is positioned at the second sensor
+     * Checks if ball is positioned at the sensors
      */
     @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
-        return feederProximity.get();
+        if (ignoreFeeder) {
+            return feederOverridenValue;
+        }
+        return (leftFeederProximity.get() && rightFeederProximity.get());
     }
 
     /**
@@ -208,6 +219,24 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     @Log(name = "Ingest motor moving")
     public boolean isIngestMoving() {
         return isIngestMotorOn();
+    }
+
+    /**
+     * sets ignoreIngest value
+     *
+     * @param ignore
+     */
+    @Config
+    public void setIgnoreFeeder(boolean ignore) {
+        ignoreFeeder = ignore;
+    }
+
+    /**
+     * sets ingestOverridenValue value
+     */
+    @Config
+    public void setFeederOverridenValue(boolean value) {
+        feederOverridenValue = value;
     }
 
 }

@@ -10,6 +10,7 @@ import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
@@ -20,7 +21,6 @@ import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
-import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -128,14 +128,16 @@ public class Controls {
             BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
             driveController.getDPadButton(Direction.DOWN).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1000, 35).withInterrupt(b));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1400, 35).withInterrupt(b)
+                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
+
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2100, 13.7).withInterrupt(b));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2700, 0).withInterrupt(b)
+                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
             driveController.getDPadButton(Direction.RIGHT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0)
-                            .andThen(new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem, -90))
-                            .withInterrupt(b));
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0).withInterrupt(b)
+                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(90))));
 
             if (subsystems.drivebaseSubsystem != null) {
                 subsystems.shooterSubsystem.setDefaultCommand(

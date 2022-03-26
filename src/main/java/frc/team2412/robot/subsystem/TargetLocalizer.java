@@ -4,19 +4,22 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
+
+import frc.team2412.robot.util.TimeBasedMedianFilter;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
 public class TargetLocalizer {
     public static class LocalizerConstants {
         // TODO tune these more
-
         public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
+        // Seconds, placeholder duration
+        public static final double FILTER_TIME = 1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches
+        public static final double VISION_DEFAULT_DISTANCE = 118;
         // Estimated, negative because limelight is in back of turret
         public static final double LIMELIGHT_TO_TURRET_CENTER_DISTANCE = -7;
         public static final Vector2 ROBOT_CENTRIC_TURRET_CENTER = new Vector2(3.93, -4);
@@ -25,7 +28,7 @@ public class TargetLocalizer {
     private final DrivebaseSubsystem drivebaseSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
-    private final LinearFilter distanceFilter;
+    private final TimeBasedMedianFilter distanceFilter;
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
@@ -45,17 +48,18 @@ public class TargetLocalizer {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = LinearFilter.movingAverage(10);
+        this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
-        startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
-        gyroAdjustmentAngle = startingPose.rotation
+        this.startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
+        this.gyroAdjustmentAngle = startingPose.rotation
                 .rotateBy(drivebaseSubsystem.getGyroscopeUnadjustedAngle().inverse());
     }
 
     public double getDistance() {
-        return distanceFilter.calculate(
-                hasTarget() ? shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias() : 120);
+        return hasTarget()
+                ? distanceFilter.calculate(shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias())
+                : VISION_DEFAULT_DISTANCE;
     }
 
     public double getAdjustedDistance() {
@@ -63,7 +67,8 @@ public class TargetLocalizer {
     }
 
     /**
-     * very basic feedforward math to adjust the depth depending on the distance you are moving away
+     * very basic feedforward math to adjust the depth depending on the distance you
+     * are moving away
      * from target
      *
      * @return adjustment
@@ -83,7 +88,8 @@ public class TargetLocalizer {
     /**
      * Returns the yaw (horizontal angle) to the hub.
      *
-     * @return The yaw to the hub (0 is straight ahead, positive is clockwise, units are degrees).
+     * @return The yaw to the hub (0 is straight ahead, positive is clockwise, units
+     *         are degrees).
      */
     public double getVisionYaw() {
         return shooterVisionSubsystem.getYaw();
@@ -92,7 +98,8 @@ public class TargetLocalizer {
     /**
      * Returns the yaw (horizontal angle) to the target position.
      *
-     * @return The yaw to the hub plus turret angle bias (0 is straight ahead, positive is clockwise,
+     * @return The yaw to the hub plus turret angle bias (0 is straight ahead,
+     *         positive is clockwise,
      *         units are degrees).
      */
     public double getTargetYaw() {
@@ -103,7 +110,8 @@ public class TargetLocalizer {
     /**
      * Return the robot's angle relative to the field.
      *
-     * @return The robot angle (0 is straight forward from the driver station, positive rotation is
+     * @return The robot angle (0 is straight forward from the driver station,
+     *         positive rotation is
      *         clockwise).
      */
     public Rotation2 getFieldCentricRobotAngle() {
@@ -152,7 +160,8 @@ public class TargetLocalizer {
      * multiply the lateral velocity by distance.
      * This is to compensate for a longer time of flight the farther away you are
      * and it is not perfect but it should work.
-     * angular velocity is to help the turret keep heading when the robot itself is turning
+     * angular velocity is to help the turret keep heading when the robot itself is
+     * turning
      *
      * @return adjustment
      */
@@ -166,13 +175,18 @@ public class TargetLocalizer {
     /**
      * Returns the estimated limelight pose according to vision and the gyroscope.
      *
-     * The translation (inches) is relative to the hub, and the rotation is relative to straight forward
-     * from the driver station (Positive rotation is clockwise). If the limelight doesn't have a target,
+     * The translation (inches) is relative to the hub, and the rotation is relative
+     * to straight forward
+     * from the driver station (Positive rotation is clockwise). If the limelight
+     * doesn't have a target,
      * returns {@link RigidTransform2#ZERO}.
      *
-     * For example, returning {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
-     * that, looking out from the driver station, the limelight is one foot to the right of and two feet
-     * in front of the center of the hub and is pointing 20 degrees to the right (clockwise).
+     * For example, returning
+     * {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
+     * that, looking out from the driver station, the limelight is one foot to the
+     * right of and two feet
+     * in front of the center of the hub and is pointing 20 degrees to the right
+     * (clockwise).
      *
      * @return The estimated limelight pose according to vision and the gyroscope.
      */
@@ -193,13 +207,18 @@ public class TargetLocalizer {
     /**
      * Returns the estimated robot pose according to vision and the gyroscope.
      *
-     * The translation (inches) is relative to the hub, and the rotation is relative to straight forward
-     * from the drive station (Positive rotation is clockwise). If the limelight doesn't have a target,
+     * The translation (inches) is relative to the hub, and the rotation is relative
+     * to straight forward
+     * from the drive station (Positive rotation is clockwise). If the limelight
+     * doesn't have a target,
      * returns {@link RigidTransform2#ZERO}.
      *
-     * For example, returning {@code RigidTransform2(Vector2(12, -24), Rotation.fromDegrees(20))} means
-     * that, looking from the driver station, the center of the robot is one foot to the right of and
-     * two feet in front of the center of the hub and is pointing 20 degrees to the right (clockwise).
+     * For example, returning
+     * {@code RigidTransform2(Vector2(12, -24), Rotation.fromDegrees(20))} means
+     * that, looking from the driver station, the center of the robot is one foot to
+     * the right of and
+     * two feet in front of the center of the hub and is pointing 20 degrees to the
+     * right (clockwise).
      *
      * @return The estimated robot pose according to vision and the gyroscope.
      */
@@ -218,17 +237,23 @@ public class TargetLocalizer {
     }
 
     /**
-     * Returns the estimated robot pose relative to the start according to vision and the gyroscope.
+     * Returns the estimated robot pose relative to the start according to vision
+     * and the gyroscope.
      *
-     * The translation (inches) is from the starting position, and the rotation is relative to the
-     * starting rotation (Positive is clockwise). If the limelight doesn't have a target, returns
+     * The translation (inches) is from the starting position, and the rotation is
+     * relative to the
+     * starting rotation (Positive is clockwise). If the limelight doesn't have a
+     * target, returns
      * {@link RigidTransform2#ZERO}.
      *
-     * For example, returning {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
-     * that, looking from the driver station, the robot moved one foot to the right and two feet closer,
+     * For example, returning
+     * {@code RigidTransform2(Vector2(12, -24), Rotation2.fromDegrees(20))} means
+     * that, looking from the driver station, the robot moved one foot to the right
+     * and two feet closer,
      * and rotated 20 degrees clockwise.
      *
-     * @return The estimated robot pose relative to the start according to vision and the gyroscope.
+     * @return The estimated robot pose relative to the start according to vision
+     *         and the gyroscope.
      */
     public RigidTransform2 getVisionGyroRobotPoseRelativeToStart() {
         return hasTarget() ? getVisionGyroRobotPose().transformBy(startingPose.inverse()) : RigidTransform2.ZERO;

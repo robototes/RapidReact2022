@@ -1,6 +1,6 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Controls.ControlConstants.CONTROLLER_PORT;
+import static frc.team2412.robot.Controls.ControlConstants.*;
 
 import java.util.function.BooleanSupplier;
 
@@ -34,7 +34,7 @@ public class Controls {
     public XboxController codriverController;
 
     // climb
-    public final Button climbArmUp;
+    public final Button climbArmUp;             
     public final Button climbArmDown;
     public final Button climbArmDownManual;
     public final Button climbArmUpManual;
@@ -61,6 +61,7 @@ public class Controls {
         subsystems = s;
 
         driveController = new XboxController(CONTROLLER_PORT);
+        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT)
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         shootButton = driveController.getRightBumperButton();

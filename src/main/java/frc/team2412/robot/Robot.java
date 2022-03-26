@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
         if (DRIVE_ENABLED) {
             updateManager = new UpdateManager(
                     subsystems.drivebaseSubsystem);
-            updateManager.startLoop(5.0e-3);
+            updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
             driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
@@ -227,6 +227,7 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
+
     }
 
     @Override
@@ -237,10 +238,18 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationInit() {
         PhysicsSim sim = PhysicsSim.getInstance();
-        subsystems.climbSubsystem.simInit(sim);
-        subsystems.indexSubsystem.simInit(sim);
-        subsystems.intakeSubsystem.simInit(sim);
-        subsystems.shooterSubsystem.simInit(sim);
+        if (subsystems.climbSubsystem != null) {
+            subsystems.climbSubsystem.simInit(sim);
+        }
+        if (subsystems.indexSubsystem != null) {
+            subsystems.indexSubsystem.simInit(sim);
+        }
+        if (subsystems.intakeSubsystem != null) {
+            subsystems.intakeSubsystem.simInit(sim);
+        }
+        if (subsystems.shooterSubsystem != null) {
+            subsystems.shooterSubsystem.simInit(sim);
+        }
     }
 
     @Override

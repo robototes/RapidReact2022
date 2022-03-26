@@ -5,10 +5,6 @@ import com.google.errorprone.annotations.Immutable;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,8 +19,6 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
-
-import java.util.List;
 
 public class AutonomousChooser {
 
@@ -86,7 +80,6 @@ public class AutonomousChooser {
 
         return command;
     }
-
 
     private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,
             AutonomousTrajectories trajectories) {
@@ -155,12 +148,14 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         CLIMB_DOWN_IN_QUEUE(
                 (subsystems, trajectories) -> new ClimbRetractSlowlyCommand(subsystems.climbSubsystem,
-                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),
+                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                        subsystems.drivebaseSubsystem),
                 "Climb down in queue",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
         CLIMB_UP_IN_QUEUE(
                 (subsystems, trajectories) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),

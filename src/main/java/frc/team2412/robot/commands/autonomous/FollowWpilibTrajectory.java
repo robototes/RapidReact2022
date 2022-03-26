@@ -6,10 +6,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
-import frc.team2412.robot.util.GeoConvertor;
 
 public class FollowWpilibTrajectory extends CommandBase {
     public static class AutoConstants {
@@ -75,5 +73,4 @@ public class FollowWpilibTrajectory extends CommandBase {
         return swerveControllerCommand.isFinished();
     }
 
-    
 }

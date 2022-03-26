@@ -7,14 +7,7 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
-import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
-import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
     public TwoBallAutoCommandLeft(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
@@ -31,14 +24,14 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
         // This shoots, drives back to where the ball is with the intake extended, picks it up and
         // immediately shoots it
         addCommands(
-//                new ParallelCommandGroup(
-//                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-//                        new WaitCommand(1)),
-//                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-//                new IntakeSetExtendCommand(intakeSubsystem),
+                // new ParallelCommandGroup(
+                // new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                // new WaitCommand(1)),
+                // new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
+                // new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
                         new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath)));
-//                        ,new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
+        // ,new IntakeIndexInCommand(indexSubsystem, intakeSubsystem)));
 
     }
 }

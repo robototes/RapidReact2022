@@ -238,19 +238,19 @@ public class Robot extends TimedRobot {
     public void simulationInit() {
 
         PhysicsSim sim = PhysicsSim.getInstance();
-        if (subsystems.climbSubsystem != null){
+        if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.simInit(sim);
         }
-        if (subsystems.indexSubsystem !=null){
+        if (subsystems.indexSubsystem != null) {
             subsystems.indexSubsystem.simInit(sim);
         }
-        if (subsystems.intakeSubsystem != null){
+        if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.simInit(sim);
         }
 
-      if (subsystems.shooterSubsystem != null){
-          subsystems.shooterSubsystem.simInit(sim);
-      }
+        if (subsystems.shooterSubsystem != null) {
+            subsystems.shooterSubsystem.simInit(sim);
+        }
 
     }
 

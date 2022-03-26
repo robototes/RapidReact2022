@@ -49,9 +49,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.072746,
-                0.0032181,
-                0.30764);
+                2.33,
+                0.0766,
+                0.236);
 
         // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
@@ -76,7 +76,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(0.1, 0.0, 0.0),
+            new PidConstants(1.38, 0.0, 0.0),
             new PidConstants(5, 0.0, 0.0),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 

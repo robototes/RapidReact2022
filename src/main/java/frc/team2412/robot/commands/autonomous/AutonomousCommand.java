@@ -28,8 +28,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
         public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot
         public static final double WHEEL_BASE = 1.0;
@@ -60,14 +60,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
-                List.of(),
-                new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
-                fastSpeedConfig);
+                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
+                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))), normalSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)),
                 List.of(),
@@ -79,7 +78,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         ;
 
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                4, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                0.1, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         trajectoryOne.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
         trajectoryTwo.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
@@ -137,7 +136,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 // new WaitCommand(1)),
                 // new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 // new IntakeSetExtendCommand(intakeSubsystem),
-                new ParallelCommandGroup(new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandTwo, swerveControllerCommandThree,
+                new ParallelCommandGroup(new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandThree,
                         swerveControllerCommandFour),
                         new SequentialCommandGroup()));
 

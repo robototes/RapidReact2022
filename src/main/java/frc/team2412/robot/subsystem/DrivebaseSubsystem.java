@@ -138,7 +138,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope = comp ? new PigeonTwo(GYRO_PORT, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME)
                     : new NavX(SerialPort.Port.kMXP);
             if (gyroscope instanceof PigeonTwo)
-                gyroscope.setInverted(true);
+                gyroscope.setInverted(false);
             SmartDashboard.putData("Field", field);
         }
 
@@ -403,7 +403,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             accelLimiter.calculate(driveSignal.getTranslation()) // vector accel limiter
                                     .rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                            getAngle() : Rotation2.ZERO) // same code as other block
+                                            getAngle().inverse() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

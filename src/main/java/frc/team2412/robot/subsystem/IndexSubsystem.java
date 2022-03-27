@@ -142,6 +142,16 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         return (leftFeederProximity.get() && rightFeederProximity.get());
     }
 
+    @Log
+    public boolean leftFeederValue() {
+        return leftFeederProximity.get();
+    }
+
+    @Log
+    public boolean rightFeederValue() {
+        return rightFeederProximity.get();
+    }
+
     /**
      * Checks if ingest motor is on
      */

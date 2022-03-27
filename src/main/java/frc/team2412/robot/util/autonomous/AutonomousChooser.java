@@ -143,7 +143,7 @@ public class AutonomousChooser {
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
                 Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(331, 71), new Rotation2d(Math.PI))),
+                new Pose2d(new Translation2d(331, 71), new Rotation2d(-Math.PI))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem),

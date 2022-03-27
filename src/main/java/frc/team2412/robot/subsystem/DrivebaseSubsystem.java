@@ -297,6 +297,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void resetGyroAngle(Rotation2 angle) {
         synchronized (sensorLock) {
+            simulated = angle;
             gyroscope.setAdjustmentAngle(
                     gyroscope.getUnadjustedAngle().rotateBy(angle.inverse()));
             tipController.setTargetPosition(getGyroscopeXY());

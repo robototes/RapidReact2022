@@ -28,8 +28,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
 
-        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 2;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 2;
         public static final double TRACK_WIDTH = 1.0;
         // Distance between centers of right and left wheels on robot
         public static final double WHEEL_BASE = 1.0;
@@ -60,17 +60,17 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
-                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
+                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(-90)),
+                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(180)),
                 new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))), normalSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
                 new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)),
                 List.of(),
-                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(180)), normalSpeedConfig);
         Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
                 List.of(),

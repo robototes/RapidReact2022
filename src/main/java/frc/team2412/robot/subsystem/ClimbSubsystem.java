@@ -23,7 +23,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         // Climb dynamic motor speeds
         public static final double EXTEND_SPEED = 0.15;
         public static final double RETRACT_SPEED = -0.15;
-        public static final double CLIMB_SPEED = 0.4;
 
         // Doing integer division, which returns 11757 (previously 8789)
         // Probably should do floating point division, which returns 11759.3
@@ -35,16 +34,20 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double MIN_ENCODER_TICKS = 0;
 
         // PID stuff
-        public static final int PID_SLOT_0 = 0;
-        public static final double P = 0.5;
-        public static final double I = 0;
-        public static final double D = 0;
+        public static final int PID_EXTENSION_SLOT = 0;
+        public static final double EXTENSION_P = 0.5;
+        public static final double EXTENSION_I = 0;
+        public static final double EXTENSION_D = 0;
+
+        public static final int PID_RETRACTION_SLOT = 1;
+        public static final double RETRACTION_P = 0.5; // TODO: figure out values
+        public static final double RETRACTION_I = 0;
+        public static final double RETRACTION_D = 0;
 
         // Relating to physical climb structure things
         // was prevously mid
         public static final double MID_RUNG_HEIGHT_INCH = 33;
-        public static final double RETRACT_HEIGHT_INCH = 15;
-        public static final double FULL_RETRACT_HEIGHT_INCH = 1;
+        public static final double RETRACT_HEIGHT_INCH = 1;
 
         // Motor current limit config
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -73,7 +76,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.configAllSettings(motorConfig);
         motor.setNeutralMode(NeutralMode.Brake);
 
-        setPID(P, I, D);
+        setPID(EXTENSION_P, EXTENSION_I, EXTENSION_D, PID_EXTENSION_SLOT);
     }
 
     /**
@@ -107,23 +110,17 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * to the mid rung height
      */
     public void extendArm() {
+        setPID(EXTENSION_P, EXTENSION_I, EXTENSION_D, PID_EXTENSION_SLOT);
         setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
-    }
-
-    /**
-     * Retract the dynamic climb arm, professionally,
-     * going down the RETRACT_HEIGHT_INCH value (most of the way)
-     */
-    public void retractArm() {
-        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
     /**
      * Graciously retract the climb arm down the extra
      * amount needed to fully retract it.
      */
-    public void retractArmFully() {
-        setMotor(FULL_RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
+    public void retractArm() {
+        setPID(RETRACTION_P, RETRACTION_I, RETRACTION_D, PID_RETRACTION_SLOT);
+        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
     /**
@@ -202,12 +199,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      *            the D value to configure
      */
     @Config(name = "PID")
-    private void setPID(@Config(name = "P", defaultValueNumeric = P) double p,
-            @Config(name = "I", defaultValueNumeric = I) double i,
-            @Config(name = "D", defaultValueNumeric = D) double d) {
-        motor.config_kP(PID_SLOT_0, p);
-        motor.config_kI(PID_SLOT_0, i);
-        motor.config_kD(PID_SLOT_0, d);
+    private void setPID(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
+            @Config(name = "EXTENSION_I", defaultValueNumeric = EXTENSION_I) double i,
+            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d,
+            @Config(name = "PID SLOT", defaultValueNumeric = PID_EXTENSION_SLOT) int slot) {
+        motor.config_kP(slot, p);
+        motor.config_kI(slot, i);
+        motor.config_kD(slot, d);
     }
 
     /**

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ClimbSetArmCommand;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
-import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
+import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
@@ -103,7 +103,7 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
+        climbArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
         climbArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
 
         climbArmDownManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, -0.4));

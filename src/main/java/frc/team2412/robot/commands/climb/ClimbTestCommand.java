@@ -12,9 +12,8 @@ public class ClimbTestCommand extends SequentialCommandGroup {
 
     public ClimbTestCommand(ClimbSubsystem subsystem) {
         addCommands(
-                new ExtendArmCommand(subsystem), new WaitCommand(0.5),
-                new RetractArmCommand(subsystem), new WaitCommand(0.5),
-                new RetractArmFullyCommand(subsystem));
+                new ExtendArmCommand(subsystem), new WaitCommand(1),
+                new RetractArmCommand(subsystem));
     }
 
 }

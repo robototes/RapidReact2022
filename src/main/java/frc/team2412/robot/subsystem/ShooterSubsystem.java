@@ -61,8 +61,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90;//-300;
-        public static final double MAX_TURRET_ANGLE = 90;//120;
+        public static final double MIN_TURRET_ANGLE = -90;// -300;
+        public static final double MAX_TURRET_ANGLE = 90;// 120;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
 

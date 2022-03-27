@@ -44,9 +44,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
     DrivebaseSubsystem drivebaseSubsystem;
 
     public AutonomousCommand(IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem,
-                             TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
-                             IntakeSubsystem intakeSubsystem) {
-
+            TargetLocalizer localizer, DrivebaseSubsystem drivebaseSubsystem,
+            IntakeSubsystem intakeSubsystem) {
 
         // Create normalSpeedConfig for trajectory
         TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(
@@ -62,7 +61,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
                 List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
                         new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
-                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))), normalSpeedConfig);
+                        new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))),
+                normalSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
@@ -136,8 +136,9 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 // new WaitCommand(1)),
                 // new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 // new IntakeSetExtendCommand(intakeSubsystem),
-                new ParallelCommandGroup(new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandThree,
-                        swerveControllerCommandFour),
+                new ParallelCommandGroup(
+                        new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandThree,
+                                swerveControllerCommandFour),
                         new SequentialCommandGroup()));
 
     }

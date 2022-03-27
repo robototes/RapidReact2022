@@ -5,9 +5,6 @@ import com.google.errorprone.annotations.Immutable;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,8 +20,6 @@ import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
-
-import java.util.List;
 
 public class AutonomousChooser {
 
@@ -90,23 +85,11 @@ public class AutonomousChooser {
     }
 
     private static SequentialCommandGroup getAutoWPICommand(Subsystems subsystems) {
-        // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-                AutonomousCommand.AutoConstants.MAX_SPEED_METERS_PER_SECOND,
-                AutonomousCommand.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(7.5, 1.9), Rotation2d.fromDegrees(0)),
-                List.of(new Translation2d(7.3, 1.1), new Translation2d(5.1, 1.8),
-                        new Translation2d(2.1, 1.3)),
-                new Pose2d(new Translation2d(5, 2.7), Rotation2d.fromDegrees(0)),
-                config);
+
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new AutonomousCommand(subsystems.drivebaseSubsystem)
-                        .getAutonomousCommand(exampleTrajectory));
+                new AutonomousCommand(subsystems.drivebaseSubsystem));
         return command;
 
     }
@@ -147,7 +130,8 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-                        Subsystems.SubsystemConstants.INTAKE_ENABLED),
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED,
+                new Pose2d(new Translation2d(359, 209), new Rotation2d(180))),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),

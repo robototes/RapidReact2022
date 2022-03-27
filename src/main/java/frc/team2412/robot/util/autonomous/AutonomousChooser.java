@@ -19,6 +19,8 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
+import frc.team2412.robot.subsystem.*;
+
 import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class AutonomousChooser {
@@ -89,7 +91,8 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                new AutonomousCommand(subsystems.drivebaseSubsystem));
+                new AutonomousCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem, subsystems.intakeSubsystem));
         return command;
 
     }
@@ -140,7 +143,7 @@ public class AutonomousChooser {
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         WPI_PATH((subsystems, trajectories) -> AutonomousChooser.getAutoWPICommand(subsystems), "WPI Lib Path",
                 Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(318, 77), new Rotation2d(180))),
+                new Pose2d(new Translation2d(331, 71), new Rotation2d(Math.PI))),
         CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem),

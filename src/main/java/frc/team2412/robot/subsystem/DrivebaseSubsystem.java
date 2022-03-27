@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
@@ -31,7 +32,7 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.NavX;
-import org.frcteam2910.common.robot.drivers.Pigeon;
+import org.frcteam2910.common.robot.drivers.PigeonTwo;
 import org.frcteam2910.common.util.*;
 
 import java.util.Map;
@@ -134,8 +135,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         boolean comp = Robot.getInstance().isCompetition();
 
         synchronized (sensorLock) {
-            gyroscope = comp ? new Pigeon(GYRO_PORT) : new NavX(SerialPort.Port.kMXP);
-            if (gyroscope instanceof Pigeon)
+            gyroscope = comp ? new PigeonTwo(GYRO_PORT, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME)
+                    : new NavX(SerialPort.Port.kMXP);
+            if (gyroscope instanceof PigeonTwo)
                 gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
@@ -220,14 +222,20 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Vector2 getGyroscopeXY() {
         synchronized (sensorLock) {
-            if (gyroscope instanceof Pigeon)
-                return new Vector2(-((Pigeon) gyroscope).getAxis(Pigeon.Axis.PITCH),
-                        ((Pigeon) gyroscope).getAxis(Pigeon.Axis.ROLL)).scale(180 / Math.PI);
+            if (gyroscope instanceof PigeonTwo)
+                return new Vector2(-((PigeonTwo) gyroscope).getAxis(PigeonTwo.Axis.PITCH),
+                        ((PigeonTwo) gyroscope).getAxis(PigeonTwo.Axis.ROLL)).scale(180 / Math.PI);
             if (gyroscope instanceof NavX)
                 return new Vector2(((NavX) gyroscope).getAxis(NavX.Axis.ROLL),
                         ((NavX) gyroscope).getAxis(NavX.Axis.PITCH)).scale(180 / Math.PI);
         }
         return Vector2.ZERO;
+    }
+
+    public Rotation2 getGyroscopeUnadjustedAngle() {
+        synchronized (sensorLock) {
+            return gyroscope.getUnadjustedAngle();
+        }
     }
 
     public RigidTransform2 getPose() {

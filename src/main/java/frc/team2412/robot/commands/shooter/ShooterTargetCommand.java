@@ -14,6 +14,8 @@ public class ShooterTargetCommand extends CommandBase {
     private final TargetLocalizer localizer;
     private final BooleanSupplier turretEnable;
 
+    private double turretAngle = 0;
+
     public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer) {
         this(shooter, localizer, () -> false);
     }
@@ -24,8 +26,6 @@ public class ShooterTargetCommand extends CommandBase {
         turretEnable = turretButton;
         addRequirements(shooter);
     }
-
-    double turretAngle = 0;
 
     @Override
     public void initialize() {
@@ -43,8 +43,9 @@ public class ShooterTargetCommand extends CommandBase {
         // if (!localizer.hasTarget())
         // return;
 
-        if (ShooterConstants.dataPoints != null && localizer.getAdjustedDistance() < 280) {
-            ShooterDataDistancePoint shooterData = ShooterConstants.dataPoints
+        if (ShooterConstants.DATA_POINTS != null && localizer.getAdjustedDistance() < 280) {
+            ShooterDataDistancePoint shooterData = ShooterConstants.DATA_POINTS
+
                     .getInterpolated(localizer.getAdjustedDistance());
 
             System.out.println("Limelight distance: " + localizer.getDistance());
@@ -84,7 +85,7 @@ public class ShooterTargetCommand extends CommandBase {
                     state = TurretState.TRACKING;
                 break;
             case TRACKING:
-                turretAngle = shooter.getTurretAngle() + localizer.getYaw();
+                turretAngle = shooter.getTurretAngle() + localizer.getTargetYaw();
                 break;
         }
 

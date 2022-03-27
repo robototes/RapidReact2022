@@ -2,21 +2,32 @@ package frc.team2412.robot.commands.index;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.IndexSubsystem;
+import frc.team2412.robot.subsystem.TargetLocalizer;
 
 public class IndexShootCommand extends CommandBase {
     private final IndexSubsystem subsystem;
+    private final TargetLocalizer localizer;
 
-    public IndexShootCommand(IndexSubsystem subsystem) {
+    public IndexShootCommand(IndexSubsystem subsystem, TargetLocalizer targetLocalizer) {
         this.subsystem = subsystem;
+        localizer = targetLocalizer;
         addRequirements(subsystem);
     }
 
+    public IndexShootCommand(IndexSubsystem subsystem) {
+        this(subsystem, null);
+    }
+
     @Override
-    public void initialize() {
+    public void execute() {
         // turn on both motors
-        subsystem.ingestMotorIn();
-        subsystem.feederMotorInFullSpeed();
-        System.out.println("*****************SHOOTING NOW*********************");
+        if (localizer == null || localizer.upToSpeed()) {
+            subsystem.ingestMotorIn();
+            subsystem.feederMotorIn();
+        } else {
+            subsystem.ingestMotorStop();
+            subsystem.feederMotorStop();
+        }
     }
 
     @Override
@@ -25,10 +36,5 @@ public class IndexShootCommand extends CommandBase {
         subsystem.feederMotorStop();
         System.out.println("++++++++++++++++SHOOTING DONE+++++++++++++++++++");
 
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 }

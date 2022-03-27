@@ -77,6 +77,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.setNeutralMode(NeutralMode.Brake);
 
         setPID(EXTENSION_P, EXTENSION_I, EXTENSION_D, PID_EXTENSION_SLOT);
+        setPID(RETRACTION_P, RETRACTION_I, RETRACTION_D, PID_RETRACTION_SLOT);
     }
 
     /**
@@ -110,7 +111,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * to the mid rung height
      */
     public void extendArm() {
-        setPID(EXTENSION_P, EXTENSION_I, EXTENSION_D, PID_EXTENSION_SLOT);
+        motor.selectProfileSlot(PID_EXTENSION_SLOT, 0);
         setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 
@@ -119,7 +120,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * amount needed to fully retract it.
      */
     public void retractArm() {
-        setPID(RETRACTION_P, RETRACTION_I, RETRACTION_D, PID_RETRACTION_SLOT);
+        motor.selectProfileSlot(PID_RETRACTION_SLOT, 0);
         setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
     }
 

@@ -6,7 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.math.system.NumericalIntegration;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.team2412.robot.Robot;
 
 public class PhysicsSim {
     /**
@@ -125,7 +127,6 @@ public class PhysicsSim {
     public void addSparkMax(CANSparkMax spark, DCMotor motor) {
         revPhysicsSim.addSparkMax(spark, motor);
     }
-
     /**
      * Runs the simulator.
      */
@@ -134,7 +135,6 @@ public class PhysicsSim {
         for (SimProfile simProfile : simProfiles) {
             simProfile.run();
         }
-        // Run the REV physics sim
         revPhysicsSim.run();
     }
 }

@@ -76,7 +76,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         ;
 
         ProfiledPIDController thetaController = new ProfiledPIDController(
-                4, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                0.1, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         trajectoryOne.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());
         trajectoryTwo.relativeTo(drivebaseSubsystem.getPoseAsPoseMeters());

@@ -4,16 +4,19 @@ import static frc.team2412.robot.Hardware.*;
 
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.system.NumericalIntegration;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,6 +104,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
     private final Gyroscope gyroscope;
+
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")
@@ -231,7 +235,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
         return Vector2.ZERO;
     }
-
     public Rotation2 getGyroscopeUnadjustedAngle() {
         synchronized (sensorLock) {
             return gyroscope.getUnadjustedAngle();
@@ -261,10 +264,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return angularVelocity;
         }
     }
-
+    public Rotation2 simulated = Rotation2.ZERO;
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return getPose().rotation;
+            return simulated;
+//            return getPose().rotation;
             // return Robot.getInstance().isCompetition() ? getPose().rotation.inverse() : getPose().rotation;
         }
     }
@@ -319,7 +323,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         Rotation2 angle;
         double angularVelocity;
         synchronized (sensorLock) {
-            angle = gyroscope.getAngle();
+            angle = getAngle().inverse();
+//            angle = gyroscope.getAngle();
             // angle = (angle.toDegrees() < 0) ? Rotation2.fromDegrees(360 + angle.toDegrees()) : angle;
         }
 
@@ -364,7 +369,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new Vector2(
                         (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
                         (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
-                chassisSpeeds.omegaRadiansPerSecond, true);
+                chassisSpeeds.omegaRadiansPerSecond, false);
 
         synchronized (stateLock) {
             this.driveSignal = holonomicDriveSignal;
@@ -382,6 +387,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     @Override
     public void update(double time, double dt) {
+//        if(Robot.getInstance().getRobotType() == Robot.RobotType.AUTOMATED_TEST){
+            simulated = simulated.rotateBy(Rotation2.fromRadians(dt*getAngularVelocity()*-0.1));
+            System.out.println("eee");
+//        }
+
         updateOdometry(time, dt);
 
         HolonomicDriveSignal signal;
@@ -421,8 +431,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             odometryYEntry.setDouble(pose.translation.y);
             odometryAngleEntry.setDouble(pose.rotation.toDegrees());
         }
-        // System.out.println(pose);
+
         Pose2d pose = getPoseAsPoseMeters();
+        System.out.println(getPoseAsPoseMeters());
         field.setRobotPose(pose);
 
     }

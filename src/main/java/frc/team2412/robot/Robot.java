@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
      */
     private static Robot instance = null;
 
-    enum RobotType {
+    public enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
@@ -226,6 +226,11 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
+        System.out.println("eee");
+        System.out.println("eee");
+        System.out.println("eee");
+        System.out.println("eee");
+        System.out.println("eee");
 
     }
 

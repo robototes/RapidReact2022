@@ -29,7 +29,7 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
         intakeStatus = tab.add("Intake Status", "Waiting").withPosition(2, 0).withSize(1, 1).getEntry();
         climbStatus = tab.add("Climb Status", "Waiting").withPosition(3, 0).withSize(1, 1).getEntry();
         addRequirements(intakeSubsystem, shooterSubsystem, indexSubsystem, climbSubsystem);
-        /*
+        
         addCommands(
                 new InstantCommand(() -> intakeStatus.setString("In Progress")),
                 new DiagnosticIntakeCommandGroup(intakeSubsystem),
@@ -46,7 +46,7 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
                 new InstantCommand(() -> climbStatus.setString("In Progress")),
                 new DiagnosticClimbCommandGroup(climbSubsystem),
                 new InstantCommand(() -> climbStatus.setString("Finished")));
-                */
+               
     }
 
     @Override

@@ -309,8 +309,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
-            resetGyroAngle(Rotation2.ZERO);
-            resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()).inverse());
+            resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()));
             swerveOdometry.resetPose(this.pose);
         }
     }
@@ -401,7 +400,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 new Vector2(
                         (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
                         (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
-                chassisSpeeds.omegaRadiansPerSecond, true);
+                chassisSpeeds.omegaRadiansPerSecond, false);
 
         synchronized (stateLock) {
             this.driveSignal = holonomicDriveSignal;

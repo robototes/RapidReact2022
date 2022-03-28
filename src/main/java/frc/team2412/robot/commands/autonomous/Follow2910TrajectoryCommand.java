@@ -20,8 +20,6 @@ public class Follow2910TrajectoryCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        State pathStartState = trajectory.getPath().calculate(0);
-        drivebase.resetPose(new RigidTransform2(pathStartState.getPosition(), pathStartState.getHeading()));
         drivebase.getFollower().follow(trajectory);
     }
 

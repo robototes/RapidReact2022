@@ -10,4 +10,9 @@ public class ShooterResetEncodersCommand extends InstantCommand {
             shooter.resetTurretEncoder(true);
         }, shooter);
     }
+
+    @Override
+    public String getName() {
+        return "ShooterResetEncodersCommand";
+    }
 }

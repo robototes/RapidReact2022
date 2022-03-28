@@ -129,7 +129,7 @@ public class Controls {
     }
 
     public void bindShooterControls() {
-        if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
+        if (false && !Subsystems.SubsystemConstants.SHOOTER_TESTING) {
             BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
             driveController.getDPadButton(Direction.DOWN).whenPressed(

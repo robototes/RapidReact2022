@@ -60,9 +60,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
-                new MaxAccelerationConstraint(1 * 12.0), // old value was 12.5 * 12.0
-                new MaxVelocityConstraint(2.0 * 12.0),
-                new CentripetalAccelerationConstraint(1.0 * 12.0), // old value was 15 * 12.0
+                new MaxAccelerationConstraint(3 * 12.0), // old value was 12.5 * 12.0
+                new MaxVelocityConstraint(6.0 * 12.0),
+                new CentripetalAccelerationConstraint(2.0 * 12.0), // old value was 15 * 12.0
         };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
@@ -142,7 +142,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope = comp ? new PigeonTwo(GYRO_PORT, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME)
                     : new NavX(SerialPort.Port.kMXP);
             if (gyroscope instanceof PigeonTwo)
-                gyroscope.setInverted(false);
+                gyroscope.setInverted(true);
             SmartDashboard.putData("Field", field);
         }
 
@@ -292,7 +292,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public Rotation2 getAngle() {
         synchronized (kinematicsLock) {
-            return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? getPose().rotation.inverse()
+            return Robot.getInstance().isCompetition() ? getPose().rotation.inverse()
                     : getPose().rotation;
         }
     }
@@ -318,7 +318,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void resetPose(RigidTransform2 pose) {
         synchronized (kinematicsLock) {
             this.pose = pose;
-            resetGyroAngle(Rotation2.ZERO);
+            resetGyroAngle(pose.rotation);
             swerveOdometry.resetPose(pose);
         }
     }
@@ -357,7 +357,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         Rotation2 angle;
         double angularVelocity;
         synchronized (sensorLock) {
-            angle = gyroscope.getAngle();
+            angle = gyroscope.getAngle().inverse();
         }
 
         ChassisVelocity velocity = swerveKinematics.toChassisVelocity(moduleVelocities);

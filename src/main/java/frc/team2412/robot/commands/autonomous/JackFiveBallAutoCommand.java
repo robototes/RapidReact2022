@@ -18,11 +18,11 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
         Trajectory trajectory1 = new Trajectory(
-                new SimplePathBuilder(new Vector2(338.4, 72.531), Rotation2.fromDegrees(0))
-                .lineTo(new Vector2(300.765, 13.201))
-                .lineTo(new Vector2(202.029, 75.188), Rotation2.fromDegrees(90))
-                .lineTo(new Vector2(44.406, 46.851))
-                .lineTo(new Vector2(191.403, 103.967), Rotation2.fromDegrees(0))
+                new SimplePathBuilder(new Vector2(338.4, 72.531), Rotation2.fromDegrees(-90))
+                .lineTo(new Vector2(300.765, 13.201), Rotation2.fromDegrees(-90))
+                .lineTo(new Vector2(202.029, 75.188), Rotation2.fromDegrees(125))
+                .lineTo(new Vector2(44.406, 46.851), Rotation2.fromDegrees(202))
+                .lineTo(new Vector2(191.403, 103.967), Rotation2.fromDegrees(90))
                 .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1
         );

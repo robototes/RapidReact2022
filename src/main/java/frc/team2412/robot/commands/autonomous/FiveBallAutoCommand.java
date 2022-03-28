@@ -21,37 +21,31 @@ public class FiveBallAutoCommand extends SequentialCommandGroup {
     public FiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem) {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
-        TrajectoryConfig fastConfig = new TrajectoryConfig(FollowWpilibTrajectory.AutoConstants.MAX_SPEED_METERS_PER_SECOND*2, FollowWpilibTrajectory.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED*2)
+        TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(FollowWpilibTrajectory.AutoConstants.MAX_SPEED_METERS_PER_SECOND*2, FollowWpilibTrajectory.AutoConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED*2)
                 .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
 
-        Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(8.335, 1.929), Rotation2d.fromDegrees(0)),
-                List.of(), new Pose2d(new Translation2d(7.442, 0.763), Rotation2d.fromDegrees(0)),
-                fastConfig);
-
-        Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(7.442, 0.763), Rotation2d.fromDegrees(0)),
+        Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
+                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(-90)),
+                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(180)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))), normalSpeedConfig);
+        Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(new Translation2d(5.176, 2.070), Rotation2d.fromDegrees(223)),
-                fastConfig);
-
-        Trajectory trajectory3 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(5.176, 2.070), Rotation2d.fromDegrees(223)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)), normalSpeedConfig);
+        Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)),
                 List.of(),
-                new Pose2d(new Translation2d(1.624, 1.482), Rotation2d.fromDegrees(309)),
-                fastConfig);
-
-        Trajectory trajectory4 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(new Translation2d(1.624, 1.482), Rotation2d.fromDegrees(309)),
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(180)), normalSpeedConfig);
+        Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
                 List.of(),
-                new Pose2d(new Translation2d(4.271, 2.441), Rotation2d.fromDegrees(384)),
-                fastConfig);
+                new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)), normalSpeedConfig);
 
         addCommands(
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory1),
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory2),
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory3),
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory4)
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryOne),
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryTwo),
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryThree),
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryFour)
         );
     }
 }

@@ -9,6 +9,7 @@ import static frc.team2412.robot.Hardware.*;
 
 import static java.lang.Thread.sleep;
 
+import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -208,6 +209,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         if (subsystems.drivebaseSubsystem != null) {
+            subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
@@ -236,6 +238,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationInit() {
+
         PhysicsSim sim = PhysicsSim.getInstance();
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.simInit(sim);
@@ -246,9 +249,11 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.simInit(sim);
         }
+
         if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.simInit(sim);
         }
+
     }
 
     @Override

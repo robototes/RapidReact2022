@@ -19,6 +19,9 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
+import frc.team2412.robot.subsystem.*;
+
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class AutonomousChooser {
 
@@ -117,7 +120,10 @@ public class AutonomousChooser {
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+                        Subsystems.SubsystemConstants.INTAKE_ENABLED,
+                new Pose2d(new Translation2d(359, 209), new Rotation2d(180))),
         SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),
@@ -127,14 +133,14 @@ public class AutonomousChooser {
         TWO_BALL_FENDER((subsystems, trajectories) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
-        FIVE_BALL((subsystems, trajectories) -> new FiveBallAutoCommand(subsystems.drivebaseSubsystem),
-                "Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(330.7087, 70.86614), Rotation2d.fromDegrees(-90))),
         JACK_FIVE_BALL((subsystems, trajectories) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
-        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), "Climb test",
-                Subsystems.SubsystemConstants.CLIMB_ENABLED),
+        WPI_PATH((subsystems, trajectories) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem), 
+                "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(331, 71), new Rotation2d(Math.PI))),
+        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), 
+                "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem),
                 "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
         INTAKE((subsystems, trajectories) -> new DiagnosticIntakeCommandGroup(subsystems.intakeSubsystem),

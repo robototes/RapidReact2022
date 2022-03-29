@@ -2,6 +2,7 @@ package frc.team2412.robot.commands.autonomous;
 
 import java.util.List;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,7 +19,8 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
         TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
-                .setKinematics(FollowWpilibTrajectory.AutoConstants.driveKinematics);
+                .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
+        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0, FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),
@@ -33,7 +35,7 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
                 fastConfig);
 
         addCommands(
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory1),
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory2));
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory2, thetaController));
     }
 }

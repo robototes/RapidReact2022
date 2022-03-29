@@ -1,8 +1,6 @@
 package frc.team2412.robot.commands.autonomous;
 
 import org.frcteam2910.common.control.Trajectory;
-import org.frcteam2910.common.control.Path.State;
-import org.frcteam2910.common.math.RigidTransform2;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;

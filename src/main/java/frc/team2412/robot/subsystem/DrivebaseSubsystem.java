@@ -56,13 +56,12 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 0.00275, // acceleration
                 0.169); // static
 
-        // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
                 new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                         FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
-                new MaxAccelerationConstraint(3 * 12.0), // old value was 12.5 * 12.0
-                new MaxVelocityConstraint(6.0 * 12.0),
-                new CentripetalAccelerationConstraint(2.0 * 12.0), // old value was 15 * 12.0
+                new MaxAccelerationConstraint(12.5 * 12.0), // old value was 12.5 * 12.0
+                new MaxVelocityConstraint(12.5 * 12.0),
+                new CentripetalAccelerationConstraint(15 * 12.0), // old value was 15 * 12.0
         };
 
         public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
@@ -87,13 +86,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0), // front right
             new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0), // back left
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // back right
-    );
-
-    private final SwerveDriveKinematics wpi_driveKinematics = new SwerveDriveKinematics(
-            new Translation2d(-TRACKWIDTH / 2.0, WHEELBASE / 2.0), // front left
-            new Translation2d(TRACKWIDTH / 2.0, WHEELBASE / 2.0), // front right
-            new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0), // back left
-            new Translation2d(TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // back right
     );
 
     private final SwerveModule[] modules;
@@ -142,7 +134,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             gyroscope = comp ? new PigeonTwo(GYRO_PORT, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME)
                     : new NavX(SerialPort.Port.kMXP);
             if (gyroscope instanceof PigeonTwo)
-                gyroscope.setInverted(true);
+                gyroscope.setInverted(false);
             SmartDashboard.putData("Field", field);
         }
 
@@ -439,7 +431,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                     signal = new HolonomicDriveSignal( // create updated drive signal
                             accelLimiter.calculate(driveSignal.getTranslation()) // vector accel limiter
                                     .rotateBy(driveSignal.isFieldOriented() ? // flatten
-                                            getAngle() : Rotation2.ZERO) // same code as other block
+                                            getAngle().inverse() : Rotation2.ZERO) // same code as other block
                                     .add(tipController.update(getGyroscopeXY())), // anti tip stuff
                             driveSignal.getRotation(), false); // retain rotation
                 } else

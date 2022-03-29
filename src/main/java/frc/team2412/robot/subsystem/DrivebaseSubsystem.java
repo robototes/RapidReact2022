@@ -233,6 +233,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         return Vector2.ZERO;
     }
 
+    /**
+     * Returns the unadjusted gyroscope angle.
+     *
+     * @return Unadjusted gyroscope angle (yaw, positive rotation is clockwise)
+     */
     public Rotation2d getGyroscopeUnadjustedAngle() {
         synchronized (sensorLock) {
             return Rotation2d.fromDegrees(gyroscope.getUnadjustedAngle().toDegrees());

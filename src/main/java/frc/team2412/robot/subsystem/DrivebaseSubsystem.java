@@ -50,9 +50,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         public static final double WHEELBASE = 1.0;
 
         public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                2.33,
-                0.0766,
-                0.236);
+                90.5,
+                3.01,
+                9.29);
 
         // these values need to be found
         public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {

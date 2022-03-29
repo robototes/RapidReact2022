@@ -25,10 +25,10 @@ public class IndexCommand extends CommandBase {
         if (indexSubsystem.hasCargo()) {
             indexSubsystem.feederMotorStop();
         } else {
-            // indexSubsystem.feederMotorIn();
+            indexSubsystem.feederMotorIn();
         }
 
-        if (intakeSubsystem.hasCargo()) {
+        if (intakeSubsystem.hasCargo() && indexSubsystem.hasCargo()) {
             indexSubsystem.ingestMotorStop();
         } else {
             indexSubsystem.ingestMotorIn();

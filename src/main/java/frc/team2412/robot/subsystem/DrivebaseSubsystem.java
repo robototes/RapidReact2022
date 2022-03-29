@@ -280,6 +280,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (kinematicsLock) {
             this.pose = GeoConvertor.poseToRigid(pose);
             swerveOdometry.resetPose(this.pose);
+            resetGyroAngle(Rotation2.ZERO);
         }
     }
 

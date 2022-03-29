@@ -19,6 +19,7 @@ import frc.team2412.robot.commands.climb.ClimbRetractSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
+import frc.team2412.robot.commands.index.ShootCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
@@ -95,11 +96,11 @@ public class AutonomousChooser {
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems) -> new StarPath(subsystems.drivebaseSubsystem),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        TWO_BALL_FENDER((subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
+        TWO_BALL_FENDER((subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem, subsystems.shooterSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
         JACK_FIVE_BALL(
-                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.indexSubsystem,
+                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
@@ -116,8 +117,8 @@ public class AutonomousChooser {
                 subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
-                (subsystems) -> new FullShootCommand(subsystems.shooterSubsystem,
-                        subsystems.targetLocalizer, subsystems.intakeSubsystem, subsystems.indexSubsystem),
+                (subsystems) -> new ShootCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                subsystems.targetLocalizer),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&

@@ -9,13 +9,17 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
     private final DrivebaseSubsystem drivebaseSubsystem;
 
-    public TwoBallFenderAutoCommand(DrivebaseSubsystem drivebaseSubsystem) {
+    public TwoBallFenderAutoCommand(DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem) {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
         TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
@@ -37,6 +41,9 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
 
         addCommands(
                 new FollowWPILibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
-                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory2, thetaController));
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory2, thetaController),
+                new ParallelCommandGroup(
+                        new ShooterHoodRPMCommand(shooterSubsystem, 2700, 0),
+                        new InstantCommand(() -> shooterSubsystem.setTurretAngle(-90))));
     }
 }

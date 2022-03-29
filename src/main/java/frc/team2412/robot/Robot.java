@@ -206,7 +206,6 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
 
         if (subsystems.drivebaseSubsystem != null) {
-            subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO);
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 

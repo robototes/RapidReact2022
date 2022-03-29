@@ -159,8 +159,8 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 new WaitCommand(3), new IntakeCommand(intakeSubsystem, indexSubsystem),
                 new WaitCommand(2), new IntakeCommand(intakeSubsystem, indexSubsystem),
                 new WaitCommand(3), new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-                new IntakeSetExtendCommand(intakeSubsystem) )
+                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem))
+                 )
 
         );
 

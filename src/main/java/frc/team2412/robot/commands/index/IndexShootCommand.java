@@ -21,7 +21,7 @@ public class IndexShootCommand extends CommandBase {
     @Override
     public void execute() {
         // turn on both motors
-        if (localizer == null || localizer.upToSpeed()) {
+        if (localizer.upToSpeed()) {
             subsystem.ingestMotorIn();
             subsystem.feederMotorIn();
         } else {

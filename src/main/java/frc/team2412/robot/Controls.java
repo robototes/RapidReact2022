@@ -122,7 +122,7 @@ public class Controls {
         subsystems.indexSubsystem
                 .setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
 
-        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem, subsystems.targetLocalizer));
     }
 
     public void bindIntakeControls() {
@@ -153,7 +153,7 @@ public class Controls {
             if (subsystems.drivebaseSubsystem != null) {
                 subsystems.shooterSubsystem.setDefaultCommand(
                         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                                driveController.getLeftBumperButton()::get));
+                                (driveController.getLeftBumperButton()::get)));
 
             }
 

@@ -6,6 +6,7 @@ import static frc.team2412.robot.Hardware.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -40,7 +41,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double EXTENSION_D = 0;
 
         public static final int PID_RETRACTION_SLOT = 1;
-        public static final double RETRACTION_P = 0.5; // TODO: figure out values
+        public static final double RETRACTION_P = 2; // TODO: figure out values
         public static final double RETRACTION_I = 0;
         public static final double RETRACTION_D = 0;
 
@@ -76,8 +77,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.configAllSettings(motorConfig);
         motor.setNeutralMode(NeutralMode.Brake);
 
-        setPID(EXTENSION_P, EXTENSION_I, EXTENSION_D, PID_EXTENSION_SLOT);
-        setPID(RETRACTION_P, RETRACTION_I, RETRACTION_D, PID_RETRACTION_SLOT);
+        setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D);
+        setPIDRetract(RETRACTION_P, RETRACTION_I, RETRACTION_D);
     }
 
     /**
@@ -199,14 +200,22 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param d
      *            the D value to configure
      */
-    @Config(name = "PID")
-    private void setPID(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
+    @Config(name = "PID extend")
+    private void setPIDExtend(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
             @Config(name = "EXTENSION_I", defaultValueNumeric = EXTENSION_I) double i,
-            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d,
-            @Config(name = "PID SLOT", defaultValueNumeric = PID_EXTENSION_SLOT) int slot) {
-        motor.config_kP(slot, p);
-        motor.config_kI(slot, i);
-        motor.config_kD(slot, d);
+            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d) {
+        motor.config_kP(PID_EXTENSION_SLOT, p);
+        motor.config_kI(PID_EXTENSION_SLOT, i);
+        motor.config_kD(PID_EXTENSION_SLOT, d);
+    }
+
+    @Config(name = "PID retract")
+    private void setPIDRetract(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
+            @Config(name = "EXTENSION_I", defaultValueNumeric = EXTENSION_I) double i,
+            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d) {
+        motor.config_kP(PID_RETRACTION_SLOT, p);
+        motor.config_kI(PID_RETRACTION_SLOT, i);
+        motor.config_kD(PID_RETRACTION_SLOT, d);
     }
 
     /**
@@ -231,4 +240,5 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public boolean isHittingLimitSwitch() {
         return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
     }
+
 }

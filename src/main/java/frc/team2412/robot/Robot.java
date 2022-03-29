@@ -71,12 +71,6 @@ public class Robot extends TimedRobot {
         System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
-
-        if (COMPRESSOR_ENABLED) {
-            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
-            pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
-        }
-
         robotType = type;
     }
 
@@ -142,6 +136,11 @@ public class Robot extends TimedRobot {
             driverVisionCamera.setResolution(160, 90);
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
+        }
+
+        if (COMPRESSOR_ENABLED) {
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+            pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         }
 
         // Create and push Field2d to SmartDashboard.

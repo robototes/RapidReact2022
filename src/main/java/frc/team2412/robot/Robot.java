@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     public static final MACAddress COMPEITION_ADDRESS = MACAddress.of(0x33, 0x9d, 0xe7);
     public static final MACAddress PRACTICE_ADDRESS = MACAddress.of(0x28, 0x40, 0x82);
 
-    public static RobotType getTypeFromAddress() {
+    private static RobotType getTypeFromAddress() {
         if (PRACTICE_ADDRESS.exists())
             return RobotType.DRIVEBASE;
         else

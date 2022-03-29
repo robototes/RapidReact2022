@@ -7,9 +7,4 @@ public class ShooterFlywheelStartCommand extends InstantCommand {
     public ShooterFlywheelStartCommand(ShooterSubsystem shooter) {
         super(shooter::startFlywheel, shooter);
     }
-
-    @Override
-    public String getName() {
-        return "ShooterFlywheelStartCommand";
-    }
 }

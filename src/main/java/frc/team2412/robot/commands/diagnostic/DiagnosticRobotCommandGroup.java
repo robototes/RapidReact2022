@@ -48,9 +48,4 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
                 new InstantCommand(() -> climbStatus.setString("Finished")));
                
     }
-
-    @Override
-    public String getName() {
-        return "DiagnosticRobotCommandGroup";
-    }
 }

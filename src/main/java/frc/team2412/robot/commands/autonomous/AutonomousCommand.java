@@ -63,23 +63,22 @@ public class AutonomousCommand extends SequentialCommandGroup {
                         // Add kinematics to ensure max speed is actually obeyed
                         .setKinematics(AutonomousCommand.AutoConstants.driveKinematics);
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
-                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
-                        new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))),
-                normalSpeedConfig);
+                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(-90)),
+                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(180)),
+                        new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))), normalSpeedConfig);
         Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(0)),
                 List.of(),
                 new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)), normalSpeedConfig);
         Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(0)),
+                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)),
                 List.of(),
-                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(180)), normalSpeedConfig);
         Trajectory trajectoryFour = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
                 List.of(),
                 new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)), normalSpeedConfig);
-        ;
+
 
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 0.1, 0, 0, AutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);

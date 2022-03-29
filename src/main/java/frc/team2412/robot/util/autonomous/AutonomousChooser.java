@@ -133,7 +133,7 @@ public class AutonomousChooser {
         TWO_BALL_FENDER((subsystems, trajectories) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
-        JACK_FIVE_BALL((subsystems, trajectories) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem),
+        JACK_FIVE_BALL((subsystems, trajectories) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
         WPI_PATH((subsystems, trajectories) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem), 

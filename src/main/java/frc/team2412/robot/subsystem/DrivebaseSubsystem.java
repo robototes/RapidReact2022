@@ -325,7 +325,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     // this returns a value that can be rotated to the pose to make the intake the front of the robot
     private Rotation2 getRotationAdjustment() {
-        return Robot.getTypeFromAddress() == Robot.RobotType.DRIVEBASE ? PRACTICE_BOT_DRIVE_OFFSET
+        return !Robot.getInstance().isCompetition() ? PRACTICE_BOT_DRIVE_OFFSET
                 : COMP_BOT_DRIVE_OFFSET;
     }
 

@@ -119,7 +119,7 @@ public class Controls {
                 driveController.getRightXAxis()));
         resetDriveGyroButton.whenPressed(() -> subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO));
 
-        if (Robot.getTypeFromAddress() == RobotType.DRIVEBASE)
+        if (!Robot.getInstance().isCompetition())
             setPoseButton.whenPressed(() -> subsystems.drivebaseSubsystem.setPose());
     }
 

@@ -143,8 +143,4 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     }
 
-    // public Command getAutonomousCommand(Trajectory exampleTrajectory) {
-    //
-    //
-    // }
 }

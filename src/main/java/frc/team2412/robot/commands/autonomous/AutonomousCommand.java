@@ -10,8 +10,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.intake.IntakeCommand;
+import frc.team2412.robot.commands.intake.IntakeIndexInCommand;
+import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
+import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.*;
 
 import java.util.List;
@@ -137,9 +141,29 @@ public class AutonomousCommand extends SequentialCommandGroup {
                 // new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
                 // new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
+                        //paths
                         new SequentialCommandGroup(swerveControllerCommandOne, swerveControllerCommandThree,
-                                swerveControllerCommandFour),
-                        new SequentialCommandGroup()));
+                                swerveControllerCommandFour)),
+                        //actions
+//                        STEPS FOR COMMAND
+//        1. drive to ball 2, intake,
+//                2. drive to ball 3, intake, shoot
+//        3. drive to ball 4, intake
+//        4. wait 2ish seconds, intake,
+//        5. drive, shoot
+
+        new SequentialCommandGroup(
+                new IntakeSetExtendCommand(intakeSubsystem), new WaitCommand(2), new IntakeCommand(intakeSubsystem, indexSubsystem),
+                new WaitCommand(3), new IntakeCommand(intakeSubsystem, indexSubsystem),
+//                                new IntakeIndexInCommand(indexSubsystem, intakeSubsystem),
+                new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                new WaitCommand(3), new IntakeCommand(intakeSubsystem, indexSubsystem),
+                new WaitCommand(2), new IntakeCommand(intakeSubsystem, indexSubsystem),
+                new WaitCommand(3), new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
+                new IntakeSetExtendCommand(intakeSubsystem) )
+
+        );
 
     }
 

@@ -3,6 +3,7 @@ package frc.team2412.robot.subsystem;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.TimeBasedMedianFilter;
+import frc.team2412.robot.util.autonomous.AutonomousChooser;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -46,8 +47,8 @@ public class TargetLocalizer {
     private final ShooterSubsystem shooterSubsystem;
     private final ShooterVisionSubsystem shooterVisionSubsystem;
     private final TimeBasedMedianFilter distanceFilter;
-    private final Rotation2d gyroAdjustmentAngle;
-    private final Pose2d startingPose;
+    private Pose2d startingPose;
+    private Rotation2d gyroAdjustmentAngle;
 
     /**
      * Creates a new {@link TargetLocalizer}.
@@ -66,8 +67,27 @@ public class TargetLocalizer {
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
         this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
-        // TODO Handle different starting positions
-        this.startingPose = new Pose2d();
+        resetPose(new Pose2d());
+    }
+
+    /**
+     * Rests the current pose according to the current auto path.
+     *
+     * @param autoChooser
+     *            The autonomous chooser with the current auto path.
+     */
+    public void resetPoseFromAutoStartPose(AutonomousChooser autoChooser) {
+        resetPose(autoChooser.getStartPose());
+    }
+
+    /**
+     * Resets the current pose.
+     *
+     * @param newPose
+     *            The new (field-centric) pose.
+     */
+    public void resetPose(Pose2d newPose) {
+        this.startingPose = newPose;
         this.gyroAdjustmentAngle = startingPose.getRotation().minus(getGyroscopeYaw());
     }
 

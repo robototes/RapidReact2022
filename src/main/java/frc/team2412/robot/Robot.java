@@ -211,6 +211,10 @@ public class Robot extends TimedRobot {
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
+        if (subsystems.targetLocalizer != null) {
+            subsystems.targetLocalizer.resetPoseFromAutoStartPose(autonomousChooser);
+        }
+
         if (subsystems.shooterSubsystem != null) {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }

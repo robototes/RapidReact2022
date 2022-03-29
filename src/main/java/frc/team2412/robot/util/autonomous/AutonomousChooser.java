@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.*;
+import frc.team2412.robot.commands.autonomous.debug.LinePath;
+import frc.team2412.robot.commands.autonomous.debug.SquarePath;
+import frc.team2412.robot.commands.autonomous.debug.StarPath;
 import frc.team2412.robot.commands.climb.ClimbExtendSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbRetractSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
@@ -19,19 +21,14 @@ import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
-import frc.team2412.robot.subsystem.*;
-
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 public class AutonomousChooser {
 
     private final SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
     public final Subsystems subsystems;
-    private final AutonomousTrajectories trajectories;
 
-    public AutonomousChooser(Subsystems subsystems, AutonomousTrajectories trajectories) {
+    public AutonomousChooser(Subsystems subsystems) {
         this.subsystems = subsystems;
-        this.trajectories = trajectories;
 
         boolean setDefault = false;
         for (var mode : AutonomousMode.values()) {
@@ -54,7 +51,7 @@ public class AutonomousChooser {
     public CommandBase getCommand() {
         AutonomousMode autoMode = autonomousModeChooser.getSelected();
         return autoMode != null
-                ? autoMode.commandSupplier.getCommand(subsystems, trajectories)
+                ? autoMode.commandSupplier.getCommand(subsystems)
                 : null;
     }
 
@@ -62,48 +59,16 @@ public class AutonomousChooser {
         return autonomousModeChooser.getSelected().startPose;
     }
 
-    private static SequentialCommandGroup getSquarePathAutoCommand(Subsystems subsystems,
-            AutonomousTrajectories trajectories) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
-                        trajectories.getSquarePathAuto()));
-
-        return command;
-    }
-
-    private static SequentialCommandGroup getStarPathAutoCommand(Subsystems subsystems,
-            AutonomousTrajectories trajectories) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
-                        trajectories.getStarPathAuto()));
-
-        return command;
-    }
-
-    private static SequentialCommandGroup getLineAutoCommand(Subsystems subsystems,
-            AutonomousTrajectories trajectories) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                new Follow2910TrajectoryCommand(subsystems.drivebaseSubsystem,
-                        trajectories.getLinePathAuto()));
-        return command;
-    }
-
     @Immutable
     @FunctionalInterface
     private interface CommandSupplier {
-        CommandBase getCommand(Subsystems subsystems, AutonomousTrajectories trajectories);
+        CommandBase getCommand(Subsystems subsystems);
     }
 
     public enum AutonomousMode {
         // Replace with individual testing commands
         ONE_BALL(
-                (subsystems, trajectories) -> new OneBallAutoCommand(subsystems.indexSubsystem,
+                (subsystems) -> new OneBallAutoCommand(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
                 "One ball auto",
@@ -112,7 +77,7 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED),
         TWO_BALL(
-                (subsystems, trajectories) -> new TwoBallAutoCommandLeft(subsystems.indexSubsystem,
+                (subsystems) -> new TwoBallAutoCommandLeft(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
@@ -124,39 +89,39 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED,
                 new Pose2d(new Translation2d(359, 209), new Rotation2d(Math.PI))),
-        SQUARE_PATH((subsystems, trajectories) -> AutonomousChooser.getSquarePathAutoCommand(subsystems, trajectories),
+        SQUARE_PATH((subsystems) -> new SquarePath(subsystems.drivebaseSubsystem),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        LINE_PATH((subsystems, trajectories) -> AutonomousChooser.getLineAutoCommand(subsystems, trajectories),
+        LINE_PATH((subsystems) -> new LinePath(subsystems.drivebaseSubsystem),
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        STAR_PATH((subsystems, trajectories) -> AutonomousChooser.getStarPathAutoCommand(subsystems, trajectories),
+        STAR_PATH((subsystems) -> new StarPath(subsystems.drivebaseSubsystem),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        TWO_BALL_FENDER((subsystems, trajectories) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
+        TWO_BALL_FENDER((subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
-        JACK_FIVE_BALL((subsystems, trajectories) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
+        JACK_FIVE_BALL((subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
-        WPI_PATH((subsystems, trajectories) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem), 
+        WPI_PATH((subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem), 
                 "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(331, 71), new Rotation2d(Math.PI))),
-        CLIMB((subsystems, trajectories) -> new ClimbTestCommand(subsystems.climbSubsystem), 
+        CLIMB((subsystems) -> new ClimbTestCommand(subsystems.climbSubsystem), 
                 "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
-        INDEX((subsystems, trajectories) -> new IndexTestCommand(subsystems.indexSubsystem),
+        INDEX((subsystems) -> new IndexTestCommand(subsystems.indexSubsystem),
                 "Index test", Subsystems.SubsystemConstants.INDEX_ENABLED),
-        INTAKE((subsystems, trajectories) -> new DiagnosticIntakeCommandGroup(subsystems.intakeSubsystem),
+        INTAKE((subsystems) -> new DiagnosticIntakeCommandGroup(subsystems.intakeSubsystem),
                 "Intake test", Subsystems.SubsystemConstants.INTAKE_ENABLED),
-        SHOOTER((subsystems, trajectories) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
+        SHOOTER((subsystems) -> new ShooterTurretSetAngleCommand(subsystems.shooterSubsystem,
                 subsystems.shooterSubsystem.getTurretTestAngle()), "Shooter test",
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
-                (subsystems, trajectories) -> new FullShootCommand(subsystems.shooterSubsystem,
+                (subsystems) -> new FullShootCommand(subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.intakeSubsystem, subsystems.indexSubsystem),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         CLIMB_DOWN_IN_QUEUE(
-                (subsystems, trajectories) -> new ClimbRetractSlowlyCommand(subsystems.climbSubsystem,
+                (subsystems) -> new ClimbRetractSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem,
                         subsystems.drivebaseSubsystem),
                 "Climb down in queue",
@@ -166,7 +131,7 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED),
         CLIMB_UP_IN_QUEUE(
-                (subsystems, trajectories) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
+                (subsystems) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),
                 "Climb up in queue",
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&

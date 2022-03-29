@@ -25,8 +25,8 @@ public class FollowWPILibTrajectory extends CommandBase {
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
 
-        public static final double PX_CONTROLLER = 1.38;
-        public static final double PY_CONTROLLER = 1.38;
+        public static final double PX_CONTROLLER = 0.3;
+        public static final double PY_CONTROLLER = 0.3;
 
         public static final double DEFAULT_THETA = 0.1;
 

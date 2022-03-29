@@ -26,11 +26,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
-import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
 
 public class Robot extends TimedRobot {
@@ -147,8 +145,7 @@ public class Robot extends TimedRobot {
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
-        autonomousChooser = new AutonomousChooser(subsystems,
-                new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        autonomousChooser = new AutonomousChooser(subsystems);
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()

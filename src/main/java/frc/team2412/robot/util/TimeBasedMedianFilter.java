@@ -2,7 +2,7 @@ package frc.team2412.robot.util;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -48,12 +48,20 @@ public class TimeBasedMedianFilter {
      */
     public double calculate(double next) {
         double time = Timer.getFPGATimestamp();
+        // Add value to queue
         values.add(new TimeData(time, next));
-        orderedValues.add(next);
-        orderedValues.sort(Comparator.comparingDouble((value) -> value.doubleValue()));
-        while (values.peek().time < time - filterTime) {
-            orderedValues.remove(values.remove().data);
+        // Insert at appropriate position to keep list sorted
+        int index = Collections.binarySearch(orderedValues, next);
+        if (index < 0) {
+            index = -1 - index;
         }
+        orderedValues.add(index, next);
+        // Remove values that are too old
+        final double cutoffTime = time - filterTime;
+        while (values.peek().time < cutoffTime) {
+            orderedValues.remove(Collections.binarySearch(orderedValues, values.remove().data));
+        }
+        // Calculate median
         int size = values.size();
         if (size % 2 != 0) {
             return orderedValues.get(size / 2);

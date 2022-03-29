@@ -303,6 +303,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             this.pose = GeoConvertor.poseToRigid(pose);
             resetGyroAngle(GeoConvertor.rotation2dToRotation2(pose.getRotation()));
             swerveOdometry.resetPose(this.pose);
+            resetGyroAngle(Rotation2.ZERO);
         }
     }
 

@@ -15,9 +15,10 @@ public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
     public WPILibFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem) {
 
         TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(1, 1)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0, FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                // Add kinematics to ensure max speed is actually obeyed
+                .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
+        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0,
+                FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
                 List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(0)),
@@ -38,11 +39,10 @@ public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
                 new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)), normalSpeedConfig);
 
         addCommands(
-            new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryOne, thetaController),
-            new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryTwo, thetaController),
-            new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryThree, thetaController),
-            new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryFour, thetaController)
-        );
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryOne, thetaController),
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryTwo, thetaController),
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryThree, thetaController),
+                new FollowWPILibTrajectory(drivebaseSubsystem, trajectoryFour, thetaController));
     }
-    
+
 }

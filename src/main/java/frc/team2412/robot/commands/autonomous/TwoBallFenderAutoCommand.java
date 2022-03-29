@@ -20,7 +20,8 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
 
         TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
                 .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0, FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0,
+                FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),

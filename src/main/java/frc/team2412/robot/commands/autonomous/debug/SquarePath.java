@@ -12,7 +12,7 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 public class SquarePath extends SequentialCommandGroup {
     public SquarePath(DrivebaseSubsystem drivebaseSubsystem) {
         Trajectory squarePathAuto = new Trajectory(
-                    new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
                         .lineTo(new Vector2(-24, 0))
                         .lineTo(new Vector2(-24, 24))
                         .lineTo(new Vector2(0, 24))

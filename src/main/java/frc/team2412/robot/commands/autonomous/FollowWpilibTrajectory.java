@@ -12,7 +12,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 
 import java.util.function.Consumer;
@@ -65,7 +64,7 @@ public class FollowWPILibTrajectory extends CommandBase {
      * of the path-
      * this is left to the user, since it is not appropriate for paths with
      * nonstationary endstates.
-     * 
+     *
      * @param drivebase
      * @param trajectory
      *            The trajectory to follow.
@@ -81,8 +80,7 @@ public class FollowWPILibTrajectory extends CommandBase {
             DrivebaseSubsystem drivebase,
             Trajectory trajectory,
             ProfiledPIDController thetaController,
-            Supplier<Rotation2d> desiredRotation
-    ) {
+            Supplier<Rotation2d> desiredRotation) {
         this.pose = drivebase::getPoseAsPoseMeters;
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -138,14 +136,12 @@ public class FollowWPILibTrajectory extends CommandBase {
     public FollowWPILibTrajectory(
             DrivebaseSubsystem drivebase,
             Trajectory trajectory,
-            ProfiledPIDController thetaController
-    ) {
+            ProfiledPIDController thetaController) {
         this(
                 drivebase,
                 trajectory,
                 thetaController,
-                () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation()
-        );
+                () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation());
     }
 
     @Override

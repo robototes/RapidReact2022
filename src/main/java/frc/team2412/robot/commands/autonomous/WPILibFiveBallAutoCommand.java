@@ -17,7 +17,7 @@ public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
         TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(1, 1)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0,
+        ProfiledPIDController thetaController = new ProfiledPIDController(FollowWPILibTrajectory.WPILibAutoConstants.DEFAULT_THETA, 0, 0,
                 FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(

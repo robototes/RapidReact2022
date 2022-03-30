@@ -23,9 +23,9 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
         this.drivebaseSubsystem = drivebaseSubsystem;
 
         TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
-                .setKinematics(FollowWPILibTrajectory.WPILibAutoConstants.driveKinematics);
+                .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
         ProfiledPIDController thetaController = new ProfiledPIDController(0.1, 0, 0,
-                FollowWPILibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+                FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectory1 = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),
@@ -40,8 +40,8 @@ public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
                 fastConfig);
 
         addCommands(
-                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
-                new FollowWPILibTrajectory(drivebaseSubsystem, trajectory2, thetaController),
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
+                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory2, thetaController),
                 new ParallelCommandGroup(
                         new ShooterHoodRPMCommand(shooterSubsystem, 2700, 0),
                         new InstantCommand(() -> shooterSubsystem.setTurretAngle(-90))));

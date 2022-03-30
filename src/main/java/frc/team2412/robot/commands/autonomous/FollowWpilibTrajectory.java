@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-public class FollowWPILibTrajectory extends CommandBase {
+public class FollowWpilibTrajectory extends CommandBase {
     public static class WPILibAutoConstants {
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
         public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
@@ -76,7 +76,7 @@ public class FollowWPILibTrajectory extends CommandBase {
      *            The Trajectory Tracker PID controller for angle for the robot.
      */
     @SuppressWarnings("ParameterName")
-    public FollowWPILibTrajectory(
+    public FollowWpilibTrajectory(
             DrivebaseSubsystem drivebase,
             Trajectory trajectory,
             ProfiledPIDController thetaController,
@@ -133,7 +133,7 @@ public class FollowWPILibTrajectory extends CommandBase {
      *            The Trajectory Tracker PID controller for angle for the robot.
      */
     @SuppressWarnings("ParameterName")
-    public FollowWPILibTrajectory(
+    public FollowWpilibTrajectory(
             DrivebaseSubsystem drivebase,
             Trajectory trajectory,
             ProfiledPIDController thetaController) {

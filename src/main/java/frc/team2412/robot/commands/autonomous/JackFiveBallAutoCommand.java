@@ -25,20 +25,29 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
 
 public class JackFiveBallAutoCommand extends SequentialCommandGroup {
-    public JackFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem,
+    public JackFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
+            IndexSubsystem indexSubsystem,
             ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
 
         TrajectoryConstraint[] normalSpeed = {
-                new FeedforwardConstraint(11.0, DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
+                new FeedforwardConstraint(11.0,
+                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
+                                                                                                                    // value
+                                                                                                                    // was
+                                                                                                                    // 11.0
                 new MaxAccelerationConstraint(6 * 12.0), // old value was 12.5 * 12.0
                 new MaxVelocityConstraint(8 * 12.0),
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
         };
 
         TrajectoryConstraint[] fastSpeed = {
-                new FeedforwardConstraint(11.0, DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
+                new FeedforwardConstraint(11.0,
+                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
+                                                                                                                    // value
+                                                                                                                    // was
+                                                                                                                    // 11.0
                 new MaxAccelerationConstraint(12.5 * 12.0), // old value was 12.5 * 12.0
                 new MaxVelocityConstraint(4 * 12.0),
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
@@ -56,7 +65,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                         .lineTo(new Vector2(218.203, 60.492), Rotation2.fromDegrees(130))
                         .build(),
                 normalSpeed, 0.1);
-        
+
         Trajectory trajectory2 = new Trajectory(
                 new SimplePathBuilder(new Vector2(213.203, 66.492), Rotation2.fromDegrees(130))
                         .lineTo(new Vector2(202.049, 82.693), Rotation2.fromDegrees(125))
@@ -85,7 +94,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1),
                                         new IndexShootCommand(indexSubsystem, localizer)),
-                                        new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory2),
+                                new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory2),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1),
                                         new IndexShootCommand(indexSubsystem, localizer)),
@@ -94,8 +103,6 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory4),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(3),
-                                        new IndexShootCommand(indexSubsystem, localizer)))
-                        )
-                );
+                                        new IndexShootCommand(indexSubsystem, localizer)))));
     }
 }

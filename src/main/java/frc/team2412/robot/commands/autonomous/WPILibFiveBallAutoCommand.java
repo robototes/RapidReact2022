@@ -24,12 +24,14 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
 
 public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
-    public WPILibFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
+    public WPILibFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
+            IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
 
         TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(1, 1)
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController = new ProfiledPIDController(FollowWpilibTrajectory.WPILibAutoConstants.DEFAULT_THETA, 0, 0,
+        ProfiledPIDController thetaController = new ProfiledPIDController(
+                FollowWpilibTrajectory.WPILibAutoConstants.DEFAULT_THETA, 0, 0,
                 FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
         Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
@@ -52,8 +54,7 @@ public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryOne, thetaController),
                                 new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryTwo, thetaController),
-                                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryThree, thetaController)
-                        )),
+                                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryThree, thetaController))),
 
                 // actions
                 // STEPS FOR COMMAND

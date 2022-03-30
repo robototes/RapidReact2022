@@ -95,15 +95,20 @@ public class AutonomousChooser {
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems) -> new StarPath(subsystems.drivebaseSubsystem),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        TWO_BALL_FENDER((subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem, subsystems.shooterSubsystem),
+        TWO_BALL_FENDER(
+                (subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem,
+                        subsystems.shooterSubsystem),
                 "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
         JACK_FIVE_BALL(
-                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem,
+                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
-        WPI_PATH((subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
+        WPI_PATH(
+                (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(331, 71), Rotation2d.fromDegrees(0))),
         CLIMB((subsystems) -> new ClimbTestCommand(subsystems.climbSubsystem),
@@ -117,7 +122,7 @@ public class AutonomousChooser {
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
                 (subsystems) -> new ShootCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem,
-                subsystems.targetLocalizer),
+                        subsystems.targetLocalizer),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&

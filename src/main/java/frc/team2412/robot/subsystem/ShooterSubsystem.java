@@ -244,7 +244,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.stopMotor();
     }
 
-    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 6000)
+    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 4000)
     private void setFlywheelTestRPM(double newRPM) {
         flywheelTestRPM = newRPM;
     }

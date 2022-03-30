@@ -4,6 +4,7 @@ import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -134,7 +135,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      *            The position to set the motor
      */
     public void setMotor(double value) {
-        motor.set(ControlMode.Position, value);
+        motor.set(ControlMode.Position, value, DemandType.ArbitraryFeedForward, 0);
     }
 
     public void setMotorSpeed(double speed) {

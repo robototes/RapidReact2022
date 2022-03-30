@@ -17,6 +17,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double RIM_HEIGHT = 104; // 8ft8in
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
         public static final double HUB_RADIUS = 24;
+        public static final double DEFAULT_DISTANCE = 118;
         // Angles are in degrees
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
 
@@ -50,10 +51,17 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
      * Note: The limelight returns measurements relative to the center of the targets in its field of
      * view, which may differ from the center of the hub.
      *
+     * <p>
+     * If vision does not have a target, returns {@code DEFAULT_DISTANCE}.
+     * </p>
+     *
      * @return The distance in inches.
      */
     @Log(name = "Distance")
     public double getDistance() {
+        if (!hasTarget()) {
+            return DEFAULT_DISTANCE;
+        }
         double distanceToHubRim = HEIGHT_TO_RIM / Math.tan(Math.toRadians(getAdjustedPitch()));
         return distanceToHubRim + HUB_RADIUS;
     }

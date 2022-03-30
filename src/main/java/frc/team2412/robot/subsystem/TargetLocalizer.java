@@ -32,11 +32,7 @@ public class TargetLocalizer {
         public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
         // Seconds, placeholder duration
         public static final double FILTER_TIME = 1;
-        // Angles are in degrees
-        // Positive is clockwise
-        public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches
-        public static final double VISION_DEFAULT_DISTANCE = 118;
         // Estimated, negative because limelight is in back of turret
         public static final double TURRET_CENTER_TO_LIMELIGHT_DISTANCE = -7;
         public static final Translation2d ROBOT_CENTRIC_TURRET_CENTER = new Translation2d(3.93, -4);
@@ -71,7 +67,7 @@ public class TargetLocalizer {
     }
 
     /**
-     * Rests the current pose according to the current auto path.
+     * Resets the current pose according to the current auto path.
      *
      * @param autoChooser
      *            The autonomous chooser with the current auto path.
@@ -92,9 +88,7 @@ public class TargetLocalizer {
     }
 
     public double getDistance() {
-        return hasTarget()
-                ? distanceFilter.calculate(shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias())
-                : VISION_DEFAULT_DISTANCE;
+        return distanceFilter.calculate(shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias());
     }
 
     public double getAdjustedDistance() {
@@ -176,7 +170,7 @@ public class TargetLocalizer {
      * @return The turret angle (0 is intake side, positive rotation is clockwise).
      */
     public Rotation2d getTurretAngle() {
-        return Rotation2d.fromDegrees(shooterSubsystem.getTurretAngle() + STARTING_TURRET_ANGLE);
+        return Rotation2d.fromDegrees(shooterSubsystem.getTurretAngle());
     }
 
     public Translation2d getTurretRelativeVelocity() {

@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
         } else {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
-            if(pneumaticHub != null) {
+            if (pneumaticHub != null) {
                 pneumaticHub.disableCompressor();
             }
         }

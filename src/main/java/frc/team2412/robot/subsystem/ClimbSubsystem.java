@@ -41,10 +41,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double EXTENSION_F = 0;
 
         public static final int PID_RETRACTION_SLOT = 1;
-        public static final double RETRACTION_P = 2; // TODO: figure out values
+        public static final double RETRACTION_P = 0.5; // TODO: figure out values
         public static final double RETRACTION_I = 0;
         public static final double RETRACTION_D = 0;
-        public static final double RETRACTION_F = 0;
+        public static final double RETRACTION_F = 0.06;
+        //This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
         // Relating to physical climb structure things
         // was prevously mid

@@ -38,11 +38,13 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double EXTENSION_P = 0.5;
         public static final double EXTENSION_I = 0;
         public static final double EXTENSION_D = 0;
+        public static final double EXTENSION_F = 0;
 
         public static final int PID_RETRACTION_SLOT = 1;
         public static final double RETRACTION_P = 2; // TODO: figure out values
         public static final double RETRACTION_I = 0;
         public static final double RETRACTION_D = 0;
+        public static final double RETRACTION_F = 0;
 
         // Relating to physical climb structure things
         // was prevously mid
@@ -76,8 +78,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.configAllSettings(motorConfig);
         motor.setNeutralMode(NeutralMode.Brake);
 
-        setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D);
-        setPIDRetract(RETRACTION_P, RETRACTION_I, RETRACTION_D);
+        setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D, EXTENSION_F);
+        setPIDRetract(RETRACTION_P, RETRACTION_I, RETRACTION_D, RETRACTION_F);
     }
 
     /**
@@ -200,21 +202,25 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      *            the D value to configure
      */
     @Config(name = "PID extend")
-    private void setPIDExtend(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
-            @Config(name = "EXTENSION_I", defaultValueNumeric = EXTENSION_I) double i,
-            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d) {
+    private void setPIDExtend(@Config(name = "EXTENSION P", defaultValueNumeric = EXTENSION_P) double p,
+            @Config(name = "EXTENSION I", defaultValueNumeric = EXTENSION_I) double i,
+            @Config(name = "EXTENSION D", defaultValueNumeric = EXTENSION_D) double d, 
+            @Config(name = "EXTENSION F", defaultValueNumeric = EXTENSION_F) double f) {
         motor.config_kP(PID_EXTENSION_SLOT, p);
         motor.config_kI(PID_EXTENSION_SLOT, i);
         motor.config_kD(PID_EXTENSION_SLOT, d);
+        motor.config_kF(PID_EXTENSION_SLOT, f);
     }
 
     @Config(name = "PID retract")
-    private void setPIDRetract(@Config(name = "EXTENSION_P", defaultValueNumeric = EXTENSION_P) double p,
-            @Config(name = "EXTENSION_I", defaultValueNumeric = EXTENSION_I) double i,
-            @Config(name = "EXTENSION_D", defaultValueNumeric = EXTENSION_D) double d) {
+    private void setPIDRetract(@Config(name = "RETRACTION P", defaultValueNumeric = RETRACTION_P) double p,
+            @Config(name =  "RETRACTION I", defaultValueNumeric = RETRACTION_I) double i,
+            @Config(name = "RETRACTION D", defaultValueNumeric = RETRACTION_D) double d,
+            @Config(name = "RETRACTION F", defaultValueNumeric = RETRACTION_F) double f) {
         motor.config_kP(PID_RETRACTION_SLOT, p);
         motor.config_kI(PID_RETRACTION_SLOT, i);
         motor.config_kD(PID_RETRACTION_SLOT, d);
+        motor.config_kF(PID_RETRACTION_SLOT, f);
     }
 
     /**

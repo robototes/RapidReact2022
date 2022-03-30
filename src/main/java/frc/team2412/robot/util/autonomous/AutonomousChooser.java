@@ -20,7 +20,6 @@ import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexTestCommand;
 import frc.team2412.robot.commands.index.ShootCommand;
-import frc.team2412.robot.commands.shooter.FullShootCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
 public class AutonomousChooser {
@@ -104,9 +103,9 @@ public class AutonomousChooser {
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
-        WPI_PATH((subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem),
+        WPI_PATH((subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(331, 71), new Rotation2d(Math.PI))),
+                new Pose2d(new Translation2d(331, 71), Rotation2d.fromDegrees(0))),
         CLIMB((subsystems) -> new ClimbTestCommand(subsystems.climbSubsystem),
                 "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems) -> new IndexTestCommand(subsystems.indexSubsystem),

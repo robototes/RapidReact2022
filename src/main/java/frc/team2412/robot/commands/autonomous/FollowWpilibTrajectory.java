@@ -50,7 +50,6 @@ public class FollowWpilibTrajectory extends CommandBase {
     private final HolonomicDriveController controller;
     private final Consumer<ChassisSpeeds> outputModuleStates;
     private final Supplier<Rotation2d> desiredRotation;
-    private final DrivebaseSubsystem drivebase;
 
     /**
      * Constructs a new SwerveControllerCommand that when executed will follow the
@@ -84,8 +83,6 @@ public class FollowWpilibTrajectory extends CommandBase {
         this.pose = drivebase::getPoseAsPoseMeters;
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        this.drivebase = drivebase;
 
         this.trajectory.relativeTo(pose.get());
 

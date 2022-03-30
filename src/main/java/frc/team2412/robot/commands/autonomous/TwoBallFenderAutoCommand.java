@@ -17,10 +17,7 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
-    private final DrivebaseSubsystem drivebaseSubsystem;
-
     public TwoBallFenderAutoCommand(DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem) {
-        this.drivebaseSubsystem = drivebaseSubsystem;
 
         TrajectoryConfig fastConfig = new TrajectoryConfig(1, 0.8)
                 .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);

@@ -9,7 +9,6 @@ import static frc.team2412.robot.Hardware.*;
 
 import static java.lang.Thread.sleep;
 
-import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;

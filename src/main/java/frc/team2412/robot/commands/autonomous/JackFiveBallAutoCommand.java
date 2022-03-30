@@ -11,8 +11,10 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
@@ -74,12 +76,12 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         Trajectory trajectory3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(202.029, 75.188), Rotation2.fromDegrees(125))
-                        .lineTo(new Vector2(50.456, 48.818), Rotation2.fromDegrees(202))
+                        .lineTo(new Vector2(50.456, 60.818), Rotation2.fromDegrees(202))
                         .build(),
                 normalSpeed, 0.1);
 
         Trajectory trajectory4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(66.456, 58.818), Rotation2.fromDegrees(202))
+                new SimplePathBuilder(new Vector2(50.456, 54.818), Rotation2.fromDegrees(202))
                         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(125))
                         .build(),
                 normalSpeed, 0.1);
@@ -88,21 +90,25 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                 new IntakeSetExtendCommand(intakeSubsystem),
                 new ParallelCommandGroup(
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
-                        new ShooterTargetCommand(shooterSubsystem, localizer),
                         new SequentialCommandGroup(
+                                //new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                                new InstantCommand(() -> {shooterSubsystem.setTurretDisable(true);}),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory1),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1),
-                                        new IndexShootCommand(indexSubsystem, localizer)),
+                                        new IndexShootCommand(indexSubsystem, localizer),
+                                        new ShooterTargetCommand(shooterSubsystem, localizer, ()->true)),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory2),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1),
                                         new IndexShootCommand(indexSubsystem, localizer)),
+                                new InstantCommand(()->new ShooterTargetCommand(shooterSubsystem, localizer, ()->false)),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory3),
                                 new WaitCommand(2),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory4),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(3),
-                                        new IndexShootCommand(indexSubsystem, localizer)))));
+                                        new IndexShootCommand(indexSubsystem, localizer),
+                                        new ShooterTargetCommand(shooterSubsystem, localizer, ()->true)))));
     }
 }

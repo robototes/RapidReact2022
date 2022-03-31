@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.team2412.robot.commands.climb.ClimbSetArmCommand;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
-import frc.team2412.robot.commands.climb.RetractArmFullyCommand;
+import frc.team2412.robot.commands.climb.RetractArmCommand;
 import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
@@ -104,7 +104,7 @@ public class Controls {
     }
 
     public void bindClimbControls() {
-        climbArmDown.whenPressed(new RetractArmFullyCommand(subsystems.climbSubsystem));
+        climbArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
         climbArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
 
         climbArmDownManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, -0.4));
@@ -126,7 +126,7 @@ public class Controls {
         subsystems.indexSubsystem
                 .setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
 
-        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem));
+        shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem, subsystems.targetLocalizer));
     }
 
     public void bindIntakeControls() {
@@ -147,7 +147,7 @@ public class Controls {
                             .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
             driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2700, 0).withInterrupt(b)
+                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 3092, 0).withInterrupt(b)
                             .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
             driveController.getDPadButton(Direction.RIGHT).whenPressed(

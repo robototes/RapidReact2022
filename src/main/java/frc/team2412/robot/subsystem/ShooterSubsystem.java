@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
-        public static final double FLYWHEEL_ALLOWED_ERROR = 100 * FLYWHEEL_RPM_TO_VELOCITY;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 50;
 
         // Placeholder gearing constant
         public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
@@ -61,15 +61,20 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
+<<<<<<< HEAD
         public static final double MIN_TURRET_ANGLE = -90;// -300;
         public static final double MAX_TURRET_ANGLE = 90;// 120;
+=======
+        public static final double MIN_TURRET_ANGLE = -270;
+        public static final double MAX_TURRET_ANGLE = 90;
+>>>>>>> a631effdd0cce2229c5212096aa2bf9518796312
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
 
         public static final int TURRET_SLOT_ID = 0;
 
-        public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -270;
-        public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 90;
+        public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -250;
+        public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 70;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -244,7 +249,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.stopMotor();
     }
 
-    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 6000)
+    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 4000)
     private void setFlywheelTestRPM(double newRPM) {
         flywheelTestRPM = newRPM;
     }
@@ -302,6 +307,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The velocity of the flywheel motors.
      */
+    @Log
     public double getFlywheelVelocity() {
         return flywheelMotor1.getSelectedSensorVelocity();
     }
@@ -454,8 +460,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    @Log
     public boolean upToSpeed() {
-        return Math.abs(flywheelMotor1.getClosedLoopError()) <= FLYWHEEL_ALLOWED_ERROR
+        return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
                 && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
     }
 

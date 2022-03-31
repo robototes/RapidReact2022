@@ -1,14 +1,27 @@
 package frc.team2412.robot.util.autonomous;
 
+import java.util.Map;
+
 import com.google.errorprone.annotations.Immutable;
+
+import org.frcteam2910.common.math.Rotation2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.TableEntryListener;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.*;
 import frc.team2412.robot.commands.autonomous.debug.LinePath;
@@ -26,6 +39,8 @@ public class AutonomousChooser {
 
     private final SendableChooser<AutonomousMode> autonomousModeChooser = new SendableChooser<>();
     public final Subsystems subsystems;
+    public final NetworkTableEntry delayedStartEntry;
+    public final NetworkTableEntry setupImage;
 
     public AutonomousChooser(Subsystems subsystems) {
         this.subsystems = subsystems;
@@ -46,13 +61,22 @@ public class AutonomousChooser {
         autonomousTab.add("Choose Auto Mode", autonomousModeChooser)
                 .withPosition(0, 0)
                 .withSize(2, 1);
+
+        setupImage = autonomousTab.add("Auto Setup", "").withWidget("Image").withProperties(Map.of("Keep Aspect Ratio", true)).withSize(5, 3).withPosition(4, 0).getEntry();
+
+        NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Autonomous").getSubTable("Choose Auto Mode").addEntryListener((table, key, entry, value, flags)->{
+                System.out.println(value.getString());
+                setupImage.setString(autonomousModeChooser.getSelected().setupImage);
+        }, EntryListenerFlags.kUpdate | EntryListenerFlags.kNew);
+
+        delayedStartEntry = autonomousTab.add("Delay start", 0.0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
     }
 
-    public CommandBase getCommand() {
+    public void scheduleCommand() {
         AutonomousMode autoMode = autonomousModeChooser.getSelected();
-        return autoMode != null
-                ? autoMode.commandSupplier.getCommand(subsystems)
-                : null;
+        if (autoMode != null) {
+                autoMode.commandSupplier.getCommand(subsystems).schedule();
+        }
     }
 
     public Pose2d getStartPose() {
@@ -88,7 +112,8 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED,
-                new Pose2d(new Translation2d(359, 209), new Rotation2d(Math.PI))),
+                new Pose2d(new Translation2d(381.791, 211.487), Rotation2d.fromDegrees(25)),
+                "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/jackTwoBall.png"),
         SQUARE_PATH((subsystems) -> new SquarePath(subsystems.drivebaseSubsystem),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems) -> new LinePath(subsystems.drivebaseSubsystem),
@@ -105,7 +130,8 @@ public class AutonomousChooser {
                         subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
                 "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90))),
+                new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
+                "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/jackFiveBall.png"),
         WPI_PATH(
                 (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
@@ -150,12 +176,22 @@ public class AutonomousChooser {
         public final String uiName;
         public final boolean enabled;
         public final Pose2d startPose;
+        public final String setupImage;
+
+        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose, String setupImage) {
+                this.commandSupplier = commandSupplier;
+                this.uiName = uiName;
+                this.enabled = enabled;
+                this.startPose = startPose;
+                this.setupImage = setupImage;
+            }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose) {
             this.commandSupplier = commandSupplier;
             this.uiName = uiName;
             this.enabled = enabled;
             this.startPose = startPose;
+            this.setupImage = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/imgnotfound.png";
         }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled) {
@@ -163,6 +199,7 @@ public class AutonomousChooser {
             this.uiName = uiName;
             this.enabled = enabled;
             this.startPose = new Pose2d();
+            this.setupImage = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/imgnotfound.png";
         }
     }
 }

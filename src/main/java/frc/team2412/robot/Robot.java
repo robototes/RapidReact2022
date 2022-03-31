@@ -192,7 +192,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        autonomousChooser.getCommand().schedule();
+        autonomousChooser.scheduleCommand();
     }
 
     @Override
@@ -212,10 +212,7 @@ public class Robot extends TimedRobot {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 
-        Command autoCommand = autonomousChooser.getCommand();
-        if (autoCommand != null) {
-            autoCommand.schedule();
-        }
+        autonomousChooser.scheduleCommand();
     }
 
     @Override

@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
@@ -38,8 +37,8 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                                                                                                                     // value
                                                                                                                     // was
                                                                                                                     // 11.0
-                new MaxAccelerationConstraint(6 * 12.0), // old value was 12.5 * 12.0
-                new MaxVelocityConstraint(8 * 12.0),
+                new MaxAccelerationConstraint(9 * 12.0), // old value was 12.5 * 12.0
+                new MaxVelocityConstraint(11.5 * 12.0),
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
         };
 
@@ -70,32 +69,31 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         Trajectory trajectory2 = new Trajectory(
                 new SimplePathBuilder(new Vector2(213.203, 66.492), Rotation2.fromDegrees(130))
-                        .lineTo(new Vector2(202.049, 82.693), Rotation2.fromDegrees(125))
+                        .lineTo(new Vector2(195.049, 82.693), Rotation2.fromDegrees(125))
                         .build(),
                 fastSpeed, 0.1);
 
         Trajectory trajectory3 = new Trajectory(
-                new SimplePathBuilder(new Vector2(202.029, 75.188), Rotation2.fromDegrees(125))
-                        .lineTo(new Vector2(50.456, 60.818), Rotation2.fromDegrees(202))
+                new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
+                        .lineTo(new Vector2(50.456, 85.818), Rotation2.fromDegrees(202))
                         .build(),
                 normalSpeed, 0.1);
 
         Trajectory trajectory4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(50.456, 54.818), Rotation2.fromDegrees(202))
+                new SimplePathBuilder(new Vector2(50.456, 85.818), Rotation2.fromDegrees(202))
                         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(125))
                         .build(),
                 normalSpeed, 0.1);
 
         addCommands(
                 new IntakeSetExtendCommand(intakeSubsystem),
+                new InstantCommand(()->new ShooterTargetCommand(shooterSubsystem, localizer, ()->false)),
                 new ParallelCommandGroup(
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
                         new SequentialCommandGroup(
-                                //new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                                new InstantCommand(() -> {shooterSubsystem.setTurretDisable(true);}),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory1),
                                 new ParallelDeadlineGroup(
-                                        new WaitCommand(1),
+                                        new WaitCommand(1.5),
                                         new IndexShootCommand(indexSubsystem, localizer),
                                         new ShooterTargetCommand(shooterSubsystem, localizer, ()->true)),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory2),

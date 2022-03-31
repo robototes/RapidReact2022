@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -141,7 +142,14 @@ public class Robot extends TimedRobot {
         if (COMPRESSOR_ENABLED) {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        } else {
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+            if (pneumaticHub != null) {
+                pneumaticHub.disableCompressor();
+            }
         }
+
+        Shuffleboard.startRecording();
 
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);

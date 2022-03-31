@@ -4,24 +4,17 @@ import java.util.Map;
 
 import com.google.errorprone.annotations.Immutable;
 
-import org.frcteam2910.common.math.Rotation2;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TableEntryListener;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.Subsystems;
 import frc.team2412.robot.commands.autonomous.*;
 import frc.team2412.robot.commands.autonomous.debug.LinePath;
@@ -89,54 +82,78 @@ public class AutonomousChooser {
         CommandBase getCommand(Subsystems subsystems);
     }
 
+    private static boolean allEnabled = Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                                        Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+                                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+                                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+                                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+                                        Subsystems.SubsystemConstants.INTAKE_ENABLED;
+    private static String imagesPath = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/";
+
     public enum AutonomousMode {
         // Replace with individual testing commands
         ONE_BALL(
                 (subsystems) -> new OneBallAutoCommand(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "One ball auto",
+                "✖ One ball auto ✖",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED),
-        TWO_BALL(
+        TWO_BALL_LEFT(
                 (subsystems) -> new TwoBallAutoCommandLeft(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "Two ball auto",
-                Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.INTAKE_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-                        Subsystems.SubsystemConstants.INTAKE_ENABLED,
+                "✖ Two ball auto left ✖",
+                allEnabled,
+                new Pose2d(new Translation2d(397.308, 122.461), Rotation2d.fromDegrees(316.877)),
+                imagesPath + "jackTwoBallLeft.png"),
+        TWO_BALL_MIDDLE(
+                (subsystems) -> new TwoBallAutoCommandMiddle(subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem),
+                "✔ Two ball auto middle ✔",
+                allEnabled,
                 new Pose2d(new Translation2d(381.791, 211.487), Rotation2d.fromDegrees(25)),
-                "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/jackTwoBall.png"),
+                imagesPath + "jackTwoBallMiddle.png"),
+        TWO_BALL_RIGHT(
+                (subsystems) -> new TwoBallAutoCommandRight(subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem,
+                        subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem),
+                "✖ Two ball auto right ✖",
+                allEnabled,
+                new Pose2d(new Translation2d(341, 250.434), Rotation2d.fromDegrees(90)),
+                imagesPath + "jackTwoBallRight.png"),
+        TWO_BALL_FENDER(
+                (subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem,
+                        subsystems.shooterSubsystem),
+                "✖ Two ball fender path ✖", 
+                allEnabled,
+                new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46)),
+                imagesPath + "twoBallFender.png"),
+        JACK_FIVE_BALL(
+                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "✔ 2910 Five ball path ✔", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
+                imagesPath + "jackFiveBall.png"),
+        WPI_PATH(
+                (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "✖ WPILib Five ball path ✖", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(331, 71), Rotation2d.fromDegrees(0)),
+                imagesPath + "fiveBall.png"),
         SQUARE_PATH((subsystems) -> new SquarePath(subsystems.drivebaseSubsystem),
                 "Square Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         LINE_PATH((subsystems) -> new LinePath(subsystems.drivebaseSubsystem),
                 "Line Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
         STAR_PATH((subsystems) -> new StarPath(subsystems.drivebaseSubsystem),
                 "Star Path", Subsystems.SubsystemConstants.DRIVE_ENABLED),
-        TWO_BALL_FENDER(
-                (subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem,
-                        subsystems.shooterSubsystem),
-                "Two ball fender path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46))),
-        JACK_FIVE_BALL(
-                (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
-                        subsystems.indexSubsystem,
-                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
-                "2910 Five ball path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
-                "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/jackFiveBall.png"),
-        WPI_PATH(
-                (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
-                        subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
-                "WPI Lib Path", Subsystems.SubsystemConstants.DRIVE_ENABLED,
-                new Pose2d(new Translation2d(331, 71), Rotation2d.fromDegrees(0))),
         CLIMB((subsystems) -> new ClimbTestCommand(subsystems.climbSubsystem),
                 "Climb test", Subsystems.SubsystemConstants.CLIMB_ENABLED),
         INDEX((subsystems) -> new IndexTestCommand(subsystems.indexSubsystem),
@@ -191,7 +208,7 @@ public class AutonomousChooser {
             this.uiName = uiName;
             this.enabled = enabled;
             this.startPose = startPose;
-            this.setupImage = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/imgnotfound.png";
+            this.setupImage = imagesPath + "imgnotfound.png";
         }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled) {
@@ -199,7 +216,7 @@ public class AutonomousChooser {
             this.uiName = uiName;
             this.enabled = enabled;
             this.startPose = new Pose2d();
-            this.setupImage = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/imgnotfound.png";
+            this.setupImage = imagesPath + "imgnotfound.png";
         }
     }
 }

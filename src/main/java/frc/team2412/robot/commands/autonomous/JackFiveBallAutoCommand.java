@@ -87,7 +87,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         addCommands(
                 new IntakeSetExtendCommand(intakeSubsystem),
-                new InstantCommand(()->new ShooterTargetCommand(shooterSubsystem, localizer, ()->false)),
+                new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer, () -> false)),
                 new ParallelCommandGroup(
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
                         new SequentialCommandGroup(
@@ -95,18 +95,19 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1.5),
                                         new IndexShootCommand(indexSubsystem, localizer),
-                                        new ShooterTargetCommand(shooterSubsystem, localizer, ()->true)),
+                                        new ShooterTargetCommand(shooterSubsystem, localizer, () -> true)),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory2),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(1),
                                         new IndexShootCommand(indexSubsystem, localizer)),
-                                new InstantCommand(()->new ShooterTargetCommand(shooterSubsystem, localizer, ()->false)),
+                                new InstantCommand(
+                                        () -> new ShooterTargetCommand(shooterSubsystem, localizer, () -> false)),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory3),
                                 new WaitCommand(2),
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, trajectory4),
                                 new ParallelDeadlineGroup(
                                         new WaitCommand(3),
                                         new IndexShootCommand(indexSubsystem, localizer),
-                                        new ShooterTargetCommand(shooterSubsystem, localizer, ()->true)))));
+                                        new ShooterTargetCommand(shooterSubsystem, localizer, () -> true)))));
     }
 }

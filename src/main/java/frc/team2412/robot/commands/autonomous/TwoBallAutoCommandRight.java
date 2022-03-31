@@ -31,8 +31,9 @@ public class TwoBallAutoCommandRight extends SequentialCommandGroup {
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
                         new SequentialCommandGroup(
                                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                                new ParallelCommandGroup(   
+                                new ParallelCommandGroup(
                                         new IndexShootCommand(indexSubsystem, localizer),
-                                        new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer, ()->true))))));
+                                        new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer,
+                                                () -> true))))));
     }
 }

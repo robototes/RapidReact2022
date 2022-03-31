@@ -25,14 +25,15 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
-                addCommands(
-                        new IntakeSetExtendCommand(intakeSubsystem),
-                        new ParallelCommandGroup(
-                                new IntakeCommand(intakeSubsystem, indexSubsystem),
-                                new SequentialCommandGroup(
-                                        new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                                        new ParallelCommandGroup(   
-                                                new IndexShootCommand(indexSubsystem, localizer),
-                                                new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer, ()->true))))));
+        addCommands(
+                new IntakeSetExtendCommand(intakeSubsystem),
+                new ParallelCommandGroup(
+                        new IntakeCommand(intakeSubsystem, indexSubsystem),
+                        new SequentialCommandGroup(
+                                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
+                                new ParallelCommandGroup(
+                                        new IndexShootCommand(indexSubsystem, localizer),
+                                        new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer,
+                                                () -> true))))));
     }
 }

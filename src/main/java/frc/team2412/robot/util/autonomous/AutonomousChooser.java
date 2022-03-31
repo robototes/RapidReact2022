@@ -55,12 +55,14 @@ public class AutonomousChooser {
                 .withPosition(0, 0)
                 .withSize(2, 1);
 
-        setupImage = autonomousTab.add("Auto Setup", "").withWidget("Image").withProperties(Map.of("Keep Aspect Ratio", true)).withSize(5, 3).withPosition(4, 0).getEntry();
+        setupImage = autonomousTab.add("Auto Setup", "").withWidget("Image")
+                .withProperties(Map.of("Keep Aspect Ratio", true)).withSize(5, 3).withPosition(4, 0).getEntry();
 
-        NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Autonomous").getSubTable("Choose Auto Mode").addEntryListener((table, key, entry, value, flags)->{
-                System.out.println(value.getString());
-                setupImage.setString(autonomousModeChooser.getSelected().setupImage);
-        }, EntryListenerFlags.kUpdate | EntryListenerFlags.kNew);
+        NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Autonomous")
+                .getSubTable("Choose Auto Mode").addEntryListener((table, key, entry, value, flags) -> {
+                    System.out.println(value.getString());
+                    setupImage.setString(autonomousModeChooser.getSelected().setupImage);
+                }, EntryListenerFlags.kUpdate | EntryListenerFlags.kNew);
 
         delayedStartEntry = autonomousTab.add("Delay start", 0.0).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
     }
@@ -68,7 +70,7 @@ public class AutonomousChooser {
     public void scheduleCommand() {
         AutonomousMode autoMode = autonomousModeChooser.getSelected();
         if (autoMode != null) {
-                autoMode.commandSupplier.getCommand(subsystems).schedule();
+            autoMode.commandSupplier.getCommand(subsystems).schedule();
         }
     }
 
@@ -83,11 +85,11 @@ public class AutonomousChooser {
     }
 
     private static boolean allEnabled = Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                                        Subsystems.SubsystemConstants.INTAKE_ENABLED &&
-                                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                                        Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
-                                        Subsystems.SubsystemConstants.DRIVE_ENABLED &&
-                                        Subsystems.SubsystemConstants.INTAKE_ENABLED;
+            Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
+            Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
+            Subsystems.SubsystemConstants.DRIVE_ENABLED &&
+            Subsystems.SubsystemConstants.INTAKE_ENABLED;
     private static String imagesPath = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/";
 
     public enum AutonomousMode {
@@ -131,7 +133,7 @@ public class AutonomousChooser {
         TWO_BALL_FENDER(
                 (subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem,
                         subsystems.shooterSubsystem),
-                "✖ Two ball fender path ✖", 
+                "✖ Two ball fender path ✖",
                 allEnabled,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46)),
                 imagesPath + "twoBallFender.png"),
@@ -195,13 +197,14 @@ public class AutonomousChooser {
         public final Pose2d startPose;
         public final String setupImage;
 
-        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose, String setupImage) {
-                this.commandSupplier = commandSupplier;
-                this.uiName = uiName;
-                this.enabled = enabled;
-                this.startPose = startPose;
-                this.setupImage = setupImage;
-            }
+        private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose,
+                String setupImage) {
+            this.commandSupplier = commandSupplier;
+            this.uiName = uiName;
+            this.enabled = enabled;
+            this.startPose = startPose;
+            this.setupImage = setupImage;
+        }
 
         private AutonomousMode(CommandSupplier commandSupplier, String uiName, boolean enabled, Pose2d startPose) {
             this.commandSupplier = commandSupplier;

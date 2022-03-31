@@ -45,7 +45,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double RETRACTION_P = 0.5; // TODO: figure out values
         public static final double RETRACTION_I = 0;
         public static final double RETRACTION_D = 0;
-        public static double RETRACTION_F = 0.06;
+        public static final double RETRACTION_F = 0.18;
         // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
         // Relating to physical climb structure things
@@ -242,11 +242,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     public boolean isHittingLimitSwitch() {
         return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
-    }
-
-    @Config
-    public void setFeedForward(double f) {
-        RETRACTION_F = f;
     }
 
 }

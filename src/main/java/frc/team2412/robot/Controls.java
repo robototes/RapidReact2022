@@ -153,7 +153,7 @@ public class Controls {
             if (subsystems.drivebaseSubsystem != null) {
                 subsystems.shooterSubsystem.setDefaultCommand(
                         new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                                (driveController.getLeftBumperButton()::get)));
+                                driveController.getLeftBumperButton()::get));
 
             }
 

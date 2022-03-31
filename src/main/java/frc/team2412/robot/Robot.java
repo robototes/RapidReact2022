@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
      */
     private static Robot instance = null;
 
-    public enum RobotType {
+    enum RobotType {
         COMPETITION, AUTOMATED_TEST, DRIVEBASE;
     }
 
@@ -238,7 +238,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationInit() {
-
         PhysicsSim sim = PhysicsSim.getInstance();
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.simInit(sim);
@@ -249,11 +248,9 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.simInit(sim);
         }
-
         if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.simInit(sim);
         }
-
     }
 
     @Override

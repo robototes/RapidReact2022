@@ -25,9 +25,4 @@ public class DriveCommand extends CommandBase {
     public void execute() {
         drivebaseSubsystem.drive(new Vector2(forward.get(false), -strafe.get(false)), -rotation.get(false) / 2);
     }
-
-    @Override
-    public void end(boolean interrupted) {
-        // drivebaseSubsystem.drive(Vector2.ZERO, 0.0);
-    }
 }

@@ -66,7 +66,7 @@ public class Controls {
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
-        shootButton = driveController.getLeftBumperButton();
+        shootButton = driveController.getRightBumperButton();
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),

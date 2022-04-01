@@ -1,8 +1,6 @@
 package frc.team2412.robot.commands.autonomous;
 
 import org.frcteam2910.common.control.Trajectory;
-import org.frcteam2910.common.control.Path.State;
-import org.frcteam2910.common.math.RigidTransform2;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
@@ -20,8 +18,6 @@ public class Follow2910TrajectoryCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        State pathStartState = trajectory.getPath().calculate(0);
-        drivebase.resetPose(new RigidTransform2(pathStartState.getPosition(), pathStartState.getHeading()));
         drivebase.getFollower().follow(trajectory);
     }
 

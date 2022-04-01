@@ -81,7 +81,7 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double distanceAdjustment() {
-        return (getDepthVelocity() * getDistance() * TURRET_DEPTH_FF) / getVoltage();
+        return (getDepthVelocity() * getDistance() * TURRET_DEPTH_FF);
     }
 
     public double getPitch() {
@@ -175,8 +175,7 @@ public class TargetLocalizer implements Loggable {
     public double yawAdjustment() {
         return (getDistance() != 0 && getDistance() > getLateralVelocity()
                 ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
-                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
-                        / getVoltage();
+                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF);
     }
 
     /**

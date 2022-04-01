@@ -17,6 +17,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.sim.SparkMaxSimProfile.SparkMaxConstants;
@@ -29,10 +31,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.3;
+        public static final double FLYWHEEL_DEFAULT_P = 0.2;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0.057;
+        public static final double FLYWHEEL_DEFAULT_F = 0.05351;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
@@ -62,7 +64,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
         public static final double MIN_TURRET_ANGLE = -90;
-        public static final double MAX_TURRET_ANGLE = 150;
+        public static final double MAX_TURRET_ANGLE = 45;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
 

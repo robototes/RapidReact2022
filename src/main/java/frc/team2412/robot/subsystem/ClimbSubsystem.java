@@ -4,6 +4,7 @@ import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -23,7 +24,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         // Climb dynamic motor speeds
         public static final double EXTEND_SPEED = 0.15;
         public static final double RETRACT_SPEED = -0.15;
-        public static final double CLIMB_SPEED = 0.4;
 
         // Doing integer division, which returns 11757 (previously 8789)
         // Probably should do floating point division, which returns 11759.3
@@ -35,16 +35,23 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double MIN_ENCODER_TICKS = 0;
 
         // PID stuff
-        public static final int PID_SLOT_0 = 0;
-        public static final double P = 0.5;
-        public static final double I = 0;
-        public static final double D = 0;
+        public static final int PID_EXTENSION_SLOT = 0;
+        public static final double EXTENSION_P = 0.5;
+        public static final double EXTENSION_I = 0;
+        public static final double EXTENSION_D = 0;
+        public static final double EXTENSION_F = 0;
+
+        public static final int PID_RETRACTION_SLOT = 1;
+        public static final double RETRACTION_P = 0.5; // TODO: figure out values
+        public static final double RETRACTION_I = 0;
+        public static final double RETRACTION_D = 0;
+        public static final double RETRACTION_F = 0.18;
+        // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
         // Relating to physical climb structure things
         // was prevously mid
         public static final double MID_RUNG_HEIGHT_INCH = 33;
-        public static final double RETRACT_HEIGHT_INCH = 15;
-        public static final double FULL_RETRACT_HEIGHT_INCH = 1;
+        public static final double RETRACT_HEIGHT_INCH = 1;
 
         // Motor current limit config
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -73,7 +80,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.configAllSettings(motorConfig);
         motor.setNeutralMode(NeutralMode.Brake);
 
-        setPID(P, I, D);
+        setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D);
+        setPIDRetract(RETRACTION_P, RETRACTION_I, RETRACTION_D);
     }
 
     /**
@@ -107,23 +115,17 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * to the mid rung height
      */
     public void extendArm() {
-        setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
-    }
-
-    /**
-     * Retract the dynamic climb arm, professionally,
-     * going down the RETRACT_HEIGHT_INCH value (most of the way)
-     */
-    public void retractArm() {
-        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
+        motor.selectProfileSlot(PID_EXTENSION_SLOT, 0);
+        setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, EXTENSION_F);
     }
 
     /**
      * Graciously retract the climb arm down the extra
      * amount needed to fully retract it.
      */
-    public void retractArmFully() {
-        setMotor(FULL_RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH);
+    public void retractArm() {
+        motor.selectProfileSlot(PID_RETRACTION_SLOT, 0);
+        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, RETRACTION_F);
     }
 
     /**
@@ -132,8 +134,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param value
      *            The position to set the motor
      */
-    public void setMotor(double value) {
-        motor.set(ControlMode.Position, value);
+    public void setMotor(double value, double feedForward) {
+        motor.set(ControlMode.Position, value, DemandType.ArbitraryFeedForward, feedForward);
     }
 
     public void setMotorSpeed(double speed) {
@@ -201,13 +203,22 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param d
      *            the D value to configure
      */
-    @Config(name = "PID")
-    private void setPID(@Config(name = "P", defaultValueNumeric = P) double p,
-            @Config(name = "I", defaultValueNumeric = I) double i,
-            @Config(name = "D", defaultValueNumeric = D) double d) {
-        motor.config_kP(PID_SLOT_0, p);
-        motor.config_kI(PID_SLOT_0, i);
-        motor.config_kD(PID_SLOT_0, d);
+    @Config(name = "PID extend")
+    private void setPIDExtend(@Config(name = "EXTENSION P", defaultValueNumeric = EXTENSION_P) double p,
+            @Config(name = "EXTENSION I", defaultValueNumeric = EXTENSION_I) double i,
+            @Config(name = "EXTENSION D", defaultValueNumeric = EXTENSION_D) double d) {
+        motor.config_kP(PID_EXTENSION_SLOT, p);
+        motor.config_kI(PID_EXTENSION_SLOT, i);
+        motor.config_kD(PID_EXTENSION_SLOT, d);
+    }
+
+    @Config(name = "PID retract")
+    private void setPIDRetract(@Config(name = "RETRACTION P", defaultValueNumeric = RETRACTION_P) double p,
+            @Config(name = "RETRACTION I", defaultValueNumeric = RETRACTION_I) double i,
+            @Config(name = "RETRACTION D", defaultValueNumeric = RETRACTION_D) double d) {
+        motor.config_kP(PID_RETRACTION_SLOT, p);
+        motor.config_kI(PID_RETRACTION_SLOT, i);
+        motor.config_kD(PID_RETRACTION_SLOT, d);
     }
 
     /**
@@ -232,4 +243,5 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public boolean isHittingLimitSwitch() {
         return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
     }
+
 }

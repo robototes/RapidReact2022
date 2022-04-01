@@ -19,17 +19,15 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
-import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
-import frc.team2412.robot.util.autonomous.AutonomousTrajectories;
 import io.github.oblarg.oblog.Logger;
 
 public class Robot extends TimedRobot {
@@ -141,13 +139,19 @@ public class Robot extends TimedRobot {
         if (COMPRESSOR_ENABLED) {
             pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
             pneumaticHub.enableCompressorAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        } else {
+            pneumaticHub = new PneumaticHub(PNEUMATIC_HUB);
+            if (pneumaticHub != null) {
+                pneumaticHub.disableCompressor();
+            }
         }
+
+        Shuffleboard.startRecording();
 
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
-        autonomousChooser = new AutonomousChooser(subsystems,
-                new AutonomousTrajectories(DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS));
+        autonomousChooser = new AutonomousChooser(subsystems);
         Logger.configureLoggingAndConfig(subsystems, false);
 
         CommandScheduler.getInstance()
@@ -195,7 +199,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        autonomousChooser.getCommand().schedule();
+        autonomousChooser.scheduleCommand();
     }
 
     @Override
@@ -219,10 +223,7 @@ public class Robot extends TimedRobot {
             new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
         }
 
-        Command autoCommand = autonomousChooser.getCommand();
-        if (autoCommand != null) {
-            autoCommand.schedule();
-        }
+        autonomousChooser.scheduleCommand();
     }
 
     @Override

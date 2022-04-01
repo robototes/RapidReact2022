@@ -27,8 +27,8 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         // Index Motor Speeds
 
-        public static double INDEX_FEEDER_SPEED = 0.2;
-        public static double INDEX_IN_SPEED = 0.175;
+        public static double INDEX_FEEDER_SPEED = 0.175;
+        public static double INDEX_IN_SPEED = 0.35;
         public static double INDEX_OUT_SPEED = -0.3;
 
         // The current limit
@@ -107,7 +107,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops first motor and updates first motor state
      */
     public void ingestMotorStop() {
-        ingestMotor.stopMotor();
+        ingestMotor.set(0);
     }
 
     /**
@@ -128,7 +128,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops second motor and updates second motor state
      */
     public void feederMotorStop() {
-        feederMotor.stopMotor();
+        feederMotor.set(0);
     }
 
     /**

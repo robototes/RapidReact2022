@@ -23,7 +23,7 @@ public class IndexShootCommand extends CommandBase {
         // turn on both motors
         if (localizer == null || localizer.upToSpeed()) {
             subsystem.ingestMotorIn();
-            subsystem.feederMotorIn();
+            subsystem.feederMotorShoot();
         } else {
             subsystem.ingestMotorStop();
             subsystem.feederMotorStop();

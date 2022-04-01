@@ -7,13 +7,16 @@ import org.frcteam2910.common.math.Vector2;
 import frc.team2412.robot.Robot;
 
 import frc.team2412.robot.util.TimeBasedMedianFilter;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Config.Exclude;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
-public class TargetLocalizer {
+public class TargetLocalizer implements Loggable {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
+        public static double TURRET_LATERAL_FF = 0.2, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0.17;
         // Seconds, placeholder duration
         public static final double FILTER_TIME = 1;
         // Angles are in degrees
@@ -25,9 +28,13 @@ public class TargetLocalizer {
         public static final Vector2 ROBOT_CENTRIC_TURRET_CENTER = new Vector2(3.93, -4);
     }
 
+    @Exclude
     private final DrivebaseSubsystem drivebaseSubsystem;
+    @Exclude
     private final ShooterSubsystem shooterSubsystem;
+    @Exclude
     private final ShooterVisionSubsystem shooterVisionSubsystem;
+
     private final TimeBasedMedianFilter distanceFilter;
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
@@ -273,5 +280,15 @@ public class TargetLocalizer {
 
     public boolean upToSpeed() {
         return shooterSubsystem.upToSpeed();
+    }
+
+    @Config
+    public void setFDepth(double f ){
+        TURRET_DEPTH_FF = f;
+    }
+
+    @Config
+    public void setFLateral(double f){
+        TURRET_LATERAL_FF = f;
     }
 }

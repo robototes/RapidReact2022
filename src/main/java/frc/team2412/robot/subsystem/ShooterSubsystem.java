@@ -31,10 +31,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.2;
+        public static final double FLYWHEEL_DEFAULT_P = 0.1;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0.05351;
+        public static final double FLYWHEEL_DEFAULT_F = 0.0465;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
@@ -136,6 +136,13 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
 
+
+        flywheelMotor1.configVoltageCompSaturation(12.5);
+        flywheelMotor1.enableVoltageCompensation(true);
+
+        flywheelMotor2.configVoltageCompSaturation(12.5);
+        flywheelMotor2.enableVoltageCompensation(true);
+
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
@@ -190,12 +197,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretDisable = disable;
     }
 
+    @Log
+    double setP;
+
     // PID
     @Config(name = "Flywheel PID", columnIndex = 0, rowIndex = 0, width = 1, height = 3)
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
             @Config(name = "flywheelF", defaultValueNumeric = FLYWHEEL_DEFAULT_F) double f) {
+                setP = p;
         flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
         flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);

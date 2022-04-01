@@ -53,6 +53,7 @@ public class Controls {
 
     // drive
     public final Button resetDriveGyroButton;
+    public final Button setPoseButton;
 
     public Subsystems subsystems;
 
@@ -64,8 +65,8 @@ public class Controls {
         codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
+        setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
         shootButton = driveController.getRightBumperButton();
-
         intakeInButton = new Button[] { driveController.getAButton(),
                 driveController.getLeftTriggerAxis().getButton(0.1),
                 driveController.getRightTriggerAxis().getButton(0.1),
@@ -116,6 +117,9 @@ public class Controls {
                 driveController.getLeftYAxis(), driveController.getLeftXAxis(),
                 driveController.getRightXAxis()));
         resetDriveGyroButton.whenPressed(() -> subsystems.drivebaseSubsystem.resetGyroAngle(Rotation2.ZERO));
+
+        if (!Robot.getInstance().isCompetition())
+            setPoseButton.whenPressed(() -> subsystems.drivebaseSubsystem.setPose());
     }
 
     public void bindIndexControls() {

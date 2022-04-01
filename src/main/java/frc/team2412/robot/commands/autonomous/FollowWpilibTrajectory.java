@@ -5,12 +5,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 
 import java.util.function.Consumer;
@@ -18,15 +19,37 @@ import java.util.function.Supplier;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-public class SwerveControllerCommand extends CommandBase {
+public class FollowWpilibTrajectory extends CommandBase {
+    public static class WPILibAutoConstants {
+        public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND = Math.PI;
+        public static final double MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED = Math.PI;
+
+        public static final double PX_CONTROLLER = 0.3;
+        public static final double PY_CONTROLLER = 0.3;
+
+        public static final double DEFAULT_THETA = 0.1;
+
+        // Constraint for the motion profilied robot angle controller
+        public static final TrapezoidProfile.Constraints K_THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                MAX_ANGULAR_SPEED_RADIANS_PER_SECOND, MAX_ANGULAR_SPEED_RADIANS_PER_SECOND_SQUARED);
+
+        public static final double TRACK_WIDTH = 1.0;
+        // Distance between centers of right and left wheels on robot
+        public static final double WHEEL_BASE = 1.0;
+        // Distance between front and back wheels on robot
+        public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
+                new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2),
+                new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2));
+    }
+
     private final Timer timer = new Timer();
     private final Trajectory trajectory;
     private final Supplier<Pose2d> pose;
-    private final SwerveDriveKinematics kinematics;
     private final HolonomicDriveController controller;
     private final Consumer<ChassisSpeeds> outputModuleStates;
     private final Supplier<Rotation2d> desiredRotation;
-    private final DrivebaseSubsystem drivebase;
 
     /**
      * Constructs a new SwerveControllerCommand that when executed will follow the
@@ -41,56 +64,37 @@ public class SwerveControllerCommand extends CommandBase {
      * this is left to the user, since it is not appropriate for paths with
      * nonstationary endstates.
      *
+     * @param drivebase
      * @param trajectory
      *            The trajectory to follow.
      * @param pose
      *            A function that supplies the robot pose - use one of the odometry
      *            classes to
      *            provide this.
-     * @param kinematics
-     *            The kinematics for the robot drivetrain.
-     * @param xController
-     *            The Trajectory Tracker PID controller for the robot's x position.
-     * @param yController
-     *            The Trajectory Tracker PID controller for the robot's y position.
      * @param thetaController
      *            The Trajectory Tracker PID controller for angle for the robot.
-     * @param desiredRotation
-     *            The angle that the drivetrain should be facing. This is sampled at
-     *            each
-     *            time step.
-     * @param outputModuleStates
-     *            The raw output module states from the position controllers.
-     * @param drivebase
-     * @param requirements
-     *            The subsystems to require.
      */
     @SuppressWarnings("ParameterName")
-    public SwerveControllerCommand(
+    public FollowWpilibTrajectory(
+            DrivebaseSubsystem drivebase,
             Trajectory trajectory,
-            Supplier<Pose2d> pose,
-            SwerveDriveKinematics kinematics,
-            PIDController xController,
-            PIDController yController,
             ProfiledPIDController thetaController,
-            Supplier<Rotation2d> desiredRotation,
-            Consumer<ChassisSpeeds> outputModuleStates,
-            DrivebaseSubsystem drivebase, Subsystem... requirements) {
+            Supplier<Rotation2d> desiredRotation) {
+        this.pose = drivebase::getPoseAsPoseMeters;
         this.trajectory = requireNonNullParam(trajectory, "trajectory", "SwerveControllerCommand");
-        this.pose = requireNonNullParam(pose, "pose", "SwerveControllerCommand");
-        this.kinematics = requireNonNullParam(kinematics, "kinematics", "SwerveControllerCommand");
-        this.drivebase = drivebase;
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        this.trajectory.relativeTo(pose.get());
 
         controller = new HolonomicDriveController(
-                requireNonNullParam(xController, "xController", "SwerveControllerCommand"),
-                requireNonNullParam(yController, "yController", "SwerveControllerCommand"),
+                new PIDController(WPILibAutoConstants.PX_CONTROLLER, 0, 0),
+                new PIDController(WPILibAutoConstants.PY_CONTROLLER, 0, 0),
                 requireNonNullParam(thetaController, "thetaController", "SwerveControllerCommand"));
 
-        this.outputModuleStates = requireNonNullParam(outputModuleStates, "frontLeftOutput", "SwerveControllerCommand");
+        this.outputModuleStates = drivebase::updateModules;
 
         this.desiredRotation = requireNonNullParam(desiredRotation, "desiredRotation", "SwerveControllerCommand");
 
-        addRequirements(requirements);
         addRequirements(drivebase);
     }
 
@@ -122,39 +126,19 @@ public class SwerveControllerCommand extends CommandBase {
      *            A function that supplies the robot pose - use one of the odometry
      *            classes to
      *            provide this.
-     * @param kinematics
-     *            The kinematics for the robot drivetrain.
-     * @param xController
-     *            The Trajectory Tracker PID controller for the robot's x position.
-     * @param yController
-     *            The Trajectory Tracker PID controller for the robot's y position.
      * @param thetaController
      *            The Trajectory Tracker PID controller for angle for the robot.
-     * @param outputModuleStates
-     *            The raw output module states from the position controllers.
-     * @param requirements
-     *            The subsystems to require.
      */
     @SuppressWarnings("ParameterName")
-    public SwerveControllerCommand(
+    public FollowWpilibTrajectory(
+            DrivebaseSubsystem drivebase,
             Trajectory trajectory,
-            Supplier<Pose2d> pose,
-            SwerveDriveKinematics kinematics,
-            PIDController xController,
-            PIDController yController,
-            ProfiledPIDController thetaController,
-            Consumer<ChassisSpeeds> outputModuleStates, DrivebaseSubsystem drivebase,
-            Subsystem... requirements) {
+            ProfiledPIDController thetaController) {
         this(
+                drivebase,
                 trajectory,
-                pose,
-                kinematics,
-                xController,
-                yController,
                 thetaController,
-                () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation(),
-                outputModuleStates,
-                drivebase, requirements);
+                () -> trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters.getRotation());
     }
 
     @Override

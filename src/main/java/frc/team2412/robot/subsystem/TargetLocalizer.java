@@ -283,12 +283,12 @@ public class TargetLocalizer implements Loggable {
     }
 
     @Config
-    public void setFDepth(double f ){
+    public void setFDepth(double f) {
         TURRET_DEPTH_FF = f;
     }
 
     @Config
-    public void setFLateral(double f){
+    public void setFLateral(double f) {
         TURRET_LATERAL_FF = f;
     }
 }

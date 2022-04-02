@@ -281,13 +281,19 @@ public class TargetLocalizer implements Loggable {
         return shooterSubsystem.upToSpeed();
     }
 
-    @Config
+    @Config(name = "Depth FF")
     public void setFDepth(double f) {
         TURRET_DEPTH_FF = f;
     }
 
-    @Config
+    @Config(name = "Lateral FF")
     public void setFLateral(double f) {
         TURRET_LATERAL_FF = f;
     }
+
+    @Config(name = "Angular FF")
+    public void setFAngular(double f){
+        TURRET_ANGULAR_FF = f;
+    }
+
 }

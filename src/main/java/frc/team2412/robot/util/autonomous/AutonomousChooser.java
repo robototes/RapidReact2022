@@ -98,7 +98,7 @@ public class AutonomousChooser {
                 (subsystems) -> new OneBallAutoCommand(subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "✖ One ball auto ✖",
+                "Y One ball auto Y",
                 Subsystems.SubsystemConstants.INDEX_ENABLED &&
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
                         Subsystems.SubsystemConstants.DRIVE_ENABLED &&
@@ -108,7 +108,7 @@ public class AutonomousChooser {
                         subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "✖ Two ball auto left ✖",
+                "Y Two ball auto left Y",
                 allEnabled,
                 new Pose2d(new Translation2d(397.308, 122.461), Rotation2d.fromDegrees(316.877)),
                 imagesPath + "jackTwoBallLeft.png"),
@@ -117,7 +117,7 @@ public class AutonomousChooser {
                         subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "✔ Two ball auto middle ✔",
+                "Y Two ball auto middle Y",
                 allEnabled,
                 new Pose2d(new Translation2d(381.791, 211.487), Rotation2d.fromDegrees(25)),
                 imagesPath + "jackTwoBallMiddle.png"),
@@ -126,14 +126,14 @@ public class AutonomousChooser {
                         subsystems.shooterSubsystem,
                         subsystems.targetLocalizer, subsystems.drivebaseSubsystem,
                         subsystems.intakeSubsystem),
-                "✖ Two ball auto right ✖",
+                "Y Two ball auto right Y",
                 allEnabled,
                 new Pose2d(new Translation2d(341, 250.434), Rotation2d.fromDegrees(90)),
                 imagesPath + "jackTwoBallRight.png"),
         TWO_BALL_FENDER(
                 (subsystems) -> new TwoBallFenderAutoCommand(subsystems.drivebaseSubsystem,
                         subsystems.shooterSubsystem),
-                "✖ Two ball fender path ✖",
+                "X Two ball fender path X",
                 allEnabled,
                 new Pose2d(new Translation2d(231.8, 200.8), Rotation2d.fromDegrees(46)),
                 imagesPath + "twoBallFender.png"),
@@ -141,13 +141,13 @@ public class AutonomousChooser {
                 (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
-                "✔ 2910 Five ball path ✔", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                "Y 2910 Five ball path Y", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
                 imagesPath + "jackFiveBall.png"),
         WPI_PATH(
                 (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
-                "✖ WPILib Five ball path ✖", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                "X WPILib Five ball path X", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(331, 71), Rotation2d.fromDegrees(0)),
                 imagesPath + "fiveBall.png"),
         SQUARE_PATH((subsystems) -> new SquarePath(subsystems.drivebaseSubsystem),
@@ -180,8 +180,7 @@ public class AutonomousChooser {
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED &&
-                        Subsystems.SubsystemConstants.DRIVE_ENABLED),
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         CLIMB_UP_IN_QUEUE(
                 (subsystems) -> new ClimbExtendSlowlyCommand(subsystems.climbSubsystem,
                         subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem),

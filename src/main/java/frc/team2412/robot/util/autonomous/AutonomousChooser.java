@@ -90,7 +90,7 @@ public class AutonomousChooser {
             Subsystems.SubsystemConstants.SHOOTER_VISION_ENABLED &&
             Subsystems.SubsystemConstants.DRIVE_ENABLED &&
             Subsystems.SubsystemConstants.INTAKE_ENABLED;
-    private static String imagesPath = "C:/Users/Robototes/git/2022/robototes/RapidReact2022/src/main/java/frc/team2412/robot/commands/autonomous/setupReference/";
+    private static String imagesPath = "C:/Users/Public/Pictures/RRSetupReference/";
 
     public enum AutonomousMode {
         // Replace with individual testing commands

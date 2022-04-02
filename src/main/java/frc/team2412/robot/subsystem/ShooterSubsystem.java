@@ -78,6 +78,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
+
+        public static final double BATTERY_VOLTAGE = 12.5;
     }
 
     /* INSTANCE VARIABLES */
@@ -134,10 +136,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
 
-        flywheelMotor1.configVoltageCompSaturation(12.5);
+        flywheelMotor1.configVoltageCompSaturation(BATTERY_VOLTAGE);
         flywheelMotor1.enableVoltageCompensation(true);
 
-        flywheelMotor2.configVoltageCompSaturation(12.5);
+        flywheelMotor2.configVoltageCompSaturation(BATTERY_VOLTAGE);
         flywheelMotor2.enableVoltageCompensation(true);
 
         flywheelMotor1.setInverted(false);
@@ -156,7 +158,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.2);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
 
-        turretMotor.configVoltageCompSaturation(12.5);
+        turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
         turretMotor.enableVoltageCompensation(true);
 
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
@@ -174,7 +176,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
 
-        hoodMotor.enableVoltageCompensation(12.5);
+        hoodMotor.enableVoltageCompensation(BATTERY_VOLTAGE);
 
         resetHoodEncoder(true);
     }

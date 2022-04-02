@@ -292,7 +292,7 @@ public class TargetLocalizer implements Loggable {
     }
 
     @Config(name = "Angular FF")
-    public void setFAngular(double f){
+    public void setFAngular(double f) {
         TURRET_ANGULAR_FF = f;
     }
 

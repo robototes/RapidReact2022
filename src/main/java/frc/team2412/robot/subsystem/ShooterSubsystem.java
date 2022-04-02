@@ -113,8 +113,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Constructor for shooter subsystem.
      */
     public ShooterSubsystem() {
-        this.flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
-        this.flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
+        this.flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_2);
+        this.flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_1);
         this.turretMotor = new WPI_TalonFX(TURRET);
         this.hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.hoodEncoder = hoodMotor.getEncoder();
@@ -141,7 +141,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configVoltageCompSaturation(BATTERY_VOLTAGE);
         flywheelMotor2.enableVoltageCompensation(true);
 
-        flywheelMotor1.setInverted(false);
+        flywheelMotor1.setInverted(true);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
 
@@ -154,7 +154,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(TURRET_CURRENT_LIMIT);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.2);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.3);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
 
         turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);

@@ -39,6 +39,9 @@ public class TargetLocalizer implements Loggable {
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
+    private double turretLateralFF = TURRET_LATERAL_FF;
+    private double turretDepthFF = TURRET_DEPTH_FF;
+
     /**
      * Creates a new {@link TargetLocalizer}.
      * If {@code drivebase} is null, will assume robot is stationary.
@@ -81,7 +84,7 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double distanceAdjustment() {
-        return (getDepthVelocity() * getDistance() * TURRET_DEPTH_FF);
+        return (getDepthVelocity() * getDistance() * turretDepthFF);
     }
 
     public double getPitch() {
@@ -174,7 +177,7 @@ public class TargetLocalizer implements Loggable {
      */
     public double yawAdjustment() {
         return (getDistance() != 0 && getDistance() > getLateralVelocity()
-                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
+                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * turretLateralFF))
                 : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF);
     }
 
@@ -283,12 +286,12 @@ public class TargetLocalizer implements Loggable {
 
     @Config(name = "Depth FF")
     public void setFDepth(double f) {
-        TURRET_DEPTH_FF = f;
+        turretDepthFF = f;
     }
 
     @Config(name = "Lateral FF")
     public void setFLateral(double f) {
-        TURRET_LATERAL_FF = f;
+        turretLateralFF = f;
     }
 
     @Config(name = "Angular FF")

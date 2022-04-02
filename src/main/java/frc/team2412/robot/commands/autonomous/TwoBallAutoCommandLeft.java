@@ -27,6 +27,8 @@ public class TwoBallAutoCommandLeft extends SequentialCommandGroup {
 
         addCommands(
                 new IntakeSetExtendCommand(intakeSubsystem),
+                new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer,
+                        () -> false)),
                 new ParallelCommandGroup(
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
                         new SequentialCommandGroup(

@@ -4,6 +4,9 @@ import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.TimeBasedMedianFilter;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Config.Exclude;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -26,10 +29,10 @@ import edu.wpi.first.math.geometry.Translation2d;
  * </ul>
  * </p>
  */
-public class TargetLocalizer {
+public class TargetLocalizer implements Loggable {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
+        public static double TURRET_LATERAL_FF = 0.2, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0.17;
         // Seconds, placeholder duration
         public static final double FILTER_TIME = 1;
         // Dimensions are in inches
@@ -39,12 +42,19 @@ public class TargetLocalizer {
         public static final Translation2d FIELD_CENTRIC_HUB_CENTER = new Translation2d(27 * 12, 13.5 * 12);
     }
 
+    @Exclude
     private final DrivebaseSubsystem drivebaseSubsystem;
+    @Exclude
     private final ShooterSubsystem shooterSubsystem;
+    @Exclude
     private final ShooterVisionSubsystem shooterVisionSubsystem;
+
     private final TimeBasedMedianFilter distanceFilter;
     private Pose2d startingPose;
     private Rotation2d gyroAdjustmentAngle;
+
+    private double turretLateralFF = TURRET_LATERAL_FF;
+    private double turretDepthFF = TURRET_DEPTH_FF;
 
     /**
      * Creates a new {@link TargetLocalizer}.
@@ -103,7 +113,7 @@ public class TargetLocalizer {
      * @return adjustment
      */
     public double distanceAdjustment() {
-        return (getDepthVelocity() * getDistance() * TURRET_DEPTH_FF) / getVoltage();
+        return (getDepthVelocity() * getDistance() * turretDepthFF);
     }
 
     public double getPitch() {
@@ -214,9 +224,8 @@ public class TargetLocalizer {
      */
     public double yawAdjustment() {
         return (getDistance() != 0 && getDistance() > getLateralVelocity()
-                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * TURRET_LATERAL_FF))
-                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF)
-                        / getVoltage();
+                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * turretLateralFF))
+                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF);
     }
 
     /**
@@ -276,5 +285,15 @@ public class TargetLocalizer {
 
     public boolean upToSpeed() {
         return shooterSubsystem.upToSpeed();
+    }
+
+    @Config
+    public void setFDepth(double f) {
+        turretDepthFF = f;
+    }
+
+    @Config
+    public void setFLateral(double f) {
+        turretLateralFF = f;
     }
 }

@@ -29,10 +29,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.3;
+        public static final double FLYWHEEL_DEFAULT_P = 0.1;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0.057;
+        public static final double FLYWHEEL_DEFAULT_F = 0.0465;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
@@ -61,15 +61,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -270;
-        public static final double MAX_TURRET_ANGLE = 90;
+        public static final double MIN_TURRET_ANGLE = -90;
+        public static final double MAX_TURRET_ANGLE = 45;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
 
         public static final int TURRET_SLOT_ID = 0;
 
-        public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -250;
-        public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 70;
+        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 30, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
+        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 30, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -78,6 +78,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
                 true, 10, 10, 500);
         public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
+
+        public static final double BATTERY_VOLTAGE = 12.5;
     }
 
     /* INSTANCE VARIABLES */
@@ -134,6 +136,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
 
+        flywheelMotor1.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        flywheelMotor1.enableVoltageCompensation(true);
+
+        flywheelMotor2.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        flywheelMotor2.enableVoltageCompensation(true);
+
         flywheelMotor1.setInverted(false);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
@@ -149,6 +157,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.setNeutralMode(NeutralMode.Brake);
         turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.2);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
+
+        turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        turretMotor.enableVoltageCompensation(true);
+
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
         hoodMotor.restoreFactoryDefaults();
@@ -163,6 +175,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setClosedLoopRampRate(1);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
+
+        hoodMotor.enableVoltageCompensation(BATTERY_VOLTAGE);
+
         resetHoodEncoder(true);
     }
 
@@ -188,12 +203,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretDisable = disable;
     }
 
+    @Log
+    double setP;
+
     // PID
     @Config(name = "Flywheel PID", columnIndex = 0, rowIndex = 0, width = 1, height = 3)
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
             @Config(name = "flywheelF", defaultValueNumeric = FLYWHEEL_DEFAULT_F) double f) {
+        setP = p;
         flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
         flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);

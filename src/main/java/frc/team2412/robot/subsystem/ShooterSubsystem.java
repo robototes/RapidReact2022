@@ -484,4 +484,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         return hoodMotor.getEncoder().getPosition();
     }
 
+    @Log
+    public String getTemperature(){
+        return flywheelMotor1.getTemperature() +  " " + flywheelMotor2.getTemperature();
+    }
+
 }

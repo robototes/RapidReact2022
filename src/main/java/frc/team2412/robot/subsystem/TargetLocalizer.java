@@ -16,7 +16,7 @@ import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 public class TargetLocalizer implements Loggable {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0;
+        public static double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0.145;
         // Seconds, placeholder duration
         public static final double FILTER_TIME = 1;
         // Angles are in degrees
@@ -84,6 +84,9 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double distanceAdjustment() {
+        if(getDepthVelocity() < 0.1){
+            return 0;
+        }
         return (getDepthVelocity() * getDistance() * turretDepthFF);
     }
 

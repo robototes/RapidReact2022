@@ -67,12 +67,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         public static final double MIN_TURRET_ANGLE = -225;
         public static final double MAX_TURRET_ANGLE = 135;
-        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 30, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
-        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 30, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
+        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 60, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
+        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 60, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 0.5);
+                true, 20, 20, 0.5);
         public static final SupplyCurrentLimitConfiguration TURRET_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 10, 10, 0.5);
         public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap

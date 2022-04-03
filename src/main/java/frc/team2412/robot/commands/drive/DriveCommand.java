@@ -29,7 +29,7 @@ public class DriveCommand extends CommandBase {
         drivebaseSubsystem.drive(new Vector2(x, y), rot);
     }
 
-    public double deadbandCorrection(double input){
+    public double deadbandCorrection(double input) {
         return input < 0.05 ? 0 : input;
     }
 }

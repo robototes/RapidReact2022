@@ -23,15 +23,13 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double x = forward.get(false);
-        if (Math.abs(x) < 0.05) {
-            x = 0;
-        }
-        double y = -strafe.get(false);
-        if (Math.abs(y) < 0.05) {
-            y = 0;
-        }
+        double x = deadbandCorrection(forward.get(false));
+        double y = deadbandCorrection(-strafe.get(false));
         double rot = -rotation.get(false) / 2;
         drivebaseSubsystem.drive(new Vector2(x, y), rot);
+    }
+
+    public double deadbandCorrection(double input){
+        return input < 0.05 ? 0 : input;
     }
 }

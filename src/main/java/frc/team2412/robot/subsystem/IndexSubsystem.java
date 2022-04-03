@@ -29,7 +29,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
         public static final double INDEX_FEEDER_SPEED = 0.125;
         public static final double INDEX_FEEDER_SHOOT_SPEED = 0.18;
-        public static final double INDEX_IN_SPEED = 0.425;
+        public static final double INDEX_IN_SPEED = IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED / 2;
         public static final double INDEX_OUT_SPEED = -0.3;
 
         // The current limit

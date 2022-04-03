@@ -24,11 +24,11 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
         double x = forward.get(false);
-        if(x < 0.05){
+        if(Math.abs(x) < 0.05){
             x = 0;
         }
         double y = -strafe.get(false);
-        if(y < 0.05){
+        if(Math.abs(y) < 0.05){
             y = 0;
         }
         double rot = -rotation.get(false) / 2;

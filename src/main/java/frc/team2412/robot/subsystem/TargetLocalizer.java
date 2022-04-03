@@ -84,7 +84,7 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double distanceAdjustment() {
-        if(getDepthVelocity() < 0.1){
+        if (getDepthVelocity() < 0.1) {
             return 0;
         }
         return (getDepthVelocity() * getDistance() * turretDepthFF);

@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public static class IntakeConstants {
 
         public static final double INNER_INTAKE_IN_SPEED = 0.35; // TODO
-        public static final double INTAKE_IN_SPEED = 0.7;
+        public static final double INTAKE_IN_SPEED = 0.85;
         public static final double INTAKE_OUT_SPEED = -0.3;
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(

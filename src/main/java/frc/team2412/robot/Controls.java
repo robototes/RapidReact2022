@@ -64,6 +64,8 @@ public class Controls {
         driveController = new XboxController(CONTROLLER_PORT);
         codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
+
+
         resetDriveGyroButton = driveController.getRightJoystickButton();
         setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
         shootButton = driveController.getRightBumperButton();

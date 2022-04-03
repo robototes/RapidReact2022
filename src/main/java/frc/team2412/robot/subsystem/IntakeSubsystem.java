@@ -67,12 +67,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     public IntakeSubsystem() {
 
-        motorOuter = new WPI_TalonFX(INTAKE_MOTOR_1, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+        motorOuter = new WPI_TalonFX(INTAKE_MOTOR_OUTER, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
         motorOuter.setNeutralMode(NeutralMode.Coast);
         motorOuter.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
         motorOuter.setInverted(true);
-        motorInner = new WPI_TalonFX(INTAKE_MOTOR_2, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+        motorInner = new WPI_TalonFX(INTAKE_MOTOR_INNER, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
         if (motorInner != null) {
             motorInner.setNeutralMode(NeutralMode.Coast);

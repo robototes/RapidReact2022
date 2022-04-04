@@ -16,4 +16,9 @@ public class PostClimbUpComamnd extends CommandBase {
         subsystem.goingUp();
     }
 
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
+
 }

@@ -13,8 +13,12 @@ public class PostClimbDownComamnd extends CommandBase {
 
     @Override
     public void execute() {
-      subsystem.goingDown();
+        subsystem.goingDown();
     }
 
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
 }

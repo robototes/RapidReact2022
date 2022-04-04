@@ -19,7 +19,6 @@ public class PostClimbUpComamnd extends CommandBase {
 
     @Override
     public boolean runsWhenDisabled() {
-        // TODO Auto-generated method stub
         return true;
     }
 

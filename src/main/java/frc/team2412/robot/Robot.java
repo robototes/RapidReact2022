@@ -148,6 +148,9 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.startRecording();
 
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog(), true);
+
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 

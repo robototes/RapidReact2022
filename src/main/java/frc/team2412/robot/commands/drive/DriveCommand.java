@@ -25,11 +25,11 @@ public class DriveCommand extends CommandBase {
     public void execute() {
         double x = deadbandCorrection(forward.get(false));
         double y = deadbandCorrection(-strafe.get(false));
-        double rot = -rotation.get(false) / 2;
+        double rot = deadbandCorrection(-rotation.get(false)) / 2;
         drivebaseSubsystem.drive(new Vector2(x, y), rot);
     }
 
     public double deadbandCorrection(double input) {
-        return Math.abs(input) < 0.05 ? 0 : input;
+        return Math.abs(input) < 0.05 ? 0 : (input - Math.signum(input)) / 0.95;
     }
 }

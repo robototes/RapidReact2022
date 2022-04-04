@@ -11,7 +11,6 @@ public class DriveCommand extends CommandBase {
     private final Axis forward;
     private final Axis strafe;
     private final Axis rotation;
-    private final boolean fieldOriented;
 
     public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation) {
         this.drivebaseSubsystem = drivebaseSubsystem;
@@ -19,19 +18,18 @@ public class DriveCommand extends CommandBase {
         this.strafe = strafe;
         this.rotation = rotation;
 
-        this.fieldOriented = drivebaseSubsystem.getFieldCentric();
-
         addRequirements(drivebaseSubsystem);
     }
 
     @Override
     public void execute() {
-        drivebaseSubsystem.drive(new Vector2(forward.get(false), -strafe.get(false)), -rotation.get(false) / 2,
-                drivebaseSubsystem.getFieldCentric());
+        double x = deadbandCorrection(forward.get(false));
+        double y = deadbandCorrection(-strafe.get(false));
+        double rot = -rotation.get(false) / 2;
+        drivebaseSubsystem.drive(new Vector2(x, y), rot);
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        drivebaseSubsystem.drive(Vector2.ZERO, 0.0, false);
+    public double deadbandCorrection(double input) {
+        return Math.abs(input) < 0.05 ? 0 : input;
     }
 }

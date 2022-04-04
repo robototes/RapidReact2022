@@ -29,10 +29,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.3;
+        public static final double FLYWHEEL_DEFAULT_P = 0.1;
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0.057;
+        public static final double FLYWHEEL_DEFAULT_F = 0.0465;
         // Placeholder PID constants
         public static final double HOOD_DEFAULT_P = 0.12;
         public static final double HOOD_DEFAULT_I = 0;
@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
-        public static final double FLYWHEEL_ALLOWED_ERROR = 100 * FLYWHEEL_RPM_TO_VELOCITY;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 50;
 
         // Placeholder gearing constant
         public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
@@ -61,23 +61,24 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
-        public static final double MIN_TURRET_ANGLE = -90;//-300;
-        public static final double MAX_TURRET_ANGLE = 90;//120;
         public static final double STARTING_TURRET_ANGLE = 0;
         public static final double TURRET_ANGLE_TOLERANCE = 1;
-
         public static final int TURRET_SLOT_ID = 0;
 
-        public static final double LEFT_WRAP = -240, LEFT_WRAP_THRESHOLD = -270;
-        public static final double RIGHT_WRAP = 60, RIGHT_WRAP_THRESHOLD = 90;
+        public static final double MIN_TURRET_ANGLE = -225;
+        public static final double MAX_TURRET_ANGLE = 135;
+        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 60, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
+        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 60, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 40, 40, 500);
+                true, 20, 20, 0.5);
         public static final SupplyCurrentLimitConfiguration TURRET_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 10, 10, 500);
+                true, 10, 10, 0.5);
         public static final InterpolatingTreeMap DATA_POINTS = InterpolatingTreeMap
                 .fromCSV(new File(Filesystem.getDeployDirectory(), "shooterData.csv").getPath());
+
+        public static final double BATTERY_VOLTAGE = 12.5;
     }
 
     /* INSTANCE VARIABLES */
@@ -112,8 +113,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * Constructor for shooter subsystem.
      */
     public ShooterSubsystem() {
-        this.flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_1);
-        this.flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_2);
+        this.flywheelMotor1 = new WPI_TalonFX(FLYWHEEL_2);
+        this.flywheelMotor2 = new WPI_TalonFX(FLYWHEEL_1);
         this.turretMotor = new WPI_TalonFX(TURRET);
         this.hoodMotor = new CANSparkMax(HOOD, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.hoodEncoder = hoodMotor.getEncoder();
@@ -134,7 +135,13 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor2.configSupplyCurrentLimit(FLYWHEEL_CURRENT_LIMIT);
         flywheelMotor2.setNeutralMode(NeutralMode.Coast);
 
-        flywheelMotor1.setInverted(false);
+        flywheelMotor1.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        flywheelMotor1.enableVoltageCompensation(true);
+
+        flywheelMotor2.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        flywheelMotor2.enableVoltageCompensation(true);
+
+        flywheelMotor1.setInverted(true);
         flywheelMotor2.follow(flywheelMotor1);
         flywheelMotor2.setInverted(InvertType.OpposeMaster);
 
@@ -147,8 +154,12 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(TURRET_CURRENT_LIMIT);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.2);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.3);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
+
+        turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
+        turretMotor.enableVoltageCompensation(true);
+
         setTurretPID(TURRET_DEFAULT_P, TURRET_DEFAULT_I, TURRET_DEFAULT_D);
 
         hoodMotor.restoreFactoryDefaults();
@@ -163,6 +174,9 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.setClosedLoopRampRate(1);
         hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         setHoodPID(HOOD_DEFAULT_P, HOOD_DEFAULT_I, HOOD_DEFAULT_D, HOOD_DEFAULT_F);
+
+        hoodMotor.enableVoltageCompensation(BATTERY_VOLTAGE);
+
         resetHoodEncoder(true);
     }
 
@@ -188,12 +202,16 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretDisable = disable;
     }
 
+    @Log
+    double setP;
+
     // PID
     @Config(name = "Flywheel PID", columnIndex = 0, rowIndex = 0, width = 1, height = 3)
     private void setFlywheelPID(@Config(name = "flywheelP", defaultValueNumeric = FLYWHEEL_DEFAULT_P) double p,
             @Config(name = "flywheelI", defaultValueNumeric = FLYWHEEL_DEFAULT_I) double i,
             @Config(name = "flywheelD", defaultValueNumeric = FLYWHEEL_DEFAULT_D) double d,
             @Config(name = "flywheelF", defaultValueNumeric = FLYWHEEL_DEFAULT_F) double f) {
+        setP = p;
         flywheelMotor1.config_kP(FLYWHEEL_SLOT_ID, p);
         flywheelMotor1.config_kI(FLYWHEEL_SLOT_ID, i);
         flywheelMotor1.config_kD(FLYWHEEL_SLOT_ID, d);
@@ -244,7 +262,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         flywheelMotor1.stopMotor();
     }
 
-    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 6000)
+    @Config.NumberSlider(name = "Flywheel test RPM", columnIndex = 5, rowIndex = 0, min = 0, max = 4000)
     private void setFlywheelTestRPM(double newRPM) {
         flywheelTestRPM = newRPM;
     }
@@ -302,6 +320,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      *
      * @return The velocity of the flywheel motors.
      */
+    @Log
     public double getFlywheelVelocity() {
         return flywheelMotor1.getSelectedSensorVelocity();
     }
@@ -454,14 +473,20 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
+    @Log
     public boolean upToSpeed() {
-        return Math.abs(flywheelMotor1.getClosedLoopError()) <= FLYWHEEL_ALLOWED_ERROR
+        return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
                 && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
     }
 
     @Log(name = "raw hood rev")
     public double getRawHood() {
         return hoodMotor.getEncoder().getPosition();
+    }
+
+    @Log
+    public String getTemperature() {
+        return flywheelMotor1.getTemperature() + " " + flywheelMotor2.getTemperature();
     }
 
 }

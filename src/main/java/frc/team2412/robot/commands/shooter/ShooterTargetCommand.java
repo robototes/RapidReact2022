@@ -60,7 +60,7 @@ public class ShooterTargetCommand extends CommandBase {
 //            System.out.println("Actual hood angle: " + shooter.getHoodAngle());
         }
 
-        if (!turretEnable.getAsBoolean())
+        if (turretEnable.getAsBoolean())
             state = TurretState.STOPPED;
         else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
             state = TurretState.WRAP_LEFT;

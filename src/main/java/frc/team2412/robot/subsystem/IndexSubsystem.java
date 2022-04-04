@@ -21,15 +21,16 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
 
     public static class IndexConstants {
 
-        public static double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
-        public static double CURRENT_LIMIT_RESET_AMPS = 10;
-        public static double CURRENT_LIMIT_TRIGGER_AMPS = 20;
+        public static final double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
+        public static final double CURRENT_LIMIT_RESET_AMPS = 10;
+        public static final double CURRENT_LIMIT_TRIGGER_AMPS = 20;
 
         // Index Motor Speeds
 
-        public static double INDEX_FEEDER_SPEED = 0.2;
-        public static double INDEX_IN_SPEED = 0.175;
-        public static double INDEX_OUT_SPEED = -0.3;
+        public static final double INDEX_FEEDER_SPEED = 0.125;
+        public static final double INDEX_FEEDER_SHOOT_SPEED = 0.18;
+        public static final double INDEX_IN_SPEED = IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED / 2;
+        public static final double INDEX_OUT_SPEED = -0.3;
 
         // The current limit
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
@@ -107,7 +108,11 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops first motor and updates first motor state
      */
     public void ingestMotorStop() {
-        ingestMotor.stopMotor();
+        ingestMotor.set(0);
+    }
+
+    public void feederMotorShoot() {
+        feederMotor.set(INDEX_FEEDER_SHOOT_SPEED);
     }
 
     /**
@@ -128,7 +133,7 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
      * Stops second motor and updates second motor state
      */
     public void feederMotorStop() {
-        feederMotor.stopMotor();
+        feederMotor.set(0);
     }
 
     /**

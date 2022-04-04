@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public static class IntakeConstants {
 
         public static final double INNER_INTAKE_IN_SPEED = 0.35; // TODO
-        public static final double INTAKE_IN_SPEED = 0.5;
+        public static final double INTAKE_IN_SPEED = 0.85;
         public static final double INTAKE_OUT_SPEED = -0.3;
 
         public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
@@ -48,8 +48,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Define Hardware
 
     @Log
-    private final WPI_TalonFX motor1;
-    private final WPI_TalonFX motor2;
+    private final WPI_TalonFX motorOuter;
+    private final WPI_TalonFX motorInner;
 
     private final DoubleSolenoid solenoid;
 
@@ -67,17 +67,17 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     public IntakeSubsystem() {
 
-        motor1 = new WPI_TalonFX(INTAKE_MOTOR_1, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+        motorOuter = new WPI_TalonFX(INTAKE_MOTOR_OUTER, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-        motor1.setNeutralMode(NeutralMode.Coast);
-        motor1.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-        motor1.setInverted(true);
-        motor2 = new WPI_TalonFX(INTAKE_MOTOR_2, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+        motorOuter.setNeutralMode(NeutralMode.Coast);
+        motorOuter.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+        motorOuter.setInverted(true);
+        motorInner = new WPI_TalonFX(INTAKE_MOTOR_INNER, Hardware.DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-        if (motor2 != null) {
-            motor2.setNeutralMode(NeutralMode.Coast);
-            motor2.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
-            motor2.setInverted(true);
+        if (motorInner != null) {
+            motorInner.setNeutralMode(NeutralMode.Coast);
+            motorInner.configSupplyCurrentLimit(MAX_MOTOR_CURRENT);
+            motorInner.setInverted(false);
         }
 
         solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
@@ -94,8 +94,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     // Methods
 
     public void simInit(PhysicsSim sim) {
-        sim.addTalonFX(motor1, 1, SIM_FULL_VELOCITY);
-        sim.addTalonFX(motor2, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(motorOuter, 1, SIM_FULL_VELOCITY);
+        sim.addTalonFX(motorInner, 1, SIM_FULL_VELOCITY);
     }
 
     /**
@@ -104,9 +104,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * @param speed
      */
     public void setSpeed(double speed) {
-        motor1.set(speed);
-        if (motor2 != null)
-            motor2.set(-speed);
+        setSpeed(speed, speed);
+    }
+
+    public void setSpeed(double outerSpeed, double innerSpeed) {
+        motorOuter.set(outerSpeed);
+        motorInner.set(innerSpeed);
     }
 
     /**
@@ -133,8 +136,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      * Stops motor and updates motor state
      */
     public void intakeStop() {
-        motor1.stopMotor();
-        motor2.stopMotor();
+        motorOuter.stopMotor();
+        motorInner.stopMotor();
     }
 
     /**
@@ -167,7 +170,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Motor Speed")
     public double getMotorSpeed() {
-        return motor1.get();
+        return motorOuter.get();
     }
 
     /**
@@ -175,7 +178,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
      */
     @Log(name = "Motor Moving")
     public boolean isMotorOn() {
-        return motor1.get() != 0;
+        return motorOuter.get() != 0;
     }
 
     /**

@@ -13,10 +13,15 @@ public class PostClimbSubsystem extends SubsystemBase implements Loggable {
 
     public PostClimbSubsystem() {
         clampSolenoid = new Solenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_SOLENOID_UPWARDS);
+        setClamp();
     }
 
     public void releaseClamp() {
         clampSolenoid.set(true);
+    }
+
+    public void setClamp() {
+        clampSolenoid.set(false);
     }
 
 }

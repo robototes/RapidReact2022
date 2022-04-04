@@ -9,11 +9,12 @@ public class PostClimbUpComamnd extends CommandBase {
 
     public PostClimbUpComamnd(PostClimbSubsystem subsystem) {
         this.subsystem = subsystem;
+        addRequirements(subsystem);
     }
 
     @Override
     public void execute() {
-        subsystem.goingUp();
+        subsystem.releaseClamp();
     }
 
     @Override

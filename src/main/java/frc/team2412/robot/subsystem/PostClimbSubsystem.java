@@ -9,20 +9,14 @@ import io.github.oblarg.oblog.Loggable;
 
 public class PostClimbSubsystem extends SubsystemBase implements Loggable {
 
-    private Solenoid upwardsSolenoid;
-    private Solenoid downwardsSolenoid;
+    private Solenoid clampSolenoid;
 
     public PostClimbSubsystem() {
-        upwardsSolenoid = new Solenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_SOLENOID_UPWARDS);
-        downwardsSolenoid = new Solenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_SOLENOID_DOWNWARDS);
+        clampSolenoid = new Solenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_SOLENOID_UPWARDS);
     }
 
-    public void goingUp() {
-        upwardsSolenoid.set(true);
-    }
-
-    public void goingDown() {
-        downwardsSolenoid.set(true);
+    public void releaseClamp() {
+        clampSolenoid.set(true);
     }
 
 }

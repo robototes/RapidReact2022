@@ -84,7 +84,6 @@ public class Hardware {
     public static final int CLIMB_FIXED_MOTOR = 51;
     public static final int CLIMB_LIMIT_SWITCH = 9; // to be determined - digital I/O pins are 0-9
     public static final int POST_CLIMB_SOLENOID_UPWARDS = 2; // TODO
-    public static final int POST_CLIMB_SOLENOID_DOWNWARDS = 3;
 
     // Other hardware
     public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)

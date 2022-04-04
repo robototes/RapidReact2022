@@ -10,7 +10,6 @@ public class Subsystems implements Loggable {
         public static final boolean CLIMB_ENABLED = false;
         public static final boolean POST_CLIMB_ENABLED = false;
 
-
         public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = true;
         public static final boolean SHOOTER_VISION_ENABLED = true;
@@ -62,7 +61,7 @@ public class Subsystems implements Loggable {
             shooterVisionSubsystem = new ShooterVisionSubsystem();
             targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
         }
-        if(POST_CLIMB_ENABLED){
+        if (POST_CLIMB_ENABLED) {
             postClimbSubsystem = new PostClimbSubsystem();
         }
 

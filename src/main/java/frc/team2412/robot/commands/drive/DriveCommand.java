@@ -30,6 +30,6 @@ public class DriveCommand extends CommandBase {
     }
 
     public double deadbandCorrection(double input) {
-        return input < 0.05 ? 0 : input;
+        return Math.abs(input) < 0.05 ? 0 : input;
     }
 }

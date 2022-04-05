@@ -14,7 +14,7 @@ public class PostClimbUpComamnd extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.releaseClamp();
+        subsystem.removeBlock();
     }
 
     @Override

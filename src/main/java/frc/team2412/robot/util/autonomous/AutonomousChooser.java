@@ -26,6 +26,7 @@ import frc.team2412.robot.commands.climb.ClimbTestCommand;
 import frc.team2412.robot.commands.diagnostic.DiagnosticIntakeCommandGroup;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexTestCommand;
+import frc.team2412.robot.commands.intake.*;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.commands.shooter.ShooterTurretSetAngleCommand;
 
@@ -177,7 +178,7 @@ public class AutonomousChooser {
                         Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
                 (subsystems) -> new IndexShootCommand(subsystems.indexSubsystem).alongWith(
-                        new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer)),
+                        new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer).alongWith(new IntakeSetInCommand(subsystems.intakeSubsystem))),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&

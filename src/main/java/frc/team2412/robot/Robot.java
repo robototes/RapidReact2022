@@ -221,9 +221,9 @@ public class Robot extends TimedRobot {
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
-        if (subsystems.shooterSubsystem != null) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
-        }
+        // if (subsystems.shooterSubsystem != null) {
+        //     new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        // }
 
         autonomousChooser.scheduleCommand();
     }

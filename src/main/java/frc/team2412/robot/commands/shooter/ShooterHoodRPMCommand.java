@@ -25,4 +25,5 @@ public class ShooterHoodRPMCommand extends CommandBase {
 
         shooter.setHoodAngle(hoodAngle);
     }
+
 }

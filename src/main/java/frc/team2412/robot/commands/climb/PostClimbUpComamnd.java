@@ -14,12 +14,7 @@ public class PostClimbUpComamnd extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.removeBlock();
-    }
-
-    @Override
-    public boolean runsWhenDisabled() {
-        return true;
+        subsystem.armSolenoid();
     }
 
     @Override

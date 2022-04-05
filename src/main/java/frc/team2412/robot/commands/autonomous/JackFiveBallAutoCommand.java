@@ -3,7 +3,6 @@ package frc.team2412.robot.commands.autonomous;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
-import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
 import frc.team2412.robot.commands.intake.IntakeSetStopCommand;
 import org.frcteam2910.common.control.CentripetalAccelerationConstraint;

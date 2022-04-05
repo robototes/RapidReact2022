@@ -15,7 +15,8 @@ public class PostClimbSubsystem extends SubsystemBase implements Loggable {
 
     public PostClimbSubsystem() {
         blockSolenoid = new Solenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_BLOCKING_SOLENOID);
-        firingSolenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_FIRING_SOLENOID_FIRE, POST_CLIMB_FIRING_SOLENOID_CLOSE);
+        firingSolenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, POST_CLIMB_FIRING_SOLENOID_FIRE,
+                POST_CLIMB_FIRING_SOLENOID_CLOSE);
         block();
         disarmSolenoid();
     }
@@ -28,15 +29,12 @@ public class PostClimbSubsystem extends SubsystemBase implements Loggable {
         blockSolenoid.set(true);
     }
 
-    public void armSolenoid(){
+    public void armSolenoid() {
         firingSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void disarmSolenoid(){
+    public void disarmSolenoid() {
         firingSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
-
-    
-
 
 }

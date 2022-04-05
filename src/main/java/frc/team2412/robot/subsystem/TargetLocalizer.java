@@ -18,7 +18,7 @@ public class TargetLocalizer implements Loggable {
         // TODO tune these more
         public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0.145;
         // Seconds, placeholder duration
-        public static final double FILTER_TIME = 1;
+        public static final double FILTER_TIME = 0.1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches

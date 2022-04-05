@@ -98,8 +98,16 @@ public class ShooterTargetCommand extends CommandBase {
                 break;
         }
 
-        double localizerTurretAdjustment = state == TurretState.TRACKING ? localizer.yawAdjustment()
-                : turretIdlePosition.getAsDouble();
+        double localizerTurretAdjustment = 0;
+
+        switch (state) {
+            case STOPPED:
+                localizerTurretAdjustment = turretIdlePosition.getAsDouble();
+                break;
+            case TRACKING:
+                localizerTurretAdjustment = localizer.yawAdjustment();
+                break;
+        }
         // System.out.println("Localizer turret adjustment: " + localizerTurretAdjustment);
 
         turretAngle = turretAngle + localizerTurretAdjustment;
@@ -144,20 +152,20 @@ public class ShooterTargetCommand extends CommandBase {
             return new InstantCommand(shooterTargetCommand::cancel);
         }
 
-        public InstantCommand enableOn(double id) {
-            return manageTurret(true, id);
+        public InstantCommand enableAt(double idleTurretAngle) {
+            return manageTurret(true, idleTurretAngle);
         }
 
-        public InstantCommand disableOn(double id) {
-            return manageTurret(false, id);
+        public InstantCommand disableAt(double idleTurretAngle) {
+            return manageTurret(false, idleTurretAngle);
         }
 
         public InstantCommand enable() {
-            return enableOn(idle);
+            return enableAt(idle);
         }
 
         public InstantCommand disable() {
-            return disableOn(idle);
+            return disableAt(idle);
         }
 
         public InstantCommand changeIdle(double id) {

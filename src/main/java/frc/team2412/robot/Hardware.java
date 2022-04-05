@@ -73,7 +73,7 @@ public class Hardware {
     public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
 
     // intake can ids are range 30-39
-    public static final int INTAKE_MOTOR_1 = 30, INTAKE_MOTOR_2 = 31, INTAKE_SOLENOID_UP = 1,
+    public static final int INTAKE_MOTOR_OUTER = 30, INTAKE_MOTOR_INNER = 31, INTAKE_SOLENOID_UP = 1,
             INTAKE_SOLENOID_DOWN = 0;
 
     // index can ids are range 40-49
@@ -83,6 +83,7 @@ public class Hardware {
     // climb can ids are range 50-59
     public static final int CLIMB_FIXED_MOTOR = 51;
     public static final int CLIMB_LIMIT_SWITCH = 9; // to be determined - digital I/O pins are 0-9
+    public static final int POST_CLIMB_SOLENOID_UPWARDS = 2; // TODO
 
     // Other hardware
     public static final int PDP_ID = 1; // needs to be verified on the bot (Can be found in REV)

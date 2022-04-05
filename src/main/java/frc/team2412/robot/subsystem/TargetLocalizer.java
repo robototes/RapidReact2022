@@ -32,9 +32,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class TargetLocalizer implements Loggable {
     public static class LocalizerConstants {
         // TODO tune these more
-        public static double TURRET_LATERAL_FF = 0.2, TURRET_ANGULAR_FF = 4, TURRET_DEPTH_FF = 0.17;
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0.145;
         // Seconds, placeholder duration
-        public static final double FILTER_TIME = 1;
+        public static final double FILTER_TIME = 0.1;
         // Dimensions are in inches
         // Estimated, negative because limelight is in back of turret
         public static final double TURRET_CENTER_TO_LIMELIGHT_DISTANCE = -7;
@@ -55,6 +55,7 @@ public class TargetLocalizer implements Loggable {
 
     private double turretLateralFF = TURRET_LATERAL_FF;
     private double turretDepthFF = TURRET_DEPTH_FF;
+    private double turretAngularFF = TURRET_ANGULAR_FF;
 
     /**
      * Creates a new {@link TargetLocalizer}.
@@ -113,6 +114,9 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double distanceAdjustment() {
+        if (getDepthVelocity() < 0.1) {
+            return 0;
+        }
         return (getDepthVelocity() * getDistance() * turretDepthFF);
     }
 
@@ -225,7 +229,7 @@ public class TargetLocalizer implements Loggable {
     public double yawAdjustment() {
         return (getDistance() != 0 && getDistance() > getLateralVelocity()
                 ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * turretLateralFF))
-                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF);
+                : 0) + (getAngularVelocity() * turretAngularFF);
     }
 
     /**
@@ -287,13 +291,19 @@ public class TargetLocalizer implements Loggable {
         return shooterSubsystem.upToSpeed();
     }
 
-    @Config
+    @Config(name = "Depth FF", defaultValueNumeric = TURRET_DEPTH_FF)
     public void setFDepth(double f) {
         turretDepthFF = f;
     }
 
-    @Config
+    @Config(name = "Lateral FF", defaultValueNumeric = TURRET_LATERAL_FF)
     public void setFLateral(double f) {
         turretLateralFF = f;
     }
+
+    @Config(name = "Angular FF", defaultValueNumeric = TURRET_ANGULAR_FF)
+    public void setFAngular(double f) {
+        turretAngularFF = f;
+    }
+
 }

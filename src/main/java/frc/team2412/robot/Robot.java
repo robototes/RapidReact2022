@@ -9,11 +9,13 @@ import static frc.team2412.robot.Hardware.*;
 
 import static java.lang.Thread.sleep;
 
+import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -148,6 +150,9 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.startRecording();
 
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog(), true);
+
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 
@@ -195,6 +200,7 @@ public class Robot extends TimedRobot {
             });
             controlAuto.start();
         }
+        JackFiveBallAutoCommand.FiveBallConstants.init();
     }
 
     @Override
@@ -236,6 +242,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void teleopExit() {
         CommandScheduler.getInstance().cancelAll();
     }
 

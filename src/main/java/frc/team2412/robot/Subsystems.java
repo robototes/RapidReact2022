@@ -1,10 +1,6 @@
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.CLIMB_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.DRIVE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INDEX_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.INTAKE_ENABLED;
-import static frc.team2412.robot.Subsystems.SubsystemConstants.SHOOTER_ENABLED;
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 
 import frc.team2412.robot.subsystem.*;
 import io.github.oblarg.oblog.Loggable;
@@ -12,6 +8,8 @@ import io.github.oblarg.oblog.Loggable;
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
         public static final boolean CLIMB_ENABLED = false;
+        public static final boolean POST_CLIMB_ENABLED = false;
+
         public static final boolean DRIVE_ENABLED = true;
         public static final boolean DRIVER_VIS_ENABLED = true;
         public static final boolean SHOOTER_VISION_ENABLED = true;
@@ -38,6 +36,8 @@ public class Subsystems implements Loggable {
 
     public TargetLocalizer targetLocalizer;
 
+    public PostClimbSubsystem postClimbSubsystem;
+
     public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -61,5 +61,9 @@ public class Subsystems implements Loggable {
             shooterVisionSubsystem = new ShooterVisionSubsystem();
             targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
         }
+        if (POST_CLIMB_ENABLED) {
+            postClimbSubsystem = new PostClimbSubsystem();
+        }
+
     }
 }

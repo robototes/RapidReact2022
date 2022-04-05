@@ -9,6 +9,7 @@ import static frc.team2412.robot.Hardware.*;
 
 import static java.lang.Thread.sleep;
 
+import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -199,6 +200,7 @@ public class Robot extends TimedRobot {
             });
             controlAuto.start();
         }
+        JackFiveBallAutoCommand.FiveBallConstants.init();
     }
 
     @Override
@@ -236,6 +238,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void teleopExit() {
         CommandScheduler.getInstance().cancelAll();
     }
 

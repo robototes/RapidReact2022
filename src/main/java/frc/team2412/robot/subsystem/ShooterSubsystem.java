@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
-        public static final double FLYWHEEL_ALLOWED_ERROR = 50;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 100;
 
         // Placeholder gearing constant
         public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;

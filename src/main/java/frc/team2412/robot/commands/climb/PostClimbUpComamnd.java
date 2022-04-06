@@ -14,13 +14,7 @@ public class PostClimbUpComamnd extends CommandBase {
 
     @Override
     public void execute() {
-        subsystem.releaseClamp();
-    }
-
-    @Override
-    public boolean runsWhenDisabled() {
-        // TODO Auto-generated method stub
-        return true;
+        subsystem.armSolenoid();
     }
 
     @Override

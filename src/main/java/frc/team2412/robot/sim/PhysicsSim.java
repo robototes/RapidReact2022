@@ -134,7 +134,6 @@ public class PhysicsSim {
         for (SimProfile simProfile : simProfiles) {
             simProfile.run();
         }
-        // Run the REV physics sim
         revPhysicsSim.run();
     }
 }

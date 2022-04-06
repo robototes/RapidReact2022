@@ -9,6 +9,7 @@ import static frc.team2412.robot.Hardware.*;
 
 import static java.lang.Thread.sleep;
 
+import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -24,7 +25,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.MACAddress;
@@ -199,6 +199,7 @@ public class Robot extends TimedRobot {
             });
             controlAuto.start();
         }
+        JackFiveBallAutoCommand.FiveBallConstants.init();
     }
 
     @Override
@@ -219,9 +220,9 @@ public class Robot extends TimedRobot {
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
         }
 
-        if (subsystems.shooterSubsystem != null) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
-        }
+        // if (subsystems.shooterSubsystem != null) {
+        // new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        // }
 
         autonomousChooser.scheduleCommand();
     }
@@ -236,6 +237,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousExit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void teleopExit() {
         CommandScheduler.getInstance().cancelAll();
     }
 

@@ -167,7 +167,7 @@ public class AutonomousChooser {
                 Subsystems.SubsystemConstants.SHOOTER_ENABLED),
         INTAKE_SHOOTER(
                 (subsystems) -> new ShootCommand(subsystems.indexSubsystem, subsystems.shooterSubsystem,
-                        subsystems.targetLocalizer),
+                        subsystems.targetLocalizer, subsystems.intakeSubsystem),
                 "Intake and shoot",
                 Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&

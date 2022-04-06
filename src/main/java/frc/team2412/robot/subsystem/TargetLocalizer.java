@@ -284,9 +284,20 @@ public class TargetLocalizer implements Loggable {
         return Robot.getInstance().getVoltage();
     }
 
+
+    private boolean ignoreUpToSpeed = false;
+
     public boolean upToSpeed() {
-        return shooterSubsystem.upToSpeed();
+        return ignoreUpToSpeed ? ignoreUpToSpeed : shooterSubsystem.upToSpeed();
     }
+
+    public void ignoreUpToSpeed(boolean ignore){
+        ignoreUpToSpeed = ignore;
+    }
+
+
+
+
 
     @Config(name = "Depth FF", defaultValueNumeric = TURRET_DEPTH_FF)
     public void setFDepth(double f) {

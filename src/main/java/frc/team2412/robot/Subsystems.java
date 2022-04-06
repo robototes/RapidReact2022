@@ -16,7 +16,7 @@ public class Subsystems implements Loggable {
         public static final boolean INDEX_ENABLED = true;
         public static final boolean INTAKE_ENABLED = true;
         public static final boolean SHOOTER_ENABLED = true;
-        public static final boolean COMPRESSOR_ENABLED = true;
+        public static final boolean COMPRESSOR_ENABLED = false;
 
         // this should always be false
         public static final boolean SHOOTER_TESTING = false;
@@ -46,7 +46,7 @@ public class Subsystems implements Loggable {
         }
         if (!comp) {
             return;
-        }
+        }    
         if (CLIMB_ENABLED) {
             climbSubsystem = new ClimbSubsystem();
         }
@@ -59,7 +59,9 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem();
             shooterVisionSubsystem = new ShooterVisionSubsystem();
-            targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
+            if(DRIVE_ENABLED){
+                targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
+            }
         }
         if (POST_CLIMB_ENABLED) {
             postClimbSubsystem = new PostClimbSubsystem();

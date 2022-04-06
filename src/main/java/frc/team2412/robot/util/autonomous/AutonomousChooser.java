@@ -143,7 +143,10 @@ public class AutonomousChooser {
                 (subsystems) -> new JackFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem,
                         subsystems.shooterSubsystem, subsystems.targetLocalizer),
-                "Y 2910 Five ball path Y", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                "Y 2910 Five ball path Y", Subsystems.SubsystemConstants.DRIVE_ENABLED
+                 && Subsystems.SubsystemConstants.INTAKE_ENABLED
+                 && Subsystems.SubsystemConstants.INDEX_ENABLED
+                 && Subsystems.SubsystemConstants.SHOOTER_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
                 imagesPath + "jackFiveBall.png"),
         WPI_PATH(

@@ -1,6 +1,7 @@
 package frc.team2412.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
@@ -97,13 +98,16 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                 manager.scheduleCommand().alongWith(
                         manager.disableAt(0),
                         new IntakeSetInCommand(intakeSubsystem),
+                        new ScheduleCommand(new IndexCommand(indexSubsystem, intakeSubsystem)),
                         // new ScheduleCommand(new IntakeCommand(intakeSubsystem, indexSubsystem)),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 manager.enableAt(0),
-                new IndexShootCommand(indexSubsystem).withTimeout(1.5),
+                new IndexShootCommand(indexSubsystem).withTimeout(2),
+                new ScheduleCommand(new IndexCommand(indexSubsystem, intakeSubsystem)),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
+                new ScheduleCommand(new IndexCommand(indexSubsystem, intakeSubsystem)),
                 manager.disableAt(70),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
                 new WaitCommand(1.5),

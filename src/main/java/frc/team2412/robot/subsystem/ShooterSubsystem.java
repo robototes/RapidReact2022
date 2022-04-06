@@ -34,10 +34,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_D = 0.05;
         public static final double FLYWHEEL_DEFAULT_F = 0.0463;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.12;
+        public static final double HOOD_DEFAULT_P = 0.05;
         public static final double HOOD_DEFAULT_I = 0;
-        public static final double HOOD_DEFAULT_D = 0;
-        public static final double HOOD_DEFAULT_F = 0.005;
+        public static final double HOOD_DEFAULT_D = 0.009;
+        public static final double HOOD_DEFAULT_F = 0;
         // Placeholder PID constants
         public static final double TURRET_DEFAULT_P = 0.1;
         public static final double TURRET_DEFAULT_I = 0;
@@ -334,7 +334,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         hoodMotor.stopMotor();
     }
 
-    @Config.NumberSlider(name = "Hood test angle", columnIndex = 5, rowIndex = 1, min = 0, max = MAX_HOOD_ANGLE)
+    // @Config.NumberSlider(name = "Hood test angle", columnIndex = 5, rowIndex = 1, min = 0, max = MAX_HOOD_ANGLE)
     private void setHoodTestAngle(double newAngle) {
         hoodTestAngle = newAngle;
     }

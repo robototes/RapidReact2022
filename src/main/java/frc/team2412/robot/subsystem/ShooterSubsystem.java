@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
-        public static final double HOOD_ALLOWED_ERROR = 1;
+        public static final double HOOD_ALLOWED_ERROR = 2;
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233

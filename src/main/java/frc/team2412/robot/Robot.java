@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2412.robot.commands.shooter.ShooterResetEncodersCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.MACAddress;
@@ -225,9 +224,9 @@ public class Robot extends TimedRobot {
             subsystems.targetLocalizer.resetPoseFromAutoStartPose(autonomousChooser);
         }
 
-        if (subsystems.shooterSubsystem != null) {
-            new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
-        }
+        // if (subsystems.shooterSubsystem != null) {
+        // new ShooterResetEncodersCommand(subsystems.shooterSubsystem).schedule();
+        // }
 
         autonomousChooser.scheduleCommand();
     }

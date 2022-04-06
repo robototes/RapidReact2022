@@ -99,7 +99,8 @@ public class TargetLocalizer implements Loggable {
     }
 
     public double getDistance() {
-        return distanceFilter.calculate(shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias());
+        double distance = shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias();
+        return hasTarget() ? distanceFilter.calculate(distance) : distance;
     }
 
     public double getAdjustedDistance() {
@@ -209,7 +210,7 @@ public class TargetLocalizer implements Loggable {
      * @return that
      */
     public double getDepthVelocity() {
-        return getTurretRelativeVelocity().getX();
+        return getTurretRelativeVelocity().getY();
     }
 
     public double getAngularVelocity() {

@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_D = 0.05;
         public static final double FLYWHEEL_DEFAULT_F = 0.0463;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.05;
+        public static final double HOOD_DEFAULT_P = 0.1;
         public static final double HOOD_DEFAULT_I = 0;
         public static final double HOOD_DEFAULT_D = 0.009;
         public static final double HOOD_DEFAULT_F = 0;
@@ -65,8 +65,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
 
-        public static final double MIN_TURRET_ANGLE = -225;
-        public static final double MAX_TURRET_ANGLE = 135;
+        public static final double MIN_TURRET_ANGLE = -180;
+        public static final double MAX_TURRET_ANGLE = 90;
         public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 60, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
         public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 60, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 

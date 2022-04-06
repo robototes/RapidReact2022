@@ -182,7 +182,7 @@ public class TargetLocalizer implements Loggable {
     public double yawAdjustment() {
         return (getDistance() != 0 && getDistance() > getLateralVelocity()
                 ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * turretLateralFF))
-                : 0) + (getAngularVelocity() * TURRET_ANGULAR_FF);
+                : 0) + (getAngularVelocity() * turretAngularFF);
     }
 
     /**

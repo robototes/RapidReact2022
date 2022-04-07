@@ -89,6 +89,10 @@ public class Controls {
 
         if (subsystems.climbSubsystem != null) {
             bindClimbControls();
+        } 
+
+        if (subsystems.postClimbSubsystem != null) {
+            bindPostClimbControls();
         }
 
         if (subsystems.indexSubsystem != null) {
@@ -113,7 +117,7 @@ public class Controls {
     }
 
     public void bindPostClimbControls() {
-        driveController.getStartButton().and(driveController.getBackButton()).whenActive(new PostClimbUpComamnd(subsystems.postClimbSubsystem));
+        driveController.getStartButton().and(driveController.getBackButton()).whileActiveOnce(new PostClimbUpComamnd(subsystems.postClimbSubsystem));
     }
 
     public void bindDriveControls() {

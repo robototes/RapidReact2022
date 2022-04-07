@@ -11,8 +11,11 @@ public class ClimbExtendSlowlyCommand extends CommandBase {
     private ClimbSubsystem climbSubsystem;
 
     // Needs all subsystems so doesn't run default commands in queue
-    public ClimbExtendSlowlyCommand(ClimbSubsystem climbSubsystem, IntakeSubsystem intakeSubsystem,
-            IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem) {
+    public ClimbExtendSlowlyCommand(
+            ClimbSubsystem climbSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem) {
         this.climbSubsystem = climbSubsystem;
         addRequirements(climbSubsystem, intakeSubsystem, indexSubsystem, shooterSubsystem);
     }
@@ -21,5 +24,4 @@ public class ClimbExtendSlowlyCommand extends CommandBase {
     public void execute() {
         climbSubsystem.extendArmSlowly();
     }
-
 }

@@ -19,8 +19,7 @@ public class MACAddress {
     /**
      * Create MAC Address
      *
-     * @param addresses
-     *            bytes of address
+     * @param addresses bytes of address
      */
     public MACAddress(byte... addresses) {
         address = addresses;
@@ -38,15 +37,12 @@ public class MACAddress {
     /**
      * does this MAC Address equal another or do the bytes match?
      *
-     * @param obj
-     *            thing to compare
+     * @param obj thing to compare
      * @return if they should be the same
      */
     public boolean matches(Object obj) {
-        if (obj instanceof byte[])
-            return Arrays.equals(address, (byte[]) obj);
-        if (obj instanceof MACAddress)
-            return matches(((MACAddress) obj).getAddress());
+        if (obj instanceof byte[]) return Arrays.equals(address, (byte[]) obj);
+        if (obj instanceof MACAddress) return matches(((MACAddress) obj).getAddress());
         return false;
     }
 
@@ -58,8 +54,7 @@ public class MACAddress {
     public boolean exists() {
         try {
             for (byte[] b : getAll()) {
-                if (matches(b))
-                    return true;
+                if (matches(b)) return true;
             }
             return false;
         } catch (IOException ignored) {
@@ -71,8 +66,7 @@ public class MACAddress {
      * get all mac addresses on the network
      *
      * @return a List of the byte addresses
-     * @throws IOException
-     *             if network cannot be found
+     * @throws IOException if network cannot be found
      */
     public static List<byte[]> getAll() throws IOException {
         List<byte[]> macAddresses = new ArrayList<>();
@@ -84,8 +78,7 @@ public class MACAddress {
             networkInterface = networkInterfaces.nextElement();
 
             byte[] address = networkInterface.getHardwareAddress();
-            if (address != null)
-                macAddresses.add(address);
+            if (address != null) macAddresses.add(address);
         }
 
         return macAddresses;
@@ -94,12 +87,9 @@ public class MACAddress {
     /**
      * Shorthand create a simplified addres
      *
-     * @param a
-     *            4th byte term as int
-     * @param b
-     *            5th byte term as int
-     * @param c
-     *            6th byte term as int
+     * @param a 4th byte term as int
+     * @param b 5th byte term as int
+     * @param c 6th byte term as int
      * @return new MACAddress
      */
     public static MACAddress of(int a, int b, int c) {

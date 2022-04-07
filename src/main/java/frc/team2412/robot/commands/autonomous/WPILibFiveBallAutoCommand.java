@@ -1,7 +1,5 @@
 package frc.team2412.robot.commands.autonomous;
 
-import java.util.List;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,39 +20,57 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
+import java.util.List;
 
 public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
-    public WPILibFiveBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
-            IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
+    public WPILibFiveBallAutoCommand(
+            DrivebaseSubsystem drivebaseSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem,
+            TargetLocalizer localizer) {
 
-        TrajectoryConfig normalSpeedConfig = new TrajectoryConfig(1, 1)
-                // Add kinematics to ensure max speed is actually obeyed
-                .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                FollowWpilibTrajectory.WPILibAutoConstants.DEFAULT_THETA, 0, 0,
-                FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+        TrajectoryConfig normalSpeedConfig =
+                new TrajectoryConfig(1, 1)
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
+        ProfiledPIDController thetaController =
+                new ProfiledPIDController(
+                        FollowWpilibTrajectory.WPILibAutoConstants.DEFAULT_THETA,
+                        0,
+                        0,
+                        FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
-        Trajectory trajectoryOne = TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(-90)),
-                        new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(180)),
-                        new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))),
-                normalSpeedConfig);
-        Trajectory trajectoryTwo = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)),
-                List.of(),
-                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(180)), normalSpeedConfig);
-        Trajectory trajectoryThree = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
-                List.of(),
-                new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)), normalSpeedConfig);
+        Trajectory trajectoryOne =
+                TrajectoryGenerator.generateTrajectory(
+                        List.of(
+                                new Pose2d(8.4, 1.8, Rotation2d.fromDegrees(-90)),
+                                new Pose2d(7.4, 0.9, Rotation2d.fromDegrees(180)),
+                                new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180))),
+                        normalSpeedConfig);
+        Trajectory trajectoryTwo =
+                TrajectoryGenerator.generateTrajectory(
+                        new Pose2d(5.3, 1.8, Rotation2d.fromDegrees(180)),
+                        List.of(),
+                        new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(180)),
+                        normalSpeedConfig);
+        Trajectory trajectoryThree =
+                TrajectoryGenerator.generateTrajectory(
+                        new Pose2d(2.0, 1.3, Rotation2d.fromDegrees(0)),
+                        List.of(),
+                        new Pose2d(5, 2.7, Rotation2d.fromDegrees(0)),
+                        normalSpeedConfig);
 
         addCommands(
                 new ParallelCommandGroup(
                         // paths
                         new SequentialCommandGroup(
-                                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryOne, thetaController),
-                                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryTwo, thetaController),
-                                new FollowWpilibTrajectory(drivebaseSubsystem, trajectoryThree, thetaController))),
+                                new FollowWpilibTrajectory(
+                                        drivebaseSubsystem, trajectoryOne, thetaController),
+                                new FollowWpilibTrajectory(
+                                        drivebaseSubsystem, trajectoryTwo, thetaController),
+                                new FollowWpilibTrajectory(
+                                        drivebaseSubsystem, trajectoryThree, thetaController))),
 
                 // actions
                 // STEPS FOR COMMAND
@@ -65,15 +81,20 @@ public class WPILibFiveBallAutoCommand extends SequentialCommandGroup {
                 // 5. drive, shoot
 
                 new SequentialCommandGroup(
-                        new IntakeSetExtendCommand(intakeSubsystem), new WaitCommand(2),
+                        new IntakeSetExtendCommand(intakeSubsystem),
+                        new WaitCommand(2),
                         new IntakeCommand(intakeSubsystem, indexSubsystem),
-                        new WaitCommand(3), new IntakeCommand(intakeSubsystem, indexSubsystem),
+                        new WaitCommand(3),
+                        new IntakeCommand(intakeSubsystem, indexSubsystem),
                         // new IntakeIndexInCommand(indexSubsystem, intakeSubsystem),
                         new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                        new WaitCommand(3), new IntakeCommand(intakeSubsystem, indexSubsystem),
-                        new WaitCommand(2), new IntakeCommand(intakeSubsystem, indexSubsystem),
-                        new WaitCommand(3), new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                        new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem))));
+                        new WaitCommand(3),
+                        new IntakeCommand(intakeSubsystem, indexSubsystem),
+                        new WaitCommand(2),
+                        new IntakeCommand(intakeSubsystem, indexSubsystem),
+                        new WaitCommand(3),
+                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1), new IndexShootCommand(indexSubsystem))));
     }
-
 }

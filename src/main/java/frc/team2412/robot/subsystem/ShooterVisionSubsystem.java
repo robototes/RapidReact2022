@@ -1,8 +1,7 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
-
 import static frc.team2412.robot.Hardware.*;
+import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,7 +17,8 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
         public static final double HUB_RADIUS = 24;
         // Angles are in degrees
-        public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
+        public static final double LIMELIGHT_ANGLE_OFFSET =
+                Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
 
         // -0.766666 limelight crosshair offset (3/19 update)
     }
@@ -34,9 +34,9 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Returns the yaw from the limelight to the (estimated) center of the hub.
-     * Note: The limelight returns measurements relative to the center of the targets in its field of
-     * view, which may differ from the center of the hub.
+     * Returns the yaw from the limelight to the (estimated) center of the hub. Note: The limelight
+     * returns measurements relative to the center of the targets in its field of view, which may
+     * differ from the center of the hub.
      *
      * @return The yaw (horizontal rotation) in degrees.
      */
@@ -46,9 +46,9 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Returns the distance from the limelight to the (estimated) center of the hub.
-     * Note: The limelight returns measurements relative to the center of the targets in its field of
-     * view, which may differ from the center of the hub.
+     * Returns the distance from the limelight to the (estimated) center of the hub. Note: The
+     * limelight returns measurements relative to the center of the targets in its field of view,
+     * which may differ from the center of the hub.
      *
      * @return The distance in inches.
      */
@@ -85,5 +85,4 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     public void setLedOff() {
         limelight.getEntry("ledMode").setValue("0");
     }
-
 }

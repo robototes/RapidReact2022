@@ -25,16 +25,13 @@ public class TalonFXSimProfile extends SimProfile {
     /**
      * Creates a new simulation profile for a TalonFX device.
      *
-     * @param falcon
-     *            The TalonFX device.
-     * @param accelToFullTime
-     *            The time the motor takes to accelerate from 0 to full, in seconds.
-     * @param fullVel
-     *            The maximum motor velocity, in ticks per 100ms.
-     * @param sensorPhase
-     *            The phase of the TalonFX sensors.
+     * @param falcon The TalonFX device.
+     * @param accelToFullTime The time the motor takes to accelerate from 0 to full, in seconds.
+     * @param fullVel The maximum motor velocity, in ticks per 100ms.
+     * @param sensorPhase The phase of the TalonFX sensors.
      */
-    public TalonFXSimProfile(TalonFX falcon, double accelToFullTime, double fullVel, boolean sensorPhase) {
+    public TalonFXSimProfile(
+            TalonFX falcon, double accelToFullTime, double fullVel, boolean sensorPhase) {
         this.falconSimCollection = falcon.getSimCollection();
         this.accelToFullTime = accelToFullTime;
         this.fullVel = fullVel;
@@ -69,10 +66,12 @@ public class TalonFXSimProfile extends SimProfile {
         falconSimCollection.setIntegratedSensorVelocity((int) vel);
         // Current
         double supplyCurrent = Math.abs(outputPercentage) * 30 * random(0.95, 1.05);
-        double statorCurrent = outputPercentage == 0 ? 0 : supplyCurrent / Math.abs(outputPercentage);
+        double statorCurrent =
+                outputPercentage == 0 ? 0 : supplyCurrent / Math.abs(outputPercentage);
         falconSimCollection.setSupplyCurrent(supplyCurrent);
         falconSimCollection.setStatorCurrent(statorCurrent);
         // Voltage
-        falconSimCollection.setBusVoltage(12 - outputPercentage * outputPercentage * 3 / 4 * random(0.95, 1.05));
+        falconSimCollection.setBusVoltage(
+                12 - outputPercentage * outputPercentage * 3 / 4 * random(0.95, 1.05));
     }
 }

@@ -24,10 +24,14 @@ public class DiagnosticRobotCommandGroup extends SequentialCommandGroup {
          * The Shuffleboard having issue of
          * cannot properly display more than 3 rows of entry in one column
          */
-        indexStatus = tab.add("Index Status", "Waiting").withPosition(0, 0).withSize(1, 1).getEntry();
-        shooterStatus = tab.add("Shooter Status", "Waiting").withPosition(1, 0).withSize(1, 1).getEntry();
-        intakeStatus = tab.add("Intake Status", "Waiting").withPosition(2, 0).withSize(1, 1).getEntry();
-        climbStatus = tab.add("Climb Status", "Waiting").withPosition(3, 0).withSize(1, 1).getEntry();
+        indexStatus =
+                tab.add("Index Status", "Waiting").withPosition(0, 0).withSize(1, 1).getEntry();
+        shooterStatus =
+                tab.add("Shooter Status", "Waiting").withPosition(1, 0).withSize(1, 1).getEntry();
+        intakeStatus =
+                tab.add("Intake Status", "Waiting").withPosition(2, 0).withSize(1, 1).getEntry();
+        climbStatus =
+                tab.add("Climb Status", "Waiting").withPosition(3, 0).withSize(1, 1).getEntry();
         addRequirements(intakeSubsystem, shooterSubsystem, indexSubsystem, climbSubsystem);
         addCommands(
                 new InstantCommand(() -> intakeStatus.setString("In Progress")),

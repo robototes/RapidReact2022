@@ -1,10 +1,9 @@
 package frc.team2412.robot.commands.drive;
 
-import org.frcteam2910.common.math.Vector2;
-import org.frcteam2910.common.robot.input.Axis;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import org.frcteam2910.common.math.Vector2;
+import org.frcteam2910.common.robot.input.Axis;
 
 public class DriveCommand extends CommandBase {
     private final DrivebaseSubsystem drivebaseSubsystem;
@@ -12,7 +11,8 @@ public class DriveCommand extends CommandBase {
     private final Axis strafe;
     private final Axis rotation;
 
-    public DriveCommand(DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation) {
+    public DriveCommand(
+            DrivebaseSubsystem drivebaseSubsystem, Axis forward, Axis strafe, Axis rotation) {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.forward = forward;
         this.strafe = strafe;

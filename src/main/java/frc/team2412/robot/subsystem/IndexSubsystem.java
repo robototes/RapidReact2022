@@ -1,18 +1,17 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 import static frc.team2412.robot.Hardware.*;
+import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IndexSubsystem extends SubsystemBase implements Loggable {
@@ -31,13 +30,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         public static final double INDEX_FEEDER_SHOOT_SPEED = 0.3;
         public static final double INDEX_INGEST_SHOOT_SPEED = 0.15;
 
-        public static final double INDEX_IN_SPEED = IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED / 2;
+        public static final double INDEX_IN_SPEED =
+                IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED / 2;
         public static final double INDEX_OUT_SPEED = -0.3;
 
         // The current limit
-        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS);
-
+        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT =
+                new SupplyCurrentLimitConfiguration(
+                        true,
+                        CURRENT_LIMIT_RESET_AMPS,
+                        CURRENT_LIMIT_TRIGGER_AMPS,
+                        CURRENT_LIMIT_TRIGGER_SECONDS);
     }
 
     // Define Hardware
@@ -45,16 +48,15 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
     private final DigitalInput leftFeederProximity;
     private final DigitalInput rightFeederProximity;
 
-    @Log.MotorController
-    private final WPI_TalonFX ingestMotor;
+    @Log.MotorController private final WPI_TalonFX ingestMotor;
 
-    @Log.MotorController
-    private final WPI_TalonFX feederMotor;
+    @Log.MotorController private final WPI_TalonFX feederMotor;
 
     // Sensor Override
 
     public boolean ignoreFeeder = false;
-    public boolean feederOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
+    public boolean feederOverridenValue =
+            false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
 
     // Constructor
 
@@ -92,23 +94,17 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         feederMotor.set(feederSpeed);
     }
 
-    /**
-     * Spins first motor inward and updates first motor state
-     */
+    /** Spins first motor inward and updates first motor state */
     public void ingestMotorIn() {
         ingestMotor.set(INDEX_IN_SPEED);
     }
 
-    /**
-     * Spins first motor outward and updates first motor state
-     */
+    /** Spins first motor outward and updates first motor state */
     public void ingestMotorOut() {
         ingestMotor.set(INDEX_OUT_SPEED);
     }
 
-    /**
-     * Stops first motor and updates first motor state
-     */
+    /** Stops first motor and updates first motor state */
     public void ingestMotorStop() {
         ingestMotor.set(0);
     }
@@ -121,30 +117,22 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         feederMotor.set(INDEX_FEEDER_SHOOT_SPEED);
     }
 
-    /**
-     * Spins second motor inward and updates second motor state
-     */
+    /** Spins second motor inward and updates second motor state */
     public void feederMotorIn() {
         feederMotor.set(INDEX_FEEDER_SPEED);
     }
 
-    /**
-     * Spins second motor outward and updates second motor state
-     */
+    /** Spins second motor outward and updates second motor state */
     public void feederMotorOut() {
         feederMotor.set(INDEX_OUT_SPEED);
     }
 
-    /**
-     * Stops second motor and updates second motor state
-     */
+    /** Stops second motor and updates second motor state */
     public void feederMotorStop() {
         feederMotor.set(0);
     }
 
-    /**
-     * Checks if ball is positioned at the sensors
-     */
+    /** Checks if ball is positioned at the sensors */
     @Log(name = "Has Cargo")
     public boolean hasCargo() { // might rename methods later?
         if (ignoreFeeder) {
@@ -163,16 +151,12 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         return rightFeederProximity.get();
     }
 
-    /**
-     * Checks if ingest motor is on
-     */
+    /** Checks if ingest motor is on */
     public boolean isIngestMotorOn() {
         return ingestMotor.get() != 0;
     }
 
-    /**
-     * Checks if feeder motor is on
-     */
+    /** Checks if feeder motor is on */
     public boolean isFeederMotorOn() {
         return feederMotor.get() != 0;
     }
@@ -192,10 +176,10 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         }
         if (ingestCurrent > CURRENT_LIMIT_RESET_AMPS) {
             if (ingestOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - ingestOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+                if (Timer.getFPGATimestamp() - ingestOverCurrentStart
+                        > CURRENT_LIMIT_TRIGGER_SECONDS) {
                     ingestMotorStop();
                 }
-
             }
         } else {
             ingestOverCurrentStart = 0;
@@ -209,15 +193,14 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         }
         if (feederCurrent > CURRENT_LIMIT_RESET_AMPS) {
             if (feederOverCurrentStart > 0) {
-                if (Timer.getFPGATimestamp() - feederOverCurrentStart > CURRENT_LIMIT_TRIGGER_SECONDS) {
+                if (Timer.getFPGATimestamp() - feederOverCurrentStart
+                        > CURRENT_LIMIT_TRIGGER_SECONDS) {
                     feederMotorStop();
                 }
-
             }
         } else {
             feederOverCurrentStart = 0;
         }
-
     }
 
     // for logging
@@ -252,12 +235,9 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         ignoreFeeder = ignore;
     }
 
-    /**
-     * sets ingestOverridenValue value
-     */
+    /** sets ingestOverridenValue value */
     @Config
     public void setFeederOverridenValue(boolean value) {
         feederOverridenValue = value;
     }
-
 }

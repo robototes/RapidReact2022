@@ -1,16 +1,13 @@
 package frc.team2412.robot.util;
 
+import edu.wpi.first.wpilibj.Timer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
-import edu.wpi.first.wpilibj.Timer;
-
-/**
- * A class that implements a median filter based on how recent information is.
- */
+/** A class that implements a median filter based on how recent information is. */
 public class TimeBasedMedianFilter {
 
     private static class TimeData {
@@ -30,8 +27,7 @@ public class TimeBasedMedianFilter {
     /**
      * Creates a new {@code TimeBasedAverageFilter}.
      *
-     * @param filterTime
-     *            Length of time in seconds that inputs affect average.
+     * @param filterTime Length of time in seconds that inputs affect average.
      */
     public TimeBasedMedianFilter(double filterTime) {
         this.filterTime = filterTime;
@@ -42,8 +38,7 @@ public class TimeBasedMedianFilter {
     /**
      * Calculates the median of the most recent values for the next value of the input stream.
      *
-     * @param next
-     *            The next input value.
+     * @param next The next input value.
      * @return The median of the values within a certain time window, including the next value.
      */
     public double calculate(double next) {
@@ -69,9 +64,7 @@ public class TimeBasedMedianFilter {
         return (orderedValues.get(size / 2 - 1) + orderedValues.get(size / 2)) / 2.0;
     }
 
-    /**
-     * Resets the filter, clearing the window of all elements
-     */
+    /** Resets the filter, clearing the window of all elements */
     public void reset() {
         values.clear();
         // <o/ dabs

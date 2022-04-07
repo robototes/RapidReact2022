@@ -2,15 +2,14 @@ package frc.team2412.robot.commands.shooter;
 
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
@@ -24,11 +23,15 @@ public class ShooterTargetCommand extends CommandBase {
         this(shooter, localizer, () -> false);
     }
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer, BooleanSupplier turretButton) {
+    public ShooterTargetCommand(
+            ShooterSubsystem shooter, TargetLocalizer localizer, BooleanSupplier turretButton) {
         this(shooter, localizer, turretButton, () -> 0);
     }
 
-    public ShooterTargetCommand(ShooterSubsystem shooter, TargetLocalizer localizer, BooleanSupplier turretButton,
+    public ShooterTargetCommand(
+            ShooterSubsystem shooter,
+            TargetLocalizer localizer,
+            BooleanSupplier turretButton,
             DoubleSupplier turretAngle) {
         this.shooter = shooter;
         this.localizer = localizer;
@@ -43,7 +46,10 @@ public class ShooterTargetCommand extends CommandBase {
     }
 
     public enum TurretState {
-        WRAP_LEFT, WRAP_RIGHT, STOPPED, TRACKING;
+        WRAP_LEFT,
+        WRAP_RIGHT,
+        STOPPED,
+        TRACKING;
     }
 
     TurretState state;
@@ -54,9 +60,8 @@ public class ShooterTargetCommand extends CommandBase {
         // return;
 
         if (ShooterConstants.DATA_POINTS != null && localizer.getAdjustedDistance() < 280) {
-            ShooterDataDistancePoint shooterData = ShooterConstants.DATA_POINTS
-
-                    .getInterpolated(localizer.getAdjustedDistance());
+            ShooterDataDistancePoint shooterData =
+                    ShooterConstants.DATA_POINTS.getInterpolated(localizer.getAdjustedDistance());
 
             // System.out.println("Limelight distance: " + localizer.getDistance());
             // System.out.println("Localizer distance" + localizer.getAdjustedDistance());
@@ -70,14 +75,12 @@ public class ShooterTargetCommand extends CommandBase {
             // System.out.println("Actual hood angle: " + shooter.getHoodAngle());
         }
 
-        if (turretDisable.getAsBoolean())
-            state = TurretState.STOPPED;
-        else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
-            state = TurretState.WRAP_LEFT;
+        if (turretDisable.getAsBoolean()) state = TurretState.STOPPED;
+        else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD) state = TurretState.WRAP_LEFT;
         else if (turretAngle > ShooterConstants.RIGHT_WRAP_THRESHOLD)
             state = TurretState.WRAP_RIGHT;
-        else if (turretAngle > ShooterConstants.LEFT_WRAP && turretAngle < ShooterConstants.RIGHT_WRAP)
-            state = TurretState.TRACKING;
+        else if (turretAngle > ShooterConstants.LEFT_WRAP
+                && turretAngle < ShooterConstants.RIGHT_WRAP) state = TurretState.TRACKING;
 
         switch (state) {
             case STOPPED:
@@ -98,7 +101,8 @@ public class ShooterTargetCommand extends CommandBase {
                 break;
         }
 
-        double localizerTurretAdjustment = state == TurretState.TRACKING ? localizer.yawAdjustment() : 0;
+        double localizerTurretAdjustment =
+                state == TurretState.TRACKING ? localizer.yawAdjustment() : 0;
 
         // System.out.println("Localizer turret adjustment: " + localizerTurretAdjustment);
 
@@ -121,8 +125,12 @@ public class ShooterTargetCommand extends CommandBase {
         public boolean enabled;
 
         public TurretManager(ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
-            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretDisable,
-                    this::getIdlePosition);
+            shooterTargetCommand =
+                    new ShooterTargetCommand(
+                            shooterSubsystem,
+                            localizer,
+                            this::getTurretDisable,
+                            this::getIdlePosition);
             idle = 0;
             enabled = false;
         }
@@ -168,10 +176,11 @@ public class ShooterTargetCommand extends CommandBase {
         }
 
         public InstantCommand manageTurret(boolean enable, double id) {
-            return new InstantCommand(() -> {
-                enabled = enable;
-                idle = id;
-            });
+            return new InstantCommand(
+                    () -> {
+                        enabled = enable;
+                        idle = id;
+                    });
         }
 
         public double getIdlePosition() {

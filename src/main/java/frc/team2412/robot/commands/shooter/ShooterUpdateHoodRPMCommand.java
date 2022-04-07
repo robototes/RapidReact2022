@@ -1,9 +1,8 @@
 package frc.team2412.robot.commands.shooter;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class ShooterUpdateHoodRPMCommand extends CommandBase {
     private final ShooterSubsystem shooter;
@@ -14,7 +13,9 @@ public class ShooterUpdateHoodRPMCommand extends CommandBase {
         this(shooter, shooter::getFlywheelTestRPM, shooter::getHoodTestAngle);
     }
 
-    public ShooterUpdateHoodRPMCommand(ShooterSubsystem shooter, DoubleSupplier flywheelRPMsupplier,
+    public ShooterUpdateHoodRPMCommand(
+            ShooterSubsystem shooter,
+            DoubleSupplier flywheelRPMsupplier,
             DoubleSupplier hoodAngleSupplier) {
         this.shooter = shooter;
         this.flywheelRPMsupplier = flywheelRPMsupplier;

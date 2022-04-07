@@ -1,9 +1,8 @@
 package frc.team2412.robot.commands.autonomous;
 
-import org.frcteam2910.common.control.Trajectory;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
+import org.frcteam2910.common.control.Trajectory;
 
 public class Follow2910TrajectoryCommand extends CommandBase {
     private final DrivebaseSubsystem drivebase;

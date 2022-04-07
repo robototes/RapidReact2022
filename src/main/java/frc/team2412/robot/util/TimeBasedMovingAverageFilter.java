@@ -1,13 +1,10 @@
 package frc.team2412.robot.util;
 
+import edu.wpi.first.wpilibj.Timer;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import edu.wpi.first.wpilibj.Timer;
-
-/**
- * A class that implements a moving average filter with a limit on the age of data.
- */
+/** A class that implements a moving average filter with a limit on the age of data. */
 public class TimeBasedMovingAverageFilter {
     private static class TimeData {
         public final double time;
@@ -25,8 +22,7 @@ public class TimeBasedMovingAverageFilter {
     /**
      * Creates a new {@link TimeBasedMovingAverageFilter}.
      *
-     * @param filterTime
-     *            Length of time in seconds that inputs affects the moving average.
+     * @param filterTime Length of time in seconds that inputs affects the moving average.
      */
     public TimeBasedMovingAverageFilter(double filterTime) {
         this.inputs = new ArrayDeque<>();
@@ -36,8 +32,7 @@ public class TimeBasedMovingAverageFilter {
     /**
      * Calculates the next value of the filter.
      *
-     * @param currentInput
-     *            Current input value.
+     * @param currentInput Current input value.
      * @return The filtered value at this step.
      */
     public double calculate(double currentInput) {
@@ -57,9 +52,7 @@ public class TimeBasedMovingAverageFilter {
         return total / inputs.size();
     }
 
-    /**
-     * Reset the filter state.
-     */
+    /** Reset the filter state. */
     public void reset() {
         inputs.clear();
     }

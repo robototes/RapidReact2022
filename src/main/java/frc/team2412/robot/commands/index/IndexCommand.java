@@ -33,12 +33,10 @@ public class IndexCommand extends CommandBase {
         } else {
             indexSubsystem.ingestMotorIn();
         }
-
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-
 }

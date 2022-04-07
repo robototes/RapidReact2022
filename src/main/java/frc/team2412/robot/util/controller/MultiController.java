@@ -1,18 +1,15 @@
 package frc.team2412.robot.util.controller;
 
-import org.frcteam2910.common.robot.input.Controller;
-
 import java.util.Arrays;
 import java.util.Set;
+import org.frcteam2910.common.robot.input.Controller;
 
 /**
  * Overarching class for multi controllers with presets
  *
  * @author Alex Stedman
- * @param <T>
- *            index for map
- * @param <U>
- *            controller type
+ * @param <T> index for map
+ * @param <U> controller type
  */
 @SuppressWarnings("unused")
 public interface MultiController<T, U extends Controller> {
@@ -26,8 +23,7 @@ public interface MultiController<T, U extends Controller> {
     /**
      * Get controller associated with key
      *
-     * @param key
-     *            the key
+     * @param key the key
      * @return the controller
      */
     OptionalController<U> getPreset(Object key);
@@ -35,8 +31,7 @@ public interface MultiController<T, U extends Controller> {
     /**
      * get raw controller associated with key
      *
-     * @param key
-     *            the key
+     * @param key the key
      * @return the raw controller
      */
     default U getRawController(Object key) {
@@ -44,19 +39,17 @@ public interface MultiController<T, U extends Controller> {
     }
 
     /**
-     * Activate a list of presets. if single preset mode is active it will deactivate all presets first
+     * Activate a list of presets. if single preset mode is active it will deactivate all presets
+     * first
      *
-     * @param preset
-     *            presets to activate
+     * @param preset presets to activate
      * @return if change was made to presets
      */
     @SuppressWarnings("unchecked")
     default boolean activate(T... preset) {
-        if (onlyOnePreset())
-            deactivate();
+        if (onlyOnePreset()) deactivate();
         for (T t : preset) {
-            if (getPreset(t) != null)
-                getPreset(t).activate();
+            if (getPreset(t) != null) getPreset(t).activate();
         }
         return getChoice().addAll(Arrays.asList(preset.clone()));
     }
@@ -64,18 +57,15 @@ public interface MultiController<T, U extends Controller> {
     /**
      * Deactivate a list of presets
      *
-     * @param preset
-     *            presets to deactivate
+     * @param preset presets to deactivate
      * @return if a change was made
      */
     @SuppressWarnings("SuspiciousMethodCalls")
     default boolean deactivate(Object... preset) {
         // SUSUSUS
-        if (!getChoice().removeAll(Arrays.asList(preset.clone())))
-            return false;
+        if (!getChoice().removeAll(Arrays.asList(preset.clone()))) return false;
         for (Object t : preset) {
-            if (getPreset(t) != null)
-                getPreset(t).deactivate();
+            if (getPreset(t) != null) getPreset(t).deactivate();
         }
         return true;
     }
@@ -89,13 +79,16 @@ public interface MultiController<T, U extends Controller> {
         return deactivate(getChoice().toArray());
     }
 
-    /**
-     * example controller types you can use for making IDs
-     *
-     */
+    /** example controller types you can use for making IDs */
     enum Controllers {
-        PRIMARY, SECONDARY, TERTIARY, BACKUP, DRIVER, CODRIVER, DEBUG, TEST;
-
+        PRIMARY,
+        SECONDARY,
+        TERTIARY,
+        BACKUP,
+        DRIVER,
+        CODRIVER,
+        DEBUG,
+        TEST;
     }
 
     /**

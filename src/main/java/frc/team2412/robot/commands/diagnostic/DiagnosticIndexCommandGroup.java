@@ -6,7 +6,6 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 
 public class DiagnosticIndexCommandGroup extends SequentialCommandGroup {
     public DiagnosticIndexCommandGroup(IndexSubsystem indexSubsystem) {
-        super(
-                new IndexTestCommand(indexSubsystem));
+        super(new IndexTestCommand(indexSubsystem));
     }
 }

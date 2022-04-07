@@ -4,13 +4,9 @@
 
 package frc.team2412.robot;
 
-import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static frc.team2412.robot.Hardware.*;
-
+import static frc.team2412.robot.Subsystems.SubsystemConstants.*;
 import static java.lang.Thread.sleep;
-
-import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
-import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -19,32 +15,33 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
 import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.subsystem.TestingSubsystem;
 import frc.team2412.robot.util.MACAddress;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Logger;
+import org.frcteam2910.common.robot.UpdateManager;
 
 public class Robot extends TimedRobot {
-    /**
-     * Singleton Stuff
-     */
+    /** Singleton Stuff */
     private static Robot instance = null;
 
     enum RobotType {
-        COMPETITION, AUTOMATED_TEST, DRIVEBASE;
+        COMPETITION,
+        AUTOMATED_TEST,
+        DRIVEBASE;
     }
 
     public static Robot getInstance() {
-        if (instance == null)
-            instance = new Robot();
+        if (instance == null) instance = new Robot();
         return instance;
     }
 
@@ -61,14 +58,18 @@ public class Robot extends TimedRobot {
     private UpdateManager updateManager;
     private AutonomousChooser autonomousChooser;
 
-    final private RobotType robotType;
+    private final RobotType robotType;
 
     private Thread controlAuto;
 
     public TestingSubsystem testingSubsystem;
 
     protected Robot(RobotType type) {
-        System.out.println("Robot type: " + (type.equals(RobotType.AUTOMATED_TEST) ? "AutomatedTest" : "Competition"));
+        System.out.println(
+                "Robot type: "
+                        + (type.equals(RobotType.AUTOMATED_TEST)
+                                ? "AutomatedTest"
+                                : "Competition"));
         instance = this;
         PDP = new PowerDistribution(Hardware.PDP_ID, ModuleType.kRev);
         robotType = type;
@@ -86,10 +87,8 @@ public class Robot extends TimedRobot {
     public static final MACAddress PRACTICE_ADDRESS = MACAddress.of(0x28, 0x40, 0x82);
 
     private static RobotType getTypeFromAddress() {
-        if (PRACTICE_ADDRESS.exists())
-            return RobotType.DRIVEBASE;
-        else
-            return RobotType.COMPETITION;
+        if (PRACTICE_ADDRESS.exists()) return RobotType.DRIVEBASE;
+        else return RobotType.COMPETITION;
     }
 
     // TODO add other override methods
@@ -128,8 +127,7 @@ public class Robot extends TimedRobot {
         subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {
-            updateManager = new UpdateManager(
-                    subsystems.drivebaseSubsystem);
+            updateManager = new UpdateManager(subsystems.drivebaseSubsystem);
             updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
@@ -171,34 +169,38 @@ public class Robot extends TimedRobot {
                         command -> System.out.println("Command finished: " + command.getName()));
 
         if (robotType.equals(RobotType.AUTOMATED_TEST)) {
-            controlAuto = new Thread(() -> {
-                System.out.println("Waiting two seconds for robot to finish startup");
-                try {
-                    sleep(2000);
-                } catch (InterruptedException ignored) {
-                }
+            controlAuto =
+                    new Thread(
+                            () -> {
+                                System.out.println(
+                                        "Waiting two seconds for robot to finish startup");
+                                try {
+                                    sleep(2000);
+                                } catch (InterruptedException ignored) {
+                                }
 
-                System.out.println("Enabling autonomous mode and waiting 10 seconds");
-                DriverStationDataJNI.setAutonomous(true);
-                DriverStationDataJNI.setEnabled(true);
+                                System.out.println(
+                                        "Enabling autonomous mode and waiting 10 seconds");
+                                DriverStationDataJNI.setAutonomous(true);
+                                DriverStationDataJNI.setEnabled(true);
 
-                try {
-                    sleep(10000);
-                } catch (InterruptedException ignored) {
-                }
+                                try {
+                                    sleep(10000);
+                                } catch (InterruptedException ignored) {
+                                }
 
-                System.out.println("Disabling robot and waiting two seconds");
-                DriverStationDataJNI.setEnabled(false);
+                                System.out.println("Disabling robot and waiting two seconds");
+                                DriverStationDataJNI.setEnabled(false);
 
-                try {
-                    sleep(2000);
-                } catch (InterruptedException ignored) {
-                }
+                                try {
+                                    sleep(2000);
+                                } catch (InterruptedException ignored) {
+                                }
 
-                System.out.println("Ending competition");
-                suppressExitWarning(true);
-                endCompetition();
-            });
+                                System.out.println("Ending competition");
+                                suppressExitWarning(true);
+                                endCompetition();
+                            });
             controlAuto.start();
         }
         JackFiveBallAutoCommand.FiveBallConstants.init();
@@ -234,7 +236,6 @@ public class Robot extends TimedRobot {
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
-
     }
 
     @Override
@@ -274,7 +275,8 @@ public class Robot extends TimedRobot {
     }
 
     public boolean isCompetition() {
-        return getRobotType() == RobotType.COMPETITION || getRobotType() == RobotType.AUTOMATED_TEST;
+        return getRobotType() == RobotType.COMPETITION
+                || getRobotType() == RobotType.AUTOMATED_TEST;
     }
 
     @Override

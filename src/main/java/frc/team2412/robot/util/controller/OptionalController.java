@@ -9,8 +9,7 @@ import org.frcteam2910.common.robot.input.DPadButton;
  * optional controller class that means a controller can be enabled and disabled
  *
  * @author Alex Stedman
- * @param <T>
- *            the type of controller
+ * @param <T> the type of controller
  */
 public class OptionalController<T extends Controller> extends Controller {
 
@@ -21,8 +20,7 @@ public class OptionalController<T extends Controller> extends Controller {
     /**
      * Create basic optional controller that is disabled
      *
-     * @param c
-     *            wrapped controller
+     * @param c wrapped controller
      */
     public OptionalController(T c) {
         this(c, false);
@@ -31,10 +29,8 @@ public class OptionalController<T extends Controller> extends Controller {
     /**
      * Creates optional controller but allows you to specify if the controller should be enabled
      *
-     * @param c
-     *            wrapped controller
-     * @param enabled
-     *            is this controller active?
+     * @param c wrapped controller
+     * @param enabled is this controller active?
      */
     public OptionalController(T c, boolean enabled) {
         controller = c;
@@ -78,8 +74,7 @@ public class OptionalController<T extends Controller> extends Controller {
      * @return if there was a state change
      */
     public boolean set(boolean a) {
-        if (active == a)
-            return false;
+        if (active == a) return false;
         active = a;
         return true;
     }
@@ -183,5 +178,4 @@ public class OptionalController<T extends Controller> extends Controller {
     public Button getDPadButton(DPadButton.Direction direction) {
         return get(controller.getDPadButton(direction));
     }
-
 }

@@ -21,5 +21,4 @@ public class PostClimbUpComamnd extends CommandBase {
     public boolean isFinished() {
         return true;
     }
-
 }

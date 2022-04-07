@@ -12,15 +12,23 @@ public class ClimbRetractSlowlyCommand extends CommandBase {
     private ClimbSubsystem climbSubsystem;
 
     // Needs all subsystems so doesn't run default commands in queue
-    public ClimbRetractSlowlyCommand(ClimbSubsystem climbSubsystem, IntakeSubsystem intakeSubsystem,
-            IndexSubsystem indexSubsystem, ShooterSubsystem shooterSubsystem, DrivebaseSubsystem drivebaseSubsystem) {
+    public ClimbRetractSlowlyCommand(
+            ClimbSubsystem climbSubsystem,
+            IntakeSubsystem intakeSubsystem,
+            IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem,
+            DrivebaseSubsystem drivebaseSubsystem) {
         this.climbSubsystem = climbSubsystem;
-        addRequirements(climbSubsystem, intakeSubsystem, indexSubsystem, shooterSubsystem, drivebaseSubsystem);
+        addRequirements(
+                climbSubsystem,
+                intakeSubsystem,
+                indexSubsystem,
+                shooterSubsystem,
+                drivebaseSubsystem);
     }
 
     @Override
     public void execute() {
         climbSubsystem.lowerArm();
     }
-
 }

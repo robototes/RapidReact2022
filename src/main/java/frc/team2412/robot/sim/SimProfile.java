@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 public abstract class SimProfile {
     private Timer timer = null;
 
-    /**
-     * Runs the simulation profile. Overrided by device specific profiles.
-     */
+    /** Runs the simulation profile. Overrided by device specific profiles. */
     public abstract void run();
 
     /**

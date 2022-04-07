@@ -1,13 +1,12 @@
 package frc.team2412.robot.subsystem;
 
+import static frc.team2412.robot.Hardware.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
 import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
-import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -27,13 +26,14 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         public static final double INTAKE_IN_SPEED = 0.85;
         public static final double INTAKE_OUT_SPEED = -0.3;
 
-        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 20, 20, 1);
+        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT =
+                new SupplyCurrentLimitConfiguration(true, 20, 20, 1);
 
         // Enums
 
         public static enum IntakeSolenoidState {
-            EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
+            EXTEND(DoubleSolenoid.Value.kForward, "Extended"),
+            RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
 
             public final DoubleSolenoid.Value value;
             public final String state;
@@ -47,8 +47,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
 
     // Define Hardware
 
-    @Log
-    private final WPI_TalonFX motorOuter;
+    @Log private final WPI_TalonFX motorOuter;
     private final WPI_TalonFX motorInner;
 
     private final DoubleSolenoid solenoid;
@@ -61,7 +60,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     public static String state = "";
 
     public boolean ignoreIngest = false;
-    public boolean ingestOverridenValue = false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
+    public boolean ingestOverridenValue =
+            false; // eddie thinking of new name as we speak 84 ratatouilles a week 🤪
 
     // CONSTRUCTOR!
 
@@ -80,8 +80,12 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
             motorInner.setInverted(false);
         }
 
-        solenoid = new DoubleSolenoid(PNEUMATIC_HUB, PneumaticsModuleType.REVPH, INTAKE_SOLENOID_UP,
-                INTAKE_SOLENOID_DOWN);
+        solenoid =
+                new DoubleSolenoid(
+                        PNEUMATIC_HUB,
+                        PneumaticsModuleType.REVPH,
+                        INTAKE_SOLENOID_UP,
+                        INTAKE_SOLENOID_DOWN);
 
         ingestProximity = new DigitalInput(INGEST_PROXIMITY);
 
@@ -113,8 +117,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor inwards and updates motor state.
-     * Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor inwards and updates motor state. Runs if Intake is extended which is when the
+     * solenoid is retracted.
      */
     public void intakeIn() {
         if (isIntakeExtended()) {
@@ -123,8 +127,8 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
     }
 
     /**
-     * Spins motor outwards and updates motor state.
-     * Runs if Intake is extended which is when the solenoid is retracted.
+     * Spins motor outwards and updates motor state. Runs if Intake is extended which is when the
+     * solenoid is retracted.
      */
     public void intakeOut() {
         if (isIntakeExtended()) {
@@ -132,58 +136,43 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         }
     }
 
-    /**
-     * Stops motor and updates motor state
-     */
+    /** Stops motor and updates motor state */
     public void intakeStop() {
         motorOuter.stopMotor();
         motorInner.stopMotor();
     }
 
-    /**
-     * Extends Intake by retract solenoid
-     */
+    /** Extends Intake by retract solenoid */
     public void intakeExtend() {
-        if (solenoid != null)
-            solenoid.set(RETRACT.value);
+        if (solenoid != null) solenoid.set(RETRACT.value);
         state = EXTEND.toString();
     }
 
-    /**
-     * Retracts Intake by extending solenoid
-     */
+    /** Retracts Intake by extending solenoid */
     public void intakeRetract() {
         intakeStop();
-        if (solenoid != null)
-            solenoid.set(EXTEND.value);
+        if (solenoid != null) solenoid.set(EXTEND.value);
         state = RETRACT.toString();
     }
 
     @Override
-    public void periodic() {
-    }
+    public void periodic() {}
 
     // Logging Methods
 
-    /**
-     * Gets the motor speed
-     */
+    /** Gets the motor speed */
     @Log(name = "Motor Speed")
     public double getMotorSpeed() {
         return motorOuter.get();
     }
 
-    /**
-     * Checks if motor is on
-     */
+    /** Checks if motor is on */
     @Log(name = "Motor Moving")
     public boolean isMotorOn() {
         return motorOuter.get() != 0;
     }
 
-    /**
-     * Checks if Intake is extended
-     */
+    /** Checks if Intake is extended */
     @Log(name = "Intake Extended")
     public boolean isIntakeExtended() {
         return solenoid.get() == RETRACT.value;
@@ -194,9 +183,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         return solenoid.get().toString();
     }
 
-    /**
-     * Checks if sensor is detecting ball
-     */
+    /** Checks if sensor is detecting ball */
     @Log
     public boolean hasCargo() {
 
@@ -216,9 +203,7 @@ public class IntakeSubsystem extends SubsystemBase implements Loggable {
         ignoreIngest = ignore;
     }
 
-    /**
-     * sets ingestOverridenValue value
-     */
+    /** sets ingestOverridenValue value */
     @Config
     public void setIngestOverridenValue(boolean value) {
         ingestOverridenValue = value;

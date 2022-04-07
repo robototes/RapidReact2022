@@ -1,9 +1,9 @@
 package frc.team2412.robot.util;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public interface UtilityCommand {
     default InstantCommand instant(Runnable r) {

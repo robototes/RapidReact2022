@@ -9,8 +9,7 @@ import org.frcteam2910.common.math.Vector3;
  * Class for PFF controllers that provide P controllers but with the advantage of FeedForward
  *
  * @author Alex Stedman
- * @param <T>
- *            type of input/output
+ * @param <T> type of input/output
  */
 @SuppressWarnings("unused")
 public class PFFController<T> {
@@ -23,8 +22,7 @@ public class PFFController<T> {
      * functional interface for core operator used by the controller
      *
      * @author Alex Stedman
-     * @param <T>
-     *            type of input/output
+     * @param <T> type of input/output
      */
     public interface PFFOperator<T> {
 
@@ -41,8 +39,7 @@ public class PFFController<T> {
         T zero();
 
         default T operate(T first, T second, double scale, double tolerance) {
-            if (equals(first, second, tolerance))
-                return zero();
+            if (equals(first, second, tolerance)) return zero();
             return scale(subtract(first, second), scale);
         }
     }
@@ -59,8 +56,7 @@ public class PFFController<T> {
     /**
      * Set the target position of the controller
      *
-     * @param target
-     *            new target position
+     * @param target new target position
      * @return this
      */
     public PFFController<T> setTargetPosition(T target) {
@@ -79,15 +75,12 @@ public class PFFController<T> {
     /**
      * output the adjustment offered by the controller
      *
-     * @param measuredValue
-     *            measured value at current time
+     * @param measuredValue measured value at current time
      * @return new value to set
      */
     public T update(T measuredValue) {
-        if (pastValue == null)
-            pastValue = measuredValue;
-        if (targetPosition == null)
-            return null;
+        if (pastValue == null) pastValue = measuredValue;
+        if (targetPosition == null) return null;
         T velocity = op.operate(measuredValue, pastValue, f / timer.get(), targetPositionTolerance);
         timer.reset();
         pastValue = measuredValue;
@@ -98,99 +91,102 @@ public class PFFController<T> {
     /**
      * create PFF controller of doubles
      *
-     * @param pValue
-     *            P value for proportional control
-     * @param fValue
-     *            F value for feedforward control
+     * @param pValue P value for proportional control
+     * @param fValue F value for feedforward control
      * @return new PFFController
      */
     public static PFFController<Double> ofDouble(double pValue, double fValue) {
-        return new PFFController<>(pValue, fValue, new PFFOperator<>() {
-            @Override
-            public Double add(Double first, Double second) {
-                return first + second;
-            }
+        return new PFFController<>(
+                pValue,
+                fValue,
+                new PFFOperator<>() {
+                    @Override
+                    public Double add(Double first, Double second) {
+                        return first + second;
+                    }
 
-            @Override
-            public Double scale(Double first, double scale) {
-                return first * scale;
-            }
+                    @Override
+                    public Double scale(Double first, double scale) {
+                        return first * scale;
+                    }
 
-            @Override
-            public boolean equals(Double first, Double second, double tolerance) {
-                return MathUtils.epsilonEquals(first, second, tolerance);
-            }
+                    @Override
+                    public boolean equals(Double first, Double second, double tolerance) {
+                        return MathUtils.epsilonEquals(first, second, tolerance);
+                    }
 
-            @Override
-            public Double zero() {
-                return 0.0;
-            }
-        });
+                    @Override
+                    public Double zero() {
+                        return 0.0;
+                    }
+                });
     }
 
     /**
      * create PFF controller of {@link Vector2}
      *
-     * @param pValue
-     *            P value for proportional control
-     * @param fValue
-     *            F value for feedforward control
+     * @param pValue P value for proportional control
+     * @param fValue F value for feedforward control
      * @return new PFFController
      */
     public static PFFController<Vector2> ofVector2(double pValue, double fValue) {
-        return new PFFController<>(pValue, fValue, new PFFOperator<>() {
-            @Override
-            public Vector2 add(Vector2 first, Vector2 second) {
-                return first.add(second);
-            }
+        return new PFFController<>(
+                pValue,
+                fValue,
+                new PFFOperator<>() {
+                    @Override
+                    public Vector2 add(Vector2 first, Vector2 second) {
+                        return first.add(second);
+                    }
 
-            @Override
-            public Vector2 scale(Vector2 first, double scale) {
-                return first.scale(scale);
-            }
+                    @Override
+                    public Vector2 scale(Vector2 first, double scale) {
+                        return first.scale(scale);
+                    }
 
-            @Override
-            public boolean equals(Vector2 first, Vector2 second, double tolerance) {
-                return first.equals(second, tolerance);
-            }
+                    @Override
+                    public boolean equals(Vector2 first, Vector2 second, double tolerance) {
+                        return first.equals(second, tolerance);
+                    }
 
-            @Override
-            public Vector2 zero() {
-                return Vector2.ZERO;
-            }
-        });
+                    @Override
+                    public Vector2 zero() {
+                        return Vector2.ZERO;
+                    }
+                });
     }
 
     /**
      * create PFF controller of {@link Vector3}
      *
-     * @param pValue
-     *            P value for proportional control
-     * @param fValue
-     *            F value for feedforward control
+     * @param pValue P value for proportional control
+     * @param fValue F value for feedforward control
      * @return new PFFController
      */
     public static PFFController<Vector3> ofVector3(double pValue, double fValue) {
-        return new PFFController<>(pValue, fValue, new PFFOperator<>() {
-            @Override
-            public Vector3 add(Vector3 first, Vector3 second) {
-                return first.add(second);
-            }
+        return new PFFController<>(
+                pValue,
+                fValue,
+                new PFFOperator<>() {
+                    @Override
+                    public Vector3 add(Vector3 first, Vector3 second) {
+                        return first.add(second);
+                    }
 
-            @Override
-            public Vector3 scale(Vector3 first, double scale) {
-                return first.scale(scale);
-            }
+                    @Override
+                    public Vector3 scale(Vector3 first, double scale) {
+                        return first.scale(scale);
+                    }
 
-            @Override
-            public boolean equals(Vector3 first, Vector3 second, double tolerance) {
-                return first.equals(second, tolerance);
-            }
+                    @Override
+                    public boolean equals(Vector3 first, Vector3 second, double tolerance) {
+                        return first.equals(second, tolerance);
+                    }
 
-            @Override
-            public Vector3 zero() {
-                return Vector3.ZERO;
-            }
-        });
+                    @Override
+                    public Vector3 zero() {
+                        return Vector3.ZERO;
+                    }
+                });
     }
 }

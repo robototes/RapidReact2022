@@ -1,22 +1,18 @@
 package frc.team2412.robot.util.controller;
 
+import java.util.*;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.XboxController;
-
-import java.util.*;
 
 /**
  * Controller class that maps multiple controllers to a single physical controller and allows the
  * user to switch between them
  *
  * @author Alex Stedman
- * @param <T>
- *            key for switching
- * @param <U>
- *            type of wrapped optional controllers
+ * @param <T> key for switching
+ * @param <U> type of wrapped optional controllers
  */
 @SuppressWarnings("unused")
-
 public class SwitchableController<T, U extends Controller> implements MultiController<T, U> {
     private final Map<T, OptionalController<U>> controllers;
     private final Set<T> choice;
@@ -25,30 +21,23 @@ public class SwitchableController<T, U extends Controller> implements MultiContr
     /**
      * create switchable controller
      *
-     * @param one
-     *            if for the presets onlyOne mode is enabled
-     * @param c
-     *            controller
-     * @param presets
-     *            preset keys
+     * @param one if for the presets onlyOne mode is enabled
+     * @param c controller
+     * @param presets preset keys
      */
     @SafeVarargs
     public SwitchableController(boolean one, U c, T... presets) {
         oneChoice = one;
         controllers = new LinkedHashMap<>();
-        for (T preset : presets)
-            controllers.put(preset, new OptionalController<>(c));
+        for (T preset : presets) controllers.put(preset, new OptionalController<>(c));
         choice = new LinkedHashSet<>();
-
     }
 
     /**
      * create switchable controller
      *
-     * @param c
-     *            controller
-     * @param presets
-     *            preset keys
+     * @param c controller
+     * @param presets preset keys
      */
     @SafeVarargs
     public SwitchableController(U c, T... presets) {
@@ -80,12 +69,9 @@ public class SwitchableController<T, U extends Controller> implements MultiContr
     /**
      * Staticly create switchable controller on port
      *
-     * @param port
-     *            port for xbox controller
-     * @param args
-     *            array for preset map
-     * @param <T>
-     *            type of preset key
+     * @param port port for xbox controller
+     * @param args array for preset map
+     * @param <T> type of preset key
      * @return the new compound controller
      */
     @SafeVarargs
@@ -96,14 +82,10 @@ public class SwitchableController<T, U extends Controller> implements MultiContr
     /**
      * Staticly create switchable controller on port
      *
-     * @param one
-     *            if only one preset mode is enabled
-     * @param port
-     *            port for xbox controller
-     * @param args
-     *            array for preset map
-     * @param <T>
-     *            type of preset key
+     * @param one if only one preset mode is enabled
+     * @param port port for xbox controller
+     * @param args array for preset map
+     * @param <T> type of preset key
      * @return the new compound controller
      */
     @SafeVarargs

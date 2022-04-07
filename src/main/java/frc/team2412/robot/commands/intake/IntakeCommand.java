@@ -33,5 +33,4 @@ public class IntakeCommand extends CommandBase {
     public boolean isFinished() {
         return false;
     }
-
 }

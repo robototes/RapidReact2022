@@ -1,5 +1,6 @@
 package frc.team2412.robot.util;
 
+import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,12 +8,8 @@ import java.nio.file.Paths;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants;
-
 public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoint> {
-    /**
-     * Creates an empty {@link InterpolatingTreeMap}.
-     */
+    /** Creates an empty {@link InterpolatingTreeMap}. */
     public InterpolatingTreeMap() {
         this(new ShooterDataDistancePoint[] {});
     }
@@ -30,8 +27,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     /**
      * Creates a {@link InterpolatingTreeMap} from a path to a CSV file.
      *
-     * @param fileName
-     *            The path to the CSV file.
+     * @param fileName The path to the CSV file.
      * @return An {@link InterpolatingTreeMap} from the data in the CSV file.
      */
     public static InterpolatingTreeMap fromCSV(String fileName) {
@@ -44,9 +40,10 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             while ((line = reader.readLine()) != null) {
                 lineNum++;
                 String msgPrefix = "Line #" + lineNum + ": ";
-                Consumer<String> debug = (msg) -> {
-                    System.out.println(msgPrefix + msg);
-                };
+                Consumer<String> debug =
+                        (msg) -> {
+                            System.out.println(msgPrefix + msg);
+                        };
 
                 int hashtagIndex = line.indexOf("#");
                 int doubleSlashIndex = line.indexOf("//");
@@ -58,10 +55,12 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     debug.accept("Starts with '//', skipping line");
                     continue;
                 }
-                if (hashtagIndex != -1 && (doubleSlashIndex == -1 || hashtagIndex < doubleSlashIndex)) {
+                if (hashtagIndex != -1
+                        && (doubleSlashIndex == -1 || hashtagIndex < doubleSlashIndex)) {
                     debug.accept("'#' at char index " + hashtagIndex + ", trimming comment");
                     line = line.substring(0, hashtagIndex);
-                } else if (doubleSlashIndex != -1 && (hashtagIndex == -1 || doubleSlashIndex < hashtagIndex)) {
+                } else if (doubleSlashIndex != -1
+                        && (hashtagIndex == -1 || doubleSlashIndex < hashtagIndex)) {
                     debug.accept("'//' at char index " + doubleSlashIndex + ", trimming comment");
                     line = line.substring(0, doubleSlashIndex);
                 }
@@ -72,7 +71,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     continue;
                 } else if (items.length > 3) {
                     debug.accept("More than 3 items, ignoring extra items");
-                    // Extra items aren't processed, could use Arrays.copyOf(items, [newlength]) if needed
+                    // Extra items aren't processed, could use Arrays.copyOf(items, [newlength]) if
+                    // needed
                 }
 
                 double distance, angle, RPM;
@@ -91,11 +91,15 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     continue;
                 }
                 if (angle < ShooterConstants.MIN_HOOD_ANGLE) {
-                    debug.accept("Hood angle " + angle + " is less than the min value, skipping line");
+                    debug.accept(
+                            "Hood angle " + angle + " is less than the min value, skipping line");
                     continue;
                 }
                 if (angle > ShooterConstants.MAX_HOOD_ANGLE) {
-                    debug.accept("Hood angle " + angle + " is greater than the max value, skipping line");
+                    debug.accept(
+                            "Hood angle "
+                                    + angle
+                                    + " is greater than the max value, skipping line");
                     continue;
                 }
                 if (RPM < 0) {
@@ -109,7 +113,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             // Debug code
             System.out.println("All points:");
             for (ShooterDataDistancePoint point : map.values()) {
-                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getRPM());
+                System.out.println(
+                        point.getDistance() + ": " + point.getAngle() + ", " + point.getRPM());
             }
 
             System.out.println("Done deserializing CSV");
@@ -123,8 +128,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     /**
      * Replaces all data in the {@link InterpolatingTreeMap} with data from a CSV file.
      *
-     * @param fileName
-     *            The path to the CSV file.
+     * @param fileName The path to the CSV file.
      */
     public void replaceFromCSV(String fileName) {
         clear();
@@ -134,21 +138,19 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     /**
      * Adds a {@link ShooterDataDistancePoint}.
      *
-     * @param dataPoint
-     *            The {@link ShooterDataDistancePoint} to add
+     * @param dataPoint The {@link ShooterDataDistancePoint} to add
      */
     private void addDataPoint(ShooterDataDistancePoint dataPoint) {
         put(dataPoint.getDistance(), dataPoint);
     }
 
     /**
-     * Gets an value at a specified distance from the origin, interpolating it if there isn't an exact
-     * match.
+     * Gets an value at a specified distance from the origin, interpolating it if there isn't an
+     * exact match.
      *
-     * @param key
-     *            The distance to get the value from.
+     * @param key The distance to get the value from.
      * @return An value from the {@link InterpolatingTreeMap}, interpolated if there isn't an exact
-     *         match.
+     *     match.
      */
     public ShooterDataDistancePoint getInterpolated(Double key) {
         ShooterDataDistancePoint value = get(key);
@@ -190,21 +192,20 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
     /**
      * Returns an interpolated value at a specified distance from the origin.
      *
-     * @param floor
-     *            The {@link ShooterDataDistancePoint} closer to the origin.
-     * @param ceiling
-     *            The {@link ShooterDataDistancePoint} father from the origin.
-     * @param key
-     *            The distance to interpolate to.
+     * @param floor The {@link ShooterDataDistancePoint} closer to the origin.
+     * @param ceiling The {@link ShooterDataDistancePoint} father from the origin.
+     * @param key The distance to interpolate to.
      * @return {@link ShooterDataDistancePoint} an interpolated value at the specified distance.
      */
-    private static ShooterDataDistancePoint interpolate(ShooterDataDistancePoint floor,
-            ShooterDataDistancePoint ceiling,
-            Double key) {
+    private static ShooterDataDistancePoint interpolate(
+            ShooterDataDistancePoint floor, ShooterDataDistancePoint ceiling, Double key) {
         double slopeDistanceDifference = ceiling.getDistance() - floor.getDistance();
-        if (slopeDistanceDifference == 0 || Double.isNaN(slopeDistanceDifference)
+        if (slopeDistanceDifference == 0
+                || Double.isNaN(slopeDistanceDifference)
                 || Double.isInfinite(slopeDistanceDifference)) {
-            System.out.println("ERROR, distance between sample points is an illegal value: " + slopeDistanceDifference);
+            System.out.println(
+                    "ERROR, distance between sample points is an illegal value: "
+                            + slopeDistanceDifference);
             return null;
         }
         double angleSlope = (ceiling.getAngle() - floor.getAngle()) / slopeDistanceDifference;
@@ -212,8 +213,8 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         double distanceOffset = key - floor.getDistance();
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
         double interpolateRPM = rpmSlope * distanceOffset + floor.getRPM();
-        ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle,
-                interpolateRPM);
+        ShooterDataDistancePoint interpolatePoint =
+                new ShooterDataDistancePoint(key, interpolateAngle, interpolateRPM);
 
         return interpolatePoint;
     }

@@ -27,8 +27,12 @@ public class VectorSlewLimiter {
         double currentTime = WPIUtilJNI.now() * 1e-6;
         double elapsedTime = currentTime - prevTime;
         prevTime = currentTime;
-        double x = MathUtil.clamp(input.x - prevVal.x, -rateLimit * elapsedTime, rateLimit * elapsedTime);
-        double y = MathUtil.clamp(input.y - prevVal.y, -rateLimit * elapsedTime, rateLimit * elapsedTime);
+        double x =
+                MathUtil.clamp(
+                        input.x - prevVal.x, -rateLimit * elapsedTime, rateLimit * elapsedTime);
+        double y =
+                MathUtil.clamp(
+                        input.y - prevVal.y, -rateLimit * elapsedTime, rateLimit * elapsedTime);
         prevVal = prevVal.add(x, y);
         return prevVal;
     }

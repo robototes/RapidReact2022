@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        LiveWindow.disableAllTelemetry();
+        LiveWindow.setEnabled(false);
         subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {

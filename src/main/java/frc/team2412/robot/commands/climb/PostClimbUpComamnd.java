@@ -18,8 +18,8 @@ public class PostClimbUpComamnd extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() {
-        return true;
+    public void end(boolean interrupted) {
+        subsystem.disarmSolenoid();
     }
 
 }

@@ -22,10 +22,11 @@ import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
+import frc.team2412.robot.util.UtilityCommand;
 
 import static frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand.FiveBallConstants.*;
 
-public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommandGroup {
+public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
     public static class FiveBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -95,7 +96,7 @@ public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommand
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);
 
-        indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
+        // indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
         addCommands2(
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
@@ -112,7 +113,7 @@ public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommand
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
                 manager.disableAt(70),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
-                new WaitCommand(1.5),
+                await(1.5),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
                 manager.enableAt(70),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),

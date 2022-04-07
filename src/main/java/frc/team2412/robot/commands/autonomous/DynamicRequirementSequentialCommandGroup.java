@@ -11,10 +11,10 @@ public class DynamicRequirementSequentialCommandGroup extends SequentialCommandG
     }
 
     public void addCommands2(Command... commands) {
-        Command[] newCommands = new Command[commands.length*2];
+        Command[] newCommands = new Command[commands.length * 2];
         for (int i = 0; i < commands.length; i++) {
-            newCommands[2*i] = new ScheduleCommand(commands[i]);
-            newCommands[2*i + 1] = new WaitUntilCommand(commands[i]::isFinished);
+            newCommands[2 * i] = new ScheduleCommand(commands[i]);
+            newCommands[2 * i + 1] = new WaitUntilCommand(commands[i]::isFinished);
         }
         addCommands(newCommands);
     }

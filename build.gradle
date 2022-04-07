@@ -125,7 +125,7 @@ spotless {
 
     java {
         targetExclude "**/build/**", "**/build-*/**", "**/bin/**", "/.*"
-        googleJavaFormat().aosp()
+        googleJavaFormat()
         toggleOffOn()
         removeUnusedImports()
         endWithNewline()

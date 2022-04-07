@@ -5,7 +5,7 @@ import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.INTAK
 import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeSetInCommand extends IntakeSetCommand {
-    public IntakeSetInCommand(IntakeSubsystem subsystem) {
-        super(subsystem, INTAKE_IN_SPEED, true);
-    }
+  public IntakeSetInCommand(IntakeSubsystem subsystem) {
+    super(subsystem, INTAKE_IN_SPEED, true);
+  }
 }

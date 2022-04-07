@@ -5,32 +5,32 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import java.util.function.DoubleSupplier;
 
 public class ShooterUpdateHoodRPMCommand extends CommandBase {
-    private final ShooterSubsystem shooter;
-    private final DoubleSupplier flywheelRPMsupplier;
-    private final DoubleSupplier hoodAngleSupplier;
+  private final ShooterSubsystem shooter;
+  private final DoubleSupplier flywheelRPMsupplier;
+  private final DoubleSupplier hoodAngleSupplier;
 
-    public ShooterUpdateHoodRPMCommand(ShooterSubsystem shooter) {
-        this(shooter, shooter::getFlywheelTestRPM, shooter::getHoodTestAngle);
-    }
+  public ShooterUpdateHoodRPMCommand(ShooterSubsystem shooter) {
+    this(shooter, shooter::getFlywheelTestRPM, shooter::getHoodTestAngle);
+  }
 
-    public ShooterUpdateHoodRPMCommand(
-            ShooterSubsystem shooter,
-            DoubleSupplier flywheelRPMsupplier,
-            DoubleSupplier hoodAngleSupplier) {
-        this.shooter = shooter;
-        this.flywheelRPMsupplier = flywheelRPMsupplier;
-        this.hoodAngleSupplier = hoodAngleSupplier;
-        addRequirements(shooter);
-    }
+  public ShooterUpdateHoodRPMCommand(
+      ShooterSubsystem shooter,
+      DoubleSupplier flywheelRPMsupplier,
+      DoubleSupplier hoodAngleSupplier) {
+    this.shooter = shooter;
+    this.flywheelRPMsupplier = flywheelRPMsupplier;
+    this.hoodAngleSupplier = hoodAngleSupplier;
+    addRequirements(shooter);
+  }
 
-    @Override
-    public void execute() {
-        shooter.setFlywheelRPM(flywheelRPMsupplier.getAsDouble());
-        shooter.setHoodAngle(hoodAngleSupplier.getAsDouble());
-    }
+  @Override
+  public void execute() {
+    shooter.setFlywheelRPM(flywheelRPMsupplier.getAsDouble());
+    shooter.setHoodAngle(hoodAngleSupplier.getAsDouble());
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

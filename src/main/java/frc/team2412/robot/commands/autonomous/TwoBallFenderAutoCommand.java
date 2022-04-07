@@ -16,38 +16,35 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import java.util.List;
 
 public class TwoBallFenderAutoCommand extends SequentialCommandGroup {
-    public TwoBallFenderAutoCommand(
-            DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem) {
+  public TwoBallFenderAutoCommand(
+      DrivebaseSubsystem drivebaseSubsystem, ShooterSubsystem shooterSubsystem) {
 
-        TrajectoryConfig fastConfig =
-                new TrajectoryConfig(1, 0.8)
-                        .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
-        ProfiledPIDController thetaController =
-                new ProfiledPIDController(
-                        0.1,
-                        0,
-                        0,
-                        FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
+    TrajectoryConfig fastConfig =
+        new TrajectoryConfig(1, 0.8)
+            .setKinematics(FollowWpilibTrajectory.WPILibAutoConstants.driveKinematics);
+    ProfiledPIDController thetaController =
+        new ProfiledPIDController(
+            0.1, 0, 0, FollowWpilibTrajectory.WPILibAutoConstants.K_THETA_CONTROLLER_CONSTRAINTS);
 
-        Trajectory trajectory1 =
-                TrajectoryGenerator.generateTrajectory(
-                        new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),
-                        List.of(),
-                        new Pose2d(new Translation2d(4.99, 5.97), Rotation2d.fromDegrees(46)),
-                        fastConfig);
+    Trajectory trajectory1 =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(new Translation2d(5.89, 5.1), Rotation2d.fromDegrees(46)),
+            List.of(),
+            new Pose2d(new Translation2d(4.99, 5.97), Rotation2d.fromDegrees(46)),
+            fastConfig);
 
-        Trajectory trajectory2 =
-                TrajectoryGenerator.generateTrajectory(
-                        new Pose2d(new Translation2d(4.99, 5.97), Rotation2d.fromDegrees(46)),
-                        List.of(),
-                        new Pose2d(new Translation2d(6.98, 4.48), Rotation2d.fromDegrees(-21)),
-                        fastConfig);
+    Trajectory trajectory2 =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(new Translation2d(4.99, 5.97), Rotation2d.fromDegrees(46)),
+            List.of(),
+            new Pose2d(new Translation2d(6.98, 4.48), Rotation2d.fromDegrees(-21)),
+            fastConfig);
 
-        addCommands(
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
-                new FollowWpilibTrajectory(drivebaseSubsystem, trajectory2, thetaController),
-                new ParallelCommandGroup(
-                        new ShooterHoodRPMCommand(shooterSubsystem, 2700, 0),
-                        new InstantCommand(() -> shooterSubsystem.setTurretAngle(-90))));
-    }
+    addCommands(
+        new FollowWpilibTrajectory(drivebaseSubsystem, trajectory1, thetaController),
+        new FollowWpilibTrajectory(drivebaseSubsystem, trajectory2, thetaController),
+        new ParallelCommandGroup(
+            new ShooterHoodRPMCommand(shooterSubsystem, 2700, 0),
+            new InstantCommand(() -> shooterSubsystem.setTurretAngle(-90))));
+  }
 }

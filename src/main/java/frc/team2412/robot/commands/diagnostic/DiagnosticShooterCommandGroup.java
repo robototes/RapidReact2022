@@ -5,7 +5,7 @@ import frc.team2412.robot.commands.shooter.ShooterDiagnosticCommand;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 
 public class DiagnosticShooterCommandGroup extends SequentialCommandGroup {
-    public DiagnosticShooterCommandGroup(ShooterSubsystem shooterSubsystem) {
-        super(new ShooterDiagnosticCommand(shooterSubsystem));
-    }
+  public DiagnosticShooterCommandGroup(ShooterSubsystem shooterSubsystem) {
+    super(new ShooterDiagnosticCommand(shooterSubsystem));
+  }
 }

@@ -9,15 +9,15 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 public class LinePath extends SequentialCommandGroup {
-    public LinePath(DrivebaseSubsystem drivebaseSubsystem) {
-        Trajectory linePathAuto =
-                new Trajectory(
-                        new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-                                .lineTo(new Vector2(24, 0))
-                                .build(),
-                        DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS,
-                        0.1);
+  public LinePath(DrivebaseSubsystem drivebaseSubsystem) {
+    Trajectory linePathAuto =
+        new Trajectory(
+            new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+                .lineTo(new Vector2(24, 0))
+                .build(),
+            DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS,
+            0.1);
 
-        addCommands(new Follow2910TrajectoryCommand(drivebaseSubsystem, linePathAuto));
-    }
+    addCommands(new Follow2910TrajectoryCommand(drivebaseSubsystem, linePathAuto));
+  }
 }

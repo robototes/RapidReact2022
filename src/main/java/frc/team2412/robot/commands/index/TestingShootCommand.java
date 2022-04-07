@@ -10,13 +10,13 @@ import frc.team2412.robot.subsystem.TargetLocalizer;
 
 public class TestingShootCommand extends ParallelCommandGroup {
 
-    public TestingShootCommand(
-            IndexSubsystem indexSubsystem,
-            ShooterSubsystem shooterSubsystem,
-            TargetLocalizer localizer,
-            IntakeSubsystem intakeSubsystem) {
-        addCommands(
-                new IntakeIndexInCommand(indexSubsystem, intakeSubsystem),
-                new ShooterTargetCommand(shooterSubsystem, localizer));
-    }
+  public TestingShootCommand(
+      IndexSubsystem indexSubsystem,
+      ShooterSubsystem shooterSubsystem,
+      TargetLocalizer localizer,
+      IntakeSubsystem intakeSubsystem) {
+    addCommands(
+        new IntakeIndexInCommand(indexSubsystem, intakeSubsystem),
+        new ShooterTargetCommand(shooterSubsystem, localizer));
+  }
 }

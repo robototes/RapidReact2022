@@ -7,7 +7,7 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeIndexInCommand extends ParallelCommandGroup {
 
-    public IntakeIndexInCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
-        addCommands(new IntakeSetInCommand(intakeSubsystem), new IndexShootCommand(indexSubsystem));
-    }
+  public IntakeIndexInCommand(IndexSubsystem indexSubsystem, IntakeSubsystem intakeSubsystem) {
+    addCommands(new IntakeSetInCommand(intakeSubsystem), new IndexShootCommand(indexSubsystem));
+  }
 }

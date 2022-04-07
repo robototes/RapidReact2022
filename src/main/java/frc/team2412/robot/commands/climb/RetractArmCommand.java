@@ -5,20 +5,20 @@ import frc.team2412.robot.subsystem.ClimbSubsystem;
 
 public class RetractArmCommand extends CommandBase {
 
-    private final ClimbSubsystem subsystem;
+  private final ClimbSubsystem subsystem;
 
-    public RetractArmCommand(ClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
-        addRequirements(subsystem);
-    }
+  public RetractArmCommand(ClimbSubsystem subsystem) {
+    this.subsystem = subsystem;
+    addRequirements(subsystem);
+  }
 
-    @Override
-    public void initialize() {
-        subsystem.retractArm();
-    }
+  @Override
+  public void initialize() {
+    subsystem.retractArm();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
+  @Override
+  public boolean isFinished() {
+    return true;
+  }
 }

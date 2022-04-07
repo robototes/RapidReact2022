@@ -5,28 +5,28 @@ import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import org.frcteam2910.common.control.Trajectory;
 
 public class Follow2910TrajectoryCommand extends CommandBase {
-    private final DrivebaseSubsystem drivebase;
-    private final Trajectory trajectory;
+  private final DrivebaseSubsystem drivebase;
+  private final Trajectory trajectory;
 
-    public Follow2910TrajectoryCommand(DrivebaseSubsystem drivebase, Trajectory trajectory) {
-        this.drivebase = drivebase;
-        this.trajectory = trajectory;
+  public Follow2910TrajectoryCommand(DrivebaseSubsystem drivebase, Trajectory trajectory) {
+    this.drivebase = drivebase;
+    this.trajectory = trajectory;
 
-        addRequirements(drivebase);
-    }
+    addRequirements(drivebase);
+  }
 
-    @Override
-    public void initialize() {
-        drivebase.getFollower().follow(trajectory);
-    }
+  @Override
+  public void initialize() {
+    drivebase.getFollower().follow(trajectory);
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        drivebase.getFollower().cancel();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    drivebase.getFollower().cancel();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return drivebase.getFollower().getCurrentTrajectory().isEmpty();
-    }
+  @Override
+  public boolean isFinished() {
+    return drivebase.getFollower().getCurrentTrajectory().isEmpty();
+  }
 }

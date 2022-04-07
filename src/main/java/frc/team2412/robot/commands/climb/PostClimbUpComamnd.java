@@ -5,20 +5,20 @@ import frc.team2412.robot.subsystem.PostClimbSubsystem;
 
 public class PostClimbUpComamnd extends CommandBase {
 
-    private PostClimbSubsystem subsystem;
+  private PostClimbSubsystem subsystem;
 
-    public PostClimbUpComamnd(PostClimbSubsystem subsystem) {
-        this.subsystem = subsystem;
-        addRequirements(subsystem);
-    }
+  public PostClimbUpComamnd(PostClimbSubsystem subsystem) {
+    this.subsystem = subsystem;
+    addRequirements(subsystem);
+  }
 
-    @Override
-    public void execute() {
-        subsystem.armSolenoid();
-    }
+  @Override
+  public void execute() {
+    subsystem.armSolenoid();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
+  @Override
+  public boolean isFinished() {
+    return true;
+  }
 }

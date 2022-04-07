@@ -6,31 +6,31 @@ import frc.team2412.robot.subsystem.IntakeSubsystem;
 
 public class IntakeCommand extends CommandBase {
 
-    private final IntakeSubsystem intakeSubsystem;
-    private final IndexSubsystem indexSubsystem;
+  private final IntakeSubsystem intakeSubsystem;
+  private final IndexSubsystem indexSubsystem;
 
-    public IntakeCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem) {
-        this.intakeSubsystem = intakeSubsystem;
-        this.indexSubsystem = indexSubsystem;
-        addRequirements(intakeSubsystem);
+  public IntakeCommand(IntakeSubsystem intakeSubsystem, IndexSubsystem indexSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+    this.indexSubsystem = indexSubsystem;
+    addRequirements(intakeSubsystem);
+  }
+
+  @Override
+  public void execute() {
+    if (!intakeSubsystem.isIntakeExtended()) {
+      intakeSubsystem.intakeStop();
+      return;
     }
 
-    @Override
-    public void execute() {
-        if (!intakeSubsystem.isIntakeExtended()) {
-            intakeSubsystem.intakeStop();
-            return;
-        }
-
-        if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
-            intakeSubsystem.intakeStop();
-        } else {
-            intakeSubsystem.intakeIn();
-        }
+    if (indexSubsystem.hasCargo() && intakeSubsystem.hasCargo()) {
+      intakeSubsystem.intakeStop();
+    } else {
+      intakeSubsystem.intakeIn();
     }
+  }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

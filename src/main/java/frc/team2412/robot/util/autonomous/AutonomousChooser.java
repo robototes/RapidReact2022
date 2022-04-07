@@ -146,6 +146,13 @@ public class AutonomousChooser {
                 "Y 2910 Five ball path Y", Subsystems.SubsystemConstants.DRIVE_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
                 imagesPath + "jackFiveBall.png"),
+        JACK_THREE_BALL_STEAL(
+                (subsystems) -> new JackStealThreeBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "N 2910 Three ball steal path N", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(401.640, 133.486), Rotation2d.fromDegrees(-90)),
+                imagesPath + "jackThreeBallSteal.png"),
         WPI_PATH(
                 (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),

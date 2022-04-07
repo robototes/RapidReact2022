@@ -25,7 +25,7 @@ import frc.team2412.robot.subsystem.TargetLocalizer;
 
 import static frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand.FiveBallConstants.*;
 
-public class JackFiveBallAutoCommand extends SequentialCommandGroup {
+public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommandGroup {
     public static class FiveBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -96,7 +96,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                 localizer);
 
         indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
-        addCommands(
+        addCommands2(
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
                         // new ScheduleCommand(new IndexCommand(indexSubsystem, intakeSubsystem)),

@@ -27,6 +27,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
 
     public ShooterVisionSubsystem() {
         limelight = NetworkTableInstance.getDefault().getTable(LIMELIGHT);
+        setCompPipline();
     }
 
     public boolean hasTarget() {
@@ -84,6 +85,10 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
 
     public void setLedOff() {
         limelight.getEntry("ledMode").setValue("0");
+    }
+
+    public void setCompPipline(){
+        limelight.getEntry("pipline").setNumber(1);
     }
 
 }

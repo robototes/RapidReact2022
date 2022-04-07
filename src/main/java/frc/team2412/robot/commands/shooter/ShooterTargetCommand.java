@@ -15,7 +15,7 @@ import frc.team2412.robot.util.ShooterDataDistancePoint;
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
-    private BooleanSupplier turretEnable;
+    private BooleanSupplier turretDisable;
     private DoubleSupplier turretIdlePosition;
 
     private double turretAngle = 0;
@@ -32,7 +32,7 @@ public class ShooterTargetCommand extends CommandBase {
             DoubleSupplier turretAngle) {
         this.shooter = shooter;
         this.localizer = localizer;
-        turretEnable = turretButton;
+        turretDisable = turretButton;
         turretIdlePosition = turretAngle;
         addRequirements(shooter);
     }
@@ -70,7 +70,7 @@ public class ShooterTargetCommand extends CommandBase {
             // System.out.println("Actual hood angle: " + shooter.getHoodAngle());
         }
 
-        if (turretEnable.getAsBoolean())
+        if (turretDisable.getAsBoolean())
             state = TurretState.STOPPED;
         else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
             state = TurretState.WRAP_LEFT;
@@ -121,7 +121,7 @@ public class ShooterTargetCommand extends CommandBase {
         public boolean enabled;
 
         public TurretManager(ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
-            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretEnable,
+            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretDisable,
                     this::getIdlePosition);
             idle = 0;
             enabled = false;
@@ -178,7 +178,7 @@ public class ShooterTargetCommand extends CommandBase {
             return idle;
         }
 
-        public boolean getTurretEnable() {
+        public boolean getTurretDisable() {
             return !enabled;
         }
     }

@@ -99,13 +99,9 @@ public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommand
         addCommands2(
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
-                        // new ScheduleCommand(new IndexCommand(indexSubsystem, intakeSubsystem)),
-                        // new ScheduleCommand(new IntakeCommand(intakeSubsystem, indexSubsystem)),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
                 manager.disableAt(0),
-                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1), // .raceWith(new
-                                                                                // IndexCommand(indexSubsystem,
-                                                                                // intakeSubsystem)),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 manager.enableAt(0),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),

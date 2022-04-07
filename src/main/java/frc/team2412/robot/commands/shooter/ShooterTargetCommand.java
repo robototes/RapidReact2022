@@ -81,7 +81,7 @@ public class ShooterTargetCommand extends CommandBase {
 
         switch (state) {
             case STOPPED:
-                 turretAngle = turretIdlePosition.getAsDouble();
+                turretAngle = turretIdlePosition.getAsDouble();
                 break;
             case WRAP_LEFT:
                 turretAngle = ShooterConstants.RIGHT_WRAP;
@@ -121,17 +121,18 @@ public class ShooterTargetCommand extends CommandBase {
         public boolean enabled;
 
         public TurretManager(ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
-            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretEnable, this::getIdlePosition);
+            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretEnable,
+                    this::getIdlePosition);
             idle = 0;
             enabled = false;
         }
 
         // public TurretManager(ShooterTargetCommand targetCommand) {
-        //     shooterTargetCommand = targetCommand;
-        //     shooterTargetCommand.turretIdlePosition = this::getIdlePosition;
-        //     shooterTargetCommand.turretEnable = this::getTurretEnable;
-        //     idle = 0;
-        //     enabled = false;
+        // shooterTargetCommand = targetCommand;
+        // shooterTargetCommand.turretIdlePosition = this::getIdlePosition;
+        // shooterTargetCommand.turretEnable = this::getTurretEnable;
+        // idle = 0;
+        // enabled = false;
         // }
 
         public ShooterTargetCommand getCommand() {

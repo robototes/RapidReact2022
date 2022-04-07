@@ -94,8 +94,8 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);
-                
-                indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
+
+        indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
         addCommands(
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
@@ -103,7 +103,9 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
                         // new ScheduleCommand(new IntakeCommand(intakeSubsystem, indexSubsystem)),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
                 manager.disableAt(0),
-                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),//.raceWith(new IndexCommand(indexSubsystem, intakeSubsystem)),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1), // .raceWith(new
+                                                                                // IndexCommand(indexSubsystem,
+                                                                                // intakeSubsystem)),
                 manager.enableAt(0),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),

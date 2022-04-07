@@ -46,7 +46,7 @@ public class Subsystems implements Loggable {
         }
         if (!comp) {
             return;
-        }    
+        }
         if (CLIMB_ENABLED) {
             climbSubsystem = new ClimbSubsystem();
         }
@@ -59,7 +59,7 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem();
             shooterVisionSubsystem = new ShooterVisionSubsystem();
-            if(DRIVE_ENABLED){
+            if (DRIVE_ENABLED) {
                 targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
             }
         }

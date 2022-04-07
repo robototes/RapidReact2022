@@ -128,21 +128,20 @@ public class Controls {
     }
 
     public void bindIndexControls() {
-        if(subsystems.intakeSubsystem != null){
+        if (subsystems.intakeSubsystem != null) {
             subsystems.indexSubsystem
-            .setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
+                    .setDefaultCommand(new IndexCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
 
             subsystems.intakeSubsystem
-            .setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
+                    .setDefaultCommand(new IntakeCommand(subsystems.intakeSubsystem, subsystems.indexSubsystem));
 
         }
-       
 
         shootButton.whileHeld(new IndexShootCommand(subsystems.indexSubsystem, subsystems.targetLocalizer));
     }
 
     public void bindIntakeControls() {
-        
+
         for (Button b : intakeSpitButton)
             b.whileHeld(new SpitBallCommand(subsystems.indexSubsystem, subsystems.intakeSubsystem));
         intakeRetractButton.whenPressed(new IntakeSetRetractCommand(subsystems.intakeSubsystem));

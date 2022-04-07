@@ -117,7 +117,6 @@ public class IndexSubsystem extends SubsystemBase implements Loggable {
         ingestMotor.set(INDEX_INGEST_SHOOT_SPEED);
     }
 
-
     public void feederMotorShoot() {
         feederMotor.set(INDEX_FEEDER_SHOOT_SPEED);
     }

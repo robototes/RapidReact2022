@@ -1,6 +1,7 @@
 package frc.team2412.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.team2412.robot.commands.index.IndexCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
@@ -71,12 +72,12 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         public static final Trajectory PATH_3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
-                        .lineTo(new Vector2(50.456, 88.818), Rotation2.fromDegrees(202))
+                        .lineTo(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(50.456, 85.818), Rotation2.fromDegrees(202))
+                new SimplePathBuilder(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
                         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
                         .build(),
                 NORMAL_SPEED, 0.1);
@@ -93,15 +94,16 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup {
 
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);
+
+        indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
         addCommands(
                 manager.scheduleCommand().alongWith(
-                        manager.disableAt(0),
                         new IntakeSetInCommand(intakeSubsystem),
-                        // new ScheduleCommand(new IntakeCommand(intakeSubsystem, indexSubsystem)),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
+                manager.disableAt(0),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 manager.enableAt(0),
-                new IndexShootCommand(indexSubsystem).withTimeout(1),
+                new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
                 manager.disableAt(70),

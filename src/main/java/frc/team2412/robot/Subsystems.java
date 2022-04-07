@@ -59,7 +59,9 @@ public class Subsystems implements Loggable {
         if (SHOOTER_ENABLED) {
             shooterSubsystem = new ShooterSubsystem();
             shooterVisionSubsystem = new ShooterVisionSubsystem();
-            targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
+            if (DRIVE_ENABLED) {
+                targetLocalizer = new TargetLocalizer(drivebaseSubsystem, shooterSubsystem, shooterVisionSubsystem);
+            }
         }
         if (POST_CLIMB_ENABLED) {
             postClimbSubsystem = new PostClimbSubsystem();

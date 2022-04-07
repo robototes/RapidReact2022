@@ -1,3 +1,5 @@
 {
-	"java.configuration.updateBuildConfiguration": "automatic"
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"editor.formatOnSave": false,
+	"java.format.settings.url": "eclipse-formatter.xml"
 }

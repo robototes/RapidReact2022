@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
 
     private final PowerDistribution PDP;
     private UsbCamera driverVisionCamera;
+    private UsbCamera fishCamera;
     private PneumaticHub pneumaticHub;
 
     private static final double MIN_PRESSURE = 90;
@@ -133,8 +134,14 @@ public class Robot extends TimedRobot {
             updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
-            driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+
+            fishCamera = new UsbCamera("Front", Hardware.FISH_CAM);
+            fishCamera.setResolution(160, 90);
+
+            driverVisionCamera = new UsbCamera("Back", Hardware.BACK_CAM);
             driverVisionCamera.setResolution(160, 90);
+            CameraServer.addCamera(fishCamera);
+            CameraServer.startAutomaticCapture();
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }

@@ -314,7 +314,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    @Config(tabName = "Drivebase")
+    @Config(tabName = "Drivebase", name =  "reset modules")
     public void resetModules(boolean reset){
         if(reset) {
             boolean supportAbsoluteEncoder = Robot.getInstance().isCompetition() && !Robot.isSimulation();

@@ -1,8 +1,10 @@
 package frc.team2412.robot.commands.autonomous;
 
 import frc.team2412.robot.commands.index.IndexShootCommand;
+import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
+import frc.team2412.robot.commands.intake.IntakeSetInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.*;
 import org.frcteam2910.common.control.SimplePathBuilder;
@@ -10,6 +12,7 @@ import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -25,15 +28,18 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
+        ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
+                localizer);
+
         addCommands(
-                new IntakeSetExtendCommand(intakeSubsystem),
-                new ParallelCommandGroup(
-                        new IntakeCommand(intakeSubsystem, indexSubsystem),
-                        new SequentialCommandGroup(
-                                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                                new ParallelCommandGroup(
-                                        new IndexShootCommand(indexSubsystem, localizer),
-                                        new InstantCommand(() -> new ShooterTargetCommand(shooterSubsystem, localizer,
-                                                () -> true))))));
+
+                manager.scheduleCommand().alongWith(
+                        new IntakeSetInCommand(intakeSubsystem),
+                        new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
+                manager.disableAt(0),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
+                manager.enableAt(0),
+                new IndexShootCommand(indexSubsystem, localizer).withTimeout(2)
+        );
     }
 }

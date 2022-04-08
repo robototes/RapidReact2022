@@ -4,6 +4,7 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 
 import frc.team2412.robot.util.TimeBasedMedianFilter;
@@ -44,6 +45,7 @@ public class TargetLocalizer implements Loggable {
     private final ShooterVisionSubsystem shooterVisionSubsystem;
 
     private final TimeBasedMedianFilter distanceFilter;
+    private final LinearFilter yawPass;
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
@@ -69,6 +71,7 @@ public class TargetLocalizer implements Loggable {
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
         this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
+        yawPass = LinearFilter.singlePoleIIR(5, 0.02);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
         this.startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
@@ -129,7 +132,7 @@ public class TargetLocalizer implements Loggable {
      */
     public double getTargetYaw() {
         // return 0;
-        return getVisionYaw() + shooterSubsystem.getTurretAngleBias();
+         return  getVisionYaw() + shooterSubsystem.getTurretAngleBias();
     }
 
     /**

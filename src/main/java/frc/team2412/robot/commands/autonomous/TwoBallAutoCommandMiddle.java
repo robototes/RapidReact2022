@@ -10,6 +10,7 @@ import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
@@ -18,8 +19,8 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
             IntakeSubsystem intakeSubsystem) {
         Trajectory robotPath = new Trajectory(
                 new SimplePathBuilder(new Vector2(381.791, 211.487), Rotation2.fromDegrees(25))
-                        .lineTo(new Vector2(426.405, 240.657), Rotation2.fromDegrees(33))
-                        .lineTo(new Vector2(420, 245), Rotation2.fromDegrees(-46.947))
+                        .lineTo(new Vector2(426.405, 220.657), Rotation2.fromDegrees(25))
+                        .lineTo(new Vector2(420, 245), Rotation2.fromDegrees(-65))
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
@@ -30,7 +31,9 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
 
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
+                        new WaitCommand(2),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
+
                 manager.disableAt(0),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
                 manager.enableAt(0),

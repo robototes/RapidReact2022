@@ -92,14 +92,14 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         limelight.getEntry("pipeline").setNumber(1);
     }
 
-    @Config(name = "set Pipeline", defaultValueNumeric = 1)
-    public void setPipeline(int pipelineNum) {
-        limelight.getEntry("pipeline").setNumber(pipelineNum);
-    }
+    // @Config(name = "set Pipeline", defaultValueNumeric = 1)
+    // public void setPipeline(int pipelineNum) {
+    //     limelight.getEntry("pipeline").setNumber(pipelineNum);
+    // }
 
-    @Log(name = "current pipeline")
-    public int getPipeline() {
-        return (int) limelight.getEntry("pipeline").getNumber(0);
-    }
+    // @Log(name = "current pipeline")
+    // public int getPipeline() {
+    //     return (int) limelight.getEntry("pipeline").getNumber(0);
+    // }
 
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
@@ -88,7 +89,18 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
     }
 
     public void setCompPipline(){
-        limelight.getEntry("pipline").setNumber(1);
+        limelight.getEntry("pipeline").setNumber(1);
     }
+
+    @Config(name = "set Pipeline", defaultValueNumeric = 1)
+    public void setPipeline(int pipelineNum){
+        limelight.getEntry("pipeline").setNumber(pipelineNum);
+    }
+
+    @Log(name = "current pipeline")
+    public int getPipeline(){
+        return (int) limelight.getEntry("pipeline").getNumber(0);
+    }
+
 
 }

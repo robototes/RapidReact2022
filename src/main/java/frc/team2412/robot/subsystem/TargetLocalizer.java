@@ -71,7 +71,7 @@ public class TargetLocalizer implements Loggable {
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
         this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
-        yawPass = LinearFilter.singlePoleIIR(5, 0.02);
+        yawPass = LinearFilter.movingAverage(5);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
         this.startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
@@ -120,7 +120,7 @@ public class TargetLocalizer implements Loggable {
      *         are degrees).
      */
     public double getVisionYaw() {
-        return shooterVisionSubsystem.getYaw()*0.5;
+        return yawPass.calculate(shooterVisionSubsystem.getYaw()*0.5);
     }
 
     /**

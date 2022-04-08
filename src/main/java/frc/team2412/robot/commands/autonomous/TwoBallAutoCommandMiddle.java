@@ -34,9 +34,9 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
                         new WaitCommand(2),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
 
-                manager.disableAt(0),
+                manager.disableAt(-20),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
-                manager.enableAt(0),
+                manager.enableAt(-20),
                 new IndexShootCommand(indexSubsystem, localizer).withTimeout(2));
     }
 }

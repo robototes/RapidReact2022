@@ -1,5 +1,6 @@
 package frc.team2412.robot.commands.climb;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.PostClimbSubsystem;
@@ -15,7 +16,7 @@ public class PostClimbUpComamnd extends CommandBase {
 
     @Override
     public void execute() {
-        System.out.println("FPGA TIME: " + Timer.getFPGATimestamp());
+        System.out.println("FPGA TIME: " + DriverStation.getMatchTime());
         subsystem.armSolenoid();
     }
 

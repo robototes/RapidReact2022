@@ -408,7 +408,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
             return;
         }
 
-        if (MIN_TURRET_ANGLE < angle && angle < MAX_TURRET_ANGLE) {
+        if (MIN_TURRET_ANGLE <= angle && angle <= MAX_TURRET_ANGLE) {
             turretMotor.set(ControlMode.Position, TURRET_DEGREES_TO_ENCODER_TICKS * angle);
         }
     }

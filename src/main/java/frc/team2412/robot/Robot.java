@@ -125,7 +125,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        LiveWindow.setEnabled(false);
+        // LiveWindow.setEnabled(false);
         subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {
@@ -286,6 +286,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        Shuffleboard.stopRecording();
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.stopArm(true);
         }

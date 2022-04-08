@@ -120,7 +120,7 @@ public class TargetLocalizer implements Loggable {
      *         are degrees).
      */
     public double getVisionYaw() {
-        return shooterVisionSubsystem.getYaw();
+        return shooterVisionSubsystem.getYaw()*0.5;
     }
 
     /**

@@ -23,7 +23,7 @@ cross_b_x:0
 cross_b_y:0
 desc:jackComp
 desired_contour_region:0
-dilation_steps:0
+dilation_steps:1
 direction_filter:0
 dual_close_sort_origin:0
 erosion_steps:0

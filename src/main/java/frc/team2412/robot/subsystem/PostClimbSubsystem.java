@@ -31,7 +31,7 @@ public class PostClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log(name = "blocking")
-    public boolean isBlocking(){
+    public boolean isBlocking() {
         return blockSolenoid.get();
     }
 

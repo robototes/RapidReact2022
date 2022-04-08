@@ -22,6 +22,8 @@ import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import frc.team2412.robot.util.VectorSlewLimiter;
+import io.github.oblarg.oblog.annotations.Config;
+
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -85,7 +87,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // back right
     );
 
-    private final SwerveModule[] modules;
+    private SwerveModule[] modules;
     private final double moduleMaxVelocityMetersPerSec;
 
     private final Object sensorLock = new Object();
@@ -294,6 +296,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                                                                                 // shuffleboard only
         }
     }
+    
 
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
@@ -309,6 +312,19 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             resetGyroAngle(pose.rotation);
             swerveOdometry.resetPose(pose);
         }
+    }
+
+    @Config(tabName = "Drivebase")
+    public void resetModules(boolean reset){
+        if(reset) {
+            boolean supportAbsoluteEncoder = Robot.getInstance().isCompetition() && !Robot.isSimulation();
+
+            modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
+        }
+       
     }
 
     public void resetGyroAngle(Rotation2 angle) {

@@ -2,8 +2,6 @@ package frc.team2412.robot.commands.autonomous;
 
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
-import frc.team2412.robot.commands.intake.IntakeCommand;
-import frc.team2412.robot.commands.intake.IntakeSetExtendCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.*;
@@ -12,9 +10,6 @@ import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
@@ -39,7 +34,6 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
                 manager.disableAt(0),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
                 manager.enableAt(0),
-                new IndexShootCommand(indexSubsystem, localizer).withTimeout(2)
-        );
+                new IndexShootCommand(indexSubsystem, localizer).withTimeout(2));
     }
 }

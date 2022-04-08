@@ -88,19 +88,18 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         limelight.getEntry("ledMode").setValue("0");
     }
 
-    public void setCompPipline(){
+    public void setCompPipline() {
         limelight.getEntry("pipeline").setNumber(1);
     }
 
     @Config(name = "set Pipeline", defaultValueNumeric = 1)
-    public void setPipeline(int pipelineNum){
+    public void setPipeline(int pipelineNum) {
         limelight.getEntry("pipeline").setNumber(pipelineNum);
     }
 
     @Log(name = "current pipeline")
-    public int getPipeline(){
+    public int getPipeline() {
         return (int) limelight.getEntry("pipeline").getNumber(0);
     }
-
 
 }

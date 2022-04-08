@@ -31,7 +31,7 @@ exposure:2
 force_convex:1
 hue_max:83
 hue_min:54
-image_flip:0
+image_flip:1
 image_source:0
 img_to_show:1
 intersection_filter:0
@@ -41,7 +41,7 @@ multigroup_min:1
 multigroup_rejector:1
 pipeline_led_enabled:1
 pipeline_led_power:100
-pipeline_res:1
+pipeline_res:0
 pipeline_type:0
 red_balance:1628
 roi_x:0.000000

@@ -37,6 +37,6 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
                 manager.disableAt(-20),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath),
                 manager.enableAt(-20),
-                new IndexShootCommand(indexSubsystem, localizer).withTimeout(2));
+                new IndexShootCommand(indexSubsystem, localizer).withTimeout(4));
     }
 }

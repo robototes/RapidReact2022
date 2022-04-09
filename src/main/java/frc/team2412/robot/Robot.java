@@ -224,6 +224,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Shuffleboard.startRecording();
 
         if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
@@ -238,6 +239,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        Shuffleboard.startRecording();
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }

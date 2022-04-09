@@ -304,6 +304,7 @@ public class TargetLocalizer implements Loggable {
         return ignoreUpToSpeed ? true : shooterSubsystem.upToSpeed();
     }
 
+    @Config(name = "ignore up to speed")
     public void ignoreUpToSpeed(boolean ignore) {
         ignoreUpToSpeed = ignore;
     }

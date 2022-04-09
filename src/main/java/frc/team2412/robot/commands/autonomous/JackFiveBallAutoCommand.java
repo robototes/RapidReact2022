@@ -72,7 +72,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
 
         public static final Trajectory PATH_3 = new Trajectory(
         new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
-        .lineTo(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
+        .lineTo(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
         .build(),
         NORMAL_SPEED, 0.1);
 
@@ -84,7 +84,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
         //         NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_4 = new Trajectory(
-        new SimplePathBuilder(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
+        new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
         .build(),
         NORMAL_SPEED, 0.1);

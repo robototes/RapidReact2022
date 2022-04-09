@@ -76,8 +76,8 @@ public class Controls {
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
 
-        climbArmUp = codriverController.getStartButton();
-        climbArmDown = codriverController.getBackButton();
+        climbArmUp = driverController.getStartButton();
+        climbArmDown = driverController.getBackButton();
         climbArmDownManual = codriverController.getRightBumperButton();
         climbArmUpManual = codriverController.getLeftBumperButton();
 

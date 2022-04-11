@@ -10,6 +10,7 @@ import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.TimeBasedMedianFilter;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 import io.github.oblarg.oblog.annotations.Config.Exclude;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
@@ -37,11 +38,16 @@ public class TargetLocalizer implements Loggable {
         public static final Vector2 ROBOT_CENTRIC_TURRET_CENTER = new Vector2(3.93, -4);
     }
 
-    @Exclude
+    @Log.Exclude
+    @Config.Exclude
     private final DrivebaseSubsystem drivebaseSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterSubsystem shooterSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterVisionSubsystem shooterVisionSubsystem;
 
     private final TimeBasedMedianFilter distanceFilter;

@@ -29,15 +29,15 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.1;
+        public static final double FLYWHEEL_DEFAULT_P = 0.13;
         public static final double FLYWHEEL_DEFAULT_I = 0;
-        public static final double FLYWHEEL_DEFAULT_D = 0;
-        public static final double FLYWHEEL_DEFAULT_F = 0.0465;
+        public static final double FLYWHEEL_DEFAULT_D = 0.09;
+        public static final double FLYWHEEL_DEFAULT_F = 0.0463;
         // Placeholder PID constants
-        public static final double HOOD_DEFAULT_P = 0.12;
+        public static final double HOOD_DEFAULT_P = 0.06;
         public static final double HOOD_DEFAULT_I = 0;
-        public static final double HOOD_DEFAULT_D = 0;
-        public static final double HOOD_DEFAULT_F = 0.005;
+        public static final double HOOD_DEFAULT_D = 0.005;
+        public static final double HOOD_DEFAULT_F = 0;
         // Placeholder PID constants
         public static final double TURRET_DEFAULT_P = 0.1;
         public static final double TURRET_DEFAULT_I = 0;
@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double MAX_HOOD_ANGLE = 40.0;
         public static final double MIN_HOOD_ANGLE = 5;
         public static final double HOOD_ANGLE_TOLERANCE = 1;
-        public static final double HOOD_ALLOWED_ERROR = 1;
+        public static final double HOOD_ALLOWED_ERROR = 2;
 
         // Estimated gearing constant of 41
         public static final double TURRET_DEGREES_TO_ENCODER_TICKS = 41 * 2048 / 360; // 233
@@ -65,8 +65,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double TURRET_ANGLE_TOLERANCE = 1;
         public static final int TURRET_SLOT_ID = 0;
 
-        public static final double MIN_TURRET_ANGLE = -225;
-        public static final double MAX_TURRET_ANGLE = 135;
+        public static final double MIN_TURRET_ANGLE = -180;
+        public static final double MAX_TURRET_ANGLE = 90;
         public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 60, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
         public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 60, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 

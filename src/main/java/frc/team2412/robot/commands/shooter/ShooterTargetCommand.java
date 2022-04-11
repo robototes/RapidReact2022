@@ -15,7 +15,7 @@ import frc.team2412.robot.util.ShooterDataDistancePoint;
 public class ShooterTargetCommand extends CommandBase {
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
-    private BooleanSupplier turretEnable;
+    private BooleanSupplier turretDisable;
     private DoubleSupplier turretIdlePosition;
 
     private double turretAngle = 0;
@@ -32,7 +32,7 @@ public class ShooterTargetCommand extends CommandBase {
             DoubleSupplier turretAngle) {
         this.shooter = shooter;
         this.localizer = localizer;
-        turretEnable = turretButton;
+        turretDisable = turretButton;
         turretIdlePosition = turretAngle;
         addRequirements(shooter);
     }
@@ -70,7 +70,7 @@ public class ShooterTargetCommand extends CommandBase {
             // System.out.println("Actual hood angle: " + shooter.getHoodAngle());
         }
 
-        if (turretEnable.getAsBoolean())
+        if (turretDisable.getAsBoolean())
             state = TurretState.STOPPED;
         else if (turretAngle < ShooterConstants.LEFT_WRAP_THRESHOLD)
             state = TurretState.WRAP_LEFT;
@@ -81,7 +81,7 @@ public class ShooterTargetCommand extends CommandBase {
 
         switch (state) {
             case STOPPED:
-                turretAngle = 0;
+                turretAngle = turretIdlePosition.getAsDouble();
                 break;
             case WRAP_LEFT:
                 turretAngle = ShooterConstants.RIGHT_WRAP;
@@ -98,16 +98,8 @@ public class ShooterTargetCommand extends CommandBase {
                 break;
         }
 
-        double localizerTurretAdjustment = 0;
+        double localizerTurretAdjustment = state == TurretState.TRACKING ? localizer.yawAdjustment() : 0;
 
-        switch (state) {
-            case STOPPED:
-                localizerTurretAdjustment = turretIdlePosition.getAsDouble();
-                break;
-            case TRACKING:
-                localizerTurretAdjustment = localizer.yawAdjustment();
-                break;
-        }
         // System.out.println("Localizer turret adjustment: " + localizerTurretAdjustment);
 
         turretAngle = turretAngle + localizerTurretAdjustment;
@@ -129,16 +121,19 @@ public class ShooterTargetCommand extends CommandBase {
         public boolean enabled;
 
         public TurretManager(ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
-            this(new ShooterTargetCommand(shooterSubsystem, localizer));
-        }
-
-        public TurretManager(ShooterTargetCommand targetCommand) {
-            shooterTargetCommand = targetCommand;
-            shooterTargetCommand.turretIdlePosition = this::getIdlePosition;
-            shooterTargetCommand.turretEnable = this::getTurretEnable;
+            shooterTargetCommand = new ShooterTargetCommand(shooterSubsystem, localizer, this::getTurretDisable,
+                    this::getIdlePosition);
             idle = 0;
             enabled = false;
         }
+
+        // public TurretManager(ShooterTargetCommand targetCommand) {
+        // shooterTargetCommand = targetCommand;
+        // shooterTargetCommand.turretIdlePosition = this::getIdlePosition;
+        // shooterTargetCommand.turretEnable = this::getTurretEnable;
+        // idle = 0;
+        // enabled = false;
+        // }
 
         public ShooterTargetCommand getCommand() {
             return shooterTargetCommand;
@@ -183,8 +178,8 @@ public class ShooterTargetCommand extends CommandBase {
             return idle;
         }
 
-        public boolean getTurretEnable() {
-            return enabled;
+        public boolean getTurretDisable() {
+            return !enabled;
         }
     }
 }

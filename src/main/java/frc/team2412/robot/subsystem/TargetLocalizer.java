@@ -120,7 +120,7 @@ public class TargetLocalizer implements Loggable {
      *         are degrees).
      */
     public double getVisionYaw() {
-        return yawPass.calculate(shooterVisionSubsystem.getYaw()*0.5);
+        return yawPass.calculate(shooterVisionSubsystem.getYaw() * 0.5);
     }
 
     /**
@@ -132,7 +132,7 @@ public class TargetLocalizer implements Loggable {
      */
     public double getTargetYaw() {
         // return 0;
-         return  getVisionYaw() + shooterSubsystem.getTurretAngleBias();
+        return getVisionYaw() + shooterSubsystem.getTurretAngleBias();
     }
 
     /**

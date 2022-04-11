@@ -296,7 +296,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                                                                                 // shuffleboard only
         }
     }
-    
 
     public void resetPose(Pose2d pose) {
         synchronized (kinematicsLock) {
@@ -314,17 +313,17 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
-    @Config(tabName = "Drivebase", name =  "reset modules", columnIndex = 5, rowIndex = 0)
-    public void resetModules(boolean reset){
-        if(reset) {
+    @Config(tabName = "Drivebase", name = "reset modules", columnIndex = 5, rowIndex = 0)
+    public void resetModules(boolean reset) {
+        if (reset) {
             boolean supportAbsoluteEncoder = Robot.getInstance().isCompetition() && !Robot.isSimulation();
 
             modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
-                FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
-                BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
-                BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
+                    FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
+                    BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                    BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
         }
-       
+
     }
 
     public void resetGyroAngle(Rotation2 angle) {

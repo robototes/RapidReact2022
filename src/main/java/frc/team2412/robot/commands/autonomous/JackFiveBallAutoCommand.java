@@ -71,29 +71,29 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
                 FAST_SPEED, 0.1);
 
         public static final Trajectory PATH_3 = new Trajectory(
-        new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
-        .lineTo(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
-        .build(),
-        NORMAL_SPEED, 0.1);
+                new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
+                        .lineTo(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
+                        .build(),
+                NORMAL_SPEED, 0.1);
 
         // public static final Trajectory PATH_3 = new Trajectory(
-        //         new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
-        //                 .lineTo(new Vector2(94.653, 36.976), Rotation2.fromDegrees(-180))
-        //                 .arcTo(new Vector2(22.456, 89.547), new Vector2(130, 103))
-        //                 .build(),
-        //         NORMAL_SPEED, 0.1);
+        // new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
+        // .lineTo(new Vector2(94.653, 36.976), Rotation2.fromDegrees(-180))
+        // .arcTo(new Vector2(22.456, 89.547), new Vector2(130, 103))
+        // .build(),
+        // NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_4 = new Trajectory(
-        new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
-        .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
-        .build(),
-        NORMAL_SPEED, 0.1);
+                new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
+                        .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
+                        .build(),
+                NORMAL_SPEED, 0.1);
 
         // public static final Trajectory PATH_4 = new Trajectory(
-        //         new SimplePathBuilder(new Vector2(22.456, 89.547), Rotation2.fromDegrees(-180))
-        //                 .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
-        //                 .build(),
-        //         NORMAL_SPEED, 0.1);
+        // new SimplePathBuilder(new Vector2(22.456, 89.547), Rotation2.fromDegrees(-180))
+        // .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
+        // .build(),
+        // NORMAL_SPEED, 0.1);
 
         public static void init() {
             System.out.println("----- 5 Ball Auto Paths Initialized -----");

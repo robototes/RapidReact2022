@@ -15,12 +15,14 @@ import org.frcteam2910.common.robot.UpdateManager;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.hal.simulation.DriverStationDataJNI;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -124,6 +126,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        LiveWindow.disableAllTelemetry();
+        LiveWindow.enableTelemetry(PDP);
+
         subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {

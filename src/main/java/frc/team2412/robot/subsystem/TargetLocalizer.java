@@ -11,7 +11,6 @@ import frc.team2412.robot.util.TimeBasedMedianFilter;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-import io.github.oblarg.oblog.annotations.Config.Exclude;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 

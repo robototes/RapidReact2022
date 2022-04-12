@@ -152,27 +152,24 @@ public class Controls {
     }
 
     public void bindShooterControls() {
-        if (!Subsystems.SubsystemConstants.SHOOTER_TESTING) {
-            BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
+        BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
-            driveController.getDPadButton(Direction.DOWN).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1400, 35).withInterrupt(b)
-                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
+        driveController.getDPadButton(Direction.DOWN).whenPressed(
+                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1400, 35).withInterrupt(b)
+                        .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
-            driveController.getDPadButton(Direction.LEFT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2400, 9.3).withInterrupt(b)
-                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
+        driveController.getDPadButton(Direction.LEFT).whenPressed(
+                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2400, 9.3).withInterrupt(b)
+                        .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
-            driveController.getDPadButton(Direction.RIGHT).whenPressed(
-                    new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0).withInterrupt(b)
-                            .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(90))));
+        driveController.getDPadButton(Direction.RIGHT).whenPressed(
+                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 0, 0).withInterrupt(b)
+                        .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(90))));
 
-            if (subsystems.drivebaseSubsystem != null) {
-                subsystems.shooterSubsystem.setDefaultCommand(
-                        new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                                driveController.getLeftBumperButton()::get));
-
-            }
+        if (subsystems.drivebaseSubsystem != null) {
+            subsystems.shooterSubsystem.setDefaultCommand(
+                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
+                            driveController.getLeftBumperButton()::get));
 
         }
     }

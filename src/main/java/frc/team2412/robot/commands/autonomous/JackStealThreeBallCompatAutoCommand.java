@@ -10,6 +10,7 @@ import org.frcteam2910.common.control.TrajectoryConstraint;
 import org.frcteam2910.common.io.json.Rotation2JsonHandler;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
+import org.opencv.ml.NormalBayesClassifier;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.team2412.robot.commands.index.IndexShootCommand;
@@ -23,10 +24,10 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import frc.team2412.robot.subsystem.TargetLocalizer;
 import frc.team2412.robot.util.UtilityCommand;
 
-import static frc.team2412.robot.commands.autonomous.JackStealThreeBallAutoCommand.StealThreeBallConstants.*;
+import static frc.team2412.robot.commands.autonomous.JackStealThreeBallCompatAutoCommand.StealThreeBallConstants.*;
 
 // TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
-public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand { 
+public class JackStealThreeBallCompatAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand { 
     public static class StealThreeBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -44,14 +45,17 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(401.398, 177.473), Rotation2.fromDegrees(0))
                         .lineTo(new Vector2(448.256, 191.255), Rotation2.fromDegrees(0))
-                        .arcTo(new Vector2(551, 70), new Vector2(447, 114), Rotation2.fromDegrees(180))
-                        .lineTo(new Vector2(440, 16))
-                        .lineTo(new Vector2(383.917, 38.712))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
-        public static final Trajectory PATH_2 =  new Trajectory(
-                new SimplePathBuilder(new Vector2(393.917, 48.712), Rotation2.fromDegrees(180))
+        public static final Trajectory PATH_2 = new Trajectory(
+                new SimplePathBuilder(new Vector2(448.256, 191.255), Rotation2.fromDegrees(0))
+                        .arcTo(new Vector2(393.969, 50.021), new Vector2(442.402, 116.567), Rotation2.fromDegrees(-90))
+                        .build(),
+                NORMAL_SPEED, 0.1);
+
+        public static final Trajectory PATH_3 =  new Trajectory(
+                new SimplePathBuilder(new Vector2(393.969, 50.021), Rotation2.fromDegrees(-90))
                         .lineTo(new Vector2(372.653, 138.097), Rotation2.fromDegrees(150))
                         .build(),
                 NORMAL_SPEED, 0.1);
@@ -62,7 +66,7 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
         
     }
 
-    public JackStealThreeBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
+    public JackStealThreeBallCompatAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
                                         IndexSubsystem indexSubsystem,
                                         ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
@@ -76,6 +80,7 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
                 manager.disableAt(0),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
                 new IndexSpitCommand(indexSubsystem)
         );
     }

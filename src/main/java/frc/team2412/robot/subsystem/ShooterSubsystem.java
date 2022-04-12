@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public static class ShooterConstants {
         // Placeholder PID constants
         // TODO non-scuffed constants
-        public static final double FLYWHEEL_DEFAULT_P = 0.3; // 0.002057
+        public static final double FLYWHEEL_DEFAULT_P = 0.2; // 0.002057
         public static final double FLYWHEEL_DEFAULT_I = 0;
         public static final double FLYWHEEL_DEFAULT_D = 0.06;
         public static final double FLYWHEEL_DEFAULT_F = 0; // 0.04424
@@ -318,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setFlywheelVelocity(double velocity) {
         // flywheelMotor1.set(ControlMode.Velocity, velocity);
         double rps = velocity / 2048 * 10;
-        double voltageFF = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - 0.021;
+        double voltageFF = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - 0.022;
         System.out.println(voltageFF);
         // flywheelMotor1.setVoltage(voltageFF);
 

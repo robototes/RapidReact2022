@@ -72,7 +72,7 @@ public class TargetLocalizer implements Loggable {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = LinearFilter.movingAverage(5);
+        this.distanceFilter = LinearFilter.movingAverage(20);
         this.yawPass = LinearFilter.movingAverage(5);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary

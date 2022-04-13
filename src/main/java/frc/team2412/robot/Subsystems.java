@@ -7,7 +7,7 @@ import io.github.oblarg.oblog.Loggable;
 
 public class Subsystems implements Loggable {
     public static class SubsystemConstants {
-        public static final boolean CLIMB_ENABLED = false;
+        public static final boolean CLIMB_ENABLED = true;
 
         public static final boolean POST_CLIMB_ENABLED = false;
 

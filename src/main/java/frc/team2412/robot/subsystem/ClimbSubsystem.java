@@ -186,7 +186,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param reset
      *            whether to reset the encoder
      */
-    @Config
+    @Config.ToggleButton
     public void resetEncoder(boolean reset) {
         if (reset) {
             motor.setSelectedSensorPosition(0);

@@ -161,11 +161,11 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.startRecording();
 
-        if(RobotBase.isReal()){
+        if (RobotBase.isReal()) {
             DataLogManager.start();
             DriverStation.startDataLog(DataLogManager.getLog(), true);
         }
-        
+
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 

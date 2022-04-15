@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -160,9 +161,11 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.startRecording();
 
-        DataLogManager.start();
-        DriverStation.startDataLog(DataLogManager.getLog(), true);
-
+        if(RobotBase.isReal()){
+            DataLogManager.start();
+            DriverStation.startDataLog(DataLogManager.getLog(), true);
+        }
+        
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
 

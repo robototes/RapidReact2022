@@ -55,6 +55,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final int FLYWHEEL_SLOT_ID = 0;
         public static final double FLYWHEEL_ALLOWED_ERROR = 50;
 
+        public static final double FLYWHEEL_FEEDFORWARD_OFFSET = 0.022;
+
         // Placeholder gearing constant
         public static final double HOOD_REVS_TO_DEGREES = 1 / (5.23 * 5.23) * 20 / 84 * 360;// 45 / 9.78;
         public static final double MAX_HOOD_ANGLE = 40.0;
@@ -318,7 +320,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setFlywheelVelocity(double velocity) {
         // flywheelMotor1.set(ControlMode.Velocity, velocity);
         double rps = velocity / 2048 * 10;
-        double voltageFF = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - 0.022;
+        double voltageFF = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - FLYWHEEL_FEEDFORWARD_OFFSET;
         System.out.println(voltageFF);
         // flywheelMotor1.setVoltage(voltageFF);
 

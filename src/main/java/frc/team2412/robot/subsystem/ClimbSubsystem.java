@@ -49,7 +49,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
         // Relating to physical climb structure things
-        // was prevously mid
+        // was previously mid
         public static final double MID_RUNG_HEIGHT_INCH = 33;
         public static final double RETRACT_HEIGHT_INCH = 1;
 

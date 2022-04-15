@@ -116,6 +116,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
                 manager.disableAt(-10),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 manager.enableAt(-10),
+                await(0.1),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
@@ -124,6 +125,7 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
                 await(1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
                 manager.enableAt(70),
+                await(0.1),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new ParallelCommandGroup(
                         manager.disableAt(0),

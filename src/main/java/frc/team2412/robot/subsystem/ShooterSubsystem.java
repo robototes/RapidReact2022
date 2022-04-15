@@ -320,13 +320,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setFlywheelVelocity(double velocity) {
         // flywheelMotor1.set(ControlMode.Velocity, velocity);
         double rps = velocity / 2048 * 10;
-        double voltageFF = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - FLYWHEEL_FEEDFORWARD_OFFSET;
-        System.out.println(voltageFF);
-        // flywheelMotor1.setVoltage(voltageFF);
+        double feedForward = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - FLYWHEEL_FEEDFORWARD_OFFSET;
 
-        // flywheelMotor1.set(ControlMode.PercentOutput, voltageFF);
         flywheelMotor1.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
-                voltageFF);
+                feedForward);
     }
 
     /**

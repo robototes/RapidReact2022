@@ -40,6 +40,8 @@ import org.frcteam2910.common.util.*;
 import java.util.Map;
 import java.util.Optional;
 
+import io.github.oblarg.oblog.Loggable;
+
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
 public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable, Loggable {

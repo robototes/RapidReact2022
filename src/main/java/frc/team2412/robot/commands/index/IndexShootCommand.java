@@ -34,7 +34,5 @@ public class IndexShootCommand extends CommandBase {
     public void end(boolean interrupted) {
         subsystem.ingestMotorStop();
         subsystem.feederMotorStop();
-        System.out.println("++++++++++++++++SHOOTING DONE+++++++++++++++++++");
-
     }
 }

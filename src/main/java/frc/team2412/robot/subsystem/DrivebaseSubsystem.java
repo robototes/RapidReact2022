@@ -395,7 +395,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         Vector2[] moduleOutputs = swerveKinematics.toModuleVelocities(chassisVelocity);
         SwerveKinematics.normalizeModuleVelocities(moduleOutputs, 1);
 
-        if (driveSignal != null && driveSignal.getTranslation().length == 0 && driveSignal.getRotation() == 0) {
+        if (driveSignal != null && driveSignal.getTranslation().length <= 0.01 && driveSignal.getRotation() == 0) {
             setToX();
             return;
         }

@@ -394,10 +394,24 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         Vector2[] moduleOutputs = swerveKinematics.toModuleVelocities(chassisVelocity);
         SwerveKinematics.normalizeModuleVelocities(moduleOutputs, 1);
+
+        if (driveSignal != null && driveSignal.getTranslation().length == 0 && driveSignal.getRotation() == 0) {
+            setToX();
+            return;
+        }
+
         for (int i = 0; i < moduleOutputs.length; i++) {
             var module = modules[i];
             module.set(moduleOutputs[i].length * 12.0, moduleOutputs[i].getAngle().toRadians());
         }
+    }
+
+    public void setToX() {
+        System.out.println("this is happening");
+        modules[0].set(0, 45);
+        modules[1].set(0, -45);
+        modules[2].set(0, -45);
+        modules[3].set(0, 45);
     }
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {

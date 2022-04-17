@@ -408,10 +408,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     public void setToX() {
         System.out.println("this is happening");
-        modules[0].set(0, 45);
-        modules[1].set(0, -45);
-        modules[2].set(0, -45);
-        modules[3].set(0, 45);
+        modules[0].set(0, Math.toRadians(45));
+        modules[1].set(0, Math.toRadians(-45));
+        modules[2].set(0, Math.toRadians(-45));
+        modules[3].set(0, Math.toRadians(45));
     }
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {

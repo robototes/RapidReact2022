@@ -42,7 +42,7 @@ import java.util.Optional;
 
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
-public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable {
+public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable, Loggable {
 
     // TODO find values as these are just copied from 2910
     public static class DriveConstants {

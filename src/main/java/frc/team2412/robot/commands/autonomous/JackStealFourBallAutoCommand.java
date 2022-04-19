@@ -24,7 +24,6 @@ import frc.team2412.robot.util.UtilityCommand;
 
 import static frc.team2412.robot.commands.autonomous.JackStealFourBallAutoCommand.StealFourBallConstants.*;
 
-// TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
 public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
     public static class StealFourBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
@@ -39,22 +38,18 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
         };
 
-        // arc to first ball, after this it should shoot
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(399.125, 133.486), Rotation2.fromDegrees(-90))
                         .arcTo(new Vector2(429.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
-        // drive to second ball, of the opposing alliance's color and pick it up, then extake it to knock
-        // third ball on other side of field
         public static final Trajectory PATH_2 = new Trajectory(
                 new SimplePathBuilder(new Vector2(429.991, 87.809), Rotation2.fromDegrees(-120))
                         .lineTo(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
-        // drive to third ball on other side of field and pick it up, then shoot
         public static final Trajectory PATH_3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .arcTo(new Vector2(446.770, 192.509), new Vector2(313.678, 161), Rotation2.fromDegrees(-270))
@@ -69,7 +64,7 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                 NORMAL_SPEED, 0.1);
 
         public static void init() {
-            System.out.println("----- 3 Ball Steal Auto Paths Initialized -----");
+            System.out.println("----- 4 Ball Steal Auto Paths Initialized -----");
         }
 
     }

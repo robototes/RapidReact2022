@@ -24,7 +24,6 @@ import frc.team2412.robot.util.UtilityCommand;
 
 import static frc.team2412.robot.commands.autonomous.JackStealThreeBallCompatAutoCommand.StealThreeBallConstants.*;
 
-// TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
 public class JackStealThreeBallCompatAutoCommand extends DynamicRequirementSequentialCommandGroup
         implements UtilityCommand {
     public static class StealThreeBallConstants {
@@ -40,7 +39,6 @@ public class JackStealThreeBallCompatAutoCommand extends DynamicRequirementSeque
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
         };
 
-        // arc to first ball, after this it should shoot
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(401.398, 177.473), Rotation2.fromDegrees(0))
                         .lineTo(new Vector2(448.256, 191.255), Rotation2.fromDegrees(0))
@@ -60,7 +58,7 @@ public class JackStealThreeBallCompatAutoCommand extends DynamicRequirementSeque
                 NORMAL_SPEED, 0.1);
 
         public static void init() {
-            System.out.println("----- 3 Ball Steal Auto Paths Initialized -----");
+            System.out.println("----- 3 Ball Steal Compat Auto Paths Initialized -----");
         }
 
     }

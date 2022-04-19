@@ -10,7 +10,6 @@ import org.frcteam2910.common.control.TrajectoryConstraint;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
-import edu.wpi.first.wpilibj2.command.*;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
@@ -24,7 +23,6 @@ import frc.team2412.robot.util.UtilityCommand;
 
 import static frc.team2412.robot.commands.autonomous.JackStealThreeBallAutoCommand.StealThreeBallConstants.*;
 
-// TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
 public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
     public static class StealThreeBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
@@ -39,7 +37,6 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
                 new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
         };
 
-        // arc to first ball, after this it should shoot
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(401.398, 177.473), Rotation2.fromDegrees(0))
                         .lineTo(new Vector2(448.256, 191.255), Rotation2.fromDegrees(0))

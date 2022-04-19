@@ -7,7 +7,6 @@ import org.frcteam2910.common.control.MaxVelocityConstraint;
 import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.control.TrajectoryConstraint;
-import org.frcteam2910.common.io.json.Rotation2JsonHandler;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
@@ -26,7 +25,7 @@ import frc.team2412.robot.util.UtilityCommand;
 import static frc.team2412.robot.commands.autonomous.JackStealThreeBallAutoCommand.StealThreeBallConstants.*;
 
 // TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
-public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand { 
+public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
     public static class StealThreeBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -50,21 +49,21 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
                         .build(),
                 NORMAL_SPEED, 0.1);
 
-        public static final Trajectory PATH_2 =  new Trajectory(
+        public static final Trajectory PATH_2 = new Trajectory(
                 new SimplePathBuilder(new Vector2(393.917, 48.712), Rotation2.fromDegrees(180))
                         .lineTo(new Vector2(372.653, 138.097), Rotation2.fromDegrees(150))
                         .build(),
                 NORMAL_SPEED, 0.1);
-        
+
         public static void init() {
             System.out.println("----- 3 Ball Steal Auto Paths Initialized -----");
         }
-        
+
     }
 
     public JackStealThreeBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
-                                        IndexSubsystem indexSubsystem,
-                                        ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
+            IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);
         addCommands2(
@@ -76,7 +75,6 @@ public class JackStealThreeBallAutoCommand extends DynamicRequirementSequentialC
                 manager.disableAt(0),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
-                new IndexSpitCommand(indexSubsystem)
-        );
+                new IndexSpitCommand(indexSubsystem));
     }
 }

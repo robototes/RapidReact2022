@@ -25,7 +25,7 @@ import frc.team2412.robot.util.UtilityCommand;
 import static frc.team2412.robot.commands.autonomous.JackStealFourBallAutoCommand.StealFourBallConstants.*;
 
 // TODO: update this to DynamicRequirementSequentialCommandGroup when the requirements fix is pulled in
-public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand { 
+public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
     public static class StealFourBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -45,36 +45,38 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                         .arcTo(new Vector2(429.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
                         .build(),
                 NORMAL_SPEED, 0.1);
-        
-        // drive to second ball, of the opposing alliance's color and pick it up, then extake it to knock third ball on other side of field
+
+        // drive to second ball, of the opposing alliance's color and pick it up, then extake it to knock
+        // third ball on other side of field
         public static final Trajectory PATH_2 = new Trajectory(
                 new SimplePathBuilder(new Vector2(429.991, 87.809), Rotation2.fromDegrees(-120))
                         .lineTo(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .build(),
                 NORMAL_SPEED, 0.1);
-        
+
         // drive to third ball on other side of field and pick it up, then shoot
         public static final Trajectory PATH_3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .arcTo(new Vector2(446.770, 192.509), new Vector2(313.678, 161), Rotation2.fromDegrees(-270))
                         .build(),
                 NORMAL_SPEED, 0.1);
-        
+
         public static final Trajectory PATH_4 = new Trajectory(
                 new SimplePathBuilder(new Vector2(446.770, 192.509), Rotation2.fromDegrees(-270))
-                        .arcTo(new Vector2(373.468, 140.532), new Vector2(369.592, 239.367), Rotation2.fromDegrees(-205))
+                        .arcTo(new Vector2(373.468, 140.532), new Vector2(369.592, 239.367),
+                                Rotation2.fromDegrees(-205))
                         .build(),
                 NORMAL_SPEED, 0.1);
-        
+
         public static void init() {
             System.out.println("----- 3 Ball Steal Auto Paths Initialized -----");
         }
-        
+
     }
 
     public JackStealFourBallAutoCommand(DrivebaseSubsystem drivebaseSubsystem, IntakeSubsystem intakeSubsystem,
-                                        IndexSubsystem indexSubsystem,
-                                        ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
+            IndexSubsystem indexSubsystem,
+            ShooterSubsystem shooterSubsystem, TargetLocalizer localizer) {
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);
         addCommands2(
@@ -88,7 +90,6 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
-                new IndexSpitCommand(indexSubsystem)
-        );
+                new IndexSpitCommand(indexSubsystem));
     }
 }

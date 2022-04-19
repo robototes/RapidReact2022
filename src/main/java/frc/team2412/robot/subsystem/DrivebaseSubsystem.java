@@ -407,7 +407,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public void setToX() {
-        System.out.println("this is happening");
         modules[0].set(0, Math.toRadians(45));
         modules[1].set(0, Math.toRadians(-45));
         modules[2].set(0, Math.toRadians(-45));

@@ -25,15 +25,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double EXTEND_SPEED = 0.15;
         public static final double RETRACT_SPEED = -0.15;
 
-        // Doing integer division, which returns 11757 (previously 8789)
-        // Probably should do floating point division, which returns 11759.3
-        public static final double ENCODER_TICKS_PER_INCH = ((272816.0 / 58) * 2 * 5) / 4;
-        public static final double CLIMB_OFFSET_INCHES = 28.5;
-
-        // Max robot height is 66 inches
-        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH;
-        public static final double MIN_ENCODER_TICKS = 0;
-
         // PID stuff
         public static final int PID_EXTENSION_SLOT = 0;
         public static final double EXTENSION_P = 0.5;
@@ -48,10 +39,26 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double RETRACTION_F = 0.18;
         // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
+        public static final int REMY_TO_INCH = 6;
+
         // Relating to physical climb structure things
-        // was prevously mid
-        public static final double MID_RUNG_HEIGHT_INCH = 33;
-        public static final double RETRACT_HEIGHT_INCH = 1;
+        // was previously mid
+        public static final double MID_RUNG_HEIGHT = 5.5;
+        public static final double RETRACT_HEIGHT = 0.166;
+
+        public static final double MID_RUNG_HEIGHT_INCH = MID_RUNG_HEIGHT * REMY_TO_INCH;
+        public static final double RETRACT_HEIGHT_INCH = RETRACT_HEIGHT * REMY_TO_INCH;
+
+        public static final double CLIMB_OFFSET = 4.75;
+        public static final double CLIMB_OFFSET_INCHES = CLIMB_OFFSET * REMY_TO_INCH;
+
+        // Doing integer division, which returns 11757 (previously 8789)
+        // Probably should do floating point division, which returns 11759.3
+        public static final double ENCODER_TICKS_PER_INCH = ((272816.0 / 58) * 2 * 5) / 4;
+
+        // Max robot height is 66 inches
+        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH;
+        public static final double MIN_ENCODER_TICKS = 0;
 
         // Motor current limit config
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -186,7 +193,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param reset
      *            whether to reset the encoder
      */
-    @Config
+    @Config.ToggleButton
     public void resetEncoder(boolean reset) {
         if (reset) {
             motor.setSelectedSensorPosition(0);

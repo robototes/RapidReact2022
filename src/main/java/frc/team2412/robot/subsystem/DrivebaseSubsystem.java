@@ -235,6 +235,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         accelLimiter = new VectorSlewLimiter(ACCEL_LIMIT);
     }
 
+    @Override
+    public String configureLogName() {
+        return "Drivebase";
+    }
+
     public Vector2 getGyroscopeXY() {
         synchronized (sensorLock) {
             if (gyroscope instanceof PigeonTwo)

@@ -32,6 +32,15 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         setCompPipeline();
     }
 
+    // @Override
+    // public void periodic() {
+    //     readOutNetwrokTableValues();
+    // }
+
+    // public void readOutNetwrokTableValues(){
+    //     System.out.println(limelight.getEntry("tv").getDouble(10000));
+    // }
+
     @Log
     public boolean hasTarget() {
         return limelight.getEntry("tv").getDouble(0) == 1;

@@ -20,6 +20,7 @@ import frc.team2412.robot.commands.autonomous.*;
 import frc.team2412.robot.commands.autonomous.debug.LinePath;
 import frc.team2412.robot.commands.autonomous.debug.SquarePath;
 import frc.team2412.robot.commands.autonomous.debug.StarPath;
+import frc.team2412.robot.commands.climb.ChargeCompressorCommand;
 import frc.team2412.robot.commands.climb.ClimbExtendSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbRetractSlowlyCommand;
 import frc.team2412.robot.commands.climb.ClimbTestCommand;
@@ -149,6 +150,28 @@ public class AutonomousChooser {
                         && Subsystems.SubsystemConstants.SHOOTER_ENABLED,
                 new Pose2d(new Translation2d(328, 75.551), Rotation2d.fromDegrees(-90)),
                 imagesPath + "jackFiveBall.png"),
+        JACK_FOUR_BALL_STEAL(
+                (subsystems) -> new JackStealFourBallAutoCommand(subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "N 2910 Four ball steal path N", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(401.640, 133.486), Rotation2d.fromDegrees(-90)),
+                imagesPath + "jackThreeBallSteal.png"),
+        JACK_THREE_BALL_STEAL(
+                (subsystems) -> new JackStealThreeBallAutoCommand(subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "N 2910 Three ball steal path N", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(401.398, 177.473), Rotation2d.fromDegrees(0))),
+        JACK_THREE_BALL_COMPAT_STEAL(
+                (subsystems) -> new JackStealThreeBallCompatAutoCommand(subsystems.drivebaseSubsystem,
+                        subsystems.intakeSubsystem,
+                        subsystems.indexSubsystem,
+                        subsystems.shooterSubsystem, subsystems.targetLocalizer),
+                "N 2910 Three ball compatible steal path N", Subsystems.SubsystemConstants.DRIVE_ENABLED,
+                new Pose2d(new Translation2d(401.398, 177.473), Rotation2d.fromDegrees(0))),
         WPI_PATH(
                 (subsystems) -> new WPILibFiveBallAutoCommand(subsystems.drivebaseSubsystem, subsystems.intakeSubsystem,
                         subsystems.indexSubsystem, subsystems.shooterSubsystem, subsystems.targetLocalizer),
@@ -194,7 +217,15 @@ public class AutonomousChooser {
                 Subsystems.SubsystemConstants.CLIMB_ENABLED &&
                         Subsystems.SubsystemConstants.INTAKE_ENABLED &&
                         Subsystems.SubsystemConstants.INDEX_ENABLED &&
-                        Subsystems.SubsystemConstants.SHOOTER_ENABLED);
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED),
+        CHARGE_COMPRESSOR(
+                (subsystems) -> new ChargeCompressorCommand(
+                        subsystems.intakeSubsystem, subsystems.indexSubsystem, subsystems.shooterSubsystem,
+                        subsystems.drivebaseSubsystem),
+                "Charge compressor",
+                Subsystems.SubsystemConstants.INTAKE_ENABLED &&
+                        Subsystems.SubsystemConstants.INDEX_ENABLED &&
+                        Subsystems.SubsystemConstants.SHOOTER_ENABLED && Subsystems.SubsystemConstants.DRIVE_ENABLED);
 
         public final CommandSupplier commandSupplier;
         public final String uiName;

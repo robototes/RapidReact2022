@@ -10,6 +10,10 @@ import static frc.team2412.robot.Hardware.*;
 import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealFourBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealThreeBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealThreeBallCompatAutoCommand;
+
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -19,6 +23,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -50,6 +55,7 @@ public class Robot extends TimedRobot {
 
     private final PowerDistribution PDP;
     private UsbCamera driverVisionCamera;
+    private UsbCamera fishCamera;
     private PneumaticHub pneumaticHub;
 
     private static final double MIN_PRESSURE = 90;
@@ -82,7 +88,7 @@ public class Robot extends TimedRobot {
         this(getTypeFromAddress());
     }
 
-    public static final MACAddress COMPEITION_ADDRESS = MACAddress.of(0x33, 0x9d, 0xe7);
+    public static final MACAddress COMPETITION_ADDRESS = MACAddress.of(0x33, 0x9d, 0xe7);
     public static final MACAddress PRACTICE_ADDRESS = MACAddress.of(0x28, 0x40, 0x82);
 
     private static RobotType getTypeFromAddress() {
@@ -124,7 +130,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        LiveWindow.setEnabled(false);
+        LiveWindow.disableAllTelemetry();
+        LiveWindow.enableTelemetry(PDP);
+
         subsystems = new Subsystems();
         controls = new Controls(subsystems);
         if (DRIVE_ENABLED) {
@@ -133,8 +141,14 @@ public class Robot extends TimedRobot {
             updateManager.startLoop(0.011); // 0.005 previously
         }
         if (DRIVER_VIS_ENABLED) {
-            driverVisionCamera = new UsbCamera("Driver Vision Front", Hardware.FRONT_CAM);
+            fishCamera = new UsbCamera("Front", Hardware.FISH_CAM);
+            fishCamera.setResolution(160, 120);
+
+            driverVisionCamera = new UsbCamera("Back", Hardware.BACK_CAM);
             driverVisionCamera.setResolution(160, 90);
+
+            CameraServer.addCamera(fishCamera);
+            CameraServer.startAutomaticCapture();
             CameraServer.addCamera(driverVisionCamera);
             CameraServer.startAutomaticCapture();
         }
@@ -151,8 +165,10 @@ public class Robot extends TimedRobot {
 
         Shuffleboard.startRecording();
 
-        DataLogManager.start();
-        DriverStation.startDataLog(DataLogManager.getLog(), true);
+        if (RobotBase.isReal()) {
+            DataLogManager.start();
+            DriverStation.startDataLog(DataLogManager.getLog(), true);
+        }
 
         // Create and push Field2d to SmartDashboard.
         SmartDashboard.putData(field);
@@ -202,6 +218,9 @@ public class Robot extends TimedRobot {
             controlAuto.start();
         }
         JackFiveBallAutoCommand.FiveBallConstants.init();
+        JackStealFourBallAutoCommand.StealFourBallConstants.init();
+        JackStealThreeBallAutoCommand.StealThreeBallConstants.init();
+        JackStealThreeBallCompatAutoCommand.StealThreeBallConstants.init();
     }
 
     @Override
@@ -217,6 +236,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Shuffleboard.startRecording();
 
         if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.resetPose(autonomousChooser.getStartPose());
@@ -235,6 +255,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        Shuffleboard.startRecording();
         if (subsystems.intakeSubsystem != null) {
             subsystems.intakeSubsystem.intakeExtend();
         }
@@ -253,6 +274,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationInit() {
+
         PhysicsSim sim = PhysicsSim.getInstance();
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.simInit(sim);
@@ -283,6 +305,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        Shuffleboard.stopRecording();
         if (subsystems.climbSubsystem != null) {
             subsystems.climbSubsystem.stopArm(true);
         }

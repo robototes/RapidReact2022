@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class PostClimbSubsystem extends SubsystemBase implements Loggable {
 
@@ -29,12 +30,16 @@ public class PostClimbSubsystem extends SubsystemBase implements Loggable {
         blockSolenoid.set(true);
     }
 
-    public void armSolenoid() {
-        firingSolenoid.set(DoubleSolenoid.Value.kForward);
+    @Log(name = "blocking")
+    public boolean isBlocking() {
+        return blockSolenoid.get();
     }
 
-    public void disarmSolenoid() {
+    public void armSolenoid() {
         firingSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
+    public void disarmSolenoid() {
+        firingSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
 }

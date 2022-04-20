@@ -25,7 +25,7 @@ import frc.team2412.robot.util.UtilityCommand;
 
 import static frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand.FiveBallConstants.*;
 
-public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommandGroup implements UtilityCommand {
+public class JackFiveBallAutoCommand extends SequentialCommandGroup implements UtilityCommand {
     public static class FiveBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
@@ -72,15 +72,28 @@ public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommand
 
         public static final Trajectory PATH_3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
-                        .lineTo(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
+                        .lineTo(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
+        // public static final Trajectory PATH_3 = new Trajectory(
+        // new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
+        // .lineTo(new Vector2(94.653, 36.976), Rotation2.fromDegrees(-180))
+        // .arcTo(new Vector2(22.456, 89.547), new Vector2(130, 103))
+        // .build(),
+        // NORMAL_SPEED, 0.1);
+
         public static final Trajectory PATH_4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(50.456, 75), Rotation2.fromDegrees(202))
+                new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
                         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
                         .build(),
                 NORMAL_SPEED, 0.1);
+
+        // public static final Trajectory PATH_4 = new Trajectory(
+        // new SimplePathBuilder(new Vector2(22.456, 89.547), Rotation2.fromDegrees(-180))
+        // .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
+        // .build(),
+        // NORMAL_SPEED, 0.1);
 
         public static void init() {
             System.out.println("----- 5 Ball Auto Paths Initialized -----");
@@ -96,21 +109,23 @@ public class JackFiveBallAutoCommand extends DynamicRequirementSequentialCommand
                 localizer);
 
         // indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
-        addCommands2(
+        addCommands(
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
-                manager.disableAt(0),
+                manager.disableAt(-10),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
-                manager.enableAt(0),
+                manager.enableAt(-10),
+                await(0.1),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
                 manager.disableAt(70),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
-                await(1.5),
+                await(1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
                 manager.enableAt(70),
+                await(0.1),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new ParallelCommandGroup(
                         manager.disableAt(0),

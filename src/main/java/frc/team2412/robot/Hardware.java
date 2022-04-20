@@ -67,7 +67,7 @@ public class Hardware {
     public static final int GYRO_PORT = 62;
 
     // cameras
-    public static final String LIMELIGHT = "limelight", FRONT_CAM = "front";
+    public static final String LIMELIGHT = "limelight", BACK_CAM = "back", FISH_CAM = "fish cam";
 
     // shooter can ids are range 20-29
     public static final int FLYWHEEL_1 = 20, FLYWHEEL_2 = 21, TURRET = 22, HOOD = 23;
@@ -84,7 +84,7 @@ public class Hardware {
     public static final int CLIMB_FIXED_MOTOR = 51;
     public static final int CLIMB_LIMIT_SWITCH = 9; // to be determined - digital I/O pins are 0-9
 
-    public static final int POST_CLIMB_BLOCKING_SOLENOID = 4; // TODO
+    public static final int POST_CLIMB_BLOCKING_SOLENOID = 4;
     public static final int POST_CLIMB_FIRING_SOLENOID_FIRE = 3;
     public static final int POST_CLIMB_FIRING_SOLENOID_CLOSE = 2;
 

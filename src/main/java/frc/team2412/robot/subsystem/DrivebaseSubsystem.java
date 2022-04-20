@@ -22,6 +22,8 @@ import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
 import frc.team2412.robot.util.PFFController;
 import frc.team2412.robot.util.VectorSlewLimiter;
+import io.github.oblarg.oblog.annotations.Config;
+
 import org.frcteam2910.common.control.*;
 import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
@@ -38,9 +40,11 @@ import org.frcteam2910.common.util.*;
 import java.util.Map;
 import java.util.Optional;
 
+import io.github.oblarg.oblog.Loggable;
+
 import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
 
-public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable {
+public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable, Loggable {
 
     // TODO find values as these are just copied from 2910
     public static class DriveConstants {
@@ -85,7 +89,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // back right
     );
 
-    private final SwerveModule[] modules;
+    private SwerveModule[] modules;
     private final double moduleMaxVelocityMetersPerSec;
 
     private final Object sensorLock = new Object();
@@ -316,6 +320,19 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         }
     }
 
+    @Config(tabName = "Drivebase", name = "reset modules", columnIndex = 5, rowIndex = 0)
+    public void resetModules(boolean reset) {
+        if (reset) {
+            boolean supportAbsoluteEncoder = Robot.getInstance().isCompetition() && !Robot.isSimulation();
+
+            modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                    FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
+                    BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
+                    BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
+        }
+
+    }
+
     public void resetGyroAngle(Rotation2 angle) {
         synchronized (sensorLock) {
             gyroscope.setAdjustmentAngle(
@@ -382,10 +399,23 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         Vector2[] moduleOutputs = swerveKinematics.toModuleVelocities(chassisVelocity);
         SwerveKinematics.normalizeModuleVelocities(moduleOutputs, 1);
+
+        if (driveSignal != null && driveSignal.getTranslation().length <= 0.01 && driveSignal.getRotation() == 0) {
+            setToX();
+            return;
+        }
+
         for (int i = 0; i < moduleOutputs.length; i++) {
             var module = modules[i];
             module.set(moduleOutputs[i].length * 12.0, moduleOutputs[i].getAngle().toRadians());
         }
+    }
+
+    public void setToX() {
+        modules[0].set(0, Math.toRadians(45));
+        modules[1].set(0, Math.toRadians(-45));
+        modules[2].set(0, Math.toRadians(-45));
+        modules[3].set(0, Math.toRadians(45));
     }
 
     public void updateModules(ChassisSpeeds chassisSpeeds) {

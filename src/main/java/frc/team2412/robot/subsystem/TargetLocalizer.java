@@ -1,12 +1,12 @@
 package frc.team2412.robot.subsystem;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
-import frc.team2412.robot.util.TimeBasedMedianFilter;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Config.Exclude;
+import io.github.oblarg.oblog.annotations.Log;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -34,7 +34,7 @@ public class TargetLocalizer implements Loggable {
         // TODO tune these more
         /*
          * Order to tune:
-         * turret angluar
+         * turret angular
          * depth FF
          * lateral FF
          * lateral factor
@@ -50,14 +50,20 @@ public class TargetLocalizer implements Loggable {
         public static final Translation2d FIELD_CENTRIC_HUB_CENTER = new Translation2d(27 * 12, 13.5 * 12);
     }
 
-    @Exclude
+    @Log.Exclude
+    @Config.Exclude
     private final DrivebaseSubsystem drivebaseSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterSubsystem shooterSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterVisionSubsystem shooterVisionSubsystem;
 
-    private final TimeBasedMedianFilter distanceFilter;
+    private final LinearFilter distanceFilter;
+    private final LinearFilter yawPass;
     private Pose2d startingPose;
     private Rotation2d gyroAdjustmentAngle;
 
@@ -82,7 +88,8 @@ public class TargetLocalizer implements Loggable {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
+        this.distanceFilter = LinearFilter.movingAverage(20);
+        this.yawPass = LinearFilter.movingAverage(5);
         resetPose(new Pose2d());
     }
 
@@ -146,7 +153,7 @@ public class TargetLocalizer implements Loggable {
      * @return The yaw to the hub (0 is straight ahead, positive is clockwise, units are degrees).
      */
     public double getVisionYaw() {
-        return shooterVisionSubsystem.getYaw();
+        return yawPass.calculate(shooterVisionSubsystem.getYaw());
     }
 
     /**
@@ -305,6 +312,7 @@ public class TargetLocalizer implements Loggable {
         return ignoreUpToSpeed ? true : shooterSubsystem.upToSpeed();
     }
 
+    @Config(name = "ignore up to speed")
     public void ignoreUpToSpeed(boolean ignore) {
         ignoreUpToSpeed = ignore;
     }

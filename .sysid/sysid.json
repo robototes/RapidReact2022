@@ -4,6 +4,7 @@
     "NetworkTables Settings": {
       "serverTeam": "2412"
     },
+    "dsClient": false,
     "mode": "Client",
     "serverTeam": "2412"
   }

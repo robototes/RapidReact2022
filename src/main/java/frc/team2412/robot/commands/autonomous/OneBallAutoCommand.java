@@ -6,13 +6,8 @@ import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team2412.robot.commands.index.IndexShootCommand;
-import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 
 public class OneBallAutoCommand extends SequentialCommandGroup {
@@ -24,12 +19,14 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
                         .build(),
                 DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
-        addCommands(
-                new ParallelCommandGroup(new IntakeSetRetractCommand(intakeSubsystem),
-                        new ScheduleCommand(new ShooterTargetCommand(shooterSubsystem, localizer)),
-                        new WaitCommand(3)),
-                new ParallelDeadlineGroup(new WaitCommand(1), new IndexShootCommand(indexSubsystem)),
-                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
+        ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
+                localizer);
 
+        addCommands(
+
+                manager.scheduleCommand(),
+                manager.disableAt(0),
+                new IndexShootCommand(indexSubsystem, localizer).withTimeout(4),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, robotPath));
     }
 }

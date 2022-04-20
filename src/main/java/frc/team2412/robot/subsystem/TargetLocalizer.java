@@ -4,12 +4,12 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 
-import frc.team2412.robot.util.TimeBasedMedianFilter;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Config.Exclude;
+import io.github.oblarg.oblog.annotations.Log;
 
 import static frc.team2412.robot.subsystem.TargetLocalizer.LocalizerConstants.*;
 
@@ -18,15 +18,13 @@ public class TargetLocalizer implements Loggable {
         // TODO tune these more
         /*
          * Order to tune:
-         * turret angluar
+         * turret angular
          * depth FF
          * lateral FF
          * lateral factor
          */
         public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0, // 0.145
                 TURRET_LATERAL_FACTOR = 0;
-        // Seconds, placeholder duration
-        public static final double FILTER_TIME = 0.1;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
         // Dimensions are in inches
@@ -36,14 +34,20 @@ public class TargetLocalizer implements Loggable {
         public static final Vector2 ROBOT_CENTRIC_TURRET_CENTER = new Vector2(3.93, -4);
     }
 
-    @Exclude
+    @Log.Exclude
+    @Config.Exclude
     private final DrivebaseSubsystem drivebaseSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterSubsystem shooterSubsystem;
-    @Exclude
+
+    @Log.Exclude
+    @Config.Exclude
     private final ShooterVisionSubsystem shooterVisionSubsystem;
 
-    private final TimeBasedMedianFilter distanceFilter;
+    private final LinearFilter distanceFilter;
+    private final LinearFilter yawPass;
     private final Rotation2 gyroAdjustmentAngle;
     private final RigidTransform2 startingPose;
 
@@ -68,7 +72,8 @@ public class TargetLocalizer implements Loggable {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = new TimeBasedMedianFilter(FILTER_TIME);
+        this.distanceFilter = LinearFilter.movingAverage(20);
+        this.yawPass = LinearFilter.movingAverage(5);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
         this.startingPose = new RigidTransform2(new Vector2(5 * 12, 5 * 12), Rotation2.ZERO);
@@ -117,7 +122,7 @@ public class TargetLocalizer implements Loggable {
      *         are degrees).
      */
     public double getVisionYaw() {
-        return shooterVisionSubsystem.getYaw();
+        return yawPass.calculate(shooterVisionSubsystem.getYaw());
     }
 
     /**
@@ -301,6 +306,7 @@ public class TargetLocalizer implements Loggable {
         return ignoreUpToSpeed ? true : shooterSubsystem.upToSpeed();
     }
 
+    @Config(name = "ignore up to speed")
     public void ignoreUpToSpeed(boolean ignore) {
         ignoreUpToSpeed = ignore;
     }

@@ -10,6 +10,10 @@ import static frc.team2412.robot.Hardware.*;
 import static java.lang.Thread.sleep;
 
 import frc.team2412.robot.commands.autonomous.JackFiveBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealFourBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealThreeBallAutoCommand;
+import frc.team2412.robot.commands.autonomous.JackStealThreeBallCompatAutoCommand;
+
 import org.frcteam2910.common.robot.UpdateManager;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -214,6 +218,9 @@ public class Robot extends TimedRobot {
             controlAuto.start();
         }
         JackFiveBallAutoCommand.FiveBallConstants.init();
+        JackStealFourBallAutoCommand.StealFourBallConstants.init();
+        JackStealThreeBallAutoCommand.StealThreeBallConstants.init();
+        JackStealThreeBallCompatAutoCommand.StealThreeBallConstants.init();
     }
 
     @Override

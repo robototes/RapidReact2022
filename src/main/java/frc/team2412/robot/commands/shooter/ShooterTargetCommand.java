@@ -50,24 +50,17 @@ public class ShooterTargetCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!localizer.hasTarget())
-            return;
+        // if (!localizer.hasTarget())
+        //     return;
 
-        if (ShooterConstants.DATA_POINTS != null && localizer.getAdjustedDistance() < 280) {
+        if (ShooterConstants.DATA_POINTS != null && localizer.getAdjustedDistance() < 280 && localizer.hasTarget()) {
             ShooterDataDistancePoint shooterData = ShooterConstants.DATA_POINTS
 
                     .getInterpolated(localizer.getAdjustedDistance());
 
-            // System.out.println("Limelight distance: " + localizer.getDistance());
-            // System.out.println("Localizer distance" + localizer.getAdjustedDistance());
-
-            // System.out.println(shooterData);
-
             shooter.setHoodAngle(shooterData.getAngle());
             shooter.setFlywheelRPM(shooterData.getRPM());
 
-            // System.out.println("Actual shooter RPM : " + shooter.getFlywheelRPM());
-            // System.out.println("Actual hood angle: " + shooter.getHoodAngle());
         }
 
         if (turretDisable.getAsBoolean())

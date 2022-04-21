@@ -21,7 +21,7 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         // Angles are in degrees
         public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
 
-        public static final int COMP_PIPELINE_NUM = 0;
+        public static final int COMP_PIPELINE_NUM = 5;
         // -0.766666 limelight crosshair offset (3/19 update)
     }
 
@@ -31,15 +31,6 @@ public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
         limelight = NetworkTableInstance.getDefault().getTable(LIMELIGHT);
         setCompPipeline();
     }
-
-    // @Override
-    // public void periodic() {
-    //     readOutNetwrokTableValues();
-    // }
-
-    // public void readOutNetwrokTableValues(){
-    //     System.out.println(limelight.getEntry("tv").getDouble(10000));
-    // }
 
     @Log
     public boolean hasTarget() {

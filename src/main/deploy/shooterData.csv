@@ -1,14 +1,15 @@
-Distance (inches),Angle (degrees),Velocity (RPM)
+
+\Distance (inches),Angle (degrees),Velocity (RPM)
 Actual point(s)
 0,   5.05,  3092
 34,  5.05,  3200
 80,  12.56, 2300
-100, 18.3,  2400
+100, 21,  2850
 
-120, 21.98, 2500 # Working
-140, 23.3,  2800
-162, 25.32, 3000 
-180, 29.56, 3000 # Close launchpad 
+120, 21.98, 3051 # Working
+140, 23.3,  3150
+162, 25.19, 3250 
+180, 27.16, 3350 # Close launchpad 
 
 200, 27.7,  3100
 220, 28.12, 3200

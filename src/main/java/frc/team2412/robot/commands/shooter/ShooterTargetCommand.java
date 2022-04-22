@@ -51,7 +51,7 @@ public class ShooterTargetCommand extends CommandBase {
     @Override
     public void execute() {
         // if (!localizer.hasTarget())
-        //     return;
+        // return;
 
         if (ShooterConstants.DATA_POINTS != null && localizer.getAdjustedDistance() < 280 && localizer.hasTarget()) {
             ShooterDataDistancePoint shooterData = ShooterConstants.DATA_POINTS

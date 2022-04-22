@@ -15,6 +15,7 @@ import org.frcteam2910.common.control.TrajectoryConstraint;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -76,6 +77,12 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
                         .build(),
                 NORMAL_SPEED, 0.1);
 
+        public static final Trajectory PATH_4 = new Trajectory(
+                new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
+                        .lineTo(new Vector2(56.456, 91), Rotation2.fromDegrees(202))
+                        .build(),
+                NORMAL_SPEED, 0.1);
+
         // public static final Trajectory PATH_3 = new Trajectory(
         // new SimplePathBuilder(new Vector2(195.029, 75.188), Rotation2.fromDegrees(125))
         // .lineTo(new Vector2(94.653, 36.976), Rotation2.fromDegrees(-180))
@@ -83,8 +90,8 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
         // .build(),
         // NORMAL_SPEED, 0.1);
 
-        public static final Trajectory PATH_4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(50.456, 85), Rotation2.fromDegrees(202))
+        public static final Trajectory PATH_5 = new Trajectory(
+                new SimplePathBuilder(new Vector2(56.456, 91), Rotation2.fromDegrees(202))
                         .lineTo(new Vector2(207.029, 82.188), Rotation2.fromDegrees(202))
                         .build(),
                 NORMAL_SPEED, 0.1);
@@ -110,21 +117,23 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
 
         // indexSubsystem.setDefaultCommand(new IndexCommand(indexSubsystem, intakeSubsystem));
         addCommands(
+                new ShooterHoodRPMCommand(shooterSubsystem, 2412, 23.3).withTimeout(0.1),
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
                 manager.disableAt(-13),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
                 manager.enableAt(-13),
+                await(0.5),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),
                 manager.disableAt(70),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
-                await(1),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
+                await(1),
+                new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_5),
                 manager.enableAt(70),
-                await(0.1),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new ParallelCommandGroup(
                         manager.disableAt(0),

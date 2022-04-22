@@ -113,10 +113,9 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
                 manager.scheduleCommand().alongWith(
                         new IntakeSetInCommand(intakeSubsystem),
                         new IndexSpitCommand(indexSubsystem).withTimeout(0.05)),
-                manager.disableAt(-10),
+                manager.disableAt(-13),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_1),
-                manager.enableAt(-10),
-                await(0.1),
+                manager.enableAt(-13),
                 new IndexShootCommand(indexSubsystem).withTimeout(2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new IndexShootCommand(indexSubsystem).withTimeout(1),

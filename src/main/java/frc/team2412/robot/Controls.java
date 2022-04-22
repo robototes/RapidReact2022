@@ -72,8 +72,8 @@ public class Controls {
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
 
-        climbArmUp = driveController.getStartButton();
-        climbArmDown = driveController.getBackButton();
+        climbArmUp = driveController.getBackButton();
+        climbArmDown = driveController.getStartButton();
 
         boolean comp = Robot.getInstance().isCompetition();
 

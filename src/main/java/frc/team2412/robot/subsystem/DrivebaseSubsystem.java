@@ -75,8 +75,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
         public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(-90), // should be 90
                 COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
-
-        public static final double SHOOT_SPEED = 0.15;
     }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
@@ -201,11 +199,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
                 .getEntry();
         
-        shootSpeed = tab.add("ShootSpeed", 0.15f)
+        shootSpeed = tab.add("ShootSpeed", 0.6f)
                 .withPosition(4, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.15))
+                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.6))
                 .getEntry();
 
         shootSpeedToggle = tab.add("ShootSpeedToggled", false)

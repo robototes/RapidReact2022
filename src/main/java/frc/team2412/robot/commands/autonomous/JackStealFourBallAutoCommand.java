@@ -41,12 +41,12 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
 
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(399.125, 133.486), Rotation2.fromDegrees(-90))
-                        .arcTo(new Vector2(429.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
+                        .arcTo(new Vector2(420.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_2 = new Trajectory(
-                new SimplePathBuilder(new Vector2(429.991, 87.809), Rotation2.fromDegrees(-120))
+                new SimplePathBuilder(new Vector2(420.991, 87.809), Rotation2.fromDegrees(-120))
                         .lineTo(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .build(),
                 NORMAL_SPEED, 0.1);

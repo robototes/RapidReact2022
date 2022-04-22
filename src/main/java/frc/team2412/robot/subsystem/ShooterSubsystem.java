@@ -485,6 +485,13 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Log(name = "Up to speed", columnIndex = 4, rowIndex = 0)
     public boolean upToSpeed() {
+
+        if (Robot.getInstance().subsystems.drivebaseSubsystem != null) {
+            return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
+                    * (1 + Robot.getInstance().subsystems.drivebaseSubsystem.getVelocity().length)
+                    && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
+        }
+
         return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
                 && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
     }

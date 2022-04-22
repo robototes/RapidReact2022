@@ -23,7 +23,7 @@ public class TargetLocalizer implements Loggable {
          * lateral FF
          * lateral factor
          */
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0.45, // 0.145
+        public static final double TURRET_LATERAL_FF = 0.9, TURRET_ANGULAR_FF = 0.25, TURRET_DEPTH_FF = 0.006, // 0.145
                 TURRET_LATERAL_FACTOR = 0;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;
@@ -72,7 +72,7 @@ public class TargetLocalizer implements Loggable {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = LinearFilter.movingAverage(20);
+        this.distanceFilter = LinearFilter.movingAverage(10);
         this.yawPass = LinearFilter.movingAverage(5);
         // TODO Handle different starting positions
         // Also don't forget to convert reference to hub-centric if necessary
@@ -103,7 +103,7 @@ public class TargetLocalizer implements Loggable {
             return 0;
         }
         return (getDepthVelocity() * Math.sqrt(
-                getDistance() * getDistance() + getLateralVelocity() * getLateralVelocity() * turretDepthLateralFactor)
+                getDistance() * getDistance() + ((getLateralVelocity() * getLateralVelocity()) * turretDepthLateralFactor))
                 * turretDepthFF);
     }
 
@@ -325,5 +325,12 @@ public class TargetLocalizer implements Loggable {
     public void setFAngular(double f) {
         turretAngularFF = f;
     }
+
+    @Config(name = "later depth FF", defaultValueNumeric = TURRET_LATERAL_FACTOR)
+    public void setFLaterDepth(double f) {
+        turretDepthLateralFactor = f;
+    }
+
+
 
 }

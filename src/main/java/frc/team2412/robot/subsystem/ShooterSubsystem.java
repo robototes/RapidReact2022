@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
-        public static final double FLYWHEEL_ALLOWED_ERROR = 50;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 75;
 
         public static final double FLYWHEEL_FEEDFORWARD_OFFSET = 0.022;
 
@@ -159,7 +159,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(TURRET_CURRENT_LIMIT);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.25);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.3);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
 
         turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);

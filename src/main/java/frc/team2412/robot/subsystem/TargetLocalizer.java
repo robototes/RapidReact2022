@@ -23,7 +23,7 @@ public class TargetLocalizer implements Loggable {
          * lateral FF
          * lateral factor
          */
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0, // 0.145
+        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0.45, // 0.145
                 TURRET_LATERAL_FACTOR = 0;
         // Angles are in degrees
         public static final double STARTING_TURRET_ANGLE = 0;

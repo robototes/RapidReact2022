@@ -111,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double targetHoodAngle;
     private double turretAngleBias;
     private double turretTestAngle;
-    private double distanceBias;
+    private double distanceBias = 10;
 
     /**
      * Constructor for shooter subsystem.
@@ -244,7 +244,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.config_kD(TURRET_SLOT_ID, turretD);
     }
 
-    @Config(name = "Distance bias", columnIndex = 5, rowIndex = 2)
+    @Config(name = "Distance bias", columnIndex = 5, rowIndex = 2, defaultValueNumeric = 10)
     private void setDistanceBias(double newBias) {
         distanceBias = newBias;
     }

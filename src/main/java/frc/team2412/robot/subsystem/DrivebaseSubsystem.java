@@ -198,7 +198,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
                 .getEntry();
-        
+
         shootSpeed = tab.add("ShootSpeed", 0.6f)
                 .withPosition(4, 1)
                 .withSize(2, 1)
@@ -314,10 +314,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(
                     translationalVelocity.scale(speedModifier.getDouble(1.0))
-                                         .scale(shootSpeedToggle.getBoolean(false) ? shootSpeed.getDouble(1) : 1)
-                                         .rotateBy(getRotationAdjustment()),
-                    (rotationalVelocity * speedModifier.getDouble(1.0)) , false); 
-            
+                            .scale(shootSpeedToggle.getBoolean(false) ? shootSpeed.getDouble(1) : 1)
+                            .rotateBy(getRotationAdjustment()),
+                    (rotationalVelocity * speedModifier.getDouble(1.0)), false);
+
         }
     }
 

@@ -105,7 +105,8 @@ public class TargetLocalizer implements Loggable {
             return 0;
         }
         return (getDepthVelocity() * Math.sqrt(
-                getDistance() * getDistance() + ((getLateralVelocity() * getLateralVelocity()) * turretDepthLateralFactor))
+                getDistance() * getDistance()
+                        + ((getLateralVelocity() * getLateralVelocity()) * turretDepthLateralFactor))
                 * turretDepthFF);
     }
 
@@ -201,9 +202,9 @@ public class TargetLocalizer implements Loggable {
         double lateralAdjustment = 0;
         double lateralVelocity = getLateralVelocity();
 
-        if(getDistance() != 0 && getDistance() > lateralVelocity){
+        if (getDistance() != 0 && getDistance() > lateralVelocity) {
             double adjustedLateralVelocity = Math.min(Math.abs(lateralVelocity), LATERAL_MAX);
-            if(lateralVelocity < 0) {
+            if (lateralVelocity < 0) {
                 adjustedLateralVelocity = -adjustedLateralVelocity;
             }
 
@@ -343,7 +344,5 @@ public class TargetLocalizer implements Loggable {
     public void setFLaterDepth(double f) {
         turretDepthLateralFactor = f;
     }
-
-
 
 }

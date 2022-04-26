@@ -4,6 +4,7 @@ import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 
@@ -203,11 +204,7 @@ public class TargetLocalizer implements Loggable {
         double lateralVelocity = getLateralVelocity();
 
         if (getDistance() != 0 && getDistance() > lateralVelocity) {
-            double adjustedLateralVelocity = Math.min(Math.abs(lateralVelocity), LATERAL_MAX);
-            if (lateralVelocity < 0) {
-                adjustedLateralVelocity = -adjustedLateralVelocity;
-            }
-
+            double adjustedLateralVelocity = MathUtil.clamp(lateralVelocity, -LATERAL_MAX, LATERAL_MAX);
             lateralAdjustment = Math.toDegrees(Math.asin(adjustedLateralVelocity / getDistance() * turretLateralFF));
         }
 

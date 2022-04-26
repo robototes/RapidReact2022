@@ -86,8 +86,7 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
-                new ParallelCommandGroup(
-                        new IndexSpitCommand(indexSubsystem),
-                        new IntakeSetOutCommand(intakeSubsystem)));
+                new IntakeSetOutCommand(intakeSubsystem),
+                new IndexSpitCommand(indexSubsystem));
     }
 }

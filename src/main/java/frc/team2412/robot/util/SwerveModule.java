@@ -9,14 +9,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
 
-    public class SwerveModuleConstants {
+    public static class SwerveModuleConstants {
 
     }
 
     WPI_TalonFX driveMotor;
     WPI_TalonFX turnMotor;
-
-    boolean absoluteEncoderEnabled;
     CANCoder absoluteEncoder;
 
     public SwerveModule(int driveMotorPort, int turnMotorPort, double turnOffset, String canbus) {
@@ -31,9 +29,15 @@ public class SwerveModule {
             double turnOffset, String canbus) {
         this.driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
         this.turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
-        this.absoluteEncoderEnabled = absoluteEncoderEnabled;
-        this.absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
-        this.absoluteEncoder.setPosition(turnOffset);
+
+
+        if(absoluteEncoderEnabled){
+            this.absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
+            this.absoluteEncoder.configMagnetOffset(turnOffset, 100);
+            this.turnMotor.setSelectedSensorPosition(absoluteEncoder.getAbsolutePosition());
+        }
+       
+
     }
 
     public SwerveModuleState getState() {
@@ -45,8 +49,7 @@ public class SwerveModule {
     }
 
     public Rotation2d getAngle() {
-        double degree = absoluteEncoderEnabled ? absoluteEncoder.getAbsolutePosition()
-                : turnMotor.getSelectedSensorPosition();
+        double degree = absoluteEncoder != null ? absoluteEncoder.getAbsolutePosition() :  turnMotor.getSelectedSensorPosition() ;
         return new Rotation2d(Math.toRadians(degree));
     }
 

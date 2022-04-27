@@ -1,9 +1,11 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.Hardware.*;
+import static frc.team2412.robot.Hardware.*;;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import com.ctre.phoenix.sensors.Pigeon2;
+
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.util.SwerveModule;
 
@@ -35,8 +37,32 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
+    private final Pigeon2 gyro = new Pigeon2(GYRO_PORT, DRIVETRAIN_INTAKE_CAN_BUS_NAME);
+
+    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getGyroHeading());
+
     public WpilibDrivebaseSubsystem() {
 
+    }
+
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
+                fieldRelative
+                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading())
+                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, 1);
+        frontLeft.setState(swerveModuleStates[0]);
+        frontRight.setState(swerveModuleStates[1]);
+        backLeft.setState(swerveModuleStates[2]);
+        backRight.setState(swerveModuleStates[3]);
+    }
+
+    public Rotation2d getGyroHeading() {
+        return new Rotation2d(gyro.getYaw());
+    }
+
+    public void resetGyro() {
+        gyro.setYaw(0);
     }
 
 }

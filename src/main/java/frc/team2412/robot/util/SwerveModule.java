@@ -25,7 +25,7 @@ public class SwerveModule {
         new SwerveModule(driveMotorPort, turnMotorPort, true, turnEncoderPort, turnOffset, canbus);
     }
 
-    public SwerveModule(int driveMotorPort, int turnMotorPort, boolean absoluteEncoderEnabled, int turnEncoderPort,
+    private SwerveModule(int driveMotorPort, int turnMotorPort, boolean absoluteEncoderEnabled, int turnEncoderPort,
             double turnOffset, String canbus) {
         this.driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
         this.turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
@@ -59,7 +59,11 @@ public class SwerveModule {
     }
 
     public void resetEncoder() {
-
+        if (absoluteEncoder != null) {
+            absoluteEncoder.setPosition(0);
+        }
+        turnMotor.setSelectedSensorPosition(0);
+        driveMotor.setSelectedSensorPosition(0);
     }
 
 }

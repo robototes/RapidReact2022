@@ -1,5 +1,6 @@
 package frc.team2412.robot.util;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -32,6 +33,7 @@ public class SwerveModule {
         this.turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
         this.absoluteEncoderEnabled = absoluteEncoderEnabled;
         this.absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
+        this.absoluteEncoder.setPosition(turnOffset);
     }
 
     public SwerveModuleState getState() {
@@ -46,6 +48,16 @@ public class SwerveModule {
         double degree = absoluteEncoderEnabled ? absoluteEncoder.getAbsolutePosition()
                 : turnMotor.getSelectedSensorPosition();
         return new Rotation2d(Math.toRadians(degree));
+    }
+
+    public void setState(SwerveModuleState state){
+        state = SwerveModuleState.optimize(state, getAngle());
+        driveMotor.set(state.speedMetersPerSecond);
+        turnMotor.set(ControlMode.Position, state.angle.getDegrees());
+    }
+
+    public void resetEncoder(){
+        
     }
 
 }

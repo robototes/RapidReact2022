@@ -12,7 +12,6 @@ import org.frcteam2910.common.robot.input.XboxController;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.team2412.robot.commands.climb.ClimbSetArmCommand;
 import frc.team2412.robot.commands.climb.ExtendArmCommand;
 import frc.team2412.robot.commands.climb.PostClimbUpComamnd;
 import frc.team2412.robot.commands.climb.RetractArmCommand;
@@ -32,13 +31,10 @@ public class Controls {
     }
 
     public XboxController driveController;
-    public XboxController codriverController;
 
     // climb
     public final Button climbArmUp;
     public final Button climbArmDown;
-    public final Button climbArmDownManual;
-    public final Button climbArmUpManual;
 
     public Controller shootPreset, climbPreset;
 
@@ -63,7 +59,6 @@ public class Controls {
         subsystems = s;
 
         driveController = new XboxController(CONTROLLER_PORT);
-        codriverController = new XboxController(CODRIVER_CONTROLLER_PORT);
 
         resetDriveGyroButton = driveController.getRightJoystickButton();
         setPoseButton = driveController.getStartButton(); // set pose button is practice bot only
@@ -76,10 +71,8 @@ public class Controls {
         intakeSpitButton = new Button[] { driveController.getBButton() };
         intakeRetractButton = driveController.getYButton();
 
-        climbArmUp = driveController.getStartButton();
-        climbArmDown = driveController.getBackButton();
-        climbArmDownManual = codriverController.getRightBumperButton();
-        climbArmUpManual = codriverController.getLeftBumperButton();
+        climbArmUp = driveController.getBackButton();
+        climbArmDown = driveController.getStartButton();
 
         boolean comp = Robot.getInstance().isCompetition();
 
@@ -111,9 +104,6 @@ public class Controls {
     public void bindClimbControls() {
         climbArmDown.whenPressed(new RetractArmCommand(subsystems.climbSubsystem));
         climbArmUp.whenPressed(new ExtendArmCommand(subsystems.climbSubsystem));
-
-        climbArmDownManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, -0.4));
-        climbArmUpManual.whileHeld(new ClimbSetArmCommand(subsystems.climbSubsystem, 0.4));
     }
 
     public void bindPostClimbControls() {

@@ -13,6 +13,7 @@ import org.frcteam2910.common.math.Vector2;
 import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
+import frc.team2412.robot.commands.intake.IntakeSetOutCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
@@ -39,24 +40,24 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
 
         public static final Trajectory PATH_1 = new Trajectory(
                 new SimplePathBuilder(new Vector2(399.125, 133.486), Rotation2.fromDegrees(-90))
-                        .arcTo(new Vector2(429.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
+                        .arcTo(new Vector2(420.991, 87.809), new Vector2(359.901, 78.359), Rotation2.fromDegrees(-120))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_2 = new Trajectory(
-                new SimplePathBuilder(new Vector2(429.991, 87.809), Rotation2.fromDegrees(-120))
+                new SimplePathBuilder(new Vector2(420.991, 87.809), Rotation2.fromDegrees(-120))
                         .lineTo(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_3 = new Trajectory(
                 new SimplePathBuilder(new Vector2(394.158, 48.433), Rotation2.fromDegrees(-150))
-                        .arcTo(new Vector2(446.770, 192.509), new Vector2(313.678, 161), Rotation2.fromDegrees(-270))
+                        .arcTo(new Vector2(456.770, 202.509), new Vector2(313.678, 161), Rotation2.fromDegrees(-270))
                         .build(),
                 NORMAL_SPEED, 0.1);
 
         public static final Trajectory PATH_4 = new Trajectory(
-                new SimplePathBuilder(new Vector2(446.770, 192.509), Rotation2.fromDegrees(-270))
+                new SimplePathBuilder(new Vector2(456.770, 202.509), Rotation2.fromDegrees(-270))
                         .arcTo(new Vector2(373.468, 140.532), new Vector2(369.592, 239.367),
                                 Rotation2.fromDegrees(-205))
                         .build(),
@@ -84,6 +85,7 @@ public class JackStealFourBallAutoCommand extends DynamicRequirementSequentialCo
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_2),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_3),
                 new Follow2910TrajectoryCommand(drivebaseSubsystem, PATH_4),
+                new IntakeSetOutCommand(intakeSubsystem),
                 new IndexSpitCommand(indexSubsystem));
     }
 }

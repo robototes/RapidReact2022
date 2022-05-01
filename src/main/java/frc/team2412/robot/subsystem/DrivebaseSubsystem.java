@@ -117,6 +117,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final NetworkTableEntry odometryYEntry;
     private final NetworkTableEntry odometryAngleEntry;
     private final NetworkTableEntry speedModifier;
+    private final NetworkTableEntry shootSpeedToggle;
+    private final NetworkTableEntry shootSpeed;
     private final NetworkTableEntry antiTip;
     private final NetworkTableEntry fieldCentric;
     private final NetworkTableEntry poseSetX;
@@ -197,6 +199,19 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
                 .getEntry();
 
+        shootSpeed = tab.add("ShootSpeed", 0.6f)
+                .withPosition(4, 1)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.6))
+                .getEntry();
+
+        shootSpeedToggle = tab.add("ShootSpeedToggled", false)
+                .withPosition(4, 2)
+                .withSize(2, 1)
+                .withWidget(BuiltInWidgets.kToggleSwitch)
+                .getEntry();
+
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
 
         antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
@@ -206,7 +221,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .getEntry();
 
         fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
-                .withPosition(3, 2)
+                .withPosition(2, 2)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
@@ -233,6 +248,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 .getEntry();
 
         accelLimiter = new VectorSlewLimiter(ACCEL_LIMIT);
+    }
+
+    @Override
+    public String configureLogName() {
+        return "Drivebase";
     }
 
     public Vector2 getGyroscopeXY() {
@@ -298,9 +318,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(
-                    translationalVelocity.scale(speedModifier.getDouble(1.0)).rotateBy(getRotationAdjustment()),
-                    rotationalVelocity * speedModifier.getDouble(1.0), false); // changing so drive signal is
-                                                                                // shuffleboard only
+                    translationalVelocity.scale(speedModifier.getDouble(1.0))
+                            .scale(shootSpeedToggle.getBoolean(false) ? shootSpeed.getDouble(1) : 1)
+                            .rotateBy(getRotationAdjustment()),
+                    (rotationalVelocity * speedModifier.getDouble(1.0)), false);
+
         }
     }
 

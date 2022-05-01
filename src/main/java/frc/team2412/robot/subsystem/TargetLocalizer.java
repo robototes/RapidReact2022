@@ -1,5 +1,6 @@
 package frc.team2412.robot.subsystem;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
@@ -39,8 +40,9 @@ public class TargetLocalizer implements Loggable {
          * lateral FF
          * lateral factor
          */
-        public static final double TURRET_LATERAL_FF = 0, TURRET_ANGULAR_FF = 0, TURRET_DEPTH_FF = 0, // 0.145
+        public static final double TURRET_LATERAL_FF = 0.9, TURRET_ANGULAR_FF = 0.25, TURRET_DEPTH_FF = 0.006, // 0.145
                 TURRET_LATERAL_FACTOR = 0;
+        public static final double LATERAL_MAX = 80;
         // Seconds, placeholder duration
         public static final double FILTER_TIME = 0.1;
         // Dimensions are in inches
@@ -88,7 +90,7 @@ public class TargetLocalizer implements Loggable {
         this.drivebaseSubsystem = drivebaseSubsystem;
         this.shooterSubsystem = shooterSubsystem;
         this.shooterVisionSubsystem = visionSubsystem;
-        this.distanceFilter = LinearFilter.movingAverage(20);
+        this.distanceFilter = LinearFilter.movingAverage(10);
         this.yawPass = LinearFilter.movingAverage(5);
         resetPose(new Pose2d());
     }
@@ -135,7 +137,8 @@ public class TargetLocalizer implements Loggable {
             return 0;
         }
         return (getDepthVelocity() * Math.sqrt(
-                getDistance() * getDistance() + getLateralVelocity() * getLateralVelocity() * turretDepthLateralFactor)
+                getDistance() * getDistance()
+                        + ((getLateralVelocity() * getLateralVelocity()) * turretDepthLateralFactor))
                 * turretDepthFF);
     }
 
@@ -246,9 +249,16 @@ public class TargetLocalizer implements Loggable {
      * @return adjustment
      */
     public double yawAdjustment() {
-        return (getDistance() != 0 && getDistance() > getLateralVelocity()
-                ? Math.toDegrees(Math.asin(getLateralVelocity() / getDistance() * turretLateralFF))
-                : 0) + (getAngularVelocity() * turretAngularFF);
+        double lateralAdjustment = 0;
+        double lateralVelocity = getLateralVelocity();
+
+        if (getDistance() != 0 && getDistance() > lateralVelocity) {
+            double adjustedLateralVelocity = MathUtil.clamp(lateralVelocity, -LATERAL_MAX, LATERAL_MAX);
+            lateralAdjustment = Math.toDegrees(Math.asin(adjustedLateralVelocity / getDistance() * turretLateralFF));
+        }
+
+        double angularAdjustment = getAngularVelocity() * turretAngularFF;
+        return lateralAdjustment + angularAdjustment;
     }
 
     /**
@@ -330,6 +340,11 @@ public class TargetLocalizer implements Loggable {
     @Config(name = "Angular FF", defaultValueNumeric = TURRET_ANGULAR_FF)
     public void setFAngular(double f) {
         turretAngularFF = f;
+    }
+
+    @Config(name = "later depth FF", defaultValueNumeric = TURRET_LATERAL_FACTOR)
+    public void setFLaterDepth(double f) {
+        turretDepthLateralFactor = f;
     }
 
 }

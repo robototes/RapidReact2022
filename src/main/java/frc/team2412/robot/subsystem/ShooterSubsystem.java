@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         public static final double FLYWHEEL_DEFAULT_RPM = 2000;
         public static final double FLYWHEEL_DEFAULT_VELOCITY = FLYWHEEL_DEFAULT_RPM * FLYWHEEL_RPM_TO_VELOCITY;
         public static final int FLYWHEEL_SLOT_ID = 0;
-        public static final double FLYWHEEL_ALLOWED_ERROR = 50;
+        public static final double FLYWHEEL_ALLOWED_ERROR = 75;
 
         public static final double FLYWHEEL_FEEDFORWARD_OFFSET = 0.022;
 
@@ -72,8 +72,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
         public static final double MIN_TURRET_ANGLE = -270;
         public static final double MAX_TURRET_ANGLE = 90;
-        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 20, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
-        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 20, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
+        public static final double LEFT_WRAP = MIN_TURRET_ANGLE + 45, LEFT_WRAP_THRESHOLD = MIN_TURRET_ANGLE + 10;
+        public static final double RIGHT_WRAP = MAX_TURRET_ANGLE - 45, RIGHT_WRAP_THRESHOLD = MAX_TURRET_ANGLE - 10;
 
         // Current limits
         public static final SupplyCurrentLimitConfiguration FLYWHEEL_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
@@ -111,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     private double targetHoodAngle;
     private double turretAngleBias;
     private double turretTestAngle;
-    private double distanceBias;
+    private double distanceBias = 10;
 
     /**
      * Constructor for shooter subsystem.
@@ -159,7 +159,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.configReverseSoftLimitEnable(true);
         turretMotor.configSupplyCurrentLimit(TURRET_CURRENT_LIMIT);
         turretMotor.setNeutralMode(NeutralMode.Brake);
-        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.25);
+        turretMotor.configClosedLoopPeakOutput(TURRET_SLOT_ID, 0.3);
         turretMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, TURRET_SLOT_ID, 0);
 
         turretMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
@@ -244,7 +244,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         turretMotor.config_kD(TURRET_SLOT_ID, turretD);
     }
 
-    @Config(name = "Distance bias", columnIndex = 5, rowIndex = 2)
+    @Config(name = "Distance bias", columnIndex = 5, rowIndex = 2, defaultValueNumeric = 10)
     private void setDistanceBias(double newBias) {
         distanceBias = newBias;
     }
@@ -485,6 +485,13 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Log(name = "Up to speed", columnIndex = 4, rowIndex = 0)
     public boolean upToSpeed() {
+
+        if (Robot.getInstance().subsystems.drivebaseSubsystem != null) {
+            return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
+                    * (1 + Robot.getInstance().subsystems.drivebaseSubsystem.getVelocity().length)
+                    && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
+        }
+
         return Math.abs(getFlywheelRPMError()) <= FLYWHEEL_ALLOWED_ERROR
                 && Math.abs(getHoodAngle() - targetHoodAngle) <= HOOD_ALLOWED_ERROR;
     }

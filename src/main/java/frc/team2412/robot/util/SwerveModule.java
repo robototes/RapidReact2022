@@ -1,8 +1,10 @@
 package frc.team2412.robot.util;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.swervedrivespecialties.swervelib.ctre.CtreUtils;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -17,26 +19,31 @@ public class SwerveModule {
     WPI_TalonFX turnMotor;
     CANCoder absoluteEncoder;
 
-    public SwerveModule(int driveMotorPort, int turnMotorPort, double turnOffset, String canbus) {
-        new SwerveModule(driveMotorPort, turnMotorPort, false, -1, turnOffset, canbus);
-    }
-
     public SwerveModule(int driveMotorPort, int turnMotorPort, int turnEncoderPort, double turnOffset, String canbus) {
-        new SwerveModule(driveMotorPort, turnMotorPort, true, turnEncoderPort, turnOffset, canbus);
-    }
+        driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
+        turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
 
-    private SwerveModule(int driveMotorPort, int turnMotorPort, boolean absoluteEncoderEnabled, int turnEncoderPort,
-            double turnOffset, String canbus) {
-        this.driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
-        this.turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
-
-        if (absoluteEncoderEnabled) {
-            this.absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
-            this.absoluteEncoder.configMagnetOffset(turnOffset, 100);
-            this.turnMotor.setSelectedSensorPosition(absoluteEncoder.getAbsolutePosition());
+        if (turnEncoderPort != -1) {
+            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
         }
 
     }
+
+    private void configAbsoluteEncoder(int turnEncoderPort, double turnOffset, String canbus){
+
+        absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
+        ErrorCode encoderCreatedCheck = absoluteEncoder.configMagnetOffset(turnOffset, 100);
+
+        // I feel like this will break but 🤷‍♂️
+        if(encoderCreatedCheck.value != 0){
+            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
+        }
+
+
+        this.turnMotor.setSelectedSensorPosition(absoluteEncoder.getAbsolutePosition());
+    }
+
+    
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocityMeter(), getAngle());

@@ -1,6 +1,6 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.Hardware.*;;
+import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 

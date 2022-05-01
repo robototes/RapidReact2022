@@ -6,33 +6,36 @@ import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2412.robot.util.SwerveModule;
+import frc.team2412.robot.util.AbsoluteSwerveModule;
 
 public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
-    private final SwerveModule frontLeft = new SwerveModule(DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
+    private final AbsoluteSwerveModule frontLeft = new AbsoluteSwerveModule(DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, DRIVETRAIN_FRONT_LEFT_ENCODER_PORT, DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET,
             DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SwerveModule frontRight = new SwerveModule(DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
+    private final AbsoluteSwerveModule frontRight = new AbsoluteSwerveModule(DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT,
             DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET,
             DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SwerveModule backLeft = new SwerveModule(DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
+    private final AbsoluteSwerveModule backLeft = new AbsoluteSwerveModule(DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, DRIVETRAIN_BACK_LEFT_ENCODER_PORT, DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET,
             DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SwerveModule backRight = new SwerveModule(DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
+    private final AbsoluteSwerveModule backRight = new AbsoluteSwerveModule(DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, DRIVETRAIN_BACK_RIGHT_ENCODER_PORT, DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET,
             DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
+    private final static double TRACKWIDTH_METER = Units.inchesToMeters(20);
+
     // copied from WPILIB
-    private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-    private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-    private final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-    private final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
+    private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH_METER / 2, TRACKWIDTH_METER / 2);
+    private final Translation2d frontRightLocation = new Translation2d(TRACKWIDTH_METER / 2, -TRACKWIDTH_METER / 2);
+    private final Translation2d backLeftLocation = new Translation2d(-TRACKWIDTH_METER / 2, TRACKWIDTH_METER / 2);
+    private final Translation2d backRightLocation = new Translation2d(-TRACKWIDTH_METER / 2, -TRACKWIDTH_METER / 2);
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
@@ -45,12 +48,19 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     }
 
+    @Override
+    public void periodic() {
+        odometry.update(getGyroHeading(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
+                backRight.getState());
+    }
+
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
                 fieldRelative
                         ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading())
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, 1);
+
         frontLeft.setState(swerveModuleStates[0]);
         frontRight.setState(swerveModuleStates[1]);
         backLeft.setState(swerveModuleStates[2]);

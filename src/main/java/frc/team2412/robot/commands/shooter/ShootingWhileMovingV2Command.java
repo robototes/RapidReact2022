@@ -61,7 +61,6 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
         shooter.updateTurretAngle(Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getY()));
 
-
     }
 
 }

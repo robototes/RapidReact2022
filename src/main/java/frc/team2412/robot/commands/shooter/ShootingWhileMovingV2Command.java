@@ -44,9 +44,11 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
         double currentShotTime = timeOfFlight.get(actualDistance);
 
+        // Still need to add accel comp here, don't have a way of getting that in current code
+        // That should help when starting from stop
         double targetXAdjustment = localizer.getLateralVelocity() * currentShotTime; // most likely be a unit error here
         double targetYadjustment = localizer.getDepthVelocity() * currentShotTime; // this should be in inch
-        
+
         Translation2d theoreticalTargetPosition = targetPosition
                 .plus(new Translation2d(targetXAdjustment, targetYadjustment));
 
@@ -58,6 +60,7 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         shooter.setHoodAngle(rpmHoodValues.getAngle());
 
         shooter.updateTurretAngle(Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getY()));
+
 
     }
 

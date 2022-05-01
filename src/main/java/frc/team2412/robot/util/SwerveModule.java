@@ -22,9 +22,7 @@ public class SwerveModule {
     public SwerveModule(int driveMotorPort, int turnMotorPort, String canbus) {
         driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
         turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
-    }
 
-    private void configMotors(){
         driveMotor.setInverted(DRIVE_MOTOR_INVERTED);
         driveMotor.configVoltageCompSaturation(12.8);
         driveMotor.enableVoltageCompensation(true);

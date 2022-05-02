@@ -34,7 +34,7 @@ public class AbsoluteSwerveModule extends SwerveModule {
 
     @Override
     public Rotation2d getAngle() {
-        return new Rotation2d(Math.toRadians(absoluteEncoder.getAbsolutePosition()));
+        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
     }
 
     public void resetEncoder() {

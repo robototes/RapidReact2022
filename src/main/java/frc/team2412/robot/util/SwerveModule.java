@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
 
-    private static final double BATTERY_VOLTAGE = 12.8;
+    private static final double BATTERY_VOLTAGE = 12.6;
     private static final int ENCODERS_TICKS_PER_REVOLUTION = 2048;
     private static final double WHEEL_DIAMETER_METER = 0.10033;
 
@@ -27,12 +27,8 @@ public class SwerveModule {
         turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
 
         driveMotor.setInverted(DRIVE_MOTOR_INVERTED);
-        driveMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
-        driveMotor.enableVoltageCompensation(true);
 
         turnMotor.setInverted(TURN_MOTOR_INVERTED);
-        turnMotor.configVoltageCompSaturation(BATTERY_VOLTAGE);
-        turnMotor.enableVoltageCompensation(true);
         turnMotor.config_kP(0, TURN_MOTOR_P);
         turnMotor.config_kD(0, TURN_MOTOR_D);
     }

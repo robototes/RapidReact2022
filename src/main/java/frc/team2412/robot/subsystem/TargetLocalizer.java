@@ -6,6 +6,8 @@ import org.frcteam2910.common.math.Vector2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.team2412.robot.Robot;
 
 import io.github.oblarg.oblog.Loggable;
@@ -340,6 +342,21 @@ public class TargetLocalizer implements Loggable {
     @Config(name = "later depth FF", defaultValueNumeric = TURRET_LATERAL_FACTOR)
     public void setFLaterDepth(double f) {
         turretDepthLateralFactor = f;
+    }
+
+
+    public Translation2d getTargetPosition(){
+        return new Translation2d(shooterVisionSubsystem.getDistance(), Rotation2d.fromDegrees(shooterVisionSubsystem.getYaw()));
+    }
+
+    public Translation2d getAdjustedTargetPosition(double timeAdjustment){
+        // Still need to add accel comp here, don't have a way of getting that in current code
+        // That should help when starting from stop
+        double targetXAdjustment = getLateralVelocity() * timeAdjustment; // most likely be a unit error here
+        double targetYadjustment = getDepthVelocity() * timeAdjustment; // this should be in inch
+
+        Translation2d positionAdjustment = new Translation2d(targetXAdjustment, targetYadjustment);
+        return getTargetPosition().minus(positionAdjustment);
     }
 
 }

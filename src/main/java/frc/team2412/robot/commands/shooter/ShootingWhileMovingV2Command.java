@@ -1,6 +1,5 @@
 package frc.team2412.robot.commands.shooter;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
@@ -48,6 +47,9 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         double theoreticalDistance = theoreticalTargetPosition.getNorm();
 
         ShooterDataDistancePoint rpmHoodValues = DATA_POINTS.getInterpolated(theoreticalDistance);
+
+        ShooterDataDistancePoint theWorseWayOfWritingThis = DATA_POINTS.getInterpolated(localizer
+                .getAdjustedTargetPosition(timeOfFlight.get(localizer.getTargetPosition().getNorm())).getNorm());
 
         shooter.setFlywheelRPM(rpmHoodValues.getRPM());
         shooter.setHoodAngle(rpmHoodValues.getAngle());

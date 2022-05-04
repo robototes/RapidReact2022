@@ -12,10 +12,7 @@ public class AbsoluteSwerveModule extends SwerveModule {
     public AbsoluteSwerveModule(int driveMotorPort, int turnMotorPort, int turnEncoderPort, double turnOffset,
             String canbus) {
         super(driveMotorPort, turnMotorPort, canbus);
-
-        if (turnEncoderPort != -1) {
-            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
-        }
+        configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
 
     }
 

@@ -5,7 +5,6 @@ import static frc.team2412.robot.Controls.ControlConstants.*;
 import java.util.function.BooleanSupplier;
 
 import frc.team2412.robot.commands.drive.DriveCommand;
-import frc.team2412.robot.commands.drive.WPILIBdriveCommand;
 
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
@@ -77,10 +76,6 @@ public class Controls {
         climbArmDown = driveController.getStartButton();
 
         boolean comp = Robot.getInstance().isCompetition();
-
-        subsystems.wpilibDrivebaseSubsystem.setDefaultCommand(
-                new WPILIBdriveCommand(subsystems.wpilibDrivebaseSubsystem, driveController.getLeftXAxis().get(false),
-                        driveController.getLeftYAxis().get(false), driveController.getRightXAxis().get(false)));
 
         if (subsystems.drivebaseSubsystem != null) {
             bindDriveControls();

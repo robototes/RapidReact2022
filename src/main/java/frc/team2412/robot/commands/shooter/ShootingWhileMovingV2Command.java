@@ -30,6 +30,9 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
     @Override
     public void execute() {
+        if (!localizer.hasTarget()) {
+            return;
+        }
 
         // get target location
         // get current shot time
@@ -54,8 +57,9 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         shooter.setFlywheelRPM(rpmHoodValues.getRPM());
         shooter.setHoodAngle(rpmHoodValues.getAngle());
 
-        shooter.updateTurretAngle(Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getX()));
-
+        double turretDegreeChange = Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getX());
+        shooter.updateTurretAngle(turretDegreeChange);
+        // Don't do wrap around yet since we don't have 360,
     }
 
 }

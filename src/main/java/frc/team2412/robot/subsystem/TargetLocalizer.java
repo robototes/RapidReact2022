@@ -344,12 +344,12 @@ public class TargetLocalizer implements Loggable {
         turretDepthLateralFactor = f;
     }
 
-
-    public Translation2d getTargetPosition(){
-        return new Translation2d(shooterVisionSubsystem.getDistance(), Rotation2d.fromDegrees(shooterVisionSubsystem.getYaw()));
+    public Translation2d getTargetPosition() {
+        return new Translation2d(shooterVisionSubsystem.getDistance(),
+                Rotation2d.fromDegrees(shooterVisionSubsystem.getYaw()));
     }
 
-    public Translation2d getAdjustedTargetPosition(double timeAdjustment){
+    public Translation2d getAdjustedTargetPosition(double timeAdjustment) {
         // Still need to add accel comp here, don't have a way of getting that in current code
         // That should help when starting from stop
         double targetXAdjustment = getLateralVelocity() * timeAdjustment; // most likely be a unit error here

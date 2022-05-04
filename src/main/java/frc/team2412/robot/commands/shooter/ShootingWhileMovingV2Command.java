@@ -57,7 +57,7 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         shooter.setFlywheelRPM(rpmHoodValues.getRPM());
         shooter.setHoodAngle(rpmHoodValues.getAngle());
 
-        double turretDegreeChange = Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getX());
+        double turretDegreeChange = Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getX()) * 180;
         shooter.updateTurretAngle(turretDegreeChange);
         // Don't do wrap around yet since we don't have 360,
     }

@@ -77,8 +77,6 @@ public class VisionUtil {
      *            along {@code robotAngle}, and +Y axis along robotAngle is common.
      * @param robotToCameraAngle
      *            The CCW-positive angle from the robot to the camera.
-     * @param robotAngle
-     *            The angle of the robot in the field coordinate system.
      * @return The transformation from the camera to the robot.
      */
     public static Transform2d calculateCameraToRobot(Translation2d robotCentricCameraPosition,

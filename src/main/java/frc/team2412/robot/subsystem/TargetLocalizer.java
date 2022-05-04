@@ -41,7 +41,8 @@ public class TargetLocalizer implements Loggable {
         // Dimensions are in inches
         // Estimated, negative because limelight is in back of turret
         public static final double TURRET_CENTER_TO_LIMELIGHT_DISTANCE = -7;
-        public static final Translation2d ROBOT_CENTRIC_TURRET_CENTER = new Translation2d(3.93, -4);
+        // +X axis is forward
+        public static final Translation2d ROBOT_CENTRIC_TURRET_CENTER = new Translation2d(-4, -3.93);
         public static final Translation2d FIELD_CENTRIC_HUB_CENTER = new Translation2d(27 * 12, 13.5 * 12);
     }
 
@@ -59,7 +60,6 @@ public class TargetLocalizer implements Loggable {
 
     private final LinearFilter distanceFilter;
     private final LinearFilter yawPass;
-    private Pose2d startingPose;
     private Rotation2d gyroAdjustmentAngle;
 
     private double turretLateralFF = TURRET_LATERAL_FF;
@@ -105,8 +105,7 @@ public class TargetLocalizer implements Loggable {
      *            The new (field-centric) pose.
      */
     public void resetPose(Pose2d newPose) {
-        this.startingPose = newPose;
-        this.gyroAdjustmentAngle = startingPose.getRotation().minus(getGyroscopeYaw());
+        this.gyroAdjustmentAngle = newPose.getRotation().minus(getGyroscopeYaw());
     }
 
     public double getDistance() {
@@ -267,12 +266,11 @@ public class TargetLocalizer implements Loggable {
             return new Pose2d();
         }
         double targetDistance = getDistance();
-        Rotation2d targetYaw = Rotation2d.fromDegrees(-getTargetYaw());
+        Rotation2d targetYaw = Rotation2d.fromDegrees(-getVisionYaw());
         Translation2d targetPosition = FIELD_CENTRIC_HUB_CENTER;
         Rotation2d robotAngle = getFieldCentricRobotAngle();
         Rotation2d robotToCameraAngle = getTurretAngle();
         Translation2d robotCentricCameraPosition = ROBOT_CENTRIC_TURRET_CENTER
-                .rotateBy(new Rotation2d(Math.PI / 2))
                 .plus(new Translation2d(TURRET_CENTER_TO_LIMELIGHT_DISTANCE, robotToCameraAngle));
         return VisionUtil.estimateRobotPose(targetPosition, targetDistance, targetYaw, robotAngle,
                 robotToCameraAngle, robotCentricCameraPosition);

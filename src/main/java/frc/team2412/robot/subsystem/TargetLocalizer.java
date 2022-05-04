@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.LinearFilter;
 import frc.team2412.robot.Robot;
 import frc.team2412.robot.util.GeoConvertor;
+import frc.team2412.robot.util.VisionUtil;
 import frc.team2412.robot.util.autonomous.AutonomousChooser;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -19,15 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
  * Class that combines sensor data from multiple subsystems. <br>
  *
  * <p>
- * Field-centric pose frame of reference:
- * <ul>
- * <li>Units are inches</li>
- * <li>Origin is right corner of alliance wall</li>
- * <li>Positive X axis points away from alliance wall</li>
- * <li>Positive Y axis points left from alliance wall</li>
- * <li>0 rotation points away from alliance wall</li>
- * <li>Positive rotation is counterclockwise</li>
- * </ul>
+ * See {@link VisionUtil} for the field coordinate system.
  * </p>
  */
 public class TargetLocalizer implements Loggable {
@@ -191,28 +184,28 @@ public class TargetLocalizer implements Loggable {
     }
 
     /**
-     * Returns the turret's angle relative to the field.
-     *
-     * @return The turret angle (0 is straight forward from the driver station, positive rotation is
-     *         counterclockwise).
-     */
-    public Rotation2d getFieldCentricTurretAngle() {
-        return getFieldCentricRobotAngle().rotateBy(getTurretAngle().unaryMinus());
-    }
-
-    /**
-     * Return the turret's angle.
+     * Return the turret's angle where clockwise rotation is positive.
      *
      * @return The turret angle (0 is intake side, positive rotation is clockwise).
      */
-    public Rotation2d getTurretAngle() {
+    public Rotation2d getCWPositiveTurretAngle() {
         return Rotation2d.fromDegrees(shooterSubsystem.getTurretAngle());
+    }
+
+    /**
+     * Returns the turret's angle where counterclockwise is positive.
+     *
+     * @return The turret angle (0 is intake side, positive rotation is counterclockwise).
+     */
+    public Rotation2d getTurretAngle() {
+        return getCWPositiveTurretAngle().unaryMinus();
     }
 
     public Translation2d getTurretRelativeVelocity() {
         return (drivebaseSubsystem != null)
                 // might need to do inverse
-                ? GeoConvertor.vector2ToTranslation2d(drivebaseSubsystem.getVelocity()).rotateBy(getTurretAngle())
+                ? GeoConvertor.vector2ToTranslation2d(drivebaseSubsystem.getVelocity())
+                        .rotateBy(getCWPositiveTurretAngle())
                 : new Translation2d();
     }
 
@@ -262,46 +255,27 @@ public class TargetLocalizer implements Loggable {
     }
 
     /**
-     * Returns the estimated limelight pose according to vision and the gyroscope. <br>
+     * Returns the estimated robot pose according to vision and the gyroscope.
      *
      * <p>
-     * If the limelight doesn't have a target, returns {@code Pose2d()}.
-     * </p>
-     *
-     * @return The field-centric estimated limelight pose according to vision and the gyroscope.
-     */
-    public Pose2d getVisionGyroLimelightPose() {
-        if (!hasTarget()) {
-            return new Pose2d();
-        }
-        Rotation2d limelightAngle = getFieldCentricTurretAngle();
-        Rotation2d hubAngle = limelightAngle.rotateBy(Rotation2d.fromDegrees(-getVisionYaw()));
-        Translation2d limelightToHub = new Translation2d(getDistance(), hubAngle);
-        Translation2d translation = FIELD_CENTRIC_HUB_CENTER.minus(limelightToHub);
-        return new Pose2d(translation, limelightAngle);
-    }
-
-    /**
-     * Returns the estimated robot pose according to vision and the gyroscope. <br>
-     *
-     * <p>
-     * If the limelight doesn't have a target, returns {@code Pose2d()}.
-     * </p>
+     * If the limelight doesn't have a target, returns {@code new Pose2d()}.
      *
      * @return The estimated field-centric robot pose according to vision and the gyroscope.
      */
-    public Pose2d getVisionGyroRobotPose() {
+    public Pose2d estimateRobotPoseFromVisionGyro() {
         if (!hasTarget()) {
             return new Pose2d();
         }
+        double targetDistance = getDistance();
+        Rotation2d targetYaw = Rotation2d.fromDegrees(-getTargetYaw());
+        Translation2d targetPosition = FIELD_CENTRIC_HUB_CENTER;
         Rotation2d robotAngle = getFieldCentricRobotAngle();
-        Translation2d limelightTranslation = getVisionGyroLimelightPose().getTranslation();
-        Translation2d turretToLimelight = new Translation2d(TURRET_CENTER_TO_LIMELIGHT_DISTANCE,
-                getFieldCentricTurretAngle());
-        Translation2d robotToTurret = ROBOT_CENTRIC_TURRET_CENTER.rotateBy(new Rotation2d(Math.PI / 2))
-                .rotateBy(robotAngle);
-        Translation2d translation = limelightTranslation.minus(robotToTurret.plus(turretToLimelight));
-        return new Pose2d(translation, robotAngle);
+        Rotation2d robotToCameraAngle = getTurretAngle();
+        Translation2d robotCentricCameraPosition = ROBOT_CENTRIC_TURRET_CENTER
+                .rotateBy(new Rotation2d(Math.PI / 2))
+                .plus(new Translation2d(TURRET_CENTER_TO_LIMELIGHT_DISTANCE, robotToCameraAngle));
+        return VisionUtil.estimateRobotPose(targetPosition, targetDistance, targetYaw, robotAngle,
+                robotToCameraAngle, robotCentricCameraPosition);
     }
 
     public void limelightOn() {

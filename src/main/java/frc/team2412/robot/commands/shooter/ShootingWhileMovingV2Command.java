@@ -19,7 +19,7 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         timeOfFlight.put(80, 1.0);
         timeOfFlight.put(100, 1.25);
         timeOfFlight.put(120, 1.5);
-        timeOfFlight.put(140, 0.75);
+        timeOfFlight.put(140, 1.75);
         timeOfFlight.put(160, 2.0);
     }
 

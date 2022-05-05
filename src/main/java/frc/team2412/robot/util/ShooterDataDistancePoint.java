@@ -2,7 +2,7 @@ package frc.team2412.robot.util;
 
 public class ShooterDataDistancePoint {
     private final double distance, angle, RPM, timeOfFlight;
-    
+
     public ShooterDataDistancePoint(double distance, double angle, double RPM, double timeOfFlight) {
         this.distance = distance;
         this.angle = angle;
@@ -23,12 +23,13 @@ public class ShooterDataDistancePoint {
         return RPM;
     }
 
-    public double getTimeOfFlight(){
+    public double getTimeOfFlight() {
         return timeOfFlight;
     }
 
     @Override
     public String toString() {
-        return "{distance: " + distance + ", angle: " + angle + ", RPM: " + RPM + ", time of flight: " + timeOfFlight + "}";
+        return "{distance: " + distance + ", angle: " + angle + ", RPM: " + RPM + ", time of flight: " + timeOfFlight
+                + "}";
     }
 }

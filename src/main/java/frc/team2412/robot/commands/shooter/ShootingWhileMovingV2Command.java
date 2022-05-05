@@ -7,7 +7,6 @@ import frc.team2412.robot.subsystem.ShooterSubsystem;
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
 import frc.team2412.robot.subsystem.TargetLocalizer;
 import frc.team2412.robot.util.ShooterDataDistancePoint;
-import frc.team2412.robot.util.WPILIBInterpolatingTreeMap;
 
 public class ShootingWhileMovingV2Command extends CommandBase {
     private final ShooterSubsystem shooter;
@@ -40,14 +39,15 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
         double theoreticalDistance = theoreticalTargetPosition.getNorm();
 
-        ShooterDataDistancePoint rpmHoodValues = DATA_POINTS.getInterpolated(theoreticalDistance + shooter.getDistanceBias());
+        ShooterDataDistancePoint rpmHoodValues = DATA_POINTS
+                .getInterpolated(theoreticalDistance + shooter.getDistanceBias());
 
         shooter.setFlywheelRPM(rpmHoodValues.getRPM());
         shooter.setHoodAngle(rpmHoodValues.getAngle());
 
         double turretRadianChange = Math.atan2(theoreticalTargetPosition.getY(), theoreticalTargetPosition.getX());
         double turretDegreeChange = Units.radiansToDegrees(turretRadianChange);
-        
+
         shooter.updateTurretAngle(turretDegreeChange);
         // Don't do wrap around yet since we don't have 360
     }

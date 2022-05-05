@@ -67,20 +67,21 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                 }
 
                 String[] items = line.split(",", -1);
-                if (items.length < 3) {
-                    debug.accept("Less than 3 items, skipping line");
+                if (items.length < 4) {
+                    debug.accept("Less than 4 items, skipping line");
                     continue;
-                } else if (items.length > 3) {
-                    debug.accept("More than 3 items, ignoring extra items");
+                } else if (items.length > 4) {
+                    debug.accept("More than 4 items, ignoring extra items");
                     // Extra items aren't processed, could use Arrays.copyOf(items, [newlength]) if needed
                 }
 
-                double distance, angle, RPM;
+                double distance, angle, RPM, timeOfFlight;
 
                 try {
                     distance = Double.parseDouble(items[0]);
                     angle = Double.parseDouble(items[1]);
                     RPM = Double.parseDouble(items[2]);
+                    timeOfFlight = Double.parseDouble(items[3]);
                 } catch (NumberFormatException err) {
                     debug.accept("Non-numerical value, skipping line");
                     continue;
@@ -103,7 +104,12 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
                     continue;
                 }
 
-                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, RPM));
+                if (timeOfFlight < 0) {
+                    debug.accept("Time of flight " + timeOfFlight + "is negative, skipping line");
+                    continue;
+                }
+
+                map.addDataPoint(new ShooterDataDistancePoint(distance, angle, RPM, timeOfFlight));
             }
 
             // Debug code
@@ -209,11 +215,16 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
         }
         double angleSlope = (ceiling.getAngle() - floor.getAngle()) / slopeDistanceDifference;
         double rpmSlope = (ceiling.getRPM() - floor.getRPM()) / slopeDistanceDifference;
+        double timeOfFlightSlope = (ceiling.getTimeOfFlight() - floor.getTimeOfFlight()) / slopeDistanceDifference;
+
         double distanceOffset = key - floor.getDistance();
+
         double interpolateAngle = angleSlope * distanceOffset + floor.getAngle();
         double interpolateRPM = rpmSlope * distanceOffset + floor.getRPM();
+        double interpolateTimeOfFlight = timeOfFlightSlope * distanceOffset + floor.getTimeOfFlight();
+
         ShooterDataDistancePoint interpolatePoint = new ShooterDataDistancePoint(key, interpolateAngle,
-                interpolateRPM);
+                interpolateRPM, interpolateTimeOfFlight);
 
         return interpolatePoint;
     }

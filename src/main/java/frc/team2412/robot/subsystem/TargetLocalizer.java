@@ -88,7 +88,7 @@ public class TargetLocalizer implements Loggable {
 
     public double getDistance() {
         return hasTarget()
-                ? distanceFilter.calculate(shooterVisionSubsystem.getDistance() + shooterSubsystem.getDistanceBias())
+                ? distanceFilter.calculate(shooterVisionSubsystem.getDistance())
                 : VISION_DEFAULT_DISTANCE;
     }
 
@@ -345,8 +345,8 @@ public class TargetLocalizer implements Loggable {
     }
 
     public Translation2d getTargetPosition() {
-        return new Translation2d(shooterVisionSubsystem.getDistance(),
-                Rotation2d.fromDegrees(shooterVisionSubsystem.getYaw()));
+        return new Translation2d(getDistance(),
+                Rotation2d.fromDegrees(getVisionYaw()));
     }
 
     public Translation2d getAdjustedTargetPosition(double timeAdjustment) {

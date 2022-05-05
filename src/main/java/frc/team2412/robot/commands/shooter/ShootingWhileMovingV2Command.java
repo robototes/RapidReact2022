@@ -1,6 +1,7 @@
 package frc.team2412.robot.commands.shooter;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.ShooterSubsystem;
 import static frc.team2412.robot.subsystem.ShooterSubsystem.ShooterConstants.*;
@@ -49,18 +50,16 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
         double theoreticalDistance = theoreticalTargetPosition.getNorm();
 
-        ShooterDataDistancePoint rpmHoodValues = DATA_POINTS.getInterpolated(theoreticalDistance);
-
-        ShooterDataDistancePoint theWorseWayOfWritingThis = DATA_POINTS.getInterpolated(localizer
-                .getAdjustedTargetPosition(timeOfFlight.get(localizer.getTargetPosition().getNorm())).getNorm());
+        ShooterDataDistancePoint rpmHoodValues = DATA_POINTS.getInterpolated(theoreticalDistance + shooter.getDistanceBias());
 
         shooter.setFlywheelRPM(rpmHoodValues.getRPM());
         shooter.setHoodAngle(rpmHoodValues.getAngle());
 
-        double turretDegreeChange = Math.atan(theoreticalTargetPosition.getY() / theoreticalTargetPosition.getX())
-                * 180;
+        double turretRadianChange = Math.atan2(theoreticalTargetPosition.getY(), theoreticalTargetPosition.getX());
+        double turretDegreeChange = Units.radiansToDegrees(turretRadianChange);
+        
         shooter.updateTurretAngle(turretDegreeChange);
-        // Don't do wrap around yet since we don't have 360,
+        // Don't do wrap around yet since we don't have 360
     }
 
 }

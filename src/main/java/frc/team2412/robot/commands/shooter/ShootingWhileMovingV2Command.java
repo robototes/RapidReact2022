@@ -13,16 +13,6 @@ public class ShootingWhileMovingV2Command extends CommandBase {
     private final ShooterSubsystem shooter;
     private final TargetLocalizer localizer;
 
-    private static WPILIBInterpolatingTreeMap<Number, Double> timeOfFlight = new WPILIBInterpolatingTreeMap<Number, Double>();
-
-    static {
-        timeOfFlight.put(80, 1.0);
-        timeOfFlight.put(100, 1.25);
-        timeOfFlight.put(120, 1.5);
-        timeOfFlight.put(140, 1.75);
-        timeOfFlight.put(160, 2.0);
-    }
-
     public ShootingWhileMovingV2Command(ShooterSubsystem shooter, TargetLocalizer localizer) {
         this.shooter = shooter;
         this.localizer = localizer;
@@ -44,7 +34,7 @@ public class ShootingWhileMovingV2Command extends CommandBase {
 
         double actualDistance = targetPosition.getNorm();
 
-        double currentShotTime = timeOfFlight.get(actualDistance);
+        double currentShotTime = DATA_POINTS.getInterpolated(actualDistance).getTimeOfFlight();
 
         Translation2d theoreticalTargetPosition = localizer.getAdjustedTargetPosition(currentShotTime);
 

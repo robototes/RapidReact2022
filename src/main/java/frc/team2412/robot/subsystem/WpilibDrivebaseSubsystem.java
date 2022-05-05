@@ -50,8 +50,7 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(getGyroHeading(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
-                backRight.getState());
+        updateOdometry();
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -74,5 +73,14 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
     public void resetGyro() {
         gyro.setYaw(0);
     }
+
+    public void updateOdometry() {
+        odometry.update(
+            getGyroHeading(),
+            frontLeft.getState(),
+            frontRight.getState(),
+            backLeft.getState(),
+            backRight.getState());
+      }
 
 }

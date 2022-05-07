@@ -115,7 +115,7 @@ public class InterpolatingTreeMap extends TreeMap<Double, ShooterDataDistancePoi
             // Debug code
             System.out.println("All points:");
             for (ShooterDataDistancePoint point : map.values()) {
-                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getRPM());
+                System.out.println(point.getDistance() + ": " + point.getAngle() + ", " + point.getRPM()+ ", " + point.getTimeOfFlight());
             }
 
             System.out.println("Done deserializing CSV");

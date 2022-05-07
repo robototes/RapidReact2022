@@ -93,7 +93,7 @@ public class TargetLocalizer implements Loggable {
     }
 
     public double getAdjustedDistance() {
-        return getDistance() + distanceAdjustment();
+        return getDistance() + shooterSubsystem.getDistanceBias() + distanceAdjustment();
     }
 
     /**

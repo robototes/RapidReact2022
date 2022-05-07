@@ -8,7 +8,6 @@ public class ShooterDataDistancePoint {
         this.angle = angle;
         this.RPM = RPM;
         this.timeOfFlight = timeOfFlight;
-        timeOfFlight = Double.NaN;
     }
 
     public double getDistance() {

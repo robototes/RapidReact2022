@@ -22,6 +22,7 @@ import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.commands.shooter.ShootingWhileMovingV2Command;
 
 @SuppressWarnings("unused")
 public class Controls {
@@ -158,8 +159,7 @@ public class Controls {
 
         if (subsystems.drivebaseSubsystem != null) {
             subsystems.shooterSubsystem.setDefaultCommand(
-                    new ShooterTargetCommand(subsystems.shooterSubsystem, subsystems.targetLocalizer,
-                            driveController.getLeftBumperButton()::get));
+                    new ShootingWhileMovingV2Command(subsystems.shooterSubsystem, subsystems.targetLocalizer));
 
         }
     }

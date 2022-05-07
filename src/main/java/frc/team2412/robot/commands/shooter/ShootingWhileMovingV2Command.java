@@ -24,14 +24,13 @@ public class ShootingWhileMovingV2Command extends CommandBase {
             return;
         }
 
-        // get target location
+        // get target distance
         // get current shot time
         // Adjust target location by that shot time
         // point at that and shoot at that new distance
 
-        Translation2d targetPosition = localizer.getTargetPosition();
 
-        double actualDistance = targetPosition.getNorm();
+        double actualDistance = localizer.getDistance();
 
         double currentShotTime = DATA_POINTS.getInterpolated(actualDistance).getTimeOfFlight();
 

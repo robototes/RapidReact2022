@@ -47,6 +47,10 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         double turretRadianChange = Math.atan2(theoreticalTargetPosition.getY(), theoreticalTargetPosition.getX());
         double turretDegreeChange = Units.radiansToDegrees(turretRadianChange);
 
+        if(turretDegreeChange == 180){
+            turretDegreeChange = 0;
+        }
+
         shooter.updateTurretAngle(turretDegreeChange);
         // Don't do wrap around yet since we don't have 360
     }

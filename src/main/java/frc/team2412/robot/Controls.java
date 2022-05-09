@@ -21,7 +21,6 @@ import frc.team2412.robot.commands.intake.IntakeCommand;
 import frc.team2412.robot.commands.intake.IntakeSetRetractCommand;
 import frc.team2412.robot.commands.intake.SpitBallCommand;
 import frc.team2412.robot.commands.shooter.ShooterHoodRPMCommand;
-import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
 import frc.team2412.robot.commands.shooter.ShootingWhileMovingV2Command;
 
 @SuppressWarnings("unused")

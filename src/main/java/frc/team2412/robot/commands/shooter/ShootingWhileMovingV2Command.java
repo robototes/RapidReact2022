@@ -29,7 +29,6 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         // Adjust target location by that shot time
         // point at that and shoot at that new distance
 
-
         double actualDistance = localizer.getDistance();
 
         double currentShotTime = DATA_POINTS.getInterpolated(actualDistance).getTimeOfFlight();
@@ -47,7 +46,7 @@ public class ShootingWhileMovingV2Command extends CommandBase {
         double turretRadianChange = Math.atan2(theoreticalTargetPosition.getY(), theoreticalTargetPosition.getX());
         double turretDegreeChange = Units.radiansToDegrees(turretRadianChange);
 
-        if(turretDegreeChange == 180){
+        if (turretDegreeChange == 180) {
             turretDegreeChange = 0;
         }
 

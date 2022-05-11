@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
@@ -48,7 +47,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
         // Doing integer division, which returns 11757 (previously 8789)
         // Probably should do floating point division, which returns 11759.3
-        public static final double ENCODER_TICKS_PER_REMY = ((272816.0 / 58) * 2 * 5) / 4 *6;
+        public static final double ENCODER_TICKS_PER_REMY = ((272816.0 / 58) * 2 * 5) / 4 * 6;
 
         // Max robot height is 66 inches
         public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET) * ENCODER_TICKS_PER_REMY;

@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
@@ -39,25 +38,19 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double RETRACTION_F = 0.18;
         // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
 
-        public static final int REMY_TO_INCH = 6;
-
         // Relating to physical climb structure things
         // was previously mid
         public static final double MID_RUNG_HEIGHT = 5.5;
         public static final double RETRACT_HEIGHT = 0.166;
 
-        public static final double MID_RUNG_HEIGHT_INCH = MID_RUNG_HEIGHT * REMY_TO_INCH;
-        public static final double RETRACT_HEIGHT_INCH = RETRACT_HEIGHT * REMY_TO_INCH;
-
         public static final double CLIMB_OFFSET = 4.75;
-        public static final double CLIMB_OFFSET_INCHES = CLIMB_OFFSET * REMY_TO_INCH;
 
         // Doing integer division, which returns 11757 (previously 8789)
         // Probably should do floating point division, which returns 11759.3
-        public static final double ENCODER_TICKS_PER_INCH = ((272816.0 / 58) * 2 * 5) / 4;
+        public static final double ENCODER_TICKS_PER_REMY = ((272816.0 / 58) * 2 * 5) / 4 * 6;
 
         // Max robot height is 66 inches
-        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET_INCHES) * ENCODER_TICKS_PER_INCH;
+        public static final double MAX_ENCODER_TICKS = (11 - CLIMB_OFFSET) * ENCODER_TICKS_PER_REMY;
         public static final double MIN_ENCODER_TICKS = 0;
 
         // Motor current limit config
@@ -67,7 +60,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
     @Log.MotorController
     private final WPI_TalonFX motor;
-    private final DigitalInput bottomLimitSwitch;
 
     // For use in the simulationPeriodic to get encoder position
     private double lastUpdatedTime = Timer.getFPGATimestamp();
@@ -75,7 +67,6 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     public ClimbSubsystem() {
         setName("ClimbSubsystem");
         motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
-        bottomLimitSwitch = new DigitalInput(CLIMB_LIMIT_SWITCH);
 
         // Configure motor soft limits, current limits and peak outputs
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
@@ -123,7 +114,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     public void extendArm() {
         motor.selectProfileSlot(PID_EXTENSION_SLOT, 0);
-        setMotor(MID_RUNG_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, EXTENSION_F);
+        setMotor(MID_RUNG_HEIGHT * ENCODER_TICKS_PER_REMY, EXTENSION_F);
     }
 
     /**
@@ -132,7 +123,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     public void retractArm() {
         motor.selectProfileSlot(PID_RETRACTION_SLOT, 0);
-        setMotor(RETRACT_HEIGHT_INCH * ENCODER_TICKS_PER_INCH, RETRACTION_F);
+        setMotor(RETRACT_HEIGHT * ENCODER_TICKS_PER_REMY, RETRACTION_F);
     }
 
     /**
@@ -181,8 +172,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @return the total climbed height in inches
      */
     @Log
-    public double climbHeightInches() {
-        return encoderPosition() / ENCODER_TICKS_PER_INCH + CLIMB_OFFSET_INCHES;
+    public double climbHeightRemy() {
+        return encoderPosition() / ENCODER_TICKS_PER_REMY + CLIMB_OFFSET;
     }
 
     /**
@@ -248,7 +239,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @return whether the limit switch has been hit
      */
     public boolean isHittingLimitSwitch() {
-        return bottomLimitSwitch != null ? bottomLimitSwitch.get() : true;
+        return true;
     }
 
 }

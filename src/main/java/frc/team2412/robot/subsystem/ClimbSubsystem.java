@@ -50,7 +50,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double ENCODER_TICKS_PER_REMY = ((272816.0 / 58) * 2 * 5) / 4 * 6;
 
         // Max robot height is 66 inches
-        public static final double MAX_ENCODER_TICKS = (66 - CLIMB_OFFSET) * ENCODER_TICKS_PER_REMY;
+        public static final double MAX_ENCODER_TICKS = (11 - CLIMB_OFFSET) * ENCODER_TICKS_PER_REMY;
         public static final double MIN_ENCODER_TICKS = 0;
 
         // Motor current limit config

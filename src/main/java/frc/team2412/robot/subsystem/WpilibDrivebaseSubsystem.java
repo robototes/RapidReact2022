@@ -54,12 +54,20 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-                fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading())
-                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, 1);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
 
+        if (fieldRelative) {
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading());
+        } else {
+            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
+        }
+
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+
+        setStates(swerveModuleStates);
+    }
+
+    public void setStates(SwerveModuleState[] swerveModuleStates) {
         frontLeft.setState(swerveModuleStates[0]);
         frontRight.setState(swerveModuleStates[1]);
         backLeft.setState(swerveModuleStates[2]);
@@ -76,11 +84,11 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     public void updateOdometry() {
         odometry.update(
-            getGyroHeading(),
-            frontLeft.getState(),
-            frontRight.getState(),
-            backLeft.getState(),
-            backRight.getState());
-      }
+                getGyroHeading(),
+                frontLeft.getState(),
+                frontRight.getState(),
+                backLeft.getState(),
+                backRight.getState());
+    }
 
 }

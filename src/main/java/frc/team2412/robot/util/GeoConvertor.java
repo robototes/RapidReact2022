@@ -35,4 +35,8 @@ public class GeoConvertor {
     public static Vector2 translation2dToVector2(Translation2d trans) {
         return new Vector2(trans.getX(), trans.getY());
     }
+
+    public static Translation2d vector2ToTranslation2d(Vector2 vector) {
+        return new Translation2d(vector.x, vector.y);
+    }
 }

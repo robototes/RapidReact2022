@@ -479,7 +479,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     @Config(name = "Reset turret", columnIndex = 9, rowIndex = 2)
     public void resetTurretEncoder(boolean reset) {
         if (reset) {
-            turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE);
+            turretMotor.setSelectedSensorPosition(STARTING_TURRET_ANGLE * TURRET_DEGREES_TO_ENCODER_TICKS);
         }
     }
 

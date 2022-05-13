@@ -74,7 +74,7 @@ public class VisionUtil {
      *
      * @param robotCentricCameraPosition
      *            The position of the camera relative to the robot center. Note that the +X axis must be
-     *            along {@code robotAngle}, and +Y axis along robotAngle is common.
+     *            along {@code robotAngle}, and +Y axis along {@code robotAngle} is common.
      * @param robotToCameraAngle
      *            The CCW-positive angle from the robot to the camera.
      * @return The transformation from the camera to the robot.
@@ -100,7 +100,7 @@ public class VisionUtil {
      *            The CCW-positive angle from the robot to the camera.
      * @param robotCentricCameraPosition
      *            The position of the camera relative to the robot center. Note that the +X axis must be
-     *            along {@code robotAngle}, and +Y axis along robotAngle is common.
+     *            along {@code robotAngle}, and +Y axis along {@code robotAngle} is common.
      * @return The robot pose in the field coordinate system.
      */
     public static Pose2d estimateRobotPose(Translation2d targetPosition, double targetDistance, Rotation2d targetYaw,
@@ -108,7 +108,7 @@ public class VisionUtil {
         Translation2d cameraToTarget = new Translation2d(targetDistance,
                 robotAngle.plus(robotToCameraAngle).plus(targetYaw));
         Translation2d cameraPosition = targetPosition.minus(cameraToTarget);
-        Translation2d cameraToRobot = robotCentricCameraPosition.rotateBy(robotAngle);
-        return new Pose2d(cameraPosition.minus(cameraToRobot), robotAngle);
+        Translation2d robotToCamera = robotCentricCameraPosition.rotateBy(robotAngle);
+        return new Pose2d(cameraPosition.minus(robotToCamera), robotAngle);
     }
 }

@@ -31,7 +31,6 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     private final static double TRACKWIDTH_METER = Units.inchesToMeters(20);
 
-    // copied from WPILIB
     private final Translation2d frontLeftLocation = new Translation2d(TRACKWIDTH_METER / 2, TRACKWIDTH_METER / 2);
     private final Translation2d frontRightLocation = new Translation2d(TRACKWIDTH_METER / 2, -TRACKWIDTH_METER / 2);
     private final Translation2d backLeftLocation = new Translation2d(-TRACKWIDTH_METER / 2, TRACKWIDTH_METER / 2);
@@ -53,17 +52,9 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
         updateOdometry();
     }
 
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
-
-        if (fieldRelative) {
-            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading());
-        } else {
-            chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
-        }
-
+    public void drive(double xSpeed, double ySpeed, double rot) {
+        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading());
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
-
         setStates(swerveModuleStates);
     }
 

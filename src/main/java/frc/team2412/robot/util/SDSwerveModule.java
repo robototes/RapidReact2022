@@ -1,6 +1,7 @@
 package frc.team2412.robot.util;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
@@ -43,6 +44,7 @@ public class SDSwerveModule {
         driveMotorSettings.voltageCompSaturation = moduleConfigs.getNominalVoltage();
 
         driveMotor.setInverted(moduleType.isDriveInverted());
+        driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.enableVoltageCompensation(true);
         driveMotor.config_kP(0, DRIVE_MOTOR_P);
         driveMotor.config_kD(0, DRIVE_MOTOR_D);
@@ -53,6 +55,7 @@ public class SDSwerveModule {
         turnMotorSettings.voltageCompSaturation = moduleConfigs.getNominalVoltage();
 
         turnMotor.setInverted(moduleType.isSteerInverted());
+        turnMotor.setNeutralMode(NeutralMode.Brake);
         turnMotor.enableVoltageCompensation(true);
         turnMotor.config_kP(0, TURN_MOTOR_P);
         turnMotor.config_kD(0, TURN_MOTOR_D);
@@ -79,8 +82,18 @@ public class SDSwerveModule {
     }
 
     public void resetEncoder() {
-        turnMotor.setSelectedSensorPosition(0);
         driveMotor.setSelectedSensorPosition(0);
+        turnMotor.setSelectedSensorPosition(0);
+    }
+
+    public void setToCoast(){
+        driveMotor.setNeutralMode(NeutralMode.Coast);
+        turnMotor.setNeutralMode(NeutralMode.Coast);
+    }
+
+    public void setToBrake(){
+        driveMotor.setNeutralMode(NeutralMode.Brake);
+        turnMotor.setNeutralMode(NeutralMode.Brake);
     }
 
 

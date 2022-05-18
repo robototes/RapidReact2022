@@ -18,7 +18,7 @@ public class WPILIBdriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.drive(X, y, rotation, false);
+        drive.drive(X * drive.maxVelocityMetersPerSecond, y* drive.maxVelocityMetersPerSecond, rotation* drive.maxVelocityMetersPerSecond);
     }
 
 }

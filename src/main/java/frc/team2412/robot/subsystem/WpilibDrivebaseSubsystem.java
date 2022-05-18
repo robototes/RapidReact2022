@@ -43,6 +43,8 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getGyroHeading());
 
+    public final double maxVelocityMetersPerSecond = 4;
+
     public WpilibDrivebaseSubsystem() {
 
     }
@@ -55,6 +57,7 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
     public void drive(double xSpeed, double ySpeed, double rot) {
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroHeading());
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxVelocityMetersPerSecond);
         setStates(swerveModuleStates);
     }
 

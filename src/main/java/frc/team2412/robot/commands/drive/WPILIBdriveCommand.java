@@ -3,12 +3,12 @@ package frc.team2412.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team2412.robot.subsystem.WpilibDrivebaseSubsystem;
 
-public class WPILibDriveCommand extends CommandBase {
+public class WpilibDriveCommand extends CommandBase {
 
     private WpilibDrivebaseSubsystem drive;
     private double x, y, rotation;
 
-    public WPILibDriveCommand(WpilibDrivebaseSubsystem drive, double x, double y, double rotation) {
+    public WpilibDriveCommand(WpilibDrivebaseSubsystem drive, double x, double y, double rotation) {
         addRequirements(drive);
         this.drive = drive;
         this.x = x;

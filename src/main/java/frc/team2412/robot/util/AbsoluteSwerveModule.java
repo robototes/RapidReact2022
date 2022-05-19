@@ -2,7 +2,6 @@ package frc.team2412.robot.util;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.swervedrivespecialties.swervelib.ctre.CtreUtils;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -30,17 +29,18 @@ public class AbsoluteSwerveModule extends SwerveModule {
 
     private int absoluteEncoderInitializationFailCount = 0;
     private final int absoluteEncoderInitializationFailThreshold = 10;
-   @Override
-   public void setState(SwerveModuleState state) {
-       if(absoluteEncoder.setPositionToAbsolute().value != 0){
-           absoluteEncoderInitializationFailCount++;
-       }
-       if(absoluteEncoderInitializationFailCount > absoluteEncoderInitializationFailThreshold){
-        absoluteEncoderInitializationFailCount = 0;
-        configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
-       }
-       super.setState(state);
-   } 
+
+    @Override
+    public void setState(SwerveModuleState state) {
+        if (absoluteEncoder.setPositionToAbsolute().value != 0) {
+            absoluteEncoderInitializationFailCount++;
+        }
+        if (absoluteEncoderInitializationFailCount > absoluteEncoderInitializationFailThreshold) {
+            absoluteEncoderInitializationFailCount = 0;
+            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
+        }
+        super.setState(state);
+    }
 
     @Override
     public Rotation2d getAngle() {

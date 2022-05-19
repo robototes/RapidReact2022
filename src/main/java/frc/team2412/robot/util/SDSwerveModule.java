@@ -21,9 +21,9 @@ public class SDSwerveModule {
             * moduleType.getDriveReduction() * Math.PI * moduleType.getWheelDiameter();
     private static final double DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND = DRIVE_MOTOR_ENCODER_TICKS_TO_METERS
             * 10.0;
-            
+
     private static final double TURN_MOTOR_ENCODER_TICKS_TO_RADIANS = 1 / ENCODER_TICKS_PER_ROTATION
-    * moduleType.getSteerReduction() * 2.0 * Math.PI;
+            * moduleType.getSteerReduction() * 2.0 * Math.PI;
 
     private static final double DRIVE_MOTOR_P = 1;
     private static final double DRIVE_MOTOR_D = 0.1;
@@ -65,7 +65,8 @@ public class SDSwerveModule {
 
     public void setState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, getAngle());
-        driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
+        driveMotor.set(ControlMode.Velocity,
+                state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
         turnMotor.set(ControlMode.Position, state.angle.getDegrees());
     }
 
@@ -86,16 +87,14 @@ public class SDSwerveModule {
         turnMotor.setSelectedSensorPosition(0);
     }
 
-    public void setToCoast(){
+    public void setToCoast() {
         driveMotor.setNeutralMode(NeutralMode.Coast);
         turnMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void setToBrake(){
+    public void setToBrake() {
         driveMotor.setNeutralMode(NeutralMode.Brake);
         turnMotor.setNeutralMode(NeutralMode.Brake);
     }
-
-
 
 }

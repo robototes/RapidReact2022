@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class AbsoluteSwerveModule extends SwerveModule {
 
-    CANCoder absoluteEncoder;
+    private CANCoder absoluteEncoder;
 
     public AbsoluteSwerveModule(int driveMotorPort, int turnMotorPort, int turnEncoderPort, double turnOffset,
             String canbus) {

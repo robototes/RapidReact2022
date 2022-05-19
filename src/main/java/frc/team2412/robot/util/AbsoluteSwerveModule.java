@@ -2,6 +2,7 @@ package frc.team2412.robot.util;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -19,13 +20,8 @@ public class AbsoluteSwerveModule extends SwerveModule {
     private void configAbsoluteEncoder(int turnEncoderPort, double turnOffset, String canbus) {
 
         absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
-        ErrorCode encoderCreatedCheck = absoluteEncoder.configMagnetOffset(turnOffset, 500);
-
-        // I feel like this will break but 🤷‍♂️
-        if (encoderCreatedCheck.value != 0) {
-            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
-        }
-
+        absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        absoluteEncoder.configMagnetOffset(turnOffset, 500);
         this.turnMotor.setSelectedSensorPosition(absoluteEncoder.getAbsolutePosition());
     }
 

@@ -1,6 +1,5 @@
 package frc.team2412.robot.util;
 
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 

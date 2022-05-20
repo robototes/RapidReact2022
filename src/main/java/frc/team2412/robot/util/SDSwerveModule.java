@@ -22,8 +22,8 @@ public class SDSwerveModule {
     private static final double DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND = DRIVE_MOTOR_ENCODER_TICKS_TO_METERS
             * 10.0;
 
-    private static final double TURN_MOTOR_ENCODER_TICKS_TO_RADIANS = 1 / ENCODER_TICKS_PER_ROTATION
-            * moduleType.getSteerReduction() * 2.0 * Math.PI;
+    private static final double TURN_MOTOR_ENCODER_TICKS_TO_DEGREE = 1 / ENCODER_TICKS_PER_ROTATION
+            * moduleType.getSteerReduction() * 360;
 
     private static final double DRIVE_MOTOR_P = 1;
     private static final double DRIVE_MOTOR_D = 0.1;
@@ -67,7 +67,7 @@ public class SDSwerveModule {
         state = SwerveModuleState.optimize(state, getAngle());
         driveMotor.set(ControlMode.Velocity,
                 state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
-        turnMotor.set(ControlMode.Position, state.angle.getDegrees());
+        turnMotor.set(ControlMode.Position, state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
 
     public SwerveModuleState getState() {
@@ -79,7 +79,7 @@ public class SDSwerveModule {
     }
 
     public Rotation2d getAngle() {
-        return new Rotation2d(turnMotor.getSelectedSensorPosition() / TURN_MOTOR_ENCODER_TICKS_TO_RADIANS);
+        return Rotation2d.fromDegrees(turnMotor.getSelectedSensorPosition() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
 
     public void resetEncoder() {

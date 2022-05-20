@@ -45,7 +45,7 @@ public class SwerveModule {
     public void setState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, getAngle());
         driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond / DRIVE_ENCODER_TICKS_TO_VELOCITY);
-        turnMotor.set(ControlMode.Position, state.angle.getDegrees());
+        turnMotor.set(ControlMode.Position, state.angle.getDegrees() / TURN_ENCODER_TICKS_TO_DEGREE);
     }
 
     public SwerveModuleState getState() {

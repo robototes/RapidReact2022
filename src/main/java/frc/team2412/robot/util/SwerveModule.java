@@ -13,7 +13,7 @@ public class SwerveModule {
     private static final double WHEEL_DIAMETER_METER = 0.10033;
     private static final double DRIVE_MOTOR_GEARING = 6.75;
     private static final double DRIVE_ENCODER_TICKS_TO_VELOCITY = 10 / DRIVE_MOTOR_GEARING
-            / ENCODERS_TICKS_PER_REVOLUTION * 2 * Math.PI * WHEEL_DIAMETER_METER;
+            / ENCODERS_TICKS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER_METER;
     private static final boolean DRIVE_MOTOR_INVERTED = true;
 
     private static final double DRIVE_MOTOR_P = 1;
@@ -21,7 +21,7 @@ public class SwerveModule {
 
     private static final double TURN_MOTOR_GEARING = 12.8;
     private static final boolean TURN_MOTOR_INVERTED = true;
-    private static final double TURN_ENCODER_TICKS_TO_DEGREE = TURN_MOTOR_GEARING / ENCODERS_TICKS_PER_REVOLUTION * 360;
+    private static final double TURN_ENCODER_TICKS_TO_DEGREE = 1 / TURN_MOTOR_GEARING / ENCODERS_TICKS_PER_REVOLUTION * 360;
 
     private static final double TURN_MOTOR_P = 0.2;
     private static final double TURN_MOTOR_D = 0.1;

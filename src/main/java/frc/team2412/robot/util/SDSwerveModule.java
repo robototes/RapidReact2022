@@ -43,6 +43,7 @@ public class SDSwerveModule {
         driveMotorSettings.supplyCurrLimit.enable = true;
         driveMotorSettings.voltageCompSaturation = moduleConfigs.getNominalVoltage();
 
+        driveMotor.configAllSettings(driveMotorSettings);
         driveMotor.setInverted(moduleType.isDriveInverted());
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.enableVoltageCompensation(true);
@@ -54,6 +55,7 @@ public class SDSwerveModule {
         turnMotorSettings.supplyCurrLimit.enable = true;
         turnMotorSettings.voltageCompSaturation = moduleConfigs.getNominalVoltage();
 
+        turnMotor.configAllSettings(turnMotorSettings);
         turnMotor.setInverted(moduleType.isSteerInverted());
         turnMotor.setNeutralMode(NeutralMode.Brake);
         turnMotor.enableVoltageCompensation(true);

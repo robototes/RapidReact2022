@@ -9,18 +9,21 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class AbsoluteSwerveModule extends SwerveModule {
 
     private CANCoder absoluteEncoder;
-    private int turnEncoderPort;
-    private double turnOffset;
-    private String canbus;
+    private final int turnEncoderPort;
+    private final double turnOffset;
+    private final String canbus;
 
     public AbsoluteSwerveModule(int driveMotorPort, int turnMotorPort, int turnEncoderPort, double turnOffset,
             String canbus) {
         super(driveMotorPort, turnMotorPort, canbus);
-        configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
+        this.turnEncoderPort = turnEncoderPort;
+        this.turnOffset = turnOffset;
+        this.canbus = canbus;
+        configAbsoluteEncoder();
 
     }
 
-    private void configAbsoluteEncoder(int turnEncoderPort, double turnOffset, String canbus) {
+    private void configAbsoluteEncoder() {
         absoluteEncoder = new CANCoder(turnEncoderPort, canbus);
         absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         absoluteEncoder.configMagnetOffset(turnOffset, 500);
@@ -37,7 +40,7 @@ public class AbsoluteSwerveModule extends SwerveModule {
         }
         if (absoluteEncoderInitializationFailCount > absoluteEncoderInitializationFailThreshold) {
             absoluteEncoderInitializationFailCount = 0;
-            configAbsoluteEncoder(turnEncoderPort, turnOffset, canbus);
+            configAbsoluteEncoder();
         }
         super.setState(state);
     }

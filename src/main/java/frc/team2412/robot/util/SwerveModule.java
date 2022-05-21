@@ -21,7 +21,8 @@ public class SwerveModule {
 
     private static final double TURN_MOTOR_GEARING = 12.8;
     private static final boolean TURN_MOTOR_INVERTED = true;
-    private static final double TURN_ENCODER_TICKS_TO_DEGREE = 1 / TURN_MOTOR_GEARING / ENCODERS_TICKS_PER_REVOLUTION * 360;
+    private static final double TURN_ENCODER_TICKS_TO_DEGREE = 1 / TURN_MOTOR_GEARING / ENCODERS_TICKS_PER_REVOLUTION
+            * 360;
 
     private static final double TURN_MOTOR_P = 0.2;
     private static final double TURN_MOTOR_D = 0.1;

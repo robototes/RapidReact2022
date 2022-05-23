@@ -13,10 +13,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SumedhsDatatouilleSwerveModule {
 
-    private static final double ENCODER_TICKS_PER_ROTATION = 2048;
     private static final ModuleConfiguration moduleType = SdsModuleConfigurations.MK4_L1;
     private static final Mk4ModuleConfiguration moduleConfigs = new Mk4ModuleConfiguration();
 
+    private static final double ENCODER_TICKS_PER_ROTATION = 2048;
     private static final double DRIVE_MOTOR_ENCODER_TICKS_TO_METERS = 1 / ENCODER_TICKS_PER_ROTATION
             * moduleType.getDriveReduction() * Math.PI * moduleType.getWheelDiameter();
     private static final double DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND = DRIVE_MOTOR_ENCODER_TICKS_TO_METERS

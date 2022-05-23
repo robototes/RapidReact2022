@@ -31,8 +31,8 @@ public class SumedhsDatatouilleSwerveModule {
     private static final double TURN_MOTOR_P = 0.2;
     private static final double TURN_MOTOR_D = 0.1;
 
-    private final WPI_TalonFX driveMotor;
-    private final WPI_TalonFX turnMotor;
+    public final WPI_TalonFX driveMotor;
+    public final WPI_TalonFX turnMotor;
 
     public SumedhsDatatouilleSwerveModule(int driveMotorPort, int turnMotorPort, String canbus) {
         driveMotor = new WPI_TalonFX(driveMotorPort, canbus);

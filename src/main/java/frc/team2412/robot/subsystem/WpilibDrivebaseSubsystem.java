@@ -85,13 +85,12 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
                 backRight.getState());
     }
 
-    public void setPose(Pose2d pose, Rotation2d gyroAngle){
+    public void setPose(Pose2d pose, Rotation2d gyroAngle) {
         odometry.resetPosition(pose, gyroAngle);
     }
 
-    public void resetPose(){
+    public void resetPose() {
         setPose(new Pose2d(), new Rotation2d());
     }
-
 
 }

@@ -11,7 +11,7 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-public class SDSwerveModule {
+public class SumedhsDatatouilleSwerveModule {
 
     private static final double ENCODER_TICKS_PER_ROTATION = 2048;
     private static final ModuleConfiguration moduleType = SdsModuleConfigurations.MK4_L1;
@@ -34,7 +34,7 @@ public class SDSwerveModule {
     private final WPI_TalonFX driveMotor;
     private final WPI_TalonFX turnMotor;
 
-    public SDSwerveModule(int driveMotorPort, int turnMotorPort, String canbus) {
+    public SumedhsDatatouilleSwerveModule(int driveMotorPort, int turnMotorPort, String canbus) {
         driveMotor = new WPI_TalonFX(driveMotorPort, canbus);
         turnMotor = new WPI_TalonFX(turnMotorPort, canbus);
 

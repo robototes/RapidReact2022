@@ -6,7 +6,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-public class AbsoluteSwerveModule extends SwerveModule {
+public class AbsoluteSwerveModule extends SumedhsDatatouilleSwerveModule {
 
     private CANCoder absoluteEncoder;
     private int turnEncoderPort;

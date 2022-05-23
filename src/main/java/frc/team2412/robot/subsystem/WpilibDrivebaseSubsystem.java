@@ -43,7 +43,7 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase {
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getGyroHeading());
 
-    public final double maxVelocityMetersPerSecond = 4;
+    public final double maxVelocityMetersPerSecond = 2.4115;
 
     public WpilibDrivebaseSubsystem() {
 

@@ -53,7 +53,9 @@ public class AbsoluteSwerveModule extends SumedhsDatatouilleSwerveModule {
     @Override
     public void resetEncoder() {
         super.resetEncoder();
-        absoluteEncoder.setPosition(0);
+        if (absoluteEncoder != null) {
+            absoluteEncoder.setPosition(0);
+        }
     }
 
 }

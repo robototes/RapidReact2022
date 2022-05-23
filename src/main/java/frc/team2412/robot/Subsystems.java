@@ -11,7 +11,7 @@ public class Subsystems implements Loggable {
 
         public static final boolean POST_CLIMB_ENABLED = false;
 
-        public static final boolean DRIVE_ENABLED = true;
+        public static final boolean DRIVE_ENABLED = false;
         public static final boolean DRIVER_VIS_ENABLED = true;
         public static final boolean SHOOTER_VISION_ENABLED = true;
         public static final boolean INDEX_ENABLED = true;
@@ -37,8 +37,12 @@ public class Subsystems implements Loggable {
 
     public PostClimbSubsystem postClimbSubsystem;
 
+    public WpilibDrivebaseSubsystem wpidriveSubsystem;
+
     public Subsystems() {
         boolean comp = Robot.getInstance().isCompetition();
+
+        wpidriveSubsystem = new WpilibDrivebaseSubsystem();
 
         if (DRIVE_ENABLED) {
             drivebaseSubsystem = new DrivebaseSubsystem();

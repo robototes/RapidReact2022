@@ -77,11 +77,8 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable 
         backRight.setState(swerveModuleStates[3]);
 
         System.out.println(frontLeft.getAngle());
-        
         System.out.println(backLeft.getAngle());
-        
         System.out.println(frontRight.getAngle());
-        
         System.out.println(backRight.getAngle());
 
     }

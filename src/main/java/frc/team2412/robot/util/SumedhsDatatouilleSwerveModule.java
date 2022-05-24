@@ -70,7 +70,7 @@ public class SumedhsDatatouilleSwerveModule {
         driveMotor.set(state.speedMetersPerSecond);
         // driveMotor.set(ControlMode.Velocity,
         // state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
-        System.out.println("amoutn to turn: " + state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
+        System.out.println("amount to turn: " + state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
         turnMotor.set(ControlMode.Position, state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
 
@@ -83,7 +83,12 @@ public class SumedhsDatatouilleSwerveModule {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(turnMotor.getSelectedSensorPosition() * TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
+        double degrees = turnMotor.getSelectedSensorPosition() * TURN_MOTOR_ENCODER_TICKS_TO_DEGREE;
+        degrees %= 360;
+        if(degrees < 0){
+            degrees += 360;
+        }
+        return Rotation2d.fromDegrees(degrees);
     }
 
     public void resetEncoder() {

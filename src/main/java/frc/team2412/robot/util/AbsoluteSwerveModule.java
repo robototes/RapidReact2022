@@ -31,7 +31,7 @@ public class AbsoluteSwerveModule extends SumedhsDatatouilleSwerveModule {
     }
 
     private int absoluteEncoderInitializationFailCount = 0;
-    private final int absoluteEncoderInitializationFailThreshold = 10;
+    private final int absoluteEncoderInitializationFailThreshold = 100;
 
     @Override
     public void setState(SwerveModuleState state) {
@@ -43,11 +43,6 @@ public class AbsoluteSwerveModule extends SumedhsDatatouilleSwerveModule {
             configAbsoluteEncoder();
         }
         super.setState(state);
-    }
-
-    @Override
-    public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
     }
 
     @Override

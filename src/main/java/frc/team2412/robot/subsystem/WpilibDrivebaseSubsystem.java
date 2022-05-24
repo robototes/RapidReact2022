@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2412.robot.Hardware;
+import frc.team2412.robot.sim.PhysicsSim;
 import frc.team2412.robot.util.SumedhsDatatouilleSwerveModule;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
@@ -112,5 +114,18 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable 
     @Log.ToString
     public Pose2d getPose(){
         return odometry.getPoseMeters();
+    }
+
+    public void simInit(PhysicsSim sim){
+        sim.addTalonFX(frontLeft.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(backLeft.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(frontRight.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(backRight.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
+
+        sim.addTalonFX(frontLeft.turnMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(backLeft.turnMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(frontRight.turnMotor, 1, Hardware.SIM_FULL_VELOCITY);
+        sim.addTalonFX(backRight.turnMotor, 1, Hardware.SIM_FULL_VELOCITY);
+
     }
 }

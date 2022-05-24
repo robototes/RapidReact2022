@@ -284,6 +284,9 @@ public class Robot extends TimedRobot {
         if (subsystems.shooterSubsystem != null) {
             subsystems.shooterSubsystem.simInit(sim);
         }
+        if(subsystems.wpidriveSubsystem != null) {
+            subsystems.wpidriveSubsystem.simInit(sim);
+        }
     }
 
     @Override

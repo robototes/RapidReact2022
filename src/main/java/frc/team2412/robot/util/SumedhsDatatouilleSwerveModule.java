@@ -13,7 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SumedhsDatatouilleSwerveModule {
 
-    private static final ModuleConfiguration moduleType = SdsModuleConfigurations.MK4_L1;
+    private static final ModuleConfiguration moduleType = SdsModuleConfigurations.MK4_L2;
     private static final Mk4ModuleConfiguration moduleConfigs = new Mk4ModuleConfiguration();
 
     private static final double ENCODER_TICKS_PER_ROTATION = 2048;
@@ -28,8 +28,8 @@ public class SumedhsDatatouilleSwerveModule {
     private static final double DRIVE_MOTOR_P = 1;
     private static final double DRIVE_MOTOR_D = 0.1;
 
-    private static final double TURN_MOTOR_P = 0.2;
-    private static final double TURN_MOTOR_D = 0.1;
+    private static final double TURN_MOTOR_P = 0.02;
+    private static final double TURN_MOTOR_D = 0.01;
 
     public final WPI_TalonFX driveMotor;
     public final WPI_TalonFX turnMotor;
@@ -67,8 +67,10 @@ public class SumedhsDatatouilleSwerveModule {
 
     public void setState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, getAngle());
-        driveMotor.set(ControlMode.Velocity,
-                state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
+        driveMotor.set(state.speedMetersPerSecond);
+        // driveMotor.set(ControlMode.Velocity,
+        // state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
+        System.out.println("amoutn to turn: " + state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
         turnMotor.set(ControlMode.Position, state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
 
@@ -81,7 +83,7 @@ public class SumedhsDatatouilleSwerveModule {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(turnMotor.getSelectedSensorPosition() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
+        return Rotation2d.fromDegrees(turnMotor.getSelectedSensorPosition() * TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
 
     public void resetEncoder() {

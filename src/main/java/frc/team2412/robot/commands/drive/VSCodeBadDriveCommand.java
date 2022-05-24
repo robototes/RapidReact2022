@@ -23,8 +23,19 @@ public class VSCodeBadDriveCommand extends CommandBase {
         y = driveController.getLeftYAxis().get();
         rotation = driveController.getRightXAxis().get();
 
+        x = deadbandCorrection(x);
+        y = deadbandCorrection(y);
+        rotation = deadbandCorrection(rotation);
+
+        // System.out.println(x + " " + y + " " + rotation);
+
         drive.drive(x * drive.maxVelocityMetersPerSecond, y * drive.maxVelocityMetersPerSecond,
                 rotation * drive.maxVelocityMetersPerSecond);
+    }
+
+    
+    public double deadbandCorrection(double input) {
+        return Math.abs(input) < 0.05 ? 0 : (input - Math.signum(input) * 0.05) / 0.95;
     }
 
 }

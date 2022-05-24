@@ -5,6 +5,8 @@ import static frc.team2412.robot.Controls.ControlConstants.*;
 import java.util.function.BooleanSupplier;
 
 import frc.team2412.robot.commands.drive.DriveCommand;
+import frc.team2412.robot.commands.drive.VSCodeBadDriveCommand;
+
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Controller;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
@@ -75,6 +77,9 @@ public class Controls {
         climbArmDown = driveController.getStartButton();
 
         boolean comp = Robot.getInstance().isCompetition();
+
+        subsystems.wpidriveSubsystem.setDefaultCommand(new VSCodeBadDriveCommand(subsystems.wpidriveSubsystem,
+                driveController));
 
         if (subsystems.drivebaseSubsystem != null) {
             bindDriveControls();

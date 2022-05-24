@@ -10,6 +10,8 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotBase;
+import frc.team2412.robot.subsystem.WpilibDrivebaseSubsystem;
 
 public class SumedhsDatatouilleSwerveModule {
 
@@ -24,9 +26,6 @@ public class SumedhsDatatouilleSwerveModule {
 
     private static final double TURN_MOTOR_ENCODER_TICKS_TO_DEGREE = 1 / ENCODER_TICKS_PER_ROTATION
             * moduleType.getSteerReduction() * 360;
-
-    private static final double DRIVE_MOTOR_P = 1;
-    private static final double DRIVE_MOTOR_D = 0.1;
 
     private static final double TURN_MOTOR_P = 0.02;
     private static final double TURN_MOTOR_D = 0.01;
@@ -47,8 +46,6 @@ public class SumedhsDatatouilleSwerveModule {
         driveMotor.setInverted(moduleType.isDriveInverted());
         driveMotor.setNeutralMode(NeutralMode.Brake);
         driveMotor.enableVoltageCompensation(true);
-        driveMotor.config_kP(0, DRIVE_MOTOR_P);
-        driveMotor.config_kD(0, DRIVE_MOTOR_D);
 
         TalonFXConfiguration turnMotorSettings = new TalonFXConfiguration();
         turnMotorSettings.supplyCurrLimit.currentLimit = moduleConfigs.getSteerCurrentLimit();
@@ -67,9 +64,9 @@ public class SumedhsDatatouilleSwerveModule {
 
     public void setState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, getAngle());
-        driveMotor.set(state.speedMetersPerSecond);
-        // driveMotor.set(ControlMode.Velocity,
-        // state.speedMetersPerSecond / DRIVE_MOTOR_ENCODER_VELOCITY_TO_METERS_PER_SECOND);
+        driveMotor.setVoltage(state.speedMetersPerSecond / WpilibDrivebaseSubsystem.maxVelocityMetersPerSecond
+                * moduleConfigs.getNominalVoltage());
+
         System.out.println("amount to turn: " + state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
         turnMotor.set(ControlMode.Position, state.angle.getDegrees() / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE);
     }
@@ -85,9 +82,15 @@ public class SumedhsDatatouilleSwerveModule {
     public Rotation2d getAngle() {
         double degrees = turnMotor.getSelectedSensorPosition() * TURN_MOTOR_ENCODER_TICKS_TO_DEGREE;
         degrees %= 360;
-        if(degrees < 0){
+        if (degrees < 0) {
             degrees += 360;
         }
+
+        if (RobotBase.isSimulation()) {
+            turnMotor.getSimCollection()
+                    .setIntegratedSensorRawPosition((int) (degrees / TURN_MOTOR_ENCODER_TICKS_TO_DEGREE));
+        }
+
         return Rotation2d.fromDegrees(degrees);
     }
 

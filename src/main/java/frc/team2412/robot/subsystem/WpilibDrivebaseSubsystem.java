@@ -4,10 +4,7 @@ import static frc.team2412.robot.Hardware.*;
 
 import java.util.Arrays;
 
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
-
-import org.frcteam2910.common.robot.drivers.NavX;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -22,16 +19,20 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable {
 
-    private final SumedhsDatatouilleSwerveModule frontLeft = new SumedhsDatatouilleSwerveModule(DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
+    private final SumedhsDatatouilleSwerveModule frontLeft = new SumedhsDatatouilleSwerveModule(
+            DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SumedhsDatatouilleSwerveModule frontRight = new SumedhsDatatouilleSwerveModule(DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
+    private final SumedhsDatatouilleSwerveModule frontRight = new SumedhsDatatouilleSwerveModule(
+            DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR, DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SumedhsDatatouilleSwerveModule backLeft = new SumedhsDatatouilleSwerveModule(DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
+    private final SumedhsDatatouilleSwerveModule backLeft = new SumedhsDatatouilleSwerveModule(
+            DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR, DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
-    private final SumedhsDatatouilleSwerveModule backRight = new SumedhsDatatouilleSwerveModule(DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
+    private final SumedhsDatatouilleSwerveModule backRight = new SumedhsDatatouilleSwerveModule(
+            DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR,
             DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR, DRIVETRAIN_INTAKE_CAN_BUS_NAME);
 
     private final static double TRACKWIDTH_METER = Units.inchesToMeters(20);
@@ -48,7 +49,7 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable 
 
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getGyroHeading());
 
-    public final double maxVelocityMetersPerSecond = 2.4115;
+    public static final double maxVelocityMetersPerSecond = 2.4115;
 
     public WpilibDrivebaseSubsystem() {
 
@@ -60,9 +61,6 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable 
     }
 
     public void drive(double xSpeed, double ySpeed, double rot) {
-        // xSpeed = 0.1;
-        // ySpeed = 0.1;
-        // rot = 0;
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxVelocityMetersPerSecond);
@@ -109,11 +107,11 @@ public class WpilibDrivebaseSubsystem extends SubsystemBase implements Loggable 
     }
 
     @Log.ToString
-    public Pose2d getPose(){
+    public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
 
-    public void simInit(PhysicsSim sim){
+    public void simInit(PhysicsSim sim) {
         sim.addTalonFX(frontLeft.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
         sim.addTalonFX(backLeft.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);
         sim.addTalonFX(frontRight.driveMotor, 1, Hardware.SIM_FULL_VELOCITY);

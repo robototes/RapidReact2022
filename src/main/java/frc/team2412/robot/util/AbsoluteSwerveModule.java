@@ -3,7 +3,6 @@ package frc.team2412.robot.util;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class AbsoluteSwerveModule extends SumedhsDatatouilleSwerveModule {

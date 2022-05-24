@@ -33,7 +33,6 @@ public class VSCodeBadDriveCommand extends CommandBase {
                 rotation * drive.maxVelocityMetersPerSecond);
     }
 
-    
     public double deadbandCorrection(double input) {
         return Math.abs(input) < 0.05 ? 0 : (input - Math.signum(input) * 0.05) / 0.95;
     }

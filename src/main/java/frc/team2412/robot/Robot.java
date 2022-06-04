@@ -312,8 +312,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledPeriodic(){
-        if(subsystems.drivebaseSubsystem != null){
+    public void disabledPeriodic() {
+        if (subsystems.drivebaseSubsystem != null) {
             subsystems.drivebaseSubsystem.setToX();
         }
     }

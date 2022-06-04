@@ -310,4 +310,11 @@ public class Robot extends TimedRobot {
             subsystems.shooterSubsystem.stopFlywheel();
         }
     }
+
+    @Override
+    public void disabledPeriodic(){
+        if(subsystems.drivebaseSubsystem != null){
+            subsystems.drivebaseSubsystem.setToX();
+        }
+    }
 }

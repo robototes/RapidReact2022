@@ -145,11 +145,11 @@ public class Controls {
         BooleanSupplier b = driveController.getDPadButton(Direction.UP)::get;
 
         driveController.getDPadButton(Direction.DOWN).whenPressed(
-                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1500, 20).withInterrupt(b)
+                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 1400, 35).withInterrupt(b)
                         .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
         driveController.getDPadButton(Direction.LEFT).whenPressed(
-                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 500, 15).withInterrupt(b)
+                new ShooterHoodRPMCommand(subsystems.shooterSubsystem, 2400, 9.3).withInterrupt(b)
                         .alongWith(new InstantCommand(() -> subsystems.shooterSubsystem.setTurretAngle(-90))));
 
         driveController.getDPadButton(Direction.RIGHT).whenPressed(

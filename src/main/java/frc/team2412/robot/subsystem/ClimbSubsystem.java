@@ -13,6 +13,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
+import frc.team2412.robot.util.MotorStuff.Motor;
+import frc.team2412.robot.util.MotorStuff.RobototesTalonFX;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
@@ -59,14 +61,14 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log.MotorController
-    private final WPI_TalonFX motor;
+    private final RobototesTalonFX motor;
 
     // For use in the simulationPeriodic to get encoder position
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
     public ClimbSubsystem() {
         setName("ClimbSubsystem");
-        motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+        motor = new RobototesTalonFX(CLIMB_FIXED_MOTOR);
 
         // Configure motor soft limits, current limits and peak outputs
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();

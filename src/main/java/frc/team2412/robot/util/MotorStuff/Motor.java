@@ -30,8 +30,6 @@ public interface Motor extends MotorController {
 
     public void setP(double value);
 
-    public void setI(double value);
-
     public void setD(double value);
 
     public void setF(double value);

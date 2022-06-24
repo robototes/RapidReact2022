@@ -106,41 +106,78 @@ public class FalconMotor extends WPI_TalonFX implements Motor {
         configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, amp, amp, timeSeconds));
     }
 
+    /**
+	 * Get the encoder position. This returns a value in encoder ticks. 2048 encoder ticks result in 1 motor revolution
+	 *
+	 * @return Position of encoder in encoder ticks.
+	 */
     @Override
     public double getEncoderPosition() {
         return getSelectedSensorPosition();
     }
 
+    /**
+	 * Get the encoder velocity. This returns the rate in which the motor is spinning.
+     * The value in encoder ticks per 100ms. 2048 encoder ticks result in 1 motor revolution
+	 *
+	 * @return velocity of encoder in encoder ticks.
+	 */
     @Override
     public double getEncoderVelocity() {
         return getSelectedSensorVelocity();
     }
 
+    /**
+	 * Sets the encoder position to the given value.
+	 *
+	 * @param position Position to set for the selected sensor, value is in encoder ticks.
+	 */
     @Override
     public void setEncoderPosition(double position) {
         setSelectedSensorPosition(position);
     }
 
+    /**
+	 * Sets the encoder position to 0.
+	 *
+	 */
     @Override
     public void resetEncoder() {
         setEncoderPosition(0);
     }
 
+    /**
+	 * Sets the 'P' constant for a PID loop.
+	 * In a loop, this value is multiplied by closed loop error.
+	 *
+	 * @param value Value of the P constant.
+	 */
     @Override
     public void setP(double value) {
         config_kP(0, value);
     }
 
-    @Override
-    public void setI(double value) {
-        config_kI(0, value);
-    }
-
+    /**
+	 * Sets the 'D' constant for a PID loop.
+	 *
+	 * This is multiplied by derivative error (slope of error over the last 1ms)
+     * 
+	 * @param value Value of the D constant.
+	 */
     @Override
     public void setD(double value) {
         config_kD(0, value);
     }
 
+    /**
+	 * Sets the 'F' constant in PID loop.
+     * This is a different value than arbitrary feedforward
+	 *
+	 * @see <a href="https://docs.ctre-phoenix.com/en/stable/ch16_ClosedLoop.html?highlight=kF#calculating-velocity-feed-forward-gain-kf">CTRE Documentation on F in PID</a>
+
+	 *
+	 * @param value Value of the F constant.
+	 */
     @Override
     public void setF(double value) {
         config_kF(0, value);

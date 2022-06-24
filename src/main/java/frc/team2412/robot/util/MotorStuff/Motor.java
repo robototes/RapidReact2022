@@ -6,6 +6,8 @@ public interface Motor extends MotorController {
 
     public void setPosition(double value);
 
+    public void setPosition(double value, double feedforward);
+
     public void setVelocity(double value);
 
     public void setVelocity(double value, double feedforward);

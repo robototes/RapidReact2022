@@ -4,7 +4,7 @@ import static com.ctre.phoenix.motorcontrol.ControlMode.*;
 import static com.ctre.phoenix.motorcontrol.DemandType.*;
 import static com.ctre.phoenix.motorcontrol.NeutralMode.*;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class FalconMotor extends WPI_TalonFX implements Motor {

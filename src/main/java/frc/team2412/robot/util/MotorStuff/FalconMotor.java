@@ -7,13 +7,13 @@ import static com.ctre.phoenix.motorcontrol.NeutralMode.*;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-public class RobototesTalonFX extends WPI_TalonFX implements Motor {
+public class FalconMotor extends WPI_TalonFX implements Motor {
 
-    public RobototesTalonFX(int deviceNumber) {
+    public FalconMotor(int deviceNumber) {
         super(deviceNumber);
     }
 
-    public RobototesTalonFX(int deviceNumber, String canbus) {
+    public FalconMotor(int deviceNumber, String canbus) {
         super(deviceNumber, canbus);
     }
 

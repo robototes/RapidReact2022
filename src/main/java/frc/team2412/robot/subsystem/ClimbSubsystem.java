@@ -90,7 +90,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * Stop the dynamic climb arm motor, graciously
      *
      * @param stop
-     *             Whether to stop the motor
+     *            Whether to stop the motor
      */
     @Config(name = "Stop Fixed Motor")
     public void stopArm(boolean stop) {
@@ -121,7 +121,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * Set the position to which the motor will graciously follow
      *
      * @param value
-     *              The position to set the motor
+     *            The position to set the motor
      */
     public void setMotor(double value, double feedforward) {
         motor.setPosition(value, feedforward);
@@ -173,7 +173,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * specified as true.
      *
      * @param reset
-     *              whether to reset the encoder
+     *            whether to reset the encoder
      */
     @Config.ToggleButton
     public void resetEncoder(boolean reset) {
@@ -186,11 +186,11 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * Configure the motor PID (probably graciously)
      *
      * @param p
-     *          the P value to configure
+     *            the P value to configure
      * @param i
-     *          the I value to configure
+     *            the I value to configure
      * @param d
-     *          the D value to configure
+     *            the D value to configure
      */
     @Config(name = "PID extend")
     private void setPIDExtend(@Config(name = "EXTENSION P", defaultValueNumeric = EXTENSION_P) double p,

@@ -187,6 +187,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+        if (shooterOverride) {
+            setFlywheelRPM(flywheelTestRPM);
+            setHoodAngle(hoodTestAngle);
+        }
     }
 
     public void simInit(PhysicsSim sim) {
@@ -415,6 +419,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setTurretAngle(double angle) {
 
         if (isTurretAtAngle(angle) || turretDisable) {
+            turretMotor.stopMotor();
             return;
         }
 

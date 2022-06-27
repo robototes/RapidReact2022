@@ -1,21 +1,16 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 import static frc.team2412.robot.Hardware.*;
+import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2412.robot.sim.PhysicsSim;
+import frc.team2412.robot.util.MotorStuff.FalconMotor;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
+import io.github.oblarg.oblog.annotations.*;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
@@ -36,7 +31,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         public static final double RETRACTION_I = 0;
         public static final double RETRACTION_D = 0;
         public static final double RETRACTION_F = 0.18;
-        // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
+        // This is based on the minimum amount of motor power need to keep climb arm in
+        // place, need to test
 
         // Relating to physical climb structure things
         // was previously mid
@@ -59,26 +55,21 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     }
 
     @Log.MotorController
-    private final WPI_TalonFX motor;
+    private final FalconMotor motor;
 
     // For use in the simulationPeriodic to get encoder position
     private double lastUpdatedTime = Timer.getFPGATimestamp();
 
     public ClimbSubsystem() {
         setName("ClimbSubsystem");
-        motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
+        motor = new FalconMotor(CLIMB_FIXED_MOTOR);
 
-        // Configure motor soft limits, current limits and peak outputs
-        TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        motorConfig.forwardSoftLimitEnable = false;
-        motorConfig.reverseSoftLimitEnable = false;
-        motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
-        motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
-        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
-        motor.configAllSettings(motorConfig);
-        motor.setNeutralMode(NeutralMode.Brake);
+        motor.setToBrakeMode();
+        motor.setCurrentLimit(40, 15);
 
-        setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D);
+        motor.setP(EXTENSION_P);
+        motor.setD(EXTENSION_D);
+
         setPIDRetract(RETRACTION_P, RETRACTION_I, RETRACTION_D);
     }
 
@@ -132,8 +123,8 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      * @param value
      *            The position to set the motor
      */
-    public void setMotor(double value, double feedForward) {
-        motor.set(ControlMode.Position, value, DemandType.ArbitraryFeedForward, feedForward);
+    public void setMotor(double value, double feedforward) {
+        motor.setPosition(value, feedforward);
     }
 
     public void setMotorSpeed(double speed) {
@@ -162,7 +153,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
      */
     @Log
     public double encoderPosition() {
-        return motor.getSelectedSensorPosition();
+        return motor.getEncoderPosition();
     }
 
     /**
@@ -187,7 +178,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
     @Config.ToggleButton
     public void resetEncoder(boolean reset) {
         if (reset) {
-            motor.setSelectedSensorPosition(0);
+            motor.resetEncoder();
         }
     }
 

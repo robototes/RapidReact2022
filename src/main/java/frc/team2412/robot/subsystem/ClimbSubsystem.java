@@ -1,12 +1,11 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.ClimbSubsystem.ClimbConstants.*;
+import static frc.team2412.robot.subsystem.Constants.ClimbConstants.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -19,45 +18,6 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class ClimbSubsystem extends SubsystemBase implements Loggable {
 
-    public static class ClimbConstants {
-        // Climb dynamic motor speeds
-        public static final double EXTEND_SPEED = 0.15;
-        public static final double RETRACT_SPEED = -0.15;
-
-        // PID stuff
-        public static final int PID_EXTENSION_SLOT = 0;
-        public static final double EXTENSION_P = 0.5;
-        public static final double EXTENSION_I = 0;
-        public static final double EXTENSION_D = 0;
-        public static final double EXTENSION_F = 0;
-
-        public static final int PID_RETRACTION_SLOT = 1;
-        public static final double RETRACTION_P = 0.5; // TODO: figure out values
-        public static final double RETRACTION_I = 0;
-        public static final double RETRACTION_D = 0;
-        public static final double RETRACTION_F = 0.18;
-        // This is based on the minimum amount of motor power need to keep climb arm in place, need to test
-
-        // Relating to physical climb structure things
-        // was previously mid
-        public static final double MID_RUNG_HEIGHT = 5.5;
-        public static final double RETRACT_HEIGHT = 0.166;
-
-        public static final double CLIMB_OFFSET = 4.75;
-
-        // Doing integer division, which returns 11757 (previously 8789)
-        // Probably should do floating point division, which returns 11759.3
-        public static final double ENCODER_TICKS_PER_REMY = ((272816.0 / 58) * 2 * 5) / 4 * 6;
-
-        // Max robot height is 66 inches
-        public static final double MAX_ENCODER_TICKS = (11 - CLIMB_OFFSET) * ENCODER_TICKS_PER_REMY;
-        public static final double MIN_ENCODER_TICKS = 0;
-
-        // Motor current limit config
-        public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
-                true, 40, 60, 15);
-    }
-
     @Log.MotorController
     private final WPI_TalonFX motor;
 
@@ -68,14 +28,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         setName("ClimbSubsystem");
         motor = new WPI_TalonFX(CLIMB_FIXED_MOTOR);
 
-        // Configure motor soft limits, current limits and peak outputs
-        TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        motorConfig.forwardSoftLimitEnable = false;
-        motorConfig.reverseSoftLimitEnable = false;
-        motorConfig.forwardSoftLimitThreshold = MAX_ENCODER_TICKS;
-        motorConfig.reverseSoftLimitThreshold = MIN_ENCODER_TICKS;
-        motorConfig.supplyCurrLimit = MOTOR_CURRENT_LIMIT;
-        motor.configAllSettings(motorConfig);
+        motor.configSupplyCurrentLimit(MOTOR_CURRENT_LIMIT);
         motor.setNeutralMode(NeutralMode.Brake);
 
         setPIDExtend(EXTENSION_P, EXTENSION_I, EXTENSION_D);

@@ -6,7 +6,6 @@ import static frc.team2412.robot.Hardware.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -93,6 +92,20 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.set(speed);
     }
 
+     /**
+     * Graciously lowers arm at set retract speed
+     */
+    public void lowerArm() {
+        setMotorSpeed(RETRACT_SPEED);
+    }
+
+    /**
+     * Graciously extends arm at set speed
+     */
+    public void extendArmSlowly() {
+        setMotorSpeed(EXTEND_SPEED);
+    }
+
     /**
      * Periodic function 🙊🙉🙈 in the simulation
      * Graciously updates the encoder position in the sim
@@ -171,28 +184,4 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.config_kI(PID_RETRACTION_SLOT, i);
         motor.config_kD(PID_RETRACTION_SLOT, d);
     }
-
-    /**
-     * Graciously lowers arm at set retract speed
-     */
-    public void lowerArm() {
-        motor.set(RETRACT_SPEED);
-    }
-
-    /**
-     * Graciously extends arm at set speed
-     */
-    public void extendArmSlowly() {
-        motor.set(EXTEND_SPEED);
-    }
-
-    /**
-     * Determine whether the limit switch has been triggered
-     *
-     * @return whether the limit switch has been hit
-     */
-    public boolean isHittingLimitSwitch() {
-        return true;
-    }
-
 }

@@ -74,16 +74,35 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private double odometryYEntry;
     @Log(name = "Angle", columnIndex = 0, rowIndex = 2)
     private double odometryAngleEntry;
-    @Config.NumberSlider(name = "Speed Modifier", defaultValue = 0.95, columnIndex = 2, rowIndex = 1)
+    
+    @Config.NumberSlider(name = "Speed Modifier", columnIndex = 2, rowIndex = 1, defaultValue = 0.95)
     private double speedModifier;
-    @Config.ToggleSwitch(name = "Shoot speed toggled", columnIndex = 4, rowIndex = 2)
+   
+    @Config.NumberSlider(name = "Shoot Speed", columnIndex = 4, rowIndex = 1, defaultValue = 0.6)
+    private double shootSpeed;
+    @Config.ToggleSwitch(name = "Shoot speed toggled", columnIndex = 4, rowIndex = 3)
     private boolean shootSpeedToggle;
-    private final NetworkTableEntry shootSpeed;
-    private final NetworkTableEntry antiTip;
-    private final NetworkTableEntry fieldCentric;
-    private final NetworkTableEntry poseSetX;
-    private final NetworkTableEntry poseSetY;
-    private final NetworkTableEntry poseSetAngle;
+   
+    @Config.ToggleSwitch(name = "Anti tip", columnIndex = 3, rowIndex = 1, width = 2, defaultValue = ANTI_TIP_DEFAULT)
+    private boolean antiTip;
+    @Config.ToggleSwitch(name = "Field Centric", columnIndex = 2, rowIndex = 2, width = 2, defaultValue = FIELD_CENTRIC_DEFAULT)
+    private boolean fieldCentric;
+    
+    @Config(name = "Set Pose X", columnIndex = 5, rowIndex = 3)
+    private double poseSetX;
+    @Config(name = "Set Pose Y", columnIndex = 6, rowIndex = 3)
+    private double poseSetY;
+    @Config(name = "Set Pose Angle", columnIndex = 6, rowIndex = 3)
+    private double poseSetAngle;
+   
+    @Log(name = "Trajectory X", columnIndex = 1, rowIndex = 0)
+    private double trajectoryX;
+    @Log(name = "Trajectory Y", columnIndex = 1, rowIndex = 1)
+    private double trajectoryY;
+    @Log(name = "Rotation Voltage", columnIndex = 1, rowIndex = 1)
+    private double rotationVoltage;
+    
+    
 
     private final Field2d field = new Field2d();
 
@@ -102,85 +121,14 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             SmartDashboard.putData("Field", field);
         }
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
-
         boolean supportAbsoluteEncoder = comp && !Robot.isSimulation();
         modules = new SwerveModule[] { FRONT_LEFT_CONFIG.create(supportAbsoluteEncoder),
                 FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
                 BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
                 BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
 
-        tab.addNumber("Trajectory X", () -> {
-            if (follower.getLastState() == null) {
-                return 0.0;
-            }
-            return follower.getLastState().getPathState().getPosition().x;
-        })
-                .withPosition(1, 0)
-                .withSize(1, 1);
-        tab.addNumber("Trajectory Y", () -> {
-            if (follower.getLastState() == null) {
-                return 0.0;
-            }
-            return follower.getLastState().getPathState().getPosition().y;
-        })
-                .withPosition(1, 1)
-                .withSize(1, 1);
-
-        tab.addNumber("Rotation Voltage", () -> {
-            HolonomicDriveSignal signal;
-            synchronized (stateLock) {
-                signal = driveSignal;
-            }
-
-            if (signal == null) {
-                return 0.0;
-            }
-
-            return signal.getRotation() * RobotController.getBatteryVoltage();
-        });
-
-        shootSpeed = tab.add("ShootSpeed", 0.6f)
-                .withPosition(4, 1)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.6))
-                .getEntry();
-
-        tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
-
-        antiTip = tab.add("Anti Tip", ANTI_TIP_DEFAULT)
-                .withPosition(3, 0)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
-                .getEntry();
-
-        fieldCentric = tab.add("Field Centric", FIELD_CENTRIC_DEFAULT)
-                .withPosition(2, 2)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
-                .getEntry();
-
         tipController = PFFController.ofVector2(TIP_P, TIP_F).setTargetPosition(getGyroscopeXY())
                 .setTargetPositionTolerance(TIP_TOLERANCE);
-
-        poseSetX = tab.add("Set Pose X", 0.0)
-                .withPosition(5, 3)
-                .withSize(1, 1)
-                .withWidget(BuiltInWidgets.kTextView)
-                .getEntry();
-
-        poseSetY = tab.add("Set Pose Y", 0.0)
-                .withPosition(6, 3)
-                .withSize(1, 1)
-                .withWidget(BuiltInWidgets.kTextView)
-                .getEntry();
-
-        poseSetAngle = tab.add("Set Pose Angle", 0.0)
-                .withPosition(7, 3)
-                .withSize(1, 1)
-                .withWidget(BuiltInWidgets.kTextView)
-                .getEntry();
 
         accelLimiter = new VectorSlewLimiter(ACCEL_LIMIT);
     }
@@ -221,9 +169,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public void setPose() {
-        resetPose(new Pose2d(poseSetX.getDouble(0.0), poseSetY.getDouble(0.0),
-                Rotation2d.fromDegrees(poseSetAngle.getDouble(0.0))));
-        resetGyroAngle(Rotation2.fromDegrees(poseSetAngle.getDouble(0.0)).inverse());
+        resetPose(new Pose2d(poseSetX, poseSetY,
+                Rotation2d.fromDegrees(poseSetAngle)));
+        resetGyroAngle(Rotation2.fromDegrees(poseSetAngle).inverse());
     }
 
     public Vector2 getVelocity() {
@@ -249,7 +197,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(
                     translationalVelocity.scale(speedModifier)
-                            .scale(shootSpeedToggle ? shootSpeed.getDouble(1) : 1)
+                            .scale(shootSpeedToggle ? shootSpeed : 1)
                             .rotateBy(getRotationAdjustment()),
                     (rotationalVelocity * speedModifier), false);
 
@@ -299,6 +247,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 : COMP_BOT_DRIVE_OFFSET;
     }
 
+    @Log(name = "Average Velocity", columnIndex = 8, rowIndex = 3)
     public double getAverageAbsoluteValueVelocity() {
         double averageVelocity = 0;
         for (var module : modules) {
@@ -339,7 +288,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
         ChassisVelocity chassisVelocity;
         if (driveSignal == null) {
             chassisVelocity = new ChassisVelocity(Vector2.ZERO, 0.0);
-        } else if (fieldCentric.getBoolean(true)) {
+        } else if (fieldCentric) {
             chassisVelocity = new ChassisVelocity(
                     driveSignal.getTranslation().rotateBy(getAngle()),
                     driveSignal.getRotation());
@@ -426,12 +375,23 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
 
     @Override
     public void periodic() {
-        // Pose2d pose = getPoseAsPoseMeters();
         synchronized (kinematicsLock) {
             odometryXEntry = Units.inchesToMeters(pose.translation.x);
             odometryYEntry = Units.inchesToMeters(pose.translation.y);
             odometryAngleEntry = pose.rotation.toDegrees();
         }
+
+        synchronized (stateLock) {
+            if (driveSignal != null) {
+                rotationVoltage = driveSignal.getRotation() * RobotController.getBatteryVoltage();
+            }
+        }
+
+        if (follower.getLastState() != null) {
+            trajectoryX = follower.getLastState().getPathState().getPosition().x;
+            trajectoryY = follower.getLastState().getPathState().getPosition().y;
+        }
+
         // System.out.println(pose);
         Pose2d pose = getPoseAsPoseMeters();
         field.setRobotPose(pose);
@@ -447,10 +407,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     }
 
     public boolean getFieldCentric() {
-        return fieldCentric.getBoolean(false);
+        return fieldCentric;
     }
 
     public boolean getAntiTip() {
-        return antiTip.getBoolean(false);
+        return antiTip;
     }
 }

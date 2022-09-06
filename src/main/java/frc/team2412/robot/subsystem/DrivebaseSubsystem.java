@@ -1,7 +1,7 @@
 package frc.team2412.robot.subsystem;
 
 import static frc.team2412.robot.Hardware.*;
-import static frc.team2412.robot.subsystem.DrivebaseSubsystem.DriveConstants.*;
+import static frc.team2412.robot.subsystem.Constants.DriveConstants.*;
 
 import java.util.*;
 
@@ -29,39 +29,9 @@ import frc.team2412.robot.*;
 import frc.team2412.robot.util.*;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.Updatable, Loggable {
-
-    // TODO find values as these are just copied from 2910
-    public static class DriveConstants {
-
-        public static final double TRACKWIDTH = 1.0;
-        public static final double WHEELBASE = 1.0;
-
-        public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
-                0.0593, // velocity
-                0.00195, // acceleration
-                0.236); // static
-
-        public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
-                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
-                new MaxAccelerationConstraint(3 * 12.0), // old value was 12.5 * 12.0
-                new MaxVelocityConstraint(4 * 12.0),
-                new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
-        };
-
-        public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
-
-        public static final boolean ANTI_TIP_DEFAULT = true;
-
-        public static final boolean FIELD_CENTRIC_DEFAULT = true;
-
-        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 4;
-
-        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(-90), // should be 90
-                COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
-    }
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(0.0708, 0.0, 0.0),
@@ -76,7 +46,6 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     );
 
     private SwerveModule[] modules;
-    private final double moduleMaxVelocityMetersPerSec;
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
@@ -99,11 +68,16 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private HolonomicDriveSignal driveSignal = null;
 
     // Logging
-    private final NetworkTableEntry odometryXEntry;
-    private final NetworkTableEntry odometryYEntry;
-    private final NetworkTableEntry odometryAngleEntry;
-    private final NetworkTableEntry speedModifier;
-    private final NetworkTableEntry shootSpeedToggle;
+    @Log(name = "X", columnIndex = 0, rowIndex = 0)
+    private double odometryXEntry;
+    @Log(name = "Y", columnIndex = 0, rowIndex = 1)
+    private double odometryYEntry;
+    @Log(name = "Angle", columnIndex = 0, rowIndex = 2)
+    private double odometryAngleEntry;
+    @Config.NumberSlider(name = "Speed Modifier", defaultValue = 0.95, columnIndex = 2, rowIndex = 1)
+    private double speedModifier;
+    @Config.ToggleSwitch(name = "Shoot speed toggled", columnIndex = 4, rowIndex = 2)
+    private boolean shootSpeedToggle;
     private final NetworkTableEntry shootSpeed;
     private final NetworkTableEntry antiTip;
     private final NetworkTableEntry fieldCentric;
@@ -117,6 +91,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private final VectorSlewLimiter accelLimiter;
 
     public DrivebaseSubsystem() {
+        setName("Drivebase");
         boolean comp = Robot.getInstance().isCompetition();
 
         synchronized (sensorLock) {
@@ -134,20 +109,7 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
                 FRONT_RIGHT_CONFIG.create(supportAbsoluteEncoder),
                 BACK_LEFT_CONFIG.create(supportAbsoluteEncoder),
                 BACK_RIGHT_CONFIG.create(supportAbsoluteEncoder) };
-        moduleMaxVelocityMetersPerSec = MODULE_MAX_VELOCITY_METERS_PER_SEC;
 
-        odometryXEntry = tab.add("X", 0.0)
-                .withPosition(0, 0)
-                .withSize(1, 1)
-                .getEntry();
-        odometryYEntry = tab.add("Y", 0.0)
-                .withPosition(0, 1)
-                .withSize(1, 1)
-                .getEntry();
-        odometryAngleEntry = tab.add("Angle", 0.0)
-                .withPosition(0, 2)
-                .withSize(1, 1)
-                .getEntry();
         tab.addNumber("Trajectory X", () -> {
             if (follower.getLastState() == null) {
                 return 0.0;
@@ -178,24 +140,11 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
             return signal.getRotation() * RobotController.getBatteryVoltage();
         });
 
-        speedModifier = tab.add("Speed Modifier", 1f)
-                .withPosition(2, 1)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.95))
-                .getEntry();
-
         shootSpeed = tab.add("ShootSpeed", 0.6f)
                 .withPosition(4, 1)
                 .withSize(2, 1)
                 .withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0.0, "max", 1.0, "defaultValueNumeric", 0.6))
-                .getEntry();
-
-        shootSpeedToggle = tab.add("ShootSpeedToggled", false)
-                .withPosition(4, 2)
-                .withSize(2, 1)
-                .withWidget(BuiltInWidgets.kToggleSwitch)
                 .getEntry();
 
         tab.addNumber("Average Velocity", this::getAverageAbsoluteValueVelocity);
@@ -299,10 +248,10 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void drive(Vector2 translationalVelocity, double rotationalVelocity) {
         synchronized (stateLock) {
             driveSignal = new HolonomicDriveSignal(
-                    translationalVelocity.scale(speedModifier.getDouble(1.0))
-                            .scale(shootSpeedToggle.getBoolean(false) ? shootSpeed.getDouble(1) : 1)
+                    translationalVelocity.scale(speedModifier)
+                            .scale(shootSpeedToggle ? shootSpeed.getDouble(1) : 1)
                             .rotateBy(getRotationAdjustment()),
-                    (rotationalVelocity * speedModifier.getDouble(1.0)), false);
+                    (rotationalVelocity * speedModifier), false);
 
         }
     }
@@ -424,8 +373,8 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void updateModules(ChassisSpeeds chassisSpeeds) {
         HolonomicDriveSignal holonomicDriveSignal = new HolonomicDriveSignal(
                 new Vector2(
-                        (chassisSpeeds.vxMetersPerSecond / moduleMaxVelocityMetersPerSec),
-                        (chassisSpeeds.vyMetersPerSecond / moduleMaxVelocityMetersPerSec)),
+                        (chassisSpeeds.vxMetersPerSecond / MODULE_MAX_VELOCITY_METERS_PER_SEC),
+                        (chassisSpeeds.vyMetersPerSecond / MODULE_MAX_VELOCITY_METERS_PER_SEC)),
                 chassisSpeeds.omegaRadiansPerSecond, false);
 
         synchronized (stateLock) {
@@ -479,9 +428,9 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     public void periodic() {
         // Pose2d pose = getPoseAsPoseMeters();
         synchronized (kinematicsLock) {
-            odometryXEntry.setDouble(Units.inchesToMeters(pose.translation.x));
-            odometryYEntry.setDouble(Units.inchesToMeters(pose.translation.y));
-            odometryAngleEntry.setDouble(pose.rotation.toDegrees());
+            odometryXEntry = Units.inchesToMeters(pose.translation.x);
+            odometryYEntry = Units.inchesToMeters(pose.translation.y);
+            odometryAngleEntry = pose.rotation.toDegrees();
         }
         // System.out.println(pose);
         Pose2d pose = getPoseAsPoseMeters();

@@ -1,5 +1,13 @@
 package frc.team2412.robot.subsystem;
 
+import org.frcteam2910.common.control.CentripetalAccelerationConstraint;
+import org.frcteam2910.common.control.FeedforwardConstraint;
+import org.frcteam2910.common.control.MaxAccelerationConstraint;
+import org.frcteam2910.common.control.MaxVelocityConstraint;
+import org.frcteam2910.common.control.TrajectoryConstraint;
+import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.util.DrivetrainFeedforwardConstants;
+
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -98,5 +106,36 @@ public class Constants {
                 this.state = state;
             }
         }
+
+    }
+
+    public static class DriveConstants {
+
+        public static final double TRACKWIDTH = 1.0;
+        public static final double WHEELBASE = 1.0;
+
+        public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(
+                0.0593, // velocity
+                0.00195, // acceleration
+                0.236); // static
+
+        public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
+                new FeedforwardConstraint(11.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old value was 11.0
+                new MaxAccelerationConstraint(3 * 12.0), // old value was 12.5 * 12.0
+                new MaxVelocityConstraint(4 * 12.0),
+                new CentripetalAccelerationConstraint(6 * 12.0), // old value was 15 * 12.0
+        };
+
+        public static final int MAX_LATENCY_COMPENSATION_MAP_ENTRIES = 25;
+
+        public static final boolean ANTI_TIP_DEFAULT = true;
+
+        public static final boolean FIELD_CENTRIC_DEFAULT = true;
+
+        public static final double TIP_P = 0.05, TIP_F = 0, TIP_TOLERANCE = 10, ACCEL_LIMIT = 4;
+
+        public static final Rotation2 PRACTICE_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(-90), // should be 90
+                COMP_BOT_DRIVE_OFFSET = Rotation2.fromDegrees(0);
     }
 }

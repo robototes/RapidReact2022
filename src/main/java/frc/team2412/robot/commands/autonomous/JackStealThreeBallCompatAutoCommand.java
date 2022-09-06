@@ -14,6 +14,7 @@ import frc.team2412.robot.commands.index.IndexShootCommand;
 import frc.team2412.robot.commands.index.IndexSpitCommand;
 import frc.team2412.robot.commands.intake.IntakeSetInCommand;
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.subsystem.Constants;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
@@ -28,8 +29,8 @@ public class JackStealThreeBallCompatAutoCommand extends DynamicRequirementSeque
     public static class StealThreeBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
                 // value
                 // was
                 // 11.0

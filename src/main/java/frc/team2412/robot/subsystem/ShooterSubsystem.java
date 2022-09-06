@@ -473,7 +473,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to compare the turret's angle to.
      * @return True if difference between turret angle and given angle is less than
-     *         HOOD_ANGLE_TOLERANCE, False otherwise.
+     *         TURRET_ANGLE_TOLERANCE, False otherwise.
      */
     public boolean isTurretAtAngle(double angle) {
         return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;

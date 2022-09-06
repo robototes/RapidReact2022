@@ -17,7 +17,7 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
                 new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
                         .lineTo(new Vector2(0, 70))
                         .build(),
-                DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
+                Constants.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);

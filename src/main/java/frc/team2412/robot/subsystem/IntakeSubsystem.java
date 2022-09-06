@@ -1,11 +1,10 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.*;
-import static frc.team2412.robot.subsystem.IntakeSubsystem.IntakeConstants.IntakeSolenoidState.*;
+import static frc.team2412.robot.subsystem.Constants.IntakeConstants.*;
+import static frc.team2412.robot.subsystem.Constants.IntakeConstants.IntakeSolenoidState.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,31 +18,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class IntakeSubsystem extends SubsystemBase implements Loggable {
-
-    // Constants
-    public static class IntakeConstants {
-
-        public static final double INNER_INTAKE_IN_SPEED = 0.35; // TODO
-        public static final double INTAKE_IN_SPEED = 0.85;
-        public static final double INTAKE_OUT_SPEED = -0.3;
-
-        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, 20, 20, 1);
-
-        // Enums
-
-        public static enum IntakeSolenoidState {
-            EXTEND(DoubleSolenoid.Value.kForward, "Extended"), RETRACT(DoubleSolenoid.Value.kReverse, "Reversed");
-
-            public final DoubleSolenoid.Value value;
-            public final String state;
-
-            private IntakeSolenoidState(DoubleSolenoid.Value value, String state) {
-                this.value = value;
-                this.state = state;
-            }
-        }
-    }
 
     // Define Hardware
 

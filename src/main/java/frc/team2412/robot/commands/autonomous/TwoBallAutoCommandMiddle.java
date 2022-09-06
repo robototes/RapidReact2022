@@ -22,7 +22,7 @@ public class TwoBallAutoCommandMiddle extends SequentialCommandGroup {
                         .lineTo(new Vector2(426.405, 210.657), Rotation2.fromDegrees(25))
                         .lineTo(new Vector2(420, 215), Rotation2.fromDegrees(-65))
                         .build(),
-                DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
+                Constants.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         ShooterTargetCommand.TurretManager manager = new ShooterTargetCommand.TurretManager(shooterSubsystem,
                 localizer);

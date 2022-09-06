@@ -124,7 +124,8 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
         this.hoodEncoder = hoodMotor.getEncoder();
         this.hoodPID = hoodMotor.getPIDController();
         configMotors();
-        flywheelFF = new SimpleMotorFeedforward(0.735, 0.1193, 0.0056666);
+        flywheelFF = new SimpleMotorFeedforward(0.471, 0.1193);
+        // Fixed this by subtracting offset * battery voltage from kS, previously 0.735
     }
 
     /* FUNCTIONS */
@@ -187,6 +188,10 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
 
     @Override
     public void periodic() {
+        if (shooterOverride) {
+            setFlywheelRPM(flywheelTestRPM);
+            setHoodAngle(hoodTestAngle);
+        }
     }
 
     public void simInit(PhysicsSim sim) {
@@ -320,7 +325,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setFlywheelVelocity(double velocity) {
         // flywheelMotor1.set(ControlMode.Velocity, velocity);
         double rps = velocity / 2048 * 10;
-        double feedForward = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage() - FLYWHEEL_FEEDFORWARD_OFFSET;
+        double feedForward = flywheelFF.calculate(rps) / Robot.getInstance().getVoltage();
 
         flywheelMotor1.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward,
                 feedForward);
@@ -415,6 +420,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
     public void setTurretAngle(double angle) {
 
         if (isTurretAtAngle(angle) || turretDisable) {
+            turretMotor.stopMotor();
             return;
         }
 
@@ -467,7 +473,7 @@ public class ShooterSubsystem extends SubsystemBase implements Loggable {
      * @param angle
      *            The angle (in degrees) to compare the turret's angle to.
      * @return True if difference between turret angle and given angle is less than
-     *         HOOD_ANGLE_TOLERANCE, False otherwise.
+     *         TURRET_ANGLE_TOLERANCE, False otherwise.
      */
     public boolean isTurretAtAngle(double angle) {
         return Math.abs(getTurretAngle() - angle) < TURRET_ANGLE_TOLERANCE;

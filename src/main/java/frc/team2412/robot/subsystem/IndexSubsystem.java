@@ -1,10 +1,9 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.IndexSubsystem.IndexConstants.*;
+import static frc.team2412.robot.subsystem.Constants.IndexConstants.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,31 +16,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class IndexSubsystem extends SubsystemBase implements Loggable {
 
-    // Constants
-
-    public static class IndexConstants {
-
-        public static final double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
-        public static final double CURRENT_LIMIT_RESET_AMPS = 10;
-        public static final double CURRENT_LIMIT_TRIGGER_AMPS = 20;
-
-        // Index Motor Speeds
-
-        public static final double INDEX_FEEDER_SPEED = 0.125;
-        public static final double INDEX_FEEDER_SHOOT_SPEED = 0.2;
-        public static final double INDEX_INGEST_SHOOT_SPEED = 0.2;
-
-        public static final double INDEX_IN_SPEED = IntakeSubsystem.IntakeConstants.INTAKE_IN_SPEED / 2;
-        public static final double INDEX_OUT_SPEED = -0.3;
-
-        // The current limit
-        public static final SupplyCurrentLimitConfiguration MAX_MOTOR_CURRENT = new SupplyCurrentLimitConfiguration(
-                true, CURRENT_LIMIT_RESET_AMPS, CURRENT_LIMIT_TRIGGER_AMPS, CURRENT_LIMIT_TRIGGER_SECONDS);
-
-    }
-
     // Define Hardware
-
     private final DigitalInput leftFeederProximity;
     private final DigitalInput rightFeederProximity;
 

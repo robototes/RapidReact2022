@@ -24,7 +24,7 @@ public class TwoBallAutoCommandRight extends SequentialCommandGroup {
                         .lineTo(new Vector2(337.850, 290.717), Rotation2.fromDegrees(90))
                         .lineTo(new Vector2(337.850, 287), Rotation2.fromDegrees(0))
                         .build(),
-                DrivebaseSubsystem.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
+                Constants.DriveConstants.TRAJECTORY_CONSTRAINTS, 0.1);
 
         addCommands(
                 new IntakeSetExtendCommand(intakeSubsystem),

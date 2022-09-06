@@ -16,6 +16,7 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 
 import frc.team2412.robot.commands.shooter.ShooterTargetCommand;
+import frc.team2412.robot.subsystem.Constants;
 import frc.team2412.robot.subsystem.DrivebaseSubsystem;
 import frc.team2412.robot.subsystem.IndexSubsystem;
 import frc.team2412.robot.subsystem.IntakeSubsystem;
@@ -29,8 +30,8 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
     public static class FiveBallConstants {
         public static final TrajectoryConstraint[] NORMAL_SPEED = {
                 new FeedforwardConstraint(11.0,
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
                 // value
                 // was
                 // 11.0
@@ -41,8 +42,8 @@ public class JackFiveBallAutoCommand extends SequentialCommandGroup implements U
 
         public static final TrajectoryConstraint[] FAST_SPEED = {
                 new FeedforwardConstraint(11.0,
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivebaseSubsystem.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        Constants.DriveConstants.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false), // old
                 // value
                 // was
                 // 11.0

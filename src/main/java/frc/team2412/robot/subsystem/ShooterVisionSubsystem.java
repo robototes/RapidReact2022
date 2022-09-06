@@ -1,6 +1,6 @@
 package frc.team2412.robot.subsystem;
 
-import static frc.team2412.robot.subsystem.ShooterVisionSubsystem.ShooterVisionConstants.*;
+import static frc.team2412.robot.subsystem.Constants.ShooterVisionConstants.*;
 
 import static frc.team2412.robot.Hardware.*;
 
@@ -12,18 +12,6 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
-    public static class ShooterVisionConstants {
-        // Dimensions are in inches
-        public static final double LIMELIGHT_HEIGHT_OFFSET = 37.5;
-        public static final double RIM_HEIGHT = 104; // 8ft8in
-        public static final double HEIGHT_TO_RIM = RIM_HEIGHT - LIMELIGHT_HEIGHT_OFFSET;
-        public static final double HUB_RADIUS = 24;
-        // Angles are in degrees
-        public static final double LIMELIGHT_ANGLE_OFFSET = Math.toDegrees(Math.atan2(HEIGHT_TO_RIM, 360 - HUB_RADIUS)); // 10.95
-
-        public static final int COMP_PIPELINE_NUM = 5;
-        // -0.766666 limelight crosshair offset (3/19 update)
-    }
 
     public NetworkTable limelight;
 

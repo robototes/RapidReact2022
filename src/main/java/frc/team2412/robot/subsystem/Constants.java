@@ -40,7 +40,7 @@ public class Constants {
         public static final SupplyCurrentLimitConfiguration MOTOR_CURRENT_LIMIT = new SupplyCurrentLimitConfiguration(
                 true, 40, 60, 15);
     }
-    
+
     public static class IndexConstants {
 
         public static final double CURRENT_LIMIT_TRIGGER_SECONDS = 0.5;
@@ -75,8 +75,8 @@ public class Constants {
         // -0.766666 limelight crosshair offset (3/19 update)
     }
 
-     // Constants
-     public static class IntakeConstants {
+    // Constants
+    public static class IntakeConstants {
 
         public static final double INNER_INTAKE_IN_SPEED = 0.35; // TODO
         public static final double INTAKE_IN_SPEED = 0.85;

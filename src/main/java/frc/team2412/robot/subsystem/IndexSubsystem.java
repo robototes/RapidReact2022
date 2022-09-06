@@ -4,7 +4,6 @@ import static frc.team2412.robot.subsystem.Constants.IndexConstants.*;
 import static frc.team2412.robot.Hardware.*;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;

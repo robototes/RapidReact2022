@@ -92,7 +92,7 @@ public class ClimbSubsystem extends SubsystemBase implements Loggable {
         motor.set(speed);
     }
 
-     /**
+    /**
      * Graciously lowers arm at set retract speed
      */
     public void lowerArm() {

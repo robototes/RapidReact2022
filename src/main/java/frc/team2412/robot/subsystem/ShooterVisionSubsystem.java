@@ -12,7 +12,7 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class ShooterVisionSubsystem extends SubsystemBase implements Loggable {
-   
+
     public NetworkTable limelight;
 
     public ShooterVisionSubsystem() {

@@ -20,7 +20,6 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.*;
@@ -74,35 +73,33 @@ public class DrivebaseSubsystem extends SubsystemBase implements UpdateManager.U
     private double odometryYEntry;
     @Log(name = "Angle", columnIndex = 0, rowIndex = 2)
     private double odometryAngleEntry;
-    
+
     @Config.NumberSlider(name = "Speed Modifier", columnIndex = 2, rowIndex = 1, defaultValue = 0.95)
     private double speedModifier;
-   
+
     @Config.NumberSlider(name = "Shoot Speed", columnIndex = 4, rowIndex = 1, defaultValue = 0.6)
     private double shootSpeed;
     @Config.ToggleSwitch(name = "Shoot speed toggled", columnIndex = 4, rowIndex = 3)
     private boolean shootSpeedToggle;
-   
+
     @Config.ToggleSwitch(name = "Anti tip", columnIndex = 3, rowIndex = 1, width = 2, defaultValue = ANTI_TIP_DEFAULT)
     private boolean antiTip;
     @Config.ToggleSwitch(name = "Field Centric", columnIndex = 2, rowIndex = 2, width = 2, defaultValue = FIELD_CENTRIC_DEFAULT)
     private boolean fieldCentric;
-    
+
     @Config(name = "Set Pose X", columnIndex = 5, rowIndex = 3)
     private double poseSetX;
     @Config(name = "Set Pose Y", columnIndex = 6, rowIndex = 3)
     private double poseSetY;
     @Config(name = "Set Pose Angle", columnIndex = 6, rowIndex = 3)
     private double poseSetAngle;
-   
+
     @Log(name = "Trajectory X", columnIndex = 1, rowIndex = 0)
     private double trajectoryX;
     @Log(name = "Trajectory Y", columnIndex = 1, rowIndex = 1)
     private double trajectoryY;
     @Log(name = "Rotation Voltage", columnIndex = 1, rowIndex = 1)
     private double rotationVoltage;
-    
-    
 
     private final Field2d field = new Field2d();
 

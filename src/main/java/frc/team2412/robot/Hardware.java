@@ -16,7 +16,7 @@ public class Hardware {
     public static final double DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET = -Math.toRadians(67.85156);
     public static final double DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET = -Math.toRadians(221.924);
     public static final double DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET = -Math.toRadians(214.892578);
-    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.310547+90);
+    public static final double DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET = -Math.toRadians(168.310547 + 90);
     public static final String DRIVETRAIN_INTAKE_CAN_BUS_NAME = "DrivebaseIntake";
 
     // Changes swerve modules & disables subsystems missing from the swerve test bot
